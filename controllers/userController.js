@@ -7,6 +7,7 @@ exports.postUsers = function ( req, res ) {
 	var user = new User({
 		username: req.body.username,
 		password: req.body.password,
+		email: req.body.email,
 		joined: ( new Date() / 1000 ).toFixed()
 	})
 
@@ -22,10 +23,22 @@ exports.postUsers = function ( req, res ) {
 // get a user
 // 
 exports.getUser = function( req, res ) {
-	User.findOne( { _id: req.user._id }, function( err, users) {
+	User.findOne( { _id: req.user._id }, function( err, user) {
 		if (err)
 			res.send(err)
 
-		res.json(users)
+		res.json(user)
+	})
+}
+
+// 
+// delete a user
+// 
+exports.deleteUser = function( req, res ) {
+	User.remove( { _id: req.user._id }, function( err, user) {
+		if (err)
+			res.send(err)
+
+		res.json("User removed.")
 	})
 }
