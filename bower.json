@@ -1,0 +1,26 @@
+{
+  "name": "slipstream",
+  "version": "0.0.0",
+  "authors": [
+    "noah <noahgray@me.com>"
+  ],
+  "description": "Social content site",
+  "main": "public/index.html",
+  "keywords": [
+    "social",
+    "content"
+  ],
+  "license": "none, copyright",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.1",
+    "angular": "~1.3.8"
+  }
+}
