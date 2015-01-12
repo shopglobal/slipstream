@@ -6,22 +6,23 @@ var User = require('../models/userModel.js')
 exports.postUsers = function ( req, res ) {
 	var user = new User({
 		username: req.body.username,
-		password: req.body.password
+		password: req.body.password,
+		joined: ( new Date() / 1000 ).toFixed()
 	})
 
 	user.save(function( err ) {
 		if (err)
-			res.send( err )
+			return res.send( err )
 
-		res.json({ message: "New user added!" })
+		res.json( { message: "New user added!" } )
 	})
 }
 
 // 
-// GET endpoint for /api/users
+// get a user
 // 
-exports.getUsers = function( req, res ) {
-	User.find( function( err, users) {
+exports.getUser = function( req, res ) {
+	User.findOne( { _id: req.user._id }, function( err, users) {
 		if (err)
 			res.send(err)
 

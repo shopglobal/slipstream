@@ -5,7 +5,7 @@ var express = require('express'),
 var userController = require('../controllers/userController.js')
 
 router.route('/users')
-	.post(authController.isAuthenticated, userController.postUsers)
-	.get(authController.isAuthenticated, userController.getUsers)
+	.post( userController.postUsers )
+	.get( authController.isAuthenticated, userController.getUser )
 
 module.exports = router
