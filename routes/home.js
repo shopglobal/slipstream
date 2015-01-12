@@ -4,6 +4,9 @@ var express = require('express'),
 
 var indexPath = path.join( __dirname, '..public/index.html')
 
+// 
+// serves he index file when accessing root URL
+// 
 router.get('/', function( rez, res, next ) {
 	res.writeHead( 200, {'Content-Type': 'text/html'} )
 
