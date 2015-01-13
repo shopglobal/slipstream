@@ -1,3 +1,47 @@
 <link href="css/style.css" rel="stylesheet">
+<link href="vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+<link href="vendor/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+
+<body ng-app="SlipStream">
+
+<div class="wrap">
+
+<div id="header">
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button class="navbar-toggle collapsed">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<spen class="sr-only">
+						Toggle Navigation
+					</spen>
+				</button>
+			</div>
+			<div class="collpase navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#/home">Home</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+
+<div class="container">
 
 This is index.html
+
+	<div ui-view></div>
+
+</div>
+
+<script src="vendor/angular/angular.js"></script>
+<script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="app/app.js"></script>
+<script src="vendor/jquery/dist/jquery.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+
+</div>
+
+</body>
