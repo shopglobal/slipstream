@@ -1,7 +1,8 @@
 var User = require('../models/userModel.js'),
 	secret = require('../config/secretConfig'),
 	jwt = require('jsonwebtoken'),
-	tokenManager = require('../config/tokenManager')
+	tokenManager = require('../config/tokenManager'),
+	 bodyParser = require('body-parser')
 
 // 
 // check the username and password and returns token if verified
@@ -12,7 +13,7 @@ exports.login = function ( req, res ) {
 			return res.json( { message: "Something went wrong " } )
 			
 		if ( !user )
-			return console.log( "Username: " + req.body.username + " Password: " + req.body.password )
+			return console.log( "Username: " + req.body.user + " Password: " + req.body.user )
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
 			if (err)
