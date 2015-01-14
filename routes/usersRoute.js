@@ -7,7 +7,6 @@ var express = require('express'),
 var userController = require('../controllers/userController.js')
 
 router.route('/users')
-	.post( userController.login )
 	.get( userController.checkAuthorization, userController.getUser )
 	.delete( userController.deleteUser )
 

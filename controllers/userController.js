@@ -55,14 +55,19 @@ exports.signUp = function ( req, res ) {
 }
 
 // 
-// get a user
+// return all of a users information, except password, etc
 // 
 exports.getUser = function( req, res ) {
 	User.findOne( { token: req.token }, function( err, user ) {
 		if (err)
 			res.send(err)
 
-		res.json(user)
+		res.json({
+			id: user._id,
+			username: user.username,
+			email: user.email,
+			joined: user.joined
+		})
 	})
 }
 
@@ -78,6 +83,10 @@ exports.deleteUser = function( req, res ) {
 	})
 }
 
+//
+// check that the request has an authorization header and attach it to 
+// the req as req.token
+//
 exports.checkAuthorization = function( req, res, callback ) {
 	var bearerToken,
 		bearerHeader = req.headers['authorization']
@@ -86,8 +95,9 @@ exports.checkAuthorization = function( req, res, callback ) {
 		var bearer = bearerHeader.split(' ')
 		bearerToken = bearer[1]
 		req.token = bearerToken
-		callback();
+		return callback();
 	} else {
-		res.sendStatus(403)
+		console.log(req.headers)
+		return res.json("Token authorization failed." )
 	}
 }
