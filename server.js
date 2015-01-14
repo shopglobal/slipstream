@@ -5,7 +5,9 @@ var http = require('http'),
 	path = require('path'),
 	bodyParser = require('body-parser'),
 	passport = require('passport'),
-	authController = require('controllers/authController'),
+	secret = require('config/secretConfig'),
+	jwt = require('jsonwebtoken'),
+	morgan = require('morgan'),
 	portToUse = 4000
 
 var indexPath = path.join(__dirname, 'public')
@@ -14,13 +16,15 @@ mongoose.connect('mongodb://localhost/slipstream')
 
 app = express();
 
-app
-	.use(passport.initialize())
+require('./config/passportConfig')(passport)
+
+app	
+	.use(morgan('dev'))
 	.use(bodyParser.urlencoded( { extended:true } ))
 	.use(express.static(indexPath))
 
-	.use('/api', require('./routes/usersRoute.js'))
-	.use('/', require('./routes/home.js'))
+	.use( '/api', require('./routes/usersRoute.js') )
+	.use( '/', require( './routes/home.js' ) )
 
 
 	.listen(portToUse)

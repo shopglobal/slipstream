@@ -1,0 +1,1 @@
+exports.secretToken = "3THYez9jftGnkJlslDO4Ig7lKkJH7TSAzFobtSUVhSA="

@@ -17,9 +17,13 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-	joined: Number
+	joined: Number,
+	token: String
 })
 
+// 
+// hashes the password so it's not plain text
+// 
 UserSchema.pre( 'save', function(callback) {
 	var user = this
 
@@ -40,6 +44,9 @@ UserSchema.pre( 'save', function(callback) {
 	})
 })
 
+// 
+// adds verifyPassword method to user schema
+// 
 UserSchema.methods.verifyPassword = function( password, callback ) {
 	bcrypt.compare(password, this.password, function(err, isMatch) {
 		if (err)
@@ -47,6 +54,10 @@ UserSchema.methods.verifyPassword = function( password, callback ) {
 
 		callback( null, isMatch )
 	})
+}
+
+UserSchema.methods.validPassword = function( password ) {
+	return bcrypt.compare( password, this.password )
 }
 
 module.exports = mongoose.model( 'User', UserSchema )

@@ -1,0 +1,1 @@
+var TOKEN_EXPIRATION = 60;
