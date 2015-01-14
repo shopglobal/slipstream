@@ -10,6 +10,9 @@ exports.login = function ( req, res ) {
 	User.findOne( { username: req.body.username }, function ( err, user ) {
 		if (err)
 			return res.json( { message: "Something went wrong " } )
+			
+		if ( !user )
+			return console.log( "Username: " + req.body.username + " Password: " + req.body.password )
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
 			if (err)
