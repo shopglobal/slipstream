@@ -1,3 +1,21 @@
-{{ user.username }}
-{{ user.email }}
-{{ user.joined }}
+
+<div class="col-md-6">
+  <div class="form-group">
+    <label for="">Username: </label>
+    <input type="text" class="form-control input-green" placeholder=" {{ user.username }} ">
+  </div>
+
+  <div class="form-group">
+    <label for="">Email: </label>
+    <input type="email" class="form-control input-green" placeholder=" {{ user.email }} ">
+  </div>
+
+  <div class="form-group">
+    <label for="">Joined: </label>
+    {{ user.joined * 1000 | date:'MMMM dd, yyyy' }}
+  </div>
+</div>
+
+<div class="col-md 6">
+  <button class="btn btn-default btn-green" ng-click="deleteAccount()">Delete Account</button>
+</div>
