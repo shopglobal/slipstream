@@ -2,16 +2,16 @@ var User = require('../models/userModel.js'),
 	secret = require('../config/secretConfig'),
 	jwt = require('jsonwebtoken'),
 	tokenManager = require('../config/tokenManager'),
-	 bodyParser = require('body-parser')
+	bodyParser = require('body-parser')
 
-// 
+//
 // check the username and password and returns token if verified
-// 
+//
 exports.login = function ( req, res ) {
 	User.findOne( { username: req.body.username }, function ( err, user ) {
 		if (err)
 			return res.json( { message: "Something went wrong " } )
-			
+
 		if ( !user )
 			return console.log( "Username: " + req.body.user + " Password: " + req.body.user )
 
@@ -36,9 +36,9 @@ exports.login = function ( req, res ) {
 	})
 }
 
-// 
+//
 // new user sign up
-// 
+//
 exports.signUp = function ( req, res ) {
 	var user = new User({
 		username: req.body.username,
@@ -58,9 +58,9 @@ exports.signUp = function ( req, res ) {
 	})
 }
 
-// 
+//
 // return all of a users information, except password, etc
-// 
+//
 exports.getUser = function( req, res ) {
 	User.findOne( { token: req.token }, function( err, user ) {
 		if (err)
@@ -75,9 +75,9 @@ exports.getUser = function( req, res ) {
 	})
 }
 
-// 
+//
 // delete a user
-// 
+//
 exports.deleteUser = function( req, res ) {
 	User.remove( { token: req.token }, function( err, user) {
 		if (err)
@@ -88,7 +88,7 @@ exports.deleteUser = function( req, res ) {
 }
 
 //
-// check that the request has an authorization header and attach it to 
+// check that the request has an authorization header and attach it to
 // the req as req.token
 //
 exports.checkAuthorization = function( req, res, callback ) {

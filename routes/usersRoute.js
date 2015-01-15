@@ -2,9 +2,9 @@ var express = require('express'),
 	http = require('http'),
 	router = express.Router(),
 	jwt = require('express-jwt'),
+	userController = require('../controllers/userController.js'),
+	blogController = require('../controllers/blogController.js'),
 	secret = require('../config/secretConfig')
-
-var userController = require('../controllers/userController.js')
 
 router.route('/users')
 	.get( userController.checkAuthorization, userController.getUser )
@@ -12,6 +12,12 @@ router.route('/users')
 
 router.route('/signup')
 	.post( userController.signUp )
+
+router.route('/add')
+	.post( userController.checkAuthorization, function ( req, res ) {
+		if ( req.params.type = "blog" )
+			blogController.add( req, res )
+	})
 
 router.route('/authenticate')
 	.post( userController.login )
