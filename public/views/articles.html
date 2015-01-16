@@ -1,7 +1,7 @@
 <div ng-controller="ArticlesController as articles">
     <div class="panel" ng-repeat="article in articles">
-        this is the article thing
-        {{ article.title }}
+        <h3>{{ article.title }}</h3>
+        <img ng-src="{{ article.image }}">
         {{ article.text }}
     </div>
 </div>
