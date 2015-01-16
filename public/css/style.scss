@@ -31,3 +31,7 @@ $green: #00E0AA;
     &:hover > a { color: $green; }
     a { color: white;
       &:visited { color: white; } } } }
+
+#addModal {
+    .story-image { width: 200px; height: auto; float: left; }
+}

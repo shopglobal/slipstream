@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
+var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
@@ -7,7 +7,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 	// add the custom service to add Authenticaiotn to header
 	//
 	$httpProvider.interceptors.push('authInterceptor')
-	// $httpProvider.interceptors.push('authCheck')
 
 	$stateProvider
 		.state( 'home', {
@@ -18,7 +17,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 		.state( 'articles', {
 			url: '/articles',
 			templateUrl: 'views/articles.html',
-			controller: 'ArticleController'
+			controller: 'ArticlesController'
 		})
 		.state( '/login', {
 			url: '/login',
@@ -31,7 +30,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 		})
 }])
 
-.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$sessionStorage', '$location', function( $scope, $state, $urlRouter, $http, $window, $sessionStorage, $location ) {
+.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$sessionStorage', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $sessionStorage, $location, $modal ) {
 	$scope.user = {
 		username: '',
 		password: ''
@@ -76,6 +75,13 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 			})
 	}
 
+	$scope.openAddModal = function () {
+		var modalInstance = $modal.open( {
+			templateUrl: "views/add.html",
+			controller: 'AddModalController'
+		})
+	}
+
 	init()
 
 }])
@@ -93,7 +99,31 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 
 }])
 
-.controller('LoginController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
+.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
+
+	$scope.contentParams = {
+		url: '',
+		type: ''
+	}
+
+	$scope.addContent = function () {
+		console.log( $scope.contentParams )
+
+		$http
+			.post( '/api/add', $scope.contentParams )
+			.success( function ( data, status ) {
+				console.log( "Data " + data + " " + status )
+				$scope.contentPreview = data
+			})
+			.error( function ( error, status ) {
+				console.log( "Error: " + error + " " + status )
+			})
+	}
+
+}])
+
+.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
+
 
 
 

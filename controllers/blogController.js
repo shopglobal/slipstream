@@ -1,16 +1,16 @@
 var User = require('../models/userModel.js'),
-	 Blog = require('../models/blogModel.js'),
+	Blog = require('../models/blogModel.js'),
     tokenManager = require('../config/tokenManager'),
-	 article = require('article'),
-	 request = require('request'),
+	article = require('article'),
+	request = require('request'),
     bodyParser = require('body-parser')
 
 exports.add = function ( req, res ) {
-	console.log( "Token: " + req.token )	
-	
+	console.log( "Token: " + req.token )
+
 	User.findOne( { token: req.token }, function ( err, user ) {
-		blogUrl = req.query.url
-	
+		blogUrl = req.body.url
+
 		request( blogUrl ).pipe( article( blogUrl, function ( err, data ) {
 			if (err)
 				return res.json( err )

@@ -16,7 +16,7 @@ router.route('/signup')
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
-		if ( req.params.type = "blog" )
+		if ( req.body.type = "blog" )
 			blogController.add( req, res )
 	})
 

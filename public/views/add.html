@@ -1,0 +1,14 @@
+<div class="container-fluid" id="addModal">
+    <div class="form-inline">
+        <select name="" id="addType" class="form-control" ng-model="contentParams.type" ng-init="Select">
+            <option value="article">Article</option>
+        </select>
+        <input type="text" class="form-control" ng-model="contentParams.url">
+        <button class="btn btn-default btn-green" ng-click="addContent()">Add</button>
+    </div>
+
+    <img ng-src="{{ contentPreview.image }}" class="story-image">
+    <h2> {{ contentPreview.title }} </h2>
+    <p>{{ contentPreview.text }}</p>
+
+</div>
