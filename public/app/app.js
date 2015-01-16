@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
@@ -30,7 +30,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'
 		})
 }])
 
-.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$sessionStorage', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $sessionStorage, $location, $modal ) {
+.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
 	$scope.user = {
 		username: '',
 		password: ''
@@ -55,14 +55,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'
 	}
 
 	//
-	// check if there is sessionStorage, which is probably an auth token
-	//
-	var init = function () {
-		if ( $window.sessionStorage.length > 0 )
-			$scope.isLoggedIn = true
-	}
-
-	//
 	// deletes the current account
 	//
 	$scope.deleteAccount = function () {
@@ -82,7 +74,15 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'
 		})
 	}
 
-	init()
+	//
+	// check if there is sessionStorage, which is probably an auth token
+	//
+	$scope.$on('$stateChangeStart', function () {
+		if ( $window.sessionStorage.length == 1 ) {
+			console.log( "you're logged in" )
+			$scope.isLoggedIn = true
+		}
+	})
 
 }])
 
@@ -112,7 +112,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage', 'ui.bootstrap'
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
-				console.log( "Data " + data + " " + status )
 				$scope.contentPreview = data
 			})
 			.error( function ( error, status ) {

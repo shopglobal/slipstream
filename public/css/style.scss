@@ -7,6 +7,7 @@ $green: #00E0AA;
 .login-panel { width: 320px; color: white;
   .btn { width: 100%; } }
 
+/* bootstrap edits */
 .panel { background: transparent; border-color: white; padding: 20px; }
 
 .btn-white { background: transparent; border-color: white; color: white; box-shadow: none; text-decoration: none;
@@ -22,6 +23,12 @@ $green: #00E0AA;
   &::-webkit-input-placeholder { color: $green; }
   &:focus { box-shadow: none; border-color: $green; } }
 
+ .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
+
+ .modal-content { box-shadow: none; border-color: $green; }
+
+.form-control:focus { box-shadow: none; border-color: $green; }
+
 .navbar-green { background-color: $green; background-image: none; border-radius: 0; border: none; box-shadow: none;
   .navbar-brand { color: white;
     &:hover { color: white; } }
@@ -32,6 +39,11 @@ $green: #00E0AA;
     a { color: white;
       &:visited { color: white; } } } }
 
-#addModal {
-    .story-image { width: 200px; height: auto; float: left; }
-}
+#addModal { margin-top: 15px; margin-bottom: 15px;
+    .add-row { padding-top: 10px;
+        #addType { min-width: 100px; } }
+    [type="text"] { width: 100%; }
+    .article-preview { padding-top: 40px;
+
+    .article-preview h2 { float: none; clear: both; }
+    .story-image { width: 300px; height: auto; float: left; margin: 0 15px 15px 0; } } }

@@ -5,11 +5,11 @@
 
 <body ng-app="SlipStream" ng-controller="HomeController">
 
-<div ng-if="!isLoggedIn" class="login-wrapper">
+<div ng-if="!isLoggedIn" class="login-wrapper" ng-model="isLoggedIn">
 	<div ng-include="'views/login.html'"></div>
 </div>
 
-<div class="wrap" ng-if="isLoggedIn">
+<div class="wrap" ng-if="isLoggedIn" ng-model="isLoggedIn">
 
 <div id="header">
 	<nav class="navbar navbar-default navbar-green" role="navigation">

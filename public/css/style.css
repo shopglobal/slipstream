@@ -13,6 +13,7 @@
   .login-panel .btn {
     width: 100%; }
 
+/* bootstrap edits */
 .panel {
   background: transparent;
   border-color: white;
@@ -62,6 +63,20 @@
     box-shadow: none;
     border-color: #00E0AA; }
 
+.select-green {
+  background: url('../images/carrot-green.png') no-repeat right !important;
+  border: solid 1px #00E0AA;
+  -webkit-appearance: none;
+  color: #00E0AA; }
+
+.modal-content {
+  box-shadow: none;
+  border-color: #00E0AA; }
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #00E0AA; }
+
 .navbar-green {
   background-color: #00E0AA;
   background-image: none;
@@ -83,7 +98,22 @@
     .navbar-green ul li a:visited {
       color: white; }
 
-#addModal .story-image {
-  width: 200px;
-  height: auto;
-  float: left; }
+#addModal {
+  margin-top: 15px;
+  margin-bottom: 15px; }
+  #addModal .add-row {
+    padding-top: 10px; }
+    #addModal .add-row #addType {
+      min-width: 100px; }
+  #addModal [type="text"] {
+    width: 100%; }
+  #addModal .article-preview {
+    padding-top: 40px; }
+    #addModal .article-preview .article-preview h2 {
+      float: none;
+      clear: both; }
+    #addModal .article-preview .story-image {
+      width: 300px;
+      height: auto;
+      float: left;
+      margin: 0 15px 15px 0; }

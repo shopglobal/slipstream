@@ -1,14 +1,18 @@
 <div class="container-fluid" id="addModal">
     <div class="form-inline">
-        <select name="" id="addType" class="form-control" ng-model="contentParams.type" ng-init="Select">
+      <input type="text" class="form-control input-green" ng-model="contentParams.url" placeholder="URL">
+      <span class="pull-right add-row">
+        <select name="" id="addType" class="form-control select-green" ng-model="contentParams.type" ng-init="contentParams.type='article'">
             <option value="article">Article</option>
         </select>
-        <input type="text" class="form-control" ng-model="contentParams.url">
         <button class="btn btn-default btn-green" ng-click="addContent()">Add</button>
+    </span>
     </div>
 
-    <img ng-src="{{ contentPreview.image }}" class="story-image">
-    <h2> {{ contentPreview.title }} </h2>
-    <p>{{ contentPreview.text }}</p>
+   <div class="article-preview">
+      <h2> {{ contentPreview.title }} </h2>
+      <img ng-src="{{ contentPreview.image }}" class="story-image">
+      <p>{{ contentPreview.text }}</p>
+   </div>
 
 </div>
