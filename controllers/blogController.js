@@ -5,6 +5,8 @@ var User = require('../models/userModel.js'),
 	request = require('request'),
     bodyParser = require('body-parser')
 
+// adds and item to the articles database with the user's id.
+
 exports.add = function ( req, res ) {
 	console.log( "Token: " + req.token )
 
@@ -31,5 +33,21 @@ exports.add = function ( req, res ) {
 			})
 
 		}))
+	})
+}
+
+// gets items form the articles database based on the user asking
+
+exports.stream = function ( req, res ) {
+	User.findOne( { token: req.token }, function ( err, user ) {
+		if( err )
+			return res.sendStatus(403)
+			
+		Blog.find( { user: user._id }, function ( err, blogs ) {
+			if( err )
+				return res.json( "No article content found, or something went wrong." )
+			
+			return res.json( blogs )
+		})
 	})
 }

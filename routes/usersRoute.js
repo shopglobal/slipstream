@@ -20,6 +20,12 @@ router.route('/add')
 			blogController.add( req, res )
 	})
 
+router.route('/stream')
+	.get( userController.checkAuthorization, function ( req, res ) {
+		if ( req.body.type = "blog" )
+			blogController.stream( req, res )
+	})
+
 router.route('/authenticate')
 	.post( userController.login )
 
