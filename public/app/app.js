@@ -15,10 +15,14 @@ var app = angular.module('SlipStream', ['ui.router', 'ngStorage'])
 			templateUrl: 'views/home.html',
 			controller: 'HomeController'
 		})
+		.state( 'articles', {
+			url: '/articles',
+			templateUrl: 'views/articles.html',
+			controller: 'ArticleController'
+		})
 		.state( '/login', {
 			url: '/login',
-			templateUrl: 'views/login.html',
-			controller: 'LoginController'
+			templateUrl: 'views/login.html'
 		})
 		.state( '/profile', {
 			url: '/profile',
