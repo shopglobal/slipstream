@@ -1,7 +1,8 @@
 <div ng-controller="ArticlesController as articles">
-    <div class="panel" ng-repeat="article in articles">
+    <div class="stream-article panel panel-green" ng-repeat="article in articles">
         <h3>{{ article.title }}</h3>
-        <img ng-src="{{ article.image }}">
+        <img ng-src="{{ article.image }}" class="stream-article-image">
         {{ article.text }}
+        <div class="clearfix"></div>
     </div>
 </div>
