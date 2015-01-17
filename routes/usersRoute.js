@@ -24,6 +24,9 @@ router.route('/stream/articles')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		blogController.stream( req, res )
 	})
+	.delete( userController.checkAuthorization, function ( req, res ) {
+		blogController.delete( req, res )
+	})
 
 router.route('/authenticate')
 	.post( userController.login )
