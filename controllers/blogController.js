@@ -43,7 +43,8 @@ exports.stream = function ( req, res ) {
 		if( err )
 			return res.sendStatus(403)
 			
-		Blog.find( { user: user._id }, function ( err, blogs ) {
+		Blog.find( { $query: { user: "54b5ec4b0920e59422d3cd7f" }, $orderby: { added: -1 } },
+		function ( err, blogs ) {
 			if( err )
 				return res.json( "No article content found, or something went wrong." )
 			
