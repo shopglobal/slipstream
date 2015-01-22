@@ -28,12 +28,13 @@ exports.add = function ( req, res ) {
          
 			// runs function and save info to database
 			
-			saveImage( data, function ( imageHash, imageFileOriginal ) {
+			saveImage( data, function ( imageHash, imageFileOriginal, imageFileThumb ) {
 				var blog = new Blog({
 					user: user._id,
 					title: data.title,
 					text: data.text,
 					image: imageFileOriginal,
+					imageThumb: imageFileThumb,
 					imageHash: imageHash,
 					added: ( new Date() / 1000 ).toFixed()
 				})

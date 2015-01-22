@@ -11,7 +11,7 @@ var BlogSchema = new mongoose.Schema ( {
 	title: String,
 	text: String,
 	image: String,
-	imageThumbnail: String,
+	imageThumb: String,
 	imageHash: String,
 	added: Number
 } )

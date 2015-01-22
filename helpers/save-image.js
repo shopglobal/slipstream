@@ -67,7 +67,7 @@ module.exports = function ( data, callback ) {
 				//the callback
 					
 				function ( err, results ) {
-					callback ( imageHash, "images/blogs/" + imageFileOriginal, imageFileThumb )
+					callback ( imageHash, "images/blogs/" + imageFileOriginal, "images/blogs/" + imageFileThumb )
 				}
 			)
 		})
