@@ -13,6 +13,7 @@ var BlogSchema = new mongoose.Schema ( {
 	image: String,
 	imageThumb: String,
 	imageHash: String,
+	url: String,
 	added: Number
 } )
 
