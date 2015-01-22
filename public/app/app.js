@@ -112,16 +112,28 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 	}
 
 	$scope.addContent = function () {
-		console.log( $scope.contentParams )
-
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
 				$scope.contentPreview = data
+				$scope.showPreview = true
 			})
 			.error( function ( error, status ) {
 				console.log( "Error: " + error + " " + status )
 			})
+	}
+
+	$scope.deleteArticle = function () {
+		console.log('delete clicked')
+		$http.delete( 'api/stream/articles', { params: {
+			id: $scope.contentPreview._id
+		}})
+		.success( function( data ) {
+			$scope.contentParams.url = ""
+		})
+		.error( function( error ) {
+			console.log( error )
+		})
 	}
 
 }])

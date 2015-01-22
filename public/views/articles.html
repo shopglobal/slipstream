@@ -6,7 +6,11 @@
 		{{ article.text | limitTo: 280 }} ...
 		<div class="share-links">
 			<div class="form-group">
-				<button class="btn btn-default btn-xs">Link</button>
+
+				<a href="{{ article.url }}">
+					<button class="btn btn-default btn-xs" popover="Right-click and select copy link" popover-trigger="mouseenter" popover-placement="bottom">Link</button>
+				</a>
+
 				<button class="btn btn-default btn-xs" ng-click="deleteArticle( article._id ); hideArticle=true">Delete</button>
 			</div>
 		</div>
