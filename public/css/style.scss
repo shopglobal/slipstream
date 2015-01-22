@@ -48,7 +48,8 @@ $green: #00E0AA;
     .article-preview h2 { float: none; clear: both; }
     .story-image { width: 300px; height: auto; float: left; margin: 0 15px 15px 0; } } }
 
-.stream-article { clear: both; 
+.stream-article { clear: both; position: relative;
 	h3 { margin-top: 0; }
+   .share-links { position: absolute; bottom: 0px; right: 15px; display: block; }
 	.stream-article-image { float: left; float: left; margin: 0 15px 15px 0; }
 }

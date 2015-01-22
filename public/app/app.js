@@ -30,6 +30,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 		})
 }])
 
+// home control, and parent controller containing all others. put global
+// things here.
+
 .controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
 	$scope.user = {
 		username: '',
@@ -99,6 +102,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 
 }])
 
+// controller for the "add" modal (pop-up) used when adding items to streams
+
 .controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
 	$scope.contentParams = {
@@ -121,6 +126,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 
 }])
 
+// controller for the articles stream.
+
 .controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
 	$http
@@ -132,8 +139,21 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 				console.log( 'Error: ' + error)
 			})
 
+	$scope.deleteArticle = function ( id ) {
+		console.log('delete clicked')
+		$http.delete( 'api/stream/articles', { params: {
+			id: id
+		}})
+			.success( function( data ) {
+				console.log( data )
+			})
+			.error( function( error ) {
+				console.log( error )
+			})
+	}
 
 }])
+
 
 //
 // service to add the token the header of the request
