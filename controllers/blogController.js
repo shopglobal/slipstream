@@ -1,15 +1,21 @@
-var User = require('../models/userModel.js'),
+var fs = require('fs'),
+	path = require('path'),
+	User = require('../models/userModel.js'),
 	Blog = require('../models/blogModel.js'),
-    tokenManager = require('../config/tokenManager'),
+	tokenManager = require('../config/tokenManager'),
 	article = require('article'),
+	async = require('async'),
 	request = require('request'),
-    bodyParser = require('body-parser')
+	crypto = require('crypto'),
+	mongoose = require('mongoose'),
+	md5 = require('MD5'),
+	saveImage = require( '../helpers/save-image' ),
+	bodyParser = require('body-parser')
 
 // adds and item to the articles database with the user's id.
 
 exports.add = function ( req, res ) {
-	console.log( "Token: " + req.token )
-
+	
 	User.findOne( { token: req.token }, function ( err, user ) {
 		blogUrl = req.body.url
 
@@ -18,20 +24,25 @@ exports.add = function ( req, res ) {
 				return res.json( err )
 
 			if ( !data )
-				return res.json( "There's no data for some reason. Sorry." )
+				return res.json( "There's no data for some reason. Sorry." ) 
+         
+			// runs function and save info to database
+			
+			saveImage( data, function ( imageHash, imageFileOriginal, imageFileThumb ) {
+				var blog = new Blog({
+					user: user._id,
+					title: data.title,
+					text: data.text,
+					image: imageFileOriginal,
+					imageThumb: imageFileThumb,
+					imageHash: imageHash,
+					added: ( new Date() / 1000 ).toFixed()
+				})
 
-			var blog = new Blog({
-				user: user._id,
-				title: data.title,
-				text: data.text,
-				image: data.image,
-				added: ( new Date() / 1000).toFixed()
+				blog.save( function ( err, blog ) {
+					return res.json( blog )
+				})	
 			})
-
-			blog.save( function ( err, blog ) {
-				return res.json( blog )
-			})
-
 		}))
 	})
 }
@@ -43,7 +54,7 @@ exports.stream = function ( req, res ) {
 		if( err )
 			return res.sendStatus(403)
 			
-		Blog.find( { $query: { user: "54b5ec4b0920e59422d3cd7f" }, $orderby: { added: -1 } },
+		Blog.find( { $query: { user: user.id }, $orderby: { added: -1 } },
 		function ( err, blogs ) {
 			if( err )
 				return res.json( "No article content found, or something went wrong." )
@@ -52,3 +63,33 @@ exports.stream = function ( req, res ) {
 		})
 	})
 }
+
+// lets a user delete an article from her stream
+
+exports.delete = function ( req, res ) {
+	User.findOne( { token: req.token }, function ( err, user ) {
+		if (err)
+			return res.json( "Error detelting content: " + error )
+			
+		if (!user)
+			return res.json( "User not found when looking up post." )
+			
+ 		var contentId = mongoose.Types.ObjectId(req.query.id)
+			
+		Blog.remove( { user: user._id, _id: contentId }, function ( err, blog ) {
+			if (err)
+				return res.json( "Article was not delted. Error: " + err)
+				
+			if (!blog)
+				return res.json( {
+					message: "Could not find any article",
+//					"contentId": contentId,
+//					"user": user._id
+				})
+				
+			return res.json( "Article, " + blog.title + " was delted" )
+		})
+	})
+}
+
+
