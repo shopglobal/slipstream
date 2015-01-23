@@ -55,20 +55,36 @@ This endpoint will accept a token in the header, and returns all a user's articl
 
 Here's a list of little TODOs. Big ones go on Blossom.
 
-* Download and store images locally instead of leaching off off original article's URL
-
-* Snip the aritcle text after a few sentences. 
-
 * Add tabs for "article", "video" and "audio" to menu bar.
 
 * Change API to accept `POST` and `GET` on streams for adding. Basically clean up API enpoint syntax.
-
-* Add delete/cancel option on add content modal.
-
-* Add delete option to tweet or copy url of content article item.
 
 Some nice-to-haves:
 
 * Collect formatting of articles to have read-it-later type functionlity instead of just preview.
 
 * Link to read-it-later or Readablity like service for each article.
+
+# Version names
+
+Here are the planned version names. They are the names of muted colours going couter-clockwise around the colour circle, starting near our mock-up colour, green, with moss. List:
+
+Moss -- 0.1.0
+Lime
+Mint
+Seaglass
+Robin’s Egg
+Peacock
+Sky Grey
+Sky Blue
+Lavender
+Velvet
+Heliotrope
+Old Rose
+Pink
+Coral
+Dusty Plum
+Dune
+Marigold
+Parchment
+Canary

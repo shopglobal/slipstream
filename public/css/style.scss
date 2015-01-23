@@ -1,9 +1,13 @@
 $green: #00E0AA;
+$red: #E03700;
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
-.login-panel { width: 320px; color: white;
-  .btn { width: 100%; } }
+.login-panel { width: 320px; color: white; float: left; }
+
+.registration-panel { width: 320px; color: white; float: right;  }
+
+.landing-container { width: 700px; }
 
 /* bootstrap edits */
 .panel { background: transparent; border-color: white; padding: 20px; }

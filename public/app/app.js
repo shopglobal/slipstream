@@ -3,9 +3,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
 
-	//
+
 	// add the custom service to add Authenticaiotn to header
-	//
+
 	$httpProvider.interceptors.push('authInterceptor')
 
 	$stateProvider
@@ -30,13 +30,21 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 }])
 
+
 // home control, and parent controller containing all others. put global
 // things here.
 
 .controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
+	
 	$scope.user = {
 		username: '',
 		password: ''
+	}
+
+	$scope.reg = {
+		username: '',
+		password: '',
+		email: ''
 	}
 
 
@@ -54,6 +62,20 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				delete $window.sessionStorage.token
 				console.log( "Error signing in: " + status )
 			} )
+	}
+
+	// registartion 
+
+	$scope.register = function () {
+		$http
+			.post( 'api/signup', $scope.reg )
+			.success( function ( data ) {
+				$window.sessionStorage.token = data.token
+				$state.reload()
+			})
+			.error( function ( data, status ) {
+				delete $window.sessionStorage.token
+			})
 	}
 
 	// logs user out by deleting session storage and reloading the app
