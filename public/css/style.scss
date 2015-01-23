@@ -28,6 +28,9 @@ a { color: $green;
 .btn-green { background: transparent; border-color: $green; color: $green; box-shadow: none; text-decoration: none;
   &:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
 
+.btn-green-solid { background: $green; color: white;
+	&:hover { background: white; } }
+
 .input-white { background: transparent; border-color: white; color: white;
   &:focus { box-shadow: none; border-color: white; } }
 
@@ -47,6 +50,14 @@ a { color: $green;
 	&:hover { border: none; } }
 
 .btn-delete { color: $red; }
+
+// navigation
+
+#nav-row-1 { margin-bottom: 0; }
+
+#nav-row-2 { padding-top: 5px; box-sizing: border-box; }
+
+.content-toggle { width: 50%; }
 
 .navbar-green { background-color: $green; background-image: none; border-radius: 0; border: none; box-shadow: none;
   .navbar-brand { color: white;
@@ -70,6 +81,7 @@ a { color: $green;
 .stream-article { clear: both; position: relative;
 	h3 { margin-top: 0; }
 	.article-snippet { margin-top: 20px; }
-   .share-links { position: absolute; bottom: 0px; right: 15px; display: block; }
-	.stream-article-image { float: left; float: left; margin: 0 15px 15px 0; }
+	.share-links { position: absolute; bottom: 0; right: 15px; display: block; }
+	.stream-article-image { float: left; float: left; margin-right: 15px; width: 150px; }
+	.clearfix { height: 0; clear: both; }
 }
