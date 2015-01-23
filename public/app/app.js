@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress'])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
@@ -39,6 +39,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 		password: ''
 	}
 
+
+	// logs in. signs in and returns the user's token into her
+	// session storage
+
 	$scope.login = function() {
 		$http
 			.post( '/api/authenticate', $scope.user )
@@ -52,14 +56,16 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			} )
 	}
 
+	// logs user out by deleting session storage and reloading the app
+
 	$scope.logout = function() {
 			delete $window.sessionStorage.token
 			location.reload()
 	}
 
-	//
-	// deletes the current account
-	//
+
+	// deletes the currently signed-in account
+
 	$scope.deleteAccount = function () {
 		$http
 			.delete( '/api/users' )
@@ -70,6 +76,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			})
 	}
 
+
+	// opens the "add content" model when a user click's "add"
+
 	$scope.openAddModal = function () {
 		var modalInstance = $modal.open( {
 			templateUrl: "views/add.html",
@@ -77,12 +86,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 		})
 	}
 
-	//
+
 	// check if there is sessionStorage, which is probably an auth token
-	//
+
 	$scope.$on('$stateChangeStart', function () {
 		if ( $window.sessionStorage.length == 1 ) {
-			console.log( "you're logged in" )
 			$scope.isLoggedIn = true
 		}
 	})
@@ -106,10 +114,23 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 
 .controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
+	$scope.showPreview = false
 	$scope.contentParams = {
 		url: '',
 		type: ''
 	}
+
+	// attempts to detect if a user deletes the url in the url field and
+	// deletes the last stream entry if they do
+
+	$scope.blankCheck = function () {
+		if ( $scope.contentParams.url.length === 0 ) {
+			$scope.showPreview = false
+			$scope.deleteArticle()
+		}
+	}
+
+	// adds article ontent to the user's database and stream
 
 	$scope.addContent = function () {
 		$http
@@ -123,8 +144,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			})
 	}
 
+	// deletes article content from the user's databse and stream
+
 	$scope.deleteArticle = function () {
-		console.log('delete clicked')
 		$http.delete( 'api/stream/articles', { params: {
 			id: $scope.contentPreview._id
 		}})
@@ -152,13 +174,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			})
 
 	$scope.deleteArticle = function ( id ) {
-		console.log('delete clicked')
 		$http.delete( 'api/stream/articles', { params: {
 			id: id
 		}})
-			.success( function( data ) {
-				console.log( data )
-			})
 			.error( function( error ) {
 				console.log( error )
 			})
