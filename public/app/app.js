@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress'])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
@@ -30,11 +30,18 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 		})
 }])
 
+// home control, and parent controller containing all others. put global
+// things here.
+
 .controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
 	$scope.user = {
 		username: '',
 		password: ''
 	}
+
+
+	// logs in. signs in and returns the user's token into her
+	// session storage
 
 	$scope.login = function() {
 		$http
@@ -49,14 +56,16 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			} )
 	}
 
+	// logs user out by deleting session storage and reloading the app
+
 	$scope.logout = function() {
 			delete $window.sessionStorage.token
 			location.reload()
 	}
 
-	//
-	// deletes the current account
-	//
+
+	// deletes the currently signed-in account
+
 	$scope.deleteAccount = function () {
 		$http
 			.delete( '/api/users' )
@@ -67,6 +76,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 			})
 	}
 
+
+	// opens the "add content" model when a user click's "add"
+
 	$scope.openAddModal = function () {
 		var modalInstance = $modal.open( {
 			templateUrl: "views/add.html",
@@ -74,12 +86,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 		})
 	}
 
-	//
+
 	// check if there is sessionStorage, which is probably an auth token
-	//
+
 	$scope.$on('$stateChangeStart', function () {
 		if ( $window.sessionStorage.length == 1 ) {
-			console.log( "you're logged in" )
 			$scope.isLoggedIn = true
 		}
 	})
@@ -99,27 +110,57 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 
 }])
 
+// controller for the "add" modal (pop-up) used when adding items to streams
+
 .controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
+	$scope.showPreview = false
 	$scope.contentParams = {
 		url: '',
 		type: ''
 	}
 
-	$scope.addContent = function () {
-		console.log( $scope.contentParams )
+	// attempts to detect if a user deletes the url in the url field and
+	// deletes the last stream entry if they do
 
+	$scope.blankCheck = function () {
+		if ( $scope.contentParams.url.length === 0 ) {
+			$scope.showPreview = false
+			$scope.deleteArticle()
+		}
+	}
+
+	// adds article ontent to the user's database and stream
+
+	$scope.addContent = function () {
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
 				$scope.contentPreview = data
+				$scope.showPreview = true
 			})
 			.error( function ( error, status ) {
 				console.log( "Error: " + error + " " + status )
 			})
 	}
 
+	// deletes article content from the user's databse and stream
+
+	$scope.deleteArticle = function () {
+		$http.delete( 'api/stream/articles', { params: {
+			id: $scope.contentPreview._id
+		}})
+		.success( function( data ) {
+			$scope.contentParams.url = ""
+		})
+		.error( function( error ) {
+			console.log( error )
+		})
+	}
+
 }])
+
+// controller for the articles stream.
 
 .controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
@@ -132,8 +173,17 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap'])
 				console.log( 'Error: ' + error)
 			})
 
+	$scope.deleteArticle = function ( id ) {
+		$http.delete( 'api/stream/articles', { params: {
+			id: id
+		}})
+			.error( function( error ) {
+				console.log( error )
+			})
+	}
 
 }])
+
 
 //
 // service to add the token the header of the request

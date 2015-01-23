@@ -1,8 +1,20 @@
 <div ng-controller="ArticlesController as articles">
-    <div class="stream-article panel panel-green" ng-repeat="article in articles">
-        <h3>{{ article.title }}</h3>
-        <img ng-src="{{ article.image }}" class="stream-article-image">
-        {{ article.text }}
-        <div class="clearfix"></div>
+
+	<div class="stream-article panel panel-green" ng-repeat="article in articles" ng-hide="hideArticle">
+        <a target="_blank" href="{{ article.url }}"><h3>{{ article.title }}</h3></a>
+		<img ng-src="{{ article.imageThumb }}" class="stream-article-image">
+		{{ article.text | limitTo: 280 }} ...
+		<div class="share-links">
+			<div class="form-group">
+
+				<a href="{{ article.url }}">
+					<button class="btn btn-default btn-xs" popover="Right-click and select copy link" popover-trigger="mouseenter" popover-placement="bottom">Link</button>
+				</a>
+
+				<button class="btn btn-default btn-xs" ng-click="deleteArticle( article._id ); hideArticle=true">Delete</button>
+			</div>
+		</div>
+		<div class="clearfix"></div>
     </div>
+
 </div>

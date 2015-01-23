@@ -1,6 +1,6 @@
 <div class="container-fluid" id="addModal">
     <div class="form-inline">
-      <input type="text" class="form-control input-green" ng-model="contentParams.url" placeholder="URL">
+      <input type="text" class="form-control input-green" ng-model="contentParams.url" placeholder="URL" ng-change="addContent(); blankCheck()">
       <span class="pull-right add-row">
         <select name="" id="addType" class="form-control select-green" ng-model="contentParams.type" ng-init="contentParams.type='article'">
             <option value="article">Article</option>
@@ -9,10 +9,12 @@
     </span>
     </div>
 
-   <div class="article-preview">
+   <div class="article-preview" ng-show="showPreview">
       <h2> {{ contentPreview.title }} </h2>
-      <img ng-src="{{ contentPreview.image }}" class="story-image">
-      <p>{{ contentPreview.text }}</p>
+      <img ng-src="{{ contentPreview.imageThumb }}" class="story-image">
+      <p>{{ contentPreview.text | limitTo: 280 }} ... </p>
    </div>
+
+   <button class="btn btn-green btn-block" ng-click="deleteArticle(); showPreview=false" ng-show="showPreview">Cancel (Delete)</button>
 
 </div>
