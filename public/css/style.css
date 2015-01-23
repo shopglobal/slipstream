@@ -1,47 +1,55 @@
-/* line 4, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 8, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .login-wrapper {
   width: 100%;
   height: 100%;
   background: #00E0AA;
   padding-top: 250px; }
 
-/* line 6, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 10, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .login-panel {
   width: 320px;
   color: white;
   float: left; }
 
-/* line 8, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 12, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .registration-panel {
   width: 320px;
   color: white;
   float: right; }
 
-/* line 10, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 14, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .landing-container {
   width: 700px; }
 
 /* bootstrap edits */
-/* line 13, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 18, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+a {
+  color: #00E0AA; }
+  /* line 19, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  a:hover {
+    color: #FF7E32;
+    text-decoration: none; }
+
+/* line 21, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .panel {
   background: transparent;
   border-color: white;
   padding: 20px; }
 
-/* line 15, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 23, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .panel-green {
   background: transparent;
   border-color: #00E0AA;
   padding: 20px; }
 
-/* line 17, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 25, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .btn-white {
   background: transparent;
   border-color: white;
   color: white;
   box-shadow: none;
   text-decoration: none; }
-  /* line 18, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 26, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .btn-white:hover {
     background: white;
     border-color: white;
@@ -49,14 +57,14 @@
     box-shadow: none;
     text-decoration: none; }
 
-/* line 20, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 28, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .btn-green {
   background: transparent;
   border-color: #00E0AA;
   color: #00E0AA;
   box-shadow: none;
   text-decoration: none; }
-  /* line 21, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 29, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .btn-green:hover {
     background: #00E0AA;
     border-color: #00E0AA;
@@ -64,115 +72,129 @@
     box-shadow: none;
     text-decoration: none; }
 
-/* line 23, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 31, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .input-white {
   background: transparent;
   border-color: white;
   color: white; }
-  /* line 24, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 32, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .input-white:focus {
     box-shadow: none;
     border-color: white; }
 
-/* line 26, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 34, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .input-green {
   background: transparent;
   border-color: #00E0AA;
   color: #00E0AA; }
-  /* line 27, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 35, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .input-green::-webkit-input-placeholder {
     color: #00E0AA; }
-  /* line 28, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 36, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .input-green:focus {
     box-shadow: none;
     border-color: #00E0AA; }
 
-/* line 30, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 38, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .select-green {
   background: url('../images/carrot-green.png') no-repeat right !important;
   border: solid 1px #00E0AA;
   -webkit-appearance: none;
   color: #00E0AA; }
 
-/* line 32, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 40, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .modal-content {
   box-shadow: none;
   border-color: #00E0AA; }
 
-/* line 34, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 42, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .form-control:focus {
   box-shadow: none;
   border-color: #00E0AA; }
 
-/* line 36, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 46, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.no-border {
+  border: none; }
+  /* line 47, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  .no-border:hover {
+    border: none; }
+
+/* line 49, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.btn-delete {
+  color: #E44A39; }
+
+/* line 51, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .navbar-green {
   background-color: #00E0AA;
   background-image: none;
   border-radius: 0;
   border: none;
   box-shadow: none; }
-  /* line 37, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 52, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green .navbar-brand {
     color: white; }
-    /* line 38, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 53, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .navbar-brand:hover {
       color: white; }
-  /* line 40, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 55, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li:hover {
     background: white; }
-  /* line 41, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 56, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li:hover > a:visited {
     color: #00E0AA; }
-  /* line 42, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 57, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li:hover > a {
     color: #00E0AA; }
-  /* line 43, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 58, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li a {
     color: white; }
-    /* line 44, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 59, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green ul li a:visited {
       color: white; }
 
-/* line 46, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 61, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 #addModal {
   margin-top: 15px;
   margin-bottom: 15px; }
-  /* line 47, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 62, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .add-row {
     padding-top: 10px; }
-    /* line 48, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 63, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .add-row #addType {
       min-width: 100px; }
-  /* line 49, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 64, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal [type="text"] {
     width: 100%; }
-  /* line 50, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 65, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .article-preview {
     padding-top: 40px; }
-    /* line 52, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 67, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .article-preview .article-preview h2 {
       float: none;
       clear: both; }
-    /* line 53, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 68, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .article-preview .story-image {
       width: auto;
       float: left;
       margin: 0 15px 15px 0; }
 
-/* line 55, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 70, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .stream-article {
   clear: both;
   position: relative; }
-  /* line 56, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 71, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article h3 {
     margin-top: 0; }
-  /* line 57, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 72, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  .stream-article .article-snippet {
+    margin-top: 20px; }
+  /* line 73, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article .share-links {
     position: absolute;
     bottom: 0px;
     right: 15px;
     display: block; }
-  /* line 58, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 74, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article .stream-article-image {
     float: left;
     float: left;

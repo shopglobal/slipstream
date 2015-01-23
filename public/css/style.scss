@@ -1,5 +1,9 @@
 $green: #00E0AA;
-$red: #E03700;
+$red: #E44A39;
+$orange: #FF7E32;
+
+
+// containers and wrappers
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
@@ -10,6 +14,10 @@ $red: #E03700;
 .landing-container { width: 700px; }
 
 /* bootstrap edits */
+
+a { color: $green;
+	&:hover { color: $orange; text-decoration: none; } }
+
 .panel { background: transparent; border-color: white; padding: 20px; }
 
 .panel-green { background: transparent; border-color: $green; padding: 20px; }
@@ -33,6 +41,13 @@ $red: #E03700;
 
 .form-control:focus { box-shadow: none; border-color: $green; }
 
+// new classes
+
+.no-border { border: none; 
+	&:hover { border: none; } }
+
+.btn-delete { color: $red; }
+
 .navbar-green { background-color: $green; background-image: none; border-radius: 0; border: none; box-shadow: none;
   .navbar-brand { color: white;
     &:hover { color: white; } }
@@ -54,6 +69,7 @@ $red: #E03700;
 
 .stream-article { clear: both; position: relative;
 	h3 { margin-top: 0; }
+	.article-snippet { margin-top: 20px; }
    .share-links { position: absolute; bottom: 0px; right: 15px; display: block; }
 	.stream-article-image { float: left; float: left; margin: 0 15px 15px 0; }
 }
