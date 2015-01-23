@@ -1,4 +1,4 @@
 node_modules
 public/vendor
 .brackets.json
-public/images/blogs/*
+public/images/blogs/**
