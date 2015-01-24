@@ -1,7 +1,23 @@
+@font-face {
+	font-family: 'FanwoodText';
+	src: url('../fonts/FanwoodText-Regular.ttf');
+}
+
+@font-face {
+	font-family: 'Domine';
+	src: url('../fonts/Domine-Regular.ttf');
+}
+
 $green: #00E0AA;
+$green-grey: #212321;
 $red: #E44A39;
 $orange: #FF7E32;
 
+$highlight: $green;
+$darkbase: $green-grey;
+
+$headline-font: Domine;
+$snippet-font: Domine;
 
 // containers and wrappers
 
@@ -24,6 +40,9 @@ a { color: $green;
 
 .btn-white { background: transparent; border-color: white; color: white; box-shadow: none; text-decoration: none;
   &:hover { background: white; border-color: white; color: $green; box-shadow: none; text-decoration: none; } }
+
+.btn-highlight { background: transparent; border-color: $highlight; color: $highlight; box-shadow: none; text-decoration: none;
+  &:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border-color: $green; color: $green; box-shadow: none; text-decoration: none;
   &:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
@@ -53,21 +72,21 @@ a { color: $green;
 
 // navigation
 
-#nav-row-1 { margin-bottom: 0; }
-
-#nav-row-2 { padding-top: 5px; box-sizing: border-box; }
+#header { background-color: $green-grey;
+	#nav-row-1 { margin-bottom: 0; } 
+	#nav-row-2 { padding-top: 5px; box-sizing: border-box; } }
 
 .content-toggle { width: 50%; }
 
-.navbar-green { background-color: $green; background-image: none; border-radius: 0; border: none; box-shadow: none;
+.navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none; box-shadow: none;
   .navbar-brand { color: white;
     &:hover { color: white; } }
   ul li {
     &:hover { background: white; }
-    &:hover > a:visited { color: $green; }
-    &:hover > a { color: $green; }
-    a { color: white;
-      &:visited { color: white; } } } }
+    &:hover > a:visited { color: $darkbase; }
+    &:hover > a { color: $darkbase; }
+    a { color: $highlight;
+      &:visited { color: $highlight; } } } }
 
 #addModal { margin-top: 15px; margin-bottom: 15px;
     .add-row { padding-top: 10px;
@@ -78,9 +97,9 @@ a { color: $green;
     .article-preview h2 { float: none; clear: both; }
     .story-image { width: auto; float: left; margin: 0 15px 15px 0; } } }
 
-.stream-article { clear: both; position: relative;
-	h3 { margin-top: 0; }
-	.article-snippet { margin-top: 20px; }
+.stream-article { clear: both; position: relative; border-color: $darkbase; border-width: 0 0 1px 0; border-radius: 0; box-shadow: none; padding-bottom: 30.5px; margin-bottom: 9.5px;
+	h2 { margin-top: 0; font-family: $headline-font; font-weight: 700; color: $darkbase; }
+	.article-snippet { margin-top: 20px; font-family: $snippet-font; line-height: 22px; }
 	.share-links { position: absolute; bottom: 0; right: 15px; display: block; }
 	.stream-article-image { float: left; float: left; margin-right: 15px; width: 150px; }
 	.clearfix { height: 0; clear: both; }
