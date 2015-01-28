@@ -8,7 +8,6 @@ var fs = require('fs'),
 	request = require('request'),
 	crypto = require('crypto'),
 	mongoose = require('mongoose'),
-	md5 = require('MD5'),
 	saveImage = require( '../helpers/save-image' ),
 	bodyParser = require('body-parser')
 
