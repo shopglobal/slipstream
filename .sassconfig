@@ -1,0 +1,7 @@
+{
+    "input": "sass",
+    "output": "css",
+    "image-path": "",
+    "output-style": "nested",
+    "output-comments": "none"
+}

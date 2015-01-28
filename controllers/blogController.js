@@ -34,6 +34,7 @@ exports.add = function ( req, res ) {
 					image: imageFileOriginal,
 					imageThumb: imageFileThumb,
 					imageHash: imageHash,
+					url: blogUrl,
 					added: ( new Date() / 1000 ).toFixed()
 				})
 
