@@ -65,10 +65,15 @@ a { color: $green;
 
 // new classes
 
-.no-border { border: none; 
-	&:hover { border: none; } }
+.no-border { border: none; background: none;
+	&:hover { border: none; background: none; } }
 
 .btn-delete { color: $red; }
+
+.text-green { color: $green; }
+
+.spinner { padding: 15px; }
+
 
 // navigation
 
@@ -92,7 +97,7 @@ a { color: $green;
     .add-row { padding-top: 10px;
         #addType { min-width: 100px; } }
     [type="text"] { width: 100%; }
-    .article-preview { padding-top: 40px;
+    .article-preview { padding-top: 20px;
 
     .article-preview h2 { float: none; clear: both; }
     .story-image { width: auto; float: left; margin: 0 15px 15px 0; } } }
