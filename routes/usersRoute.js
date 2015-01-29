@@ -4,6 +4,7 @@ var express = require('express'),
 	jwt = require('express-jwt'),
 	userController = require('../controllers/userController.js'),
 	blogController = require('../controllers/blogController.js'),
+	videoController = require('../controllers/videoController.js'),
 	secret = require('../config/secretConfig'),
 	bodyParser = require('body-parser')
 
@@ -16,8 +17,10 @@ router.route('/signup')
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
-		if ( req.body.type = "blog" )
-			blogController.add( req, res )
+		if ( req.query.type === "video" )
+			videoController.add( req, res )
+		else if ( req.query.type === "blog" )
+			blogController.add( req, res )		
 	})
 
 router.route('/stream/articles')
