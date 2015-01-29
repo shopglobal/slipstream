@@ -13,8 +13,8 @@ var VideoSchema = new mongoose.Schema ( {
 	date: Number, 		// the date the video was published
 	author: String,		// the creator of the video
 	views: Number,		// the number of views on the video
-	duration: Number,	// duration of video
+	duration: String,	// duration of video
 	rating: Number		// video rating
 } )
 
-module.expoers mongoose.model( 'Video', VideoSchema )
+module.exports = mongoose.model( 'Video', VideoSchema )
