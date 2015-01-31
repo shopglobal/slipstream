@@ -112,4 +112,8 @@ a { color: $green;
 
 // video
 
-.video-info { width: 10%; }
+.video-panel { 
+	h2 { padding: 0 15px 0 15px; } }
+	
+.video-info {  }
+.video-iframe { height: 480px; }

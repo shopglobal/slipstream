@@ -271,8 +271,12 @@ a {
     height: 0;
     clear: both; }
 
-/* line 115, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
-.video-info {
-  width: 10%; }
+/* line 116, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.video-panel h2 {
+  padding: 0 15px 0 15px; }
+
+/* line 119, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.video-iframe {
+  height: 480px; }
 
 /*# sourceMappingURL=style.css.map */
