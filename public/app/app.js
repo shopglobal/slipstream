@@ -3,9 +3,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
 	$urlRouterProvider.otherwise('/home')
 
-	//
+
 	// add the custom service to add Authenticaiotn to header
-	//
+
 	$httpProvider.interceptors.push('authInterceptor')
 
 	$stateProvider
@@ -30,13 +30,21 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 }])
 
+
 // home control, and parent controller containing all others. put global
 // things here.
 
 .controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
+	
 	$scope.user = {
 		username: '',
 		password: ''
+	}
+
+	$scope.reg = {
+		username: '',
+		password: '',
+		email: ''
 	}
 
 
@@ -54,6 +62,20 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				delete $window.sessionStorage.token
 				console.log( "Error signing in: " + status )
 			} )
+	}
+
+	// registartion 
+
+	$scope.register = function () {
+		$http
+			.post( 'api/signup', $scope.reg )
+			.success( function ( data ) {
+				$window.sessionStorage.token = data.token
+				$state.reload()
+			})
+			.error( function ( data, status ) {
+				delete $window.sessionStorage.token
+			})
 	}
 
 	// logs user out by deleting session storage and reloading the app
@@ -97,7 +119,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 }])
 
-.controller('ProfileController', ['$scope', '$state', '$urlRouter', '$http', function( $scope, $state, $urlRouter, $http ) {
+.controller('ProfileController', ['$scope', '$state', '$urlRouter', '$http', '$modal', function( $scope, $state, $urlRouter, $http, $modal ) {
 
 	$http
 		.get( '/api/users' )
@@ -112,9 +134,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 // controller for the "add" modal (pop-up) used when adding items to streams
 
-.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
+.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', function( $scope, $window, $state, $urlRouter, $http, $modalInstance ) {
 
 	$scope.showPreview = false
+	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
 		type: ''
@@ -126,6 +149,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$scope.blankCheck = function () {
 		if ( $scope.contentParams.url.length === 0 ) {
 			$scope.showPreview = false
+			$scope.showSpinner = false
 			$scope.deleteArticle()
 		}
 	}
@@ -133,11 +157,13 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	// adds article ontent to the user's database and stream
 
 	$scope.addContent = function () {
+		$scope.showSpinner = true
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
 				$scope.contentPreview = data
 				$scope.showPreview = true
+				$scope.showSpinner = false
 			})
 			.error( function ( error, status ) {
 				console.log( "Error: " + error + " " + status )
@@ -152,10 +178,28 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		}})
 		.success( function( data ) {
 			$scope.contentParams.url = ""
+
 		})
 		.error( function( error ) {
 			console.log( error )
 		})
+	}
+
+	// closes the modal and assumes user does NOT want to save
+	// changes
+
+	$scope.cancel = function() {
+		if ( $scope.showPreview === true )
+			$scope.deleteArticle()
+		$modalInstance.close()
+	}
+
+	// "adds" the article by simple closing the modal and reloading
+	// the state without deleting the article
+
+	$scope.done = function() {
+		$modalInstance.close()
+		$state.reload()
 	}
 
 }])

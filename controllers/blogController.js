@@ -6,9 +6,7 @@ var fs = require('fs'),
 	article = require('article'),
 	async = require('async'),
 	request = require('request'),
-	crypto = require('crypto'),
 	mongoose = require('mongoose'),
-	md5 = require('MD5'),
 	saveImage = require( '../helpers/save-image' ),
 	bodyParser = require('body-parser')
 
