@@ -25,23 +25,32 @@ exports.add = function ( req, res ) {
          
 			// runs function and save info to database
 			
-			saveImage( data, function ( imageHash, imageFileOriginal, imageFileThumb ) {
-				var blog = new Blog({
-					user: user._id,
-					title: data.title,
-					text: data.text,
-					image: imageFileOriginal,
-					imageThumb: imageFileThumb,
-					imageHash: imageHash,
-					url: blogUrl,
-					added: ( new Date() / 1000 ).toFixed()
+			function makeBlog ( callback ) {
+				saveImage( data, function ( imageHash, imageFileOriginal, imageFileThumb ) {
+					var blog = new Blog({
+						user: user._id,
+						title: data.title,
+						text: data.text,
+						image: imageFileOriginal,
+						imageThumb: imageFileThumb,
+						imageHash: imageHash,
+						url: blogUrl,
+						added: ( new Date() / 1000 ).toFixed()
+					})
+					callback( blog )
 				})
-
+			}
+			
+			function saveBlog ( blog ) {
 				blog.save( function ( err, blog ) {
 					return res.json( blog )
-				})	
+				})
+			}
+			
+			makeBlog( saveBlog )
+				
 			})
-		}))
+		)
 	})
 }
 
