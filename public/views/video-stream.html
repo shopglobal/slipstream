@@ -1,7 +1,13 @@
 <div ng-controller="VideosController as videos">
 	
 	<div class="panel" ng-repeat="video in videos">
-		<iframe width="854" height="480" ng-src="{{ 'http://www.youtube.com/embed/' + video.id }}" frameborder="0" allowfullscreen></iframe>
+		<h2>{{ video.title }}</h2>
+		<iframe width="90%" height="480" ng-src="{{ 'https://www.youtube.com/embed/' + video.videoId }}" frameborder="0" allowfullscreen></iframe>
+		<div class="video-info pull-right">
+			Rating: {{ video.rating }} <br />
+			Views: {{ video.views }} <br />
+			Date added: {{ video.date * 1000 | date:"MMM dd yyyy HH:mm" }} <br />
+		</div>
 	</div>
 
 </div>
