@@ -1,0 +1,7 @@
+<div ng-controller="VideosController as videos">
+	
+	<div class="panel" ng-repeat="video in videos">
+		<iframe width="854" height="480" ng-src="{{ 'http://www.youtube.com/embed/' + video.id }}" frameborder="0" allowfullscreen></iframe>
+	</div>
+
+</div>

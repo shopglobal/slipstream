@@ -1,8 +1,17 @@
 var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress'])
 
-.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', function( $stateProvider, $urlRouterProvider, $httpProvider ) {
+.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
+	
+	// sets default state
+
 	$urlRouterProvider.otherwise('/home')
 
+	// whitelists outside scripts for iframe use
+
+	$sceDelegateProvider.resourceUrlWhitelist( [
+		'self',
+		'http://www.youtube.com/**'
+	] )
 
 	// add the custom service to add Authenticaiotn to header
 
@@ -18,6 +27,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			url: '/articles',
 			templateUrl: 'views/articles.html',
 			controller: 'ArticlesController'
+		})
+		.state( 'videos', {
+			url: '/videos',
+			templateUrl: 'views/video-stream.html',
+			controller: 'VideosController'
 		})
 		.state( '/login', {
 			url: '/login',
@@ -226,6 +240,31 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			})
 	}
 
+}])
+
+// controller for the articles stream.
+
+.controller('VideosController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$sce', function( $scope, $window, $state, $urlRouter, $http, $sce ) {
+
+	$http
+		.get( 'api/stream/videos')
+			.success( function ( data ) {
+				$scope.videos = data
+			})
+			.error( function ( error ) {
+				console.log( 'Error: ' + error)
+			})
+
+
+
+	// $scope.deleteArticle = function ( id ) {
+	// 	$http.delete( 'api/stream/articles', { params: {
+	// 		id: id
+	// 	}})
+	// 		.error( function( error ) {
+	// 			console.log( error )
+	// 		})
+	// }
 }])
 
 
