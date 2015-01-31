@@ -5,7 +5,7 @@ var User = require( '../models/userModel' ),
 	Youtube = require( 'youtube-api' ),
 	Q = require( 'q' ),
 	Data = require( 'datejs' ),
-	url = require( 'url' )
+	URL = require( 'url' )
 
 // method for adding a video
 
@@ -33,7 +33,7 @@ exports.add = function ( req, res ) {
 		.then( function() {
 			Youtube.videos.list({
 				part: "statistics,snippet,contentDetails",
-				id: req.query.url
+				id: URL.parse( req.query.url ).query.slice(-11)
 			}, function ( err, data ) {
 
 				// check for problems
