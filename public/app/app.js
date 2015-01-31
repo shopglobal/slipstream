@@ -5,7 +5,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	// sets default state
 
 	$urlRouterProvider.otherwise('/home')
-
+	
 	// whitelists outside scripts for iframe use
 
 	$sceDelegateProvider.resourceUrlWhitelist( [
@@ -154,7 +154,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
-		type: ''
+		type: 'blog'
 	}
 
 	// attempts to detect if a user deletes the url in the url field and
@@ -180,7 +180,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				$scope.showSpinner = false
 			})
 			.error( function ( error, status ) {
-				console.log( "Error: " + error + " " + status )
+				console.log( "Error adding article: " + error + "| status: " + status + " | params: " + $scope.contentParams.url )
 			})
 	}
 

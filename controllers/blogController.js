@@ -14,7 +14,7 @@ var fs = require('fs'),
 exports.add = function ( req, res ) {
 	
 	User.findOne( { token: req.token }, function ( err, user ) {
-		blogUrl = req.query.url
+		blogUrl = req.body.url
 
 		request( blogUrl ).pipe( article( blogUrl, function ( err, data ) {
 			if (err)

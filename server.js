@@ -9,7 +9,7 @@ var http = require('http'),
 	secret = require('./config/secretConfig'),
 	jwt = require('jsonwebtoken'),
 	morgan = require('morgan'),
-	portToUse = 4000
+	portToUse = 8443
 
 var indexPath = path.join(__dirname, 'public')
 
@@ -29,10 +29,8 @@ app
 	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
 
-//https.
-//	createServer( options, app ).listen(4001)
-
-https.createServer( options, app).listen(4000)
+https
+	.createServer( options, app ).listen( portToUse )
 
 //app.get('/', function( req, res ) {
 //	res.writeHead( 200, { 'Content-Type': 'text/plain' } )
