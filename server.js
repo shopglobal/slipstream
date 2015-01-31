@@ -1,4 +1,5 @@
 var http = require('http'),
+	https = require( 'https' ),
 	fs = require('fs'),
 	mongoose = require('mongoose'),
 	express = require('express'),
@@ -12,22 +13,30 @@ var http = require('http'),
 
 var indexPath = path.join(__dirname, 'public')
 
+var options = {
+	key: fs.readFileSync( 'server.key'),
+	cert: fs.readFileSync( 'server.crt' )
+}
+
 mongoose.connect('mongodb://localhost/slipstream')
 
 app = express();
 
-require('./config/passportConfig')(passport)
-
 app	
 	.use(morgan('dev'))
-	app.use(bodyParser.urlencoded({ extended: true }))
-	app.use(bodyParser.json())
-	.use(express.static(indexPath))
-
+	.use(bodyParser.urlencoded({ extended: true }))
+	.use(bodyParser.json())
 	.use( '/api', require('./routes/usersRoute.js') )
-	.use( '/', require( './routes/home.js' ) )
+	.use( express.static( indexPath ) )
 
+//https.
+//	createServer( options, app ).listen(4001)
 
-	.listen(portToUse)
+https.createServer( options, app).listen(4000)
+
+//app.get('/', function( req, res ) {
+//	res.writeHead( 200, { 'Content-Type': 'text/plain' } )
+//	res.sendFile(indexPath)
+//})
 
 console.log("Running on port " + portToUse)
