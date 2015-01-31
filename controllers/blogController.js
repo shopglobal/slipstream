@@ -7,15 +7,14 @@ var fs = require('fs'),
 	async = require('async'),
 	request = require('request'),
 	mongoose = require('mongoose'),
-	saveImage = require( '../helpers/save-image' ),
-	bodyParser = require('body-parser')
+	saveImage = require( '../helpers/save-image' )
 
 // adds and item to the articles database with the user's id.
 
 exports.add = function ( req, res ) {
 	
 	User.findOne( { token: req.token }, function ( err, user ) {
-		blogUrl = req.body.url
+		blogUrl = req.query.url
 
 		request( blogUrl ).pipe( article( blogUrl, function ( err, data ) {
 			if (err)
