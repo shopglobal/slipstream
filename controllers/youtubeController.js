@@ -33,7 +33,7 @@ exports.add = function ( req, res ) {
 		.then( function() {
 			Youtube.videos.list({
 				part: "statistics,snippet,contentDetails",
-				id: URL.parse( req.query.url ).query.slice(-11)
+				id: URL.parse( req.body.url ).query.slice(-11)
 			}, function ( err, data ) {
 
 				// check for problems
