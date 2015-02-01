@@ -154,7 +154,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
-		type: 'blog'
+		type: ''
 	}
 
 	// attempts to detect if a user deletes the url in the url field and
