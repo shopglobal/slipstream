@@ -19,7 +19,7 @@ router.route('/signup')
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type === "video" )
-			videoController.add( req, res )
+			youtubeController.add( req, res )
 		else if ( req.body.type === "blog" )
 			blogController.add( req, res )		
 	})
