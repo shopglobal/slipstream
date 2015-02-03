@@ -2,39 +2,32 @@ var User = require( '../models/userModel' ),
 	Video = require( '../models/videoModel' ),
 	mongoose = require( 'mongoose' ),
 	Youtube = require( 'youtube-api' ),
+	Date = require( 'datejs' ),
 	URL = require( 'url' ),
     async = require( 'async' ),
-	Q = require( 'q' )
+	q = require( 'q' )
 
 exports.add = function ( req, res ) {
-	var defer = Q.defer()
+	var defer = q.defer()
 	
     // check sign in and get user information as 'user' 
 
     function getUser () {
-		var defer = Q.defer()
         User.findOne( { token: req.token }, function ( err, user ) {
-			defer.resolve( user )
-		})
-		
-		return defer.promise
+			return user
+        })
     }
 
     // split the youtbe videoID from the full URL
 
     function getVideoId () {
-		var defer = Q.defer()
-		var id = URL.parse( req.body.url ).query.slice(-11)
-		
-		defer.resolve( id )
-		return defer.promise	
+        return URL.parse( req.query.url ).query.slice(-11)
     }
 
     // create the video object to be saved in the databse model
 
-    function makeVideoObject ( user, video ) {
-        var vData = video.items[0]
-		video = new Video({
+    function makeVideoObject ( user, vData ) {
+        video = new Video({
             user: user._id,
             title: vData.snippet.title,
             videoId: vData.id,
@@ -48,42 +41,45 @@ exports.add = function ( req, res ) {
             duration: vData.contentDetails.duration,
             rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
         })
-		video.save()
-		return res.json( video )
+        return res.json( video )
     }
-	
-	// authenticate youtube api
-	
-	function authYoutube () {
-		Youtube.authenticate({
-			type: "key",
-			key: "AIzaSyD79gA6KcMnG0vyRgNyfxDpq8ok_Aj6LrE"
-		})
-	}   
 
     // search for new video based on it's ID
 
     function youtubeFind ( videoId ) {
-		defer = Q.defer()
-		
-		authYoutube()
 
-		video = Youtube.videos.list({
-			part: "statistics,snippet,contentDetails",
-			id: videoId
-		}, function (err, data ) {
-			defer.resolve( data )
-		})
-		
-		return defer.promise
-	}
+        function authYoutube ( callback ) {
+            var authObj = Youtube.authenticate({
+                type: "key",
+                key: "AIzaSyD79gA6KcMnG0vyRgNyfxDpq8ok_Aj6LrE"
+            })
+            callback()
+        }            
+            
+        function getYoutube () {
+            Youtube.videos.list({
+                part: "statistics,snippet,contentDetails",
+                id: videoId
+            }, function ( err, data ) {
+                if (err)
+                    return console.log( "youtubeFind error: " + err )
+
+				return data.items[0]
+            })        
+        }
+        
+        authYoutube( getYoutube )
+    } 
 	
-	var user = getUser()
+//	var user = getUser()
 	var videoId = getVideoId()
-	var video = videoId.then( youtubeFind )
+//	var video = q(videoId).then( youtubeFind )
 	
-	Q.all( [ user, video ] ).then( function ( result ) {
-		return makeVideoObject( result[0], result[1] )
+	q.all( [ getUser(), youtubeFind(videoId) ] ).spread( function( user, video ) {
+		if ( !user )
+			return res.json( "Not authenticated." )
+		
+		makeVideoObject( user, video )
 	})
 	
 }
