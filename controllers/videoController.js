@@ -3,7 +3,6 @@ var User = require( '../models/userModel' ),
 	mongoose = require( 'mongoose' ),
 	Youtube = require( 'youtube-api' ),
 	URL = require( 'url' ),
-    async = require( 'async' ),
 	Q = require( 'q' )
 
 exports.add = function ( req, res ) {

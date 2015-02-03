@@ -99,7 +99,7 @@ exports.checkAuthorization = function( req, res, callback ) {
 		var bearer = bearerHeader.split(' ')
 		bearerToken = bearer[1]
 		req.token = bearerToken
-		return callback();
+		return callback()
 	} else {
 		console.log(req.headers)
 		return res.json("Token authorization failed." )

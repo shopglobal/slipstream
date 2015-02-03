@@ -37,6 +37,8 @@
     "passport-local": "^1.0.0",
     "q": "^1.1.2",
     "request": "^2.51.0",
+    "soundcloud-node": "0.0.10",
+    "soundclouder": "^0.8.1",
     "youtube-api": "^0.3.2"
   }
 }
