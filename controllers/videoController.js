@@ -3,6 +3,7 @@ var User = require( '../models/userModel' ),
 	mongoose = require( 'mongoose' ),
 	Youtube = require( 'youtube-api' ),
 	URL = require( 'url' ),
+	getUser = require( '../helpers/get-user' ),
 	Q = require( 'q' )
 
 exports.add = function ( req, res ) {
@@ -100,4 +101,28 @@ exports.stream = function( req, res ) {
 			return res.json( videos )
 		})
 	})	
+}
+
+// delete a video
+// TODO: make the error reporting actually work
+
+exports.delete = function( req, res ) {
+	var contentId = mongoose.Types.ObjectId( req.query.id )
+	
+	function deleteVideo ( user ) {
+		var deferred = Q.defer()
+		
+		Video.remove( { user: user, _id: contentId }, function ( err, video ) {
+			deferred.resolve( video )
+		})
+		
+		return deferred.promise
+	} 
+	
+	getUser( req.token ).then(deleteVideo).then( function ( video ) {
+		return res.json( { status: 200, Message: "Deleted: " + video.title } )
+	}, function ( err ) {
+		return res.json( { status: 500, Message: err } )	
+	})
+		
 }
