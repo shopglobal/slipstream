@@ -44,7 +44,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 		.state( 'listen', {
 			url: '/listen',
-			templateUrl: 'views/listen.html',
+			templateUrl: 'views/listen-stream.html',
 			controller: 'ListenController'
 		})
 }])
