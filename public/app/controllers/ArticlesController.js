@@ -1,7 +1,7 @@
 app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
 	$http
-		.get( 'api/stream/articles')
+		.get( 'api/stream/read')
 			.success( function ( data ) {
 				$scope.articles = data
 			})
@@ -10,7 +10,7 @@ app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter
 			})
 
 	$scope.deleteArticle = function ( id ) {
-		$http.delete( 'api/stream/articles', { params: {
+		$http.delete( 'api/stream/read', { params: {
 			id: id
 		}})
 			.error( function( error ) {

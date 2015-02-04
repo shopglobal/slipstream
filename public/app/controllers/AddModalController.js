@@ -14,7 +14,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 		if ( $scope.contentParams.url.length === 0 ) {
 			$scope.showPreview = false
 			$scope.showSpinner = false
-			$scope.deleteArticle()
+			$scope.deleteItem()
 		}
 	}
 
@@ -36,8 +36,9 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 
 	// deletes article content from the user's databse and stream
 
-	$scope.deleteArticle = function () {
-		$http.delete( 'api/stream/articles', { params: {
+	$scope.deleteItem = function () {
+		var endPoint = '/api/stream/' + $scope.contentParams.type
+		$http.delete( endPoint, { params: {
 			id: $scope.contentPreview._id
 		}})
 		.success( function( data ) {
@@ -54,7 +55,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 
 	$scope.cancel = function() {
 		if ( $scope.showPreview === true )
-			$scope.deleteArticle()
+			$scope.deleteItem()
 		$modalInstance.close()
 	}
 
