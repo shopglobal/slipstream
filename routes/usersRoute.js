@@ -5,7 +5,7 @@ var express = require('express'),
 	userController = require('../controllers/userController.js'),
 	blogController = require('../controllers/blogController.js'),
 	videoController = require('../controllers/videoController.js'),
-	songController = require('../controllers/songController.js'),
+	listenController = require('../controllers/listenController.js'),
 	secret = require('../config/secretConfig'),
 	bodyParser = require('body-parser')
 
@@ -23,7 +23,7 @@ router.route('/add')
 		if ( req.body.type === "read" )
 			blogController.add( req, res )
 		if ( req.body.type === "listen" )
-			songController.add( req, res )
+			listenController.add( req, res )
 	})
 
 router.route('/stream/read')
@@ -41,6 +41,14 @@ router.route('/stream/watch')
 	.delete( userController.checkAuthorization, function ( req, res ) {
 		videoController.delete( req, res )
 	})
+
+router.route('/stream/listen')
+	.get( userController.checkAuthorization, function ( req, res ) {
+		listenController.stream( req, res )
+	})
+//	.delete( userController.checkAuthorization, function ( req, res ) {
+//		listenController.delete( req, res )
+//	})
 
 router.route('/authenticate')
 	.post( userController.login )
