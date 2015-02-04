@@ -18,15 +18,15 @@ router.route('/signup')
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
-		if ( req.body.type === "video" )
+		if ( req.body.type === "watch" )
 			videoController.add( req, res )
-		if ( req.body.type === "blog" )
+		if ( req.body.type === "read" )
 			blogController.add( req, res )
-		if ( req.body.type === "song" )
+		if ( req.body.type === "listen" )
 			songController.add( req, res )
 	})
 
-router.route('/stream/articles')
+router.route('/stream/read')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		blogController.stream( req, res )
 	})
@@ -34,9 +34,12 @@ router.route('/stream/articles')
 		blogController.delete( req, res )
 	})
 
-router.route('/stream/videos')
+router.route('/stream/watch')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		videoController.stream( req, res )
+	})
+	.delete( userController.checkAuthorization, function ( req, res ) {
+		videoController.delete( req, res )
 	})
 
 router.route('/authenticate')
