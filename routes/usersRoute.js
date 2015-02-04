@@ -18,11 +18,11 @@ router.route('/signup')
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
-		if ( req.body.type === "video" )
+		if ( req.body.type === "watch" )
 			videoController.add( req, res )
-		if ( req.body.type === "blog" )
+		if ( req.body.type === "read" )
 			blogController.add( req, res )
-		if ( req.body.type === "song" )
+		if ( req.body.type === "listen" )
 			songController.add( req, res )
 	})
 
