@@ -26,7 +26,7 @@ router.route('/add')
 			songController.add( req, res )
 	})
 
-router.route('/stream/articles')
+router.route('/stream/read')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		blogController.stream( req, res )
 	})
@@ -34,9 +34,12 @@ router.route('/stream/articles')
 		blogController.delete( req, res )
 	})
 
-router.route('/stream/videos')
+router.route('/stream/watch')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		videoController.stream( req, res )
+	})
+	.delete( userController.checkAuthorization, function ( req, res ) {
+		videoController.delete( req, res )
 	})
 
 router.route('/authenticate')

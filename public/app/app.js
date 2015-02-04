@@ -28,10 +28,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'views/articles.html',
 			controller: 'ArticlesController'
 		})
-		.state( 'videos', {
+		.state( 'watch', {
 			url: '/watch',
-			templateUrl: 'views/video-stream.html',
-			controller: 'VideosController'
+			templateUrl: 'views/watch-stream.html',
+			controller: 'WatchController'
 		})
 		.state( '/login', {
 			url: '/login',
@@ -44,7 +44,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 		.state( 'listen', {
 			url: '/listen',
-			templateUrl: 'views/listen.html',
+			templateUrl: 'views/listen-stream.html',
 			controller: 'ListenController'
 		})
 }])
