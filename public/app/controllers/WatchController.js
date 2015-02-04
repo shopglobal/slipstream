@@ -1,7 +1,7 @@
-app.controller('VideosController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$sce', function( $scope, $window, $state, $urlRouter, $http, $sce ) {
+app.controller('WatchController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$sce', function( $scope, $window, $state, $urlRouter, $http, $sce ) {
 
 	$http
-		.get( 'api/stream/videos')
+		.get( 'api/stream/watch')
 			.success( function ( data ) {
 				$scope.videos = data
 			})
