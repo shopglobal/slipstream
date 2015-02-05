@@ -3,6 +3,7 @@ var User = require( '../models/userModel' ),
 	mongoose = require( 'mongoose' ),
 	Youtube = require( 'youtube-api' ),
 	URL = require( 'url' ),
+	getYoutubeId = require( 'get-youtube-id' ),
 	getUser = require( '../helpers/get-user' ),
 	Q = require( 'q' )
 
@@ -24,7 +25,7 @@ exports.add = function ( req, res ) {
 
     function getVideoId () {
 		var defer = Q.defer()
-		var id = URL.parse( req.body.url ).query.slice(-11)
+		var id = getYoutubeId( req.body.url )
 		
 		defer.resolve( id )
 		return defer.promise	
