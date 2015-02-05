@@ -10,7 +10,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$sceDelegateProvider.resourceUrlWhitelist( [
 		'self',
-		'https://www.youtube.com/**'
+		'https://www.youtube.com/**',
+		'https://w.soundcloud.com/**',
+		'https://api.soundcloud.com/**'
 	] )
 
 	// add the custom service to add Authenticaiotn to header
