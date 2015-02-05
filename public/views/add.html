@@ -10,7 +10,7 @@
 					<option value="read">Article</option>
 					<option value="watch">Video</option>
 					<option value="listen">Music</option>
-			</select> 
+			</select>
 		
 		</span>
 		</div>
@@ -21,7 +21,7 @@
 
 	 <div class="article-preview" ng-show="showPreview">
 			<h2> {{ contentPreview.title }} </h2>
-			<img ng-src="{{ contentPreview.imageThumb }}" class="story-image">
+			<img ng-src="{{ contentPreview.image }}" class="story-image">
 			<p>{{ contentPreview.text | limitTo: 280 }} ... </p>
 	 </div>
 
