@@ -2,6 +2,11 @@
 	
 	<div class="panel" ng-repeat="song in songs">
 		<h2>{{ song.title }}</h2>
+
+		<iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="{{ embedUrl( song.songId ) }}"></iframe>
+
 	</div>
+
+
 	
 </div>
