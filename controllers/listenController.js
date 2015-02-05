@@ -1,5 +1,5 @@
-var User = require( '../models/userModel' ),
-	Song = require( '../models/songModel' ),
+var Song = require( '../models/songModel' ),
+	User = require( '../models/userModel' ),
 	mongoose = require( 'mongoose' ),
 	URL = require( 'url' ),
 	Q = require( 'q' ),
@@ -72,4 +72,28 @@ exports.add = function ( req, res ) {
 		return res.json ( err )
 	})
 		
+}
+
+exports.stream = function ( req, res ) {
+	
+	function findSongs () {
+		var deferred = Q.defer()
+		var userId = getUser( req.token )
+		Q.all( [ userId ], function ( result ) {
+			Song.find( { $query: { user: user }, $oderby: { added: -1 } }, function ( err, data ) {
+				if ( err )
+					return res.json( err )
+				
+				deferred.resolve( data )
+			})
+		})
+		return deferred.promise
+	}
+	
+	findSongs()
+	.then( function ( data ) {
+		return res.json( data )
+	}, function ( err ) {
+		return res.json ( err ) 
+	})
 }
