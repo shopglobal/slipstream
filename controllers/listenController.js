@@ -4,7 +4,6 @@ var Song = require( '../models/songModel' ),
 	URL = require( 'url' ),
 	Q = require( 'q' ),
 	getUser = require( '../helpers/get-user' ),
-//	SoundCloud = require( '../helpers/soundcloud-node' )
 	SC = require( 'soundclouder' ),
 	request = require( 'request' )
 
@@ -80,7 +79,7 @@ exports.stream = function ( req, res ) {
 		var deferred = Q.defer()
 		var userId = getUser( req.token )
 		Q.all( [ userId ] ).then( function ( result ) {
-			Song.find( { $query: { user: result[0] }, $oderby: { added: -1 } }, function ( err, data ) {
+			Song.find( { $query: { user: result[0] }, $orderby: { added: -1 } }, function ( err, data ) {
 				if ( err )
 					return res.json( err )
 				
