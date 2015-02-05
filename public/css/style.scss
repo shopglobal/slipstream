@@ -74,7 +74,6 @@ a { color: $green;
 
 .spinner { padding: 15px; }
 
-
 // navigation
 
 #header { background-color: $green-grey;
@@ -94,13 +93,15 @@ a { color: $green;
       &:visited { color: $highlight; } } } }
 
 #addModal { margin-top: 15px; margin-bottom: 15px;
-    .add-row { padding-top: 10px;
-        #addType { min-width: 100px; } }
+    .type-toggle { 
+    	& > input { visibility: hidden; position: absolute; }
+    	& > input + span { color: #ccc; } 
+    	& > input:checked + span { color: $highlight; } }
+    #addType { min-width: 100px; padding-top: 10px; border: none; box-shadow: none; } 
     [type="text"] { width: 100%; }
     .article-preview { padding-top: 20px;
-
-    .article-preview h2 { float: none; clear: both; }
-    .story-image { width: auto; float: left; margin: 0 15px 15px 0; } } }
+    	.article-preview h2 { float: none; clear: both; }
+    	.story-image { width: auto; float: left; margin: 0 15px 15px 0; } } }
 
 .stream-article { clear: both; position: relative; border-color: $darkbase; border-width: 0 0 1px 0; border-radius: 0; box-shadow: none; padding-bottom: 30.5px; margin-bottom: 9.5px;
 	h2 { margin-top: 0; font-family: $headline-font; font-weight: 700; color: $darkbase; }
