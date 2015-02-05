@@ -5,7 +5,7 @@ module.exports = function getUser ( token ) {
 	var deferred = Q.defer()
 	
 	User.findOne( { token: token }, function ( err, data ) {
-		deferred.resolve( data._id )
+		deferred.resolve( data.id )
 	})
 	
 	return deferred.promise

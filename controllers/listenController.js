@@ -79,8 +79,8 @@ exports.stream = function ( req, res ) {
 	function findSongs () {
 		var deferred = Q.defer()
 		var userId = getUser( req.token )
-		Q.all( [ userId ], function ( result ) {
-			Song.find( { $query: { user: user }, $oderby: { added: -1 } }, function ( err, data ) {
+		Q.all( [ userId ] ).then( function ( result ) {
+			Song.find( { $query: { user: result[0] }, $oderby: { added: -1 } }, function ( err, data ) {
 				if ( err )
 					return res.json( err )
 				
