@@ -1,5 +1,3 @@
-// the constoller for "watch" stream actions.
-
 var User = require( '../models/userModel' ),
 	Video = require( '../models/videoModel' ),
 	mongoose = require( 'mongoose' ),
