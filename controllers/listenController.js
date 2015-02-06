@@ -98,3 +98,23 @@ exports.stream = function ( req, res ) {
 		return res.json ( err ) 
 	})
 }
+
+exports.delete = function ( req, res ) {
+	var contentId = mongoose.Types.ObjectId( req.query.id )
+	
+	function deleteSong ( user ) {
+		var deferred = Q.defer()
+		
+		Song.remove( { user: user, _id: contentId }, function ( err, song ) {
+			deferred.resolve( song )
+		})
+		
+		return deferred.promise
+	} 
+	
+	getUser( req.token ).then( deleteSong ).then( function ( songId ) {
+		return res.json( { status: 200, Message: "Deleted: " + song.title } )
+	}, function ( err ) {
+		return res.json( { status: 500, Message: err } )	
+	})
+}
