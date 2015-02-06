@@ -1,3 +1,5 @@
+// controller for the listen stream
+
 var Song = require( '../models/songModel' ),
 	User = require( '../models/userModel' ),
 	mongoose = require( 'mongoose' ),

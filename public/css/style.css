@@ -223,8 +223,16 @@ a {
     height: 0;
     clear: both; }
 
-.video-panel h2 {
-  padding: 0 15px 0 15px; }
+.video-panel {
+  position: relative; }
+  .video-panel .btn-delete {
+    position: absolute;
+    right: 0;
+    top: 40;
+    color: #00E0AA;
+    font-size: 24px; }
+  .video-panel h2 {
+    padding: 0 15px 0 15px; }
 
 .video-iframe {
   height: 480px; }
