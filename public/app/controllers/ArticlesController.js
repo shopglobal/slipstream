@@ -1,7 +1,10 @@
 app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter', '$http', function( $scope, $window, $state, $urlRouter, $http ) {
 
 	$http
-		.get( 'api/stream/read')
+		.get( 'api/stream/read', { params: { 
+			show: 3, 
+			page: 1 
+		} } )
 			.success( function ( data ) {
 				$scope.articles = data
 			})
