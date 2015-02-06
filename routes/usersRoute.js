@@ -46,9 +46,9 @@ router.route('/stream/listen')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		listenController.stream( req, res )
 	})
-//	.delete( userController.checkAuthorization, function ( req, res ) {
-//		listenController.delete( req, res )
-//	})
+	.delete( userController.checkAuthorization, function ( req, res ) {
+		listenController.delete( req, res )
+	})
 
 router.route('/authenticate')
 	.post( userController.login )
