@@ -11,7 +11,6 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		email: ''
 	}
 
-
 	// logs in. signs in and returns the user's token into her
 	// session storage
 
@@ -80,5 +79,14 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			$scope.isLoggedIn = true
 		}
 	})
+
+	// deletes an item. format: ` delete( type(string), id ) `
+
+	$scope.deleteItem = function ( type, id ) {
+		$http.delete( 'api/stream/' + type, { params: { id: id } } )
+		.error( function ( error ) {
+			console.log( error )
+		})
+	}
 
 }])

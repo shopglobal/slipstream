@@ -1,7 +1,9 @@
 <div ng-controller="WatchController as videos">
 	
-	<div class="panel video-panel" ng-repeat="video in videos">
+	<div class="panel video-panel" ng-repeat="video in videos" ng-hide="hideItem">
 		<h2>{{ video.title }}</h2>
+
+		<button class="btn btn-default btn-xs no-border btn-delete" ng-click="deleteItem( 'watch', video._id ); hideItem=true">X</button>
 		
 		<div class="video-iframe col-md-9">
 			<iframe width="100%" height="100%" ng-src="{{ 'https://www.youtube.com/embed/' + video.videoId }}" frameborder="0" allowfullscreen></iframe>
@@ -12,6 +14,7 @@
 			Views: {{ video.views }} <br />
 			Date added: {{ video.date * 1000 | date:"MMM dd HH:mm" }} <br />
 			Date uploaded: {{ video.date * 1000 | date:"MMM dd HH:mm" }} <br />
+
 		</div>
 		
 		<div class="clearfix"></div>
