@@ -1,3 +1,5 @@
+// controller for the "watch" stream
+
 var User = require( '../models/userModel' ),
 	Video = require( '../models/videoModel' ),
 	mongoose = require( 'mongoose' ),
