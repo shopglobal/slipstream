@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress'])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll' ])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
 	
@@ -51,9 +51,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 }])
 
-//
+
 // service to add the token the header of the request
-//
+
 .factory('authInterceptor', [ '$window', function ( $window ) {
 	return {
 		request : function (config) {
@@ -65,6 +65,105 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		}
 	}
 } ] )
+
+// gets content for infinite scrolling 
+
+.factory( 'Content', [ '$http', function ( $http ) {
+	var Content = function () {
+		this.items = []
+		this.busy = false
+		this.last = 1
+	}
+
+	Content.prototype.loadMore = function ( type ) {
+		if ( this.busy )
+			return
+
+		console.log( "new content requested" )
+
+		this.busy = true
+
+		$http
+			.get( 'api/stream/' + type, { params: { 
+				show: 3, 
+				page: this.last 
+			} } )
+				.success( function ( data ) {
+					console.log( data )
+					for( i = 0; i < data.length; i++) {
+						this.items.push( data[i] )
+					}
+				
+					this.last++
+					this.busy = false
+			}.bind(this))
+	}
+
+	return Content
+}])
+
+// getting the items from the read stream for the endless scrolling
+
+// .factory('datasource', [
+//     '$timeout', '$http', function( $timeout, $http ) {
+//         var get;
+//         get = function(index, count, success) {
+//             return $timeout(function() {
+//                 var i, result, _i, _ref;
+//                 result = []
+//                 var articles
+//                 $http
+// 					.get( 'api/stream/read', { params: { 
+// 						show: 10, 
+// 						page: 1 
+// 					} } )
+// 						.success( function ( data ) {
+// 							articles = data
+// 						})
+// 						.error( function ( error ) {
+// 							console.log( 'Error: ' + error)
+// 						})
+//                 for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
+//                 	result.push( articles[i] )
+//                 }
+//                 return success( result );
+//             }, 100);
+//         };
+//         return {
+//             get: get
+//         };
+//     }
+// ])
+
+
+// .factory( 'readStream', [ '$timeout', '$http', function ( $timeout, $http ) {
+// 	var get = function ( index, count, success ) {
+// 		return $timeout( function () {
+// 			var results = []
+			
+// 			for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
+// 					results.push("item #" + i);
+// 			}
+
+// 			// $http
+// 			// 	.get( 'api/stream/read', { params: { 
+// 			// 		show: 10, 
+// 			// 		page: 1 
+// 			// 	} } )
+// 			// 		.success( function ( data ) {
+// 			// 			results.push( data )
+// 			// 		})
+// 			// 		.error( function ( error ) {
+// 			// 			console.log( 'Error: ' + error)
+// 			// 		})
+
+// 			return success( results )
+// 		}, 1000 )
+// 	}
+	
+// 	return { get : get }
+
+// } ] )
 
 	//
 	// set a scope variable for whether a user is signed in or not

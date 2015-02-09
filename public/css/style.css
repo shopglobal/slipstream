@@ -23,6 +23,9 @@
 .landing-container {
   width: 700px; }
 
+#viewport {
+  height: 400px; }
+
 /* bootstrap edits */
 a {
   color: #00E0AA; }

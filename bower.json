@@ -25,6 +25,7 @@
     "angular-ui-router": "~0.2.13",
     "ngstorage": "~0.3.0",
     "angular-bootstrap": "~0.12.0",
-    "angular-ui-utils": "bower-keypress"
+    "angular-ui-utils": "bower",
+    "ngInfiniteScroll": "~1.2.0"
   }
 }
