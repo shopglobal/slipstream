@@ -1,7 +1,7 @@
 'use strict'
 
-var mongoose = require('mongoose'),
-	 UserSchema = require('./userModel')
+var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+	UserSchema = require('./userModel')
 
 //
 // schema for the blog object in database

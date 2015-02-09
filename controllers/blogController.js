@@ -5,8 +5,8 @@ var fs = require('fs'),
 	tokenManager = require('../config/tokenManager'),
 	article = require('article'),
 	async = require('async'),
-	request = require('request'),
-	mongoose = require('mongoose'),
+	request = require( 'request' ),
+	mongoose = require( 'mongoose-q' )(),
 	saveImage = require( '../helpers/save-image' )
 
 // adds and item to the articles database with the user's id.
@@ -57,16 +57,17 @@ exports.add = function ( req, res ) {
 // gets items form the articles database based on the user asking
 
 exports.stream = function ( req, res ) {
+	var show = req.query.show
+	var page = req.query.page
+	
 	User.findOne( { token: req.token }, function ( err, user ) {
 		if( err )
 			return res.sendStatus(403)
 			
-		Blog.find( { $query: { user: user.id }, $orderby: { added: -1 } },
-		function ( err, blogs ) {
-			if( err )
-				return res.json( "No article content found, or something went wrong." )
-			
-			return res.json( blogs )
+		Blog.find( { $query: { user: user.id }, $orderby: { added: -1 } } )
+		.skip( page > 0 ? (( page - 1) * show) : 0).limit( show ).exec()
+		.then( function ( result ) {
+			return res.json( result )
 		})
 	})
 }

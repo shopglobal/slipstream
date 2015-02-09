@@ -13,13 +13,4 @@ app.controller('ListenController', ['$scope', '$window', '$state', '$urlRouter',
 				console.log( 'Error: ' + error)
 			})
 
-	$scope.deleteArticle = function ( id ) {
-		$http.delete( 'api/stream/listen', { params: {
-			id: id
-		}})
-			.error( function( error ) {
-				console.log( error )
-			})
-	}
-
 }])
