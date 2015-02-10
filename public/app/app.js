@@ -66,7 +66,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	}
 } ] )
 
-// gets content for infinite scrolling 
+// gets content for infinite scrolling. usage: loadMore( TYPE, AMOUNT )
 
 .factory( 'Content', [ '$http', function ( $http ) {
 	var Content = function () {
@@ -75,7 +75,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		this.last = 1
 	}
 
-	Content.prototype.loadMore = function ( type ) {
+	Content.prototype.loadMore = function ( type, show ) {
 		if ( this.busy )
 			return
 
@@ -85,7 +85,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 		$http
 			.get( 'api/stream/' + type, { params: { 
-				show: 3, 
+				show: show, 
 				page: this.last 
 			} } )
 				.success( function ( data ) {
