@@ -1,12 +1,6 @@
-<div ng-controller="ArticlesController as articles">
-<!-- 
-	<div ui-scroll="item in datasource">
+<div ng-controller="ArticlesController as articles" class="content-list">
 
-		{{ item }}
-
-	</div> -->
-
-	<div infinite-scroll="articles.loadMore('read')">
+	<div infinite-scroll="articles.loadMore('read', 10)" infinite-scroll-immediate-check="true">
 
 		<div class="stream-article panel panel-green" ng-repeat="article in articles.items" ng-hide="hideArticle">
 	        
@@ -30,5 +24,5 @@
 		<div class="loading" ng-show="articles.busy">Loading...</div>
 
 	</div>
-
+	<div class="clearfix"></div>
 </div>
