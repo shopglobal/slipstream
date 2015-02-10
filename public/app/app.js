@@ -79,8 +79,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		if ( this.busy )
 			return
 
-		console.log( "new content requested" )
-
 		this.busy = true
 
 		$http
@@ -89,7 +87,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				page: this.last 
 			} } )
 				.success( function ( data ) {
-					console.log( data )
 					for( i = 0; i < data.length; i++) {
 						this.items.push( data[i] )
 					}
