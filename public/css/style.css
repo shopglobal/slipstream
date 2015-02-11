@@ -4,8 +4,24 @@
 @font-face {
   font-family: 'Domine';
   src: url("../fonts/Domine-Regular.ttf"); }
+@font-face {
+  font-family: 'Oxygen';
+  src: url("../fonts/Oxygen-Regular.ttf");
+  font-style: normal;
+  font-weight: bold; }
+@font-face {
+  font-family: 'Oxygen';
+  src: url("../fonts/Oxygen-Light.ttf");
+  font-style: normal;
+  font-weight: light; }
+@font-face {
+  font-family: 'Oxygen';
+  src: url("../fonts/Oxygen-Bold.ttf");
+  font-style: normal;
+  font-weight: bold; }
 body {
-  background-color: #F2F1F1; }
+  background-color: #F2F1F1;
+  font-family: Oxygen; }
 
 .login-wrapper {
   width: 100%;
@@ -27,6 +43,9 @@ body {
   width: 700px; }
 
 /* bootstrap edits */
+h1, h2, h3, h4, h5 {
+  font-weight: 300; }
+
 a {
   color: #00E0AA; }
   a:hover {
@@ -133,9 +152,10 @@ a {
 .no-border {
   border: none;
   background: none; }
-  .no-border:hover {
+  .no-border:hover, .no-border:active {
     border: none;
-    background: none; }
+    background: none;
+    box-shadow: none; }
 
 .btn-delete {
   color: #E44A39; }
@@ -145,6 +165,13 @@ a {
 
 .spinner {
   padding: 15px; }
+
+.btn-delete {
+  position: absolute;
+  right: 15;
+  top: 15;
+  color: #00E0AA;
+  font-size: 24px; }
 
 #header #nav-row-1 {
   margin-bottom: 28px;
@@ -161,12 +188,29 @@ a {
   background: white; }
   .content-toggle .btn {
     height: 50px; }
+    .content-toggle .btn .glyphicon {
+      margin-right: 25px; }
 
 .navbar-green {
   background-color: transparent;
   background-image: none;
   border-radius: 0;
   border: none; }
+  .navbar-green .add-container {
+    box-sizing: border-box;
+    max-height: 50px; }
+    .navbar-green .add-container:hover {
+      background: transparent; }
+    .navbar-green .add-container:hover > a, .navbar-green .add-container:hover > a:visited {
+      color: white; }
+    .navbar-green .add-container a {
+      padding: 7px; }
+    .navbar-green .add-container .add-button {
+      font-size: 24px;
+      font-weight: 700;
+      padding: 5px 8px;
+      border: 3px solid white;
+      border-radius: 5px; }
   .navbar-green .navbar-brand {
     color: white; }
     .navbar-green .navbar-brand:hover {
@@ -179,9 +223,7 @@ a {
       background: #00E0AA; }
   .navbar-green ul li:hover {
     background: white; }
-  .navbar-green ul li:hover > a:visited {
-    color: #00E0AA; }
-  .navbar-green ul li:hover > a {
+  .navbar-green ul li:hover > a:visited, .navbar-green ul li:hover > a {
     color: #00E0AA; }
   .navbar-green ul li a {
     color: white; }
@@ -237,18 +279,20 @@ a {
   margin-bottom: 9.5px; }
   .stream-article h2 {
     margin-top: 0;
-    font-family: Domine;
-    font-weight: 700;
+    font-family: Oxygen;
     color: #00E0AA; }
   .stream-article .article-snippet {
     margin-top: 20px;
-    font-family: Domine;
+    font-family: Oxygen;
     line-height: 22px; }
   .stream-article .share-links {
     position: absolute;
     bottom: 0;
     right: 15px;
     display: block; }
+    .stream-article .share-links .glyphicon {
+      font-size: 24px;
+      color: #C5C5C5; }
   .stream-article .stream-article-image {
     float: left;
     float: left;
@@ -260,12 +304,6 @@ a {
 
 .video-panel {
   position: relative; }
-  .video-panel .btn-delete {
-    position: absolute;
-    right: 0;
-    top: 40;
-    color: white;
-    font-size: 24px; }
   .video-panel h2 {
     padding: 0 15px 0 15px; }
 
@@ -274,11 +312,5 @@ a {
 
 .listen-panel {
   position: relative; }
-  .listen-panel .btn-delete {
-    position: absolute;
-    right: 15px;
-    top: 40px;
-    color: white;
-    font-size: 24px; }
 
 /*# sourceMappingURL=style.css.map */
