@@ -173,6 +173,10 @@ a {
   color: #00E0AA;
   font-size: 24px; }
 
+#header .navbar-brand {
+  padding-top: 10px; }
+  #header .navbar-brand #logo {
+    height: 30px; }
 #header #nav-row-1 {
   margin-bottom: 28px;
   background-color: #00E0AA;
