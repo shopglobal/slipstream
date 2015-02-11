@@ -1,22 +1,15 @@
-app.controller('WatchController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$sce', function( $scope, $window, $state, $urlRouter, $http, $sce ) {
+app.controller('WatchController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$sce', 'Content', function( $scope, $window, $state, $urlRouter, $http, $sce, Content ) {
 
-	$http
-		.get( 'api/stream/watch')
-			.success( function ( data ) {
-				$scope.videos = data
-			})
-			.error( function ( error ) {
-				console.log( 'Error: ' + error)
-			})
+	$scope.videos = new Content()
 
-
-
-	// $scope.deleteArticle = function ( id ) {
-	// 	$http.delete( 'api/stream/articles', { params: {
-	// 		id: id
+	// $http
+	// 	.get( 'api/stream/watch', { params: {
+	// 		page: 
 	// 	}})
-	// 		.error( function( error ) {
-	// 			console.log( error )
+	// 		.success( function ( data ) {
+	// 			$scope.videos = data
 	// 		})
-	// }
+	// 		.error( function ( error ) {
+	// 			console.log( 'Error: ' + error)
+	// 		})
 }])

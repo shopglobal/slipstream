@@ -92,18 +92,26 @@ exports.add = function ( req, res ) {
 }
 	
 exports.stream = function( req, res ) {
-	User.findOne( { token: req.token }, function ( err, user ) {
-		if( err )
-			return res.sendStatus(403)
-			
-		Video.find( { $query: { user: user.id }, $orderby: { added: -1 } },
-		function ( err, videos ) {
-			if( err )
-				return res.json( "No article content found, or something went wrong." )
-			
-			return res.json( videos )
+	var show = req.query.show,
+		page = req.query.page	
+	
+	function getWatchStream ( user ) {
+		var deferred = Q.defer()
+		
+		Video.find( { $query: { user: user }, $orderby: { added: -1 } } )
+		.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show ).exec()
+		.then( function ( result ) {
+			deferred.resolve( result )	
 		})
-	})	
+		return deferred.promise
+	}
+	
+	getUser( req.token )
+	.then( getWatchStream )
+	.then( function ( videos ) {
+		return res.json( videos )	
+	})
+
 }
 
 // delete a video

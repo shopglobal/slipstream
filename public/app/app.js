@@ -72,7 +72,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	var Content = function () {
 		this.items = []
 		this.busy = false
-		this.last = 1
+		this.page = 1
 	}
 
 	Content.prototype.loadMore = function ( type, show ) {
@@ -84,14 +84,14 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		$http
 			.get( 'api/stream/' + type, { params: { 
 				show: show, 
-				page: this.last 
+				page: this.page 
 			} } )
 				.success( function ( data ) {
 					for( i = 0; i < data.length; i++) {
 						this.items.push( data[i] )
 					}
 				
-					this.last++
+					this.page++
 					this.busy = false
 			}.bind(this))
 	}
