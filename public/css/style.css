@@ -188,6 +188,8 @@ a {
   background: white; }
   .content-toggle .btn {
     height: 50px; }
+    .content-toggle .btn .glyphicon {
+      margin-right: 25px; }
 
 .navbar-green {
   background-color: transparent;
