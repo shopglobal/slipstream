@@ -223,6 +223,9 @@ a {
   max-width: 754px;
   margin: 0 auto; }
 
+.list-container {
+  height: 100%; }
+
 .stream-article {
   clear: both;
   position: relative;

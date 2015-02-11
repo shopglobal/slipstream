@@ -1,28 +1,33 @@
-<div ng-controller="ArticlesController as articles" class="content-list">
+<div ng-controller="ArticlesController as articles" class="list-container">
 
-	<div infinite-scroll="articles.loadMore('read', 10)" infinite-scroll-immediate-check="true">
+	<div class="content-list">
 
-		<div class="stream-article panel panel-green" ng-repeat="article in articles.items" ng-hide="hideArticle">
-	        
-			<img ng-src="{{ article.imageThumb }}" class="stream-article-image">
-			<a target="_blank" href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
-			<p class="article-snippet">{{ article.text | limitTo: 390 }}... </p>
+		<div infinite-scroll="articles.loadMore('read', 5)" infinite-scroll-immediate-check="true">
 
-			<div class="share-links">
-				<div class="form-group">
-			
-					<button class="btn btn-default btn-xs no-border" popover="Right-click and select copy link" popover-trigger="mouseenter" popover-placement="bottom"><a href="{{ article.url }}">Link</a></button>
-					
+			<div class="stream-article panel panel-green" ng-repeat="article in articles.items" ng-hide="hideArticle">
+		        
+				<img ng-src="{{ article.imageThumb }}" class="stream-article-image">
+				<a target="_blank" href="{{ article.url }}"><h2>{{ article.title }}</h2></a>
+				<p class="article-snippet">{{ article.text | limitTo: 390 }}... </p>
 
-					<button class="btn btn-default btn-xs no-border btn-delete" ng-click="deleteItem( 'read', article._id ); hideArticle=true">X</button>
+				<div class="share-links">
+					<div class="form-group">
+				
+						<button class="btn btn-default btn-xs no-border" popover="Right-click and select copy link" popover-trigger="mouseenter" popover-placement="bottom"><a href="{{ article.url }}">Link</a></button>
+						
 
+						<button class="btn btn-default btn-xs no-border btn-delete" ng-click="deleteItem( 'read', article._id ); hideArticle=true">X</button>
+
+					</div>
 				</div>
-			</div>
-			<div class="clearfix"></div>
-	    </div>
+				<div class="clearfix"></div>
+		    </div>
 
-		<div class="loading" ng-show="articles.busy">Loading...</div>
+			<div class="loading" ng-show="articles.busy">Loading...</div>
 
+		</div>
+	
 	</div>
+
 	<div class="clearfix"></div>
 </div>

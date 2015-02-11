@@ -129,6 +129,8 @@ a { color: $green;
 
 .content-list { background-color: white; border-radius: 5px; border: 2px solid $list-border; box-shadow: 0px 0px 2px rgba( 0, 0, 0, 0.1); max-width: 754px; margin: 0 auto; }
 
+.list-container { height: 100%; }
+
 .stream-article { clear: both; position: relative; border-color: $list-border; border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; padding-bottom: 30.5px; margin-bottom: 9.5px;
 	h2 { margin-top: 0; font-family: $headline-font; font-weight: 700; color: $darkbase; }
 	.article-snippet { margin-top: 20px; font-family: $snippet-font; line-height: 22px; }
