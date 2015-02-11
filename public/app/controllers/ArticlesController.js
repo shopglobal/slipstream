@@ -14,10 +14,6 @@ app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter
 
 	$scope.articles = new Content()
 
-	setTimeout( function () {
-		console.log( $scope.articles )
-	},1000)
-
 	// $scope.loadMore = function () {
 		
 	// 	var last = ( $scope.articles.length / 3 )
