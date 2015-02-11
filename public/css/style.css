@@ -194,6 +194,21 @@ a {
   background-image: none;
   border-radius: 0;
   border: none; }
+  .navbar-green .add-container {
+    box-sizing: border-box;
+    max-height: 50px; }
+    .navbar-green .add-container:hover {
+      background: transparent; }
+    .navbar-green .add-container:hover > a, .navbar-green .add-container:hover > a:visited {
+      color: white; }
+    .navbar-green .add-container a {
+      padding: 7px; }
+    .navbar-green .add-container .add-button {
+      font-size: 24px;
+      font-weight: 700;
+      padding: 5px 8px;
+      border: 3px solid white;
+      border-radius: 5px; }
   .navbar-green .navbar-brand {
     color: white; }
     .navbar-green .navbar-brand:hover {
@@ -206,9 +221,7 @@ a {
       background: #00E0AA; }
   .navbar-green ul li:hover {
     background: white; }
-  .navbar-green ul li:hover > a:visited {
-    color: #00E0AA; }
-  .navbar-green ul li:hover > a {
+  .navbar-green ul li:hover > a:visited, .navbar-green ul li:hover > a {
     color: #00E0AA; }
   .navbar-green ul li a {
     color: white; }

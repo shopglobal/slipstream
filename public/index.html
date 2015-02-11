@@ -32,21 +32,21 @@
 			</div>
 			<div class="collpase navbar-collapse">				
 				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<a href="" ng-click="openAddModal()"><span class="glyphicon glyphicon-plus-sign"></span> Add</a>
+					<li class="add-container">
+						<a href="" ng-click="openAddModal()"><div class="add-button">+</div></a>
 					</li>
 				
 				
 					<li>
 						<div class="dropdown user-menu">
-						  <button class="btn btn-highlight dropdown-toggle no-border" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+						  <button class="btn btn-highlight dropdown-toggle no-border" type="button" id="user-menu" data-toggle="dropdown" aria-expanded="true">
 						    <span class="glyphicon glyphicon-menu-hamburger"></span>
-						    <spen class="sr-only">
+						    <span class="sr-only">
 								Toggle User Menu
-							</spen>
+							</span>
 						  </button>
 						  
-						  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
+						  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="user-menu">
 						    <li role="presentation"><a role="menuitem" tabindex="-1" href="#/profile">Profile</a></li>
 						    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="logout()">Log out</a></li>
 						  </ul>

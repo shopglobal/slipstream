@@ -124,6 +124,11 @@ a { color: $green;
 	.btn { height: 50px; } }
 
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none; 
+	.add-container { box-sizing: border-box; max-height: 50px;
+		&:hover { background: transparent; }
+		&:hover > a, &:hover > a:visited { color: white; } 
+		a { padding: 7px; }
+		.add-button { font-size: 24px; font-weight: 700; padding: 5px 8px; border: 3px solid white; border-radius: 5px; } }
 	.navbar-brand { color: white;
 		&:hover { color: white; } }
 	.user-menu { padding: 12px 15px; 
@@ -131,8 +136,7 @@ a { color: $green;
 		ul li:hover { background: $green; } }
 	ul li {
 		&:hover { background: white; }
-		&:hover > a:visited { color: $darkbase; }
-		&:hover > a { color: $darkbase; }
+		&:hover > a:visited, &:hover > a { color: $darkbase; }
 		a { color: $highlight;
 			&:visited { color: $highlight; } } } }
 
