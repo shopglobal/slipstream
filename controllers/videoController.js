@@ -61,6 +61,7 @@ exports.add = function ( req, res ) {
 				duration: vData.contentDetails.duration,
 				rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
 			})
+			video.save()
 			deferred.resolve( video )
 		})
 		
@@ -100,7 +101,6 @@ exports.add = function ( req, res ) {
 	Q.all( [ getUser(), video ] )
 	.then( makeVideoObject )
 	.then( function ( video ) {
-		video.save()
 		return res.json( video )
 	})
 	

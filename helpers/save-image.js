@@ -72,13 +72,13 @@ module.exports = function ( type, imageUrl ) {
 			src: imageRootDir + imageFileOriginal,
 			dst: imageRootDir + imageFileThumb,
 			width: 250
-		})
+		}).then( function ( file ) {
+			var originalFinalPath = "images/" + type + "/" + imageFileOriginal
+			var thumbFinalPath = "images/" + type + "/" + imageFileThumb
+			var paths = [ imageHash, originalFinalPath, thumbFinalPath ]
 
-		var originalFinalPath = "images/" + type + "/" + imageFileOriginal
-		var thumbFinalPath = "images/" + type + "/" + imageFileThumb
-		var paths = [ imageHash, originalFinalPath, thumbFinalPath ]
-		
-		deferred.resolve( paths )
+			deferred.resolve( paths )	
+		})		
 		
 		return deferred.promise
 	}
