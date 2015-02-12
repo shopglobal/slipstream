@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll' ])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago' ])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
 	
@@ -68,11 +68,14 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 // gets content for infinite scrolling. usage: loadMore( TYPE, AMOUNT )
 
+.value( 'THROTTLE_MILLISECONDS', 500 )
+
 .factory( 'Content', [ '$http', function ( $http ) {
 	var Content = function () {
 		this.items = []
 		this.busy = false
 		this.page = 1
+		THROTTLE_MILLISECONDS = 1000
 	}
 
 	Content.prototype.loadMore = function ( type, show ) {
