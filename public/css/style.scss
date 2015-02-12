@@ -129,25 +129,27 @@ a { color: $green;
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none; 
 	.add-container { box-sizing: border-box; max-height: 50px;
 		&:hover { background: transparent; }
-		&:hover > a, &:hover > a:visited { color: white; } 
+		&:hover > a, &:hover > a:visited, a:visited { color: white; } 
 		a { padding: 7px; }
 		.add-button { font-size: 24px; font-weight: 700; padding: 5px 8px; border: 3px solid white; border-radius: 5px; } }
 	.navbar-brand { color: white;
 		&:hover { color: white; } }
-	.user-menu { padding: 12px 15px; 
-		a, a:visited { color: $green; }
-		ul li:hover { background: $green; } }
+	.user-menu-button { padding: 12px 15px;
+		.btn, .btn:hover { color: $highlight; } }
+	.user-menu a{ color: $green; 
+		&:visited { color: $green; } 
+		&:hover { background-color: $green; color: white; } }
 	ul li {
-		&:hover { background: white; }
-		&:hover > a:visited, &:hover > a { color: $darkbase; }
-		a { color: $highlight;
-			&:visited { color: $highlight; } } } }
+		&:hover { background: $darkbase; }
+		&:hover > a:visited, &:hover > a { color: white; } } }
 
 #addModal { margin-top: 15px; margin-bottom: 15px;
 	.type-toggle { 
 		& > input { visibility: hidden; position: absolute; }
-		& > input + span { color: #ccc; } 
-		& > input:checked + span { color: $highlight; } }
+		& > input + span { color: #ccc; }
+		& > input:hover + span { color: $highlight; }
+		& > input:checked + span { color: $darkbase; }
+		& > input:checked:hover + span { color: $highlight; } }
 	#addType { min-width: 100px; padding-top: 10px; border: none; box-shadow: none; } 
 	[type="text"] { width: 100%; }
 	.article-preview { padding-top: 20px;
