@@ -7,6 +7,7 @@ var User = require( '../models/userModel' ),
 	URL = require( 'url' ),
 	getYoutubeId = require( 'get-youtube-id' ),
 	getUser = require( '../helpers/get-user' ),
+	saveImage = require( '../helpers/save-image' ),
 	Q = require( 'q' )
 
 exports.add = function ( req, res ) {
@@ -40,23 +41,28 @@ exports.add = function ( req, res ) {
 		var user = data[0]
 		var vData = data[1].items[0]
 		
-		video = new Video({
-            user: user._id,
-            title: vData.snippet.title,
-            videoId: vData.id,
-            service: "youtube",
-            image: vData.snippet.thumbnails.high.url,
-            imageHash: "12345",
-			description: vData.snippet.description,
-            added: ( new Date() / 1000 ).toFixed(),
-            date: ( new Date( vData.snippet.publishedAt ) / 1000 ),
-            author: vData.channelId,
-            views: vData.viewCount,
-            duration: vData.contentDetails.duration,
-            rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
-        })
 		
-		deferred.resolve( video )
+		saveImage( req.body.type, vData.snippet.thumbnails.high.url )
+		.spread( function( imageHash, imageOriginalPath, imageThumbPath ) {
+		
+			video = new Video({
+				user: user._id,
+				title: vData.snippet.title,
+				videoId: vData.id,
+				service: "youtube",
+				image: imageOriginalPath,
+				imageThumb: imageThumbPath,
+				imageHash: imageHash,
+				description: vData.snippet.description,
+				added: ( new Date() / 1000 ).toFixed(),
+				date: ( new Date( vData.snippet.publishedAt ) / 1000 ),
+				author: vData.channelId,
+				views: vData.viewCount,
+				duration: vData.contentDetails.duration,
+				rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
+			})
+			deferred.resolve( video )
+		})
 		
 		return deferred.promise
     }
