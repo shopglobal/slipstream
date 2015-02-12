@@ -68,10 +68,13 @@ module.exports = function ( type, imageUrl ) {
 	function writeThumbnail ( imageRootDir, imageFileOriginal, imageFileThumb, imageHash ) {
 		var deferred = Q.defer()
 
-		easyimg.thumbnail({
+		easyimg.rescrop({
 			src: imageRootDir + imageFileOriginal,
 			dst: imageRootDir + imageFileThumb,
-			width: 250
+			width: 250, height: 140,
+			cropwidth: 250, cropheight: 140,
+			x: 0, y: 0,
+			fill: true			
 		}).then( function ( file ) {
 			var originalFinalPath = "images/" + type + "/" + imageFileOriginal
 			var thumbFinalPath = "images/" + type + "/" + imageFileThumb
