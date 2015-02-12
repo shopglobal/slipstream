@@ -26,7 +26,8 @@ exports.add = function ( req, res ) {
 			// runs function and save info to database
 			
 			function makeBlog ( callback ) {
-				saveImage( data, function ( imageHash, imageFileOriginal, imageFileThumb ) {
+				saveImage( req.body.type, data.image )
+				.spread( function ( imageHash, imageFileOriginal, imageFileThumb ) {
 					var blog = new Blog({
 						user: user._id,
 						title: data.title,
@@ -40,6 +41,7 @@ exports.add = function ( req, res ) {
 					callback( blog )
 				})
 			}
+
 			
 			function saveBlog ( blog ) {
 				blog.save( function ( err, blog ) {

@@ -2,3 +2,6 @@ node_modules
 public/vendor
 .brackets.json
 public/images/blogs/**
+public/images/read/**
+public/images/watch/**
+public/images/listen/**

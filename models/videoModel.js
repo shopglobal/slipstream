@@ -8,6 +8,7 @@ var VideoSchema = new mongoose.Schema ( {
 	videoId: String, 	// such as youtube ID
 	service: String, 	// such as "youtube"
 	image: String,
+	imageThumb: String,
 	imageHash: String,	// TODO: save image
 	description: String,
 	added: Number,		// the date the user added it to slipstream
