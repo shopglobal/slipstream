@@ -61,6 +61,8 @@ body { background-color: #F2F1F1; font-family: $body-font; }
 
 h1, h2, h3, h4, h5 { font-weight: 300; color: $green; }
 
+h2 { margin-top: 0 }
+
 a { color: $green;
 	&:hover { color: $orange; text-decoration: none; } }
 
@@ -188,4 +190,5 @@ a { color: $green;
 
 // listen panel
 
-.listen-panel { position: relative; }
+.listen-panel { position: relative; 
+	.listen-iframe { margin-bottom: 20px; } }
