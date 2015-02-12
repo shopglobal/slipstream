@@ -8,15 +8,15 @@
 			<form name="" id="addType" class="form-control pull-right add-row" ng-init="contentParams.type='read'">
 				<div class="btn-group">
 					<label for="read" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" />
+						<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'read' }}" />
 						<span class="glyphicon glyphicon-book"></span>
 					</label>
 					<label for="watch" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" />
+						<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'watch' }}" />
 						<span class="glyphicon glyphicon-film"></span>
 					</label>
 					<label for="listen" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" />
+						<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'listen' }}" />
 						<span class="glyphicon glyphicon-headphones"></span>
 					</label>
 				</div>
