@@ -35,8 +35,11 @@ exports.add = function ( req, res ) {
 
     // create the video object to be saved in the databse model
 
-    function makeVideoObject ( user, video ) {
-        var vData = video.items[0]
+    function makeVideoObject ( data ) {
+		var deferred = Q.defer()
+		var user = data[0]
+		var vData = data[1].items[0]
+		
 		video = new Video({
             user: user._id,
             title: vData.snippet.title,
@@ -44,6 +47,7 @@ exports.add = function ( req, res ) {
             service: "youtube",
             image: vData.snippet.thumbnails.high.url,
             imageHash: "12345",
+			description: vData.snippet.description,
             added: ( new Date() / 1000 ).toFixed(),
             date: ( new Date( vData.snippet.publishedAt ) / 1000 ),
             author: vData.channelId,
@@ -51,8 +55,10 @@ exports.add = function ( req, res ) {
             duration: vData.contentDetails.duration,
             rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
         })
-		video.save()
-		return res.json( video )
+		
+		deferred.resolve( video )
+		
+		return deferred.promise
     }
 	
 	// authenticate youtube api
@@ -85,8 +91,11 @@ exports.add = function ( req, res ) {
 	var videoId = getVideoId()
 	var video = videoId.then( youtubeFind )
 	
-	Q.all( [ user, video ] ).then( function ( result ) {
-		return makeVideoObject( result[0], result[1] )
+	Q.all( [ getUser(), video ] )
+	.then( makeVideoObject )
+	.then( function ( video ) {
+		video.save()
+		return res.json( video )
 	})
 	
 }

@@ -76,26 +76,26 @@ exports.add = function ( req, res ) {
 }
 
 exports.stream = function ( req, res ) {
+	var show = req.query.show,
+		page = req.query.page
 	
-	function findSongs () {
+	
+	function getListenStream ( user ) {
 		var deferred = Q.defer()
-		var userId = getUser( req.token )
-		Q.all( [ userId ] ).then( function ( result ) {
-			Song.find( { $query: { user: result[0] }, $orderby: { added: -1 } }, function ( err, data ) {
-				if ( err )
-					return res.json( err )
-				
-				deferred.resolve( data )
-			})
+		
+		Song.find( { $query: { user: user }, $orderby: { added: -1 } } )
+		.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
+		.exec()
+		.then( function ( result ) {
+			deferred.resolve( result )
 		})
 		return deferred.promise
 	}
 	
-	findSongs()
-	.then( function ( data ) {
-		return res.json( data )
-	}, function ( err ) {
-		return res.json ( err ) 
+	getUser( req.token )
+	.then( getListenStream )
+	.then( function ( results ) {
+		return res.json( results )
 	})
 }
 

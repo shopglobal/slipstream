@@ -1,11 +1,19 @@
-<div ng-controller="ListenController as songs" class="content-list">
+<div ng-controller="ListenController as songs" class="list-container">
 	
-	<div class="panel listen-panel" ng-repeat="song in songs" ng-hide=" hideItem ">
-		<h2>{{ song.title }}</h2>
+	<div class="content-list">
+	
+		<div infinite-scroll="songs.loadMore( 'listen', 3 )" infinite-scroll-immediate-check="true" infinite-scroll-disabled="busy">
+	
+			<div class="panel listen-panel" ng-repeat="song in songs.items" ng-hide=" hideItem ">
+				<h2>{{ song.title }}</h2>
 
-		<button class="btn btn-default btn-xs no-border btn-delete" ng-click="deleteItem( 'listen', song._id ); hideItem=true">X</button>
+				<button class="btn btn-default btn-xs no-border btn-delete" ng-click="deleteItem( 'listen', song._id ); hideItem=true">X</button>
 
-		<iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="{{ embedUrl( song.songId ) }}"></iframe>
+				<iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="{{ embedUrl( song.songId ) }}"></iframe>
+
+			</div>
+
+		</div>
 
 	</div>
 
