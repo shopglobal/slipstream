@@ -12,21 +12,21 @@
 	font-family: 'Oxygen';
 	src: url('../fonts/Oxygen-Regular.ttf');
 	font-style: normal;
-	font-weight: bold;
+	font-weight: 500;
 }
 
 @font-face {
 	font-family: 'Oxygen';
 	src: url('../fonts/Oxygen-Light.ttf');
 	font-style: normal;
-	font-weight: light;
+	font-weight: 300;
 }
 
 @font-face {
 	font-family: 'Oxygen';
 	src: url('../fonts/Oxygen-Bold.ttf');
 	font-style: normal;
-	font-weight: bold;
+	font-weight: 700;
 }
 
 $green: #00E0AA;
@@ -59,9 +59,11 @@ body { background-color: #F2F1F1; font-family: $body-font; }
 
 /* bootstrap edits */
 
-h1, h2, h3, h4, h5 { font-weight: 300; color: $green; }
+h1, h2 { font-weight: 300; color: $green; }
 
-h2 { margin-top: 0 }
+h3, h4, h5 { font-weight: 700; color: $green; }
+
+h2 { margin-top: 0; }
 
 a { color: $green;
 	&:hover { color: $orange; text-decoration: none; } }
@@ -73,14 +75,16 @@ a { color: $green;
 .btn-white { background: transparent; border-color: white; color: white; box-shadow: none; text-decoration: none;
 	&:hover { background: white; border-color: white; color: $green; box-shadow: none; text-decoration: none; } }
 
+.btn { font-weight: 700; }
+
 .btn-highlight { background: transparent; border-color: $highlight; color: $highlight; box-shadow: none; text-decoration: none;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
-.btn-green { background: transparent; border-color: $green; color: $green; box-shadow: none; text-decoration: none;
+.btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
 	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
 
 .btn-green-solid { background: $green; color: white;
-	&:hover { background: white; } }
+	&:hover { background: $green; } }
 
 .btn-group-thick { 
 	&:nth-child(2) { border-width: 3px; border-color: red; }
@@ -97,8 +101,6 @@ a { color: $green;
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
- .modal-content { box-shadow: none; border-color: $green; }
-
 .form-control:focus { box-shadow: none; border-color: $green; }
 
 .dropdown-menu { box-shadow: none; }
@@ -114,7 +116,9 @@ a { color: $green;
 
 .spinner { padding: 15px; }
 
-.btn-delete { position: absolute; right: 15; top: 15; color: $green; font-size: 24px; }
+.btn-delete { position: absolute; top: 0; right: 0; color: $green; font-size: 24px; }
+
+.add-form { margin-top: 20px; }
 
 // navigation
 
@@ -145,20 +149,29 @@ a { color: $green;
 		&:hover { background: $darkbase; }
 		&:hover > a:visited, &:hover > a { color: white; } } }
 
+// modals
+
+.add-modal { background-color: rgba( 255, 255, 255, 0.75);
+	.modal-dialog { width: 625px; }
+	.modal-content { box-shadow: none; border-color: $green; } }
+
 #addModal { margin-top: 15px; margin-bottom: 15px;
-	.type-toggle { 
+	.add-form { padding: 0; margin: 0; 
+		.add-form-text { padding: 0 } 
+		.add-form-toggle { padding: 0; margin: 0;
+			.add-form-toggle-buttons { min-width: 100px; border: none; box-shadow: none; padding: 0; margin: 7px 0; } } }
+	.type-toggle { border: 2px solid $green; font-size: 18px; padding: 2px 20px 3px 20px;
 		& > input { visibility: hidden; position: absolute; }
 		& > input + span { color: #ccc; }
 		& > input:hover + span { color: $highlight; }
 		& > input:checked + span { color: $darkbase; }
 		& > input:checked:hover + span { color: $highlight; } }
-	#addType { min-width: 100px; padding-top: 10px; border: none; box-shadow: none; } 
-	[type="text"] { width: 100%; }
+	.url-line { width: 99%; border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; }
 	.article-preview { padding-top: 20px;
-		.article-preview h2 { float: none; clear: both; }
-		.story-image { width: auto; float: left; margin: 0 15px 15px 0; } } }
-
-
+		.preview-text { padding: 0; margin: 0; 
+			h4 { margin: 0; padding: 0; } }
+		.preview-thumbnail { width: 150px; float: left; margin: 3px 15px 15px 0; } 
+	.add-row-bottom { padding-right: 0; } } }
 
 // content
 
@@ -175,8 +188,8 @@ a { color: $green;
 
 .stream-article { clear: both; position: relative; border-color: $list-border; border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; padding-bottom: 30.5px; margin-bottom: 9.5px;
 	h2 { margin-top: 0; font-family: $headline-font; color: $darkbase; }
-	.article-snippet { margin-top: 20px; font-family: $snippet-font; line-height: 22px; }
-	.stream-article-image { float: left; float: left; margin-right: 15px; width: 150px; }
+	.article-snippet { font-family: $snippet-font; line-height: 22px; }
+	.stream-article-image { float: left; float: left; margin-right: 15px; width: 200px; }
 	.clearfix { height: 0; clear: both; } }
 
 // video
