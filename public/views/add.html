@@ -1,26 +1,35 @@
 <div class="container-fluid" id="addModal">
 		
-		<button class="btn pull-right no-border" ng-click="cancel()"><span class="glyphicon  glyphicon-remove text-green"></span></button>
+		<h2 class="pull-left">Add to Stream</h2>
 
-		<div class="form-inline">
-			<input type="text" class="form-control input-green" ng-model="contentParams.url" placeholder="URL" ng-change="addContent(); blankCheck()">
+		<button class="btn pull-right no-border btn-delete" ng-click="cancel()">X</button>
+
+		<div class="add-form clear-fix col-md-12">
+
+			<div class="add-form-text col-md-8">
+				<input type="text" class="form-control input-green url-line" ng-model="contentParams.url" placeholder="Paste URL" ng-change="addContent(); blankCheck()">
+			</div>
+
+			<div class="clear-fix"></div>
 			
-			<form name="" id="addType" class="form-control pull-right add-row" ng-init="contentParams.type='read'">
-				<div class="btn-group">
-					<label for="read" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'read' }}" />
-						<span class="glyphicon glyphicon-book"></span>
-					</label>
-					<label for="watch" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'watch' }}" />
-						<span class="glyphicon glyphicon-film"></span>
-					</label>
-					<label for="listen" type="button" class="type-toggle btn btn-green">
-						<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'listen' }}" />
-						<span class="glyphicon glyphicon-headphones"></span>
-					</label>
-				</div>
-			</form>
+			<div class="add-form-toggle col-md-4">
+				<form name="" class="form-control pull-right add-form-toggle-buttons" ng-init="contentParams.type='read'">
+					<div class="btn-group pull-right">
+						<label for="read" type="button" class="type-toggle btn btn-green">
+							<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'read' }}" />
+							<span class="glyphicon glyphicon-book"></span>
+						</label>
+						<label for="watch" type="button" class="type-toggle btn btn-green">
+							<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'watch' }}" />
+							<span class="glyphicon glyphicon-film"></span>
+						</label>
+						<label for="listen" type="button" class="type-toggle btn btn-green">
+							<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'listen' }}" />
+							<span class="glyphicon glyphicon-headphones"></span>
+						</label>
+					</div>
+				</form>
+			</div>
 
 		</div>
 
@@ -29,19 +38,23 @@
 		</div>
 
 	 <div class="article-preview" ng-show="showPreview">
-			<h2> {{ contentPreview.title }} </h2>
-			<img ng-src="{{ contentPreview.imageThumb }}" class="story-image">
-			<p>{{ contentPreview.text | limitTo: 280 }} ... </p>
+			
+			<img ng-src="{{ contentPreview.imageThumb }}" class="preview-thumbnail">
+			
+			<div class="preview-text col-md-8">
+				<h4> {{ contentPreview.title }} </h4>
+				<p>{{ contentPreview.text | limitTo: 170 }} ... </p>
+			</div>
 	 </div>
 
-	 <div class="clear-fix col-md-12">
+	 <div class="clear-fix col-md-12 add-row-bottom">
 
-		<div class="container-fluid col-md-6">
+		<!-- <div class="container-fluid col-md-6">
 			 <button class="col-md-6 btn btn-green-solid btn-block" ng-click="deleteItem(); showPreview=false" ng-show="showPreview">Cancel (Delete)</button>
-		</div>
+		</div> -->
 
-		<div class="container-fluid col-md-6">
-			<button class="btn btn-green btn-block" ng-click="done(); showPreview=false" ng-show="showPreview">Done</button>
+		<div class="container-fluid col-md-3 pull-right done-button">
+			<button class="btn btn-green btn-block pull-right" ng-click="done(); showPreview=false" ng-show="showPreview">Done</button>
 		</div>
 
 	 </div>
