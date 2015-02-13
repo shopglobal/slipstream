@@ -1,4 +1,18 @@
-<div class="center-block landing-container">
-	<div ng-include="'views/login.html'"></div>
-	<div ng-include="'views/register.html'"></div>
+<link rel="stylesheet" href="css/landing.css" />
+
+<div class="container">
+
+<a ui-sref="landing.login">Login</a>
+<a ui-sref="landing.register">Register</a>
+
+	<div ui-view id="viewport" height="100%"></div>
+
+	<footer class="footer" role="footer">
+		<div class="container">
+			<p class="text-center">
+				@2015 {{ appName }}, all rights reserved 
+			</p>
+		</div>
+	</div>
+
 </div>

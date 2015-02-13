@@ -20,37 +20,100 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$httpProvider.interceptors.push('authInterceptor')
 
 	$stateProvider
-		.state( 'home', {
+		.state( 'landing', {
 			url: '/home',
+			templateUrl: 'views/landing.html'
+		})
+		.state( 'landing.login', {
+			url: '/login',
+			templateUrl: 'views/login.html'
+		})
+		.state( 'landing.register', {
+			url: '/register',
+			templateUrl: 'views/register.html'
+		})
+		.state( 'app', {
+			url: '/app',
+			templateUrl: 'views/app.html',
+			controller: 'MainController'
+		})
+		.state( 'app.home', {
+			url: '/main',
 			templateUrl: 'views/home.html',
 			controller: 'HomeController'
 		})
-		.state( 'read', {
+		.state( 'app.read', {
 			url: '/read',
 			templateUrl: 'views/articles.html',
 			controller: 'ArticlesController'
 		})
-		.state( 'watch', {
+		.state( 'app.watch', {
 			url: '/watch',
 			templateUrl: 'views/watch-stream.html',
 			controller: 'WatchController'
 		})
-		.state( '/login', {
+		.state( 'app.login', {
 			url: '/login',
 			templateUrl: 'views/login.html'
 		})
-		.state( '/profile', {
+		.state( 'app.profile', {
 			url: '/profile',
 			templateUrl: 'views/profile.html',
 			controller: 'ProfileController'
 		})
-		.state( 'listen', {
+		.state( 'app.listen', {
 			url: '/listen',
 			templateUrl: 'views/listen-stream.html',
 			controller: 'ListenController'
 		})
 }])
 
+.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', function( $scope, $window, $state, $urlRouter, $http, Content ) {
+
+	$scope.appName = "SlipStream"
+
+	$scope.user = {
+		username: '',
+		password: ''
+	}
+
+	$scope.reg = {
+		username: '',
+		password: '',
+		email: ''
+	}
+
+	// logs in. signs in and returns the user's token into her
+	// session storage
+
+	$scope.login = function() {
+		$http
+			.post( '/api/authenticate', $scope.user )
+			.success( function ( data, status ) {
+				$window.sessionStorage.token = data.token
+				$state.go( 'app.home' )
+			} )
+			.error( function ( data, status ) {
+				delete $window.sessionStorage.token
+				console.log( "Error signing in: " + status )
+			} )
+	}
+
+	// registartion 
+
+	$scope.register = function () {
+		$http
+			.post( 'api/signup', $scope.reg )
+			.success( function ( data ) {
+				$window.sessionStorage.token = data.token
+				$state.reload()
+			})
+			.error( function ( data, status ) {
+				delete $window.sessionStorage.token
+			})
+	}
+
+}])
 
 // service to add the token the header of the request
 

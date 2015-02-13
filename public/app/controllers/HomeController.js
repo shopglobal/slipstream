@@ -45,7 +45,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.logout = function() {
 			delete $window.sessionStorage.token
-			location.reload()
+			$state.go( 'landing.login' )
 	}
 
 
@@ -76,8 +76,8 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	// check if there is sessionStorage, which is probably an auth token
 
 	$scope.$on('$stateChangeStart', function () {
-		if ( $window.sessionStorage.length == 1 ) {
-			$scope.isLoggedIn = true
+		if ( $window.sessionStorage.length !== 1 ) {
+			$state.go( 'landing.login ')
 		}
 	})
 
