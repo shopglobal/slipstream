@@ -43,13 +43,15 @@ $snippet-font: Oxygen;
 
 $list-border: #E9E9E9;
 
+$dark-text: #5B5A5A;
+
 // containers and wrappers
 
 body { background-color: #F2F1F1; font-family: $body-font; }
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
-.login-panel { width: 320px; color: white; float: left; }
+.login-panel { margin: 0 auto; float: none; color: white; }
 
 .registration-panel { width: 320px; color: white; float: right;  }
 
@@ -58,6 +60,8 @@ body { background-color: #F2F1F1; font-family: $body-font; }
 // #viewport { height: 400px; }
 
 /* bootstrap edits */
+
+*:focus { outline: none !important; }
 
 h1, h2 { font-weight: 300; color: $green; }
 
@@ -68,7 +72,7 @@ h2 { margin-top: 0; }
 a { color: $green;
 	&:hover { color: $orange; text-decoration: none; } }
 
-.panel { background: transparent; border-color: white; padding: 20px; }
+.panel { background: transparent; border-color: white; padding: 20px; box-shadow: none; }
 
 .panel-green { background: transparent; border-color: $green; padding: 20px; }
 
@@ -84,7 +88,8 @@ a { color: $green;
 	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
 
 .btn-green-solid { background: $green; color: white;
-	&:hover { background: $green; } }
+	&:active { color: white; }
+	&:hover { background: $green; color: white; border: none; } }
 
 .btn-group-thick { 
 	&:nth-child(2) { border-width: 3px; border-color: red; }
@@ -93,15 +98,15 @@ a { color: $green;
 		.btn { border-width: 3px; } } }
 
 .input-white { background: transparent; border-color: white; color: white;
-	&:focus { box-shadow: none; border-color: white; } }
+	&:focus { box-shadow: none; border-color: white; outline: none; } }
 
-.input-green { background: transparent; border-color: $green; color: $green;
+.input-green { background: transparent; border-color: $green; color: $dark-text;
 	&::-webkit-input-placeholder { color: $green; }
-	&:focus { box-shadow: none; border-color: $green; } }
+	&:focus { box-shadow: none; border-color: $green; outline: none; } }
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
-.form-control:focus { box-shadow: none; border-color: $green; }
+.form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
 .dropdown-menu { box-shadow: none; }
 
@@ -119,6 +124,8 @@ a { color: $green;
 .btn-delete { position: absolute; top: 0; right: 0; color: $green; font-size: 24px; }
 
 .add-form { margin-top: 20px; }
+
+.dark-text { color: $dark-text; }
 
 // navigation
 

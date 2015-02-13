@@ -1,20 +1,8 @@
-<head>
-	<title>SlipStream</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+<div ng-controller="HomeController">
 
-<link href="vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
-<script src="vendor/jquery/dist/jquery.min.js"></script>
-<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
-
-<body ng-app="SlipStream" ng-controller="HomeController">
-
-<div ng-if="!isLoggedIn" class="login-wrapper" ng-model="isLoggedIn">
+<!-- <div ng-if="!isLoggedIn" class="login-wrapper" ng-model="isLoggedIn">
 	<div ng-include="'views/landing.html'"></div>
-</div>
-
-<div class="wrap" ng-if="isLoggedIn" ng-model="isLoggedIn">
+</div> -->
 
 <div id="header">
 	
@@ -64,19 +52,19 @@
 		<div class="container">
 			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick">
 				<div class="btn-group">
-					<button ui-sref="read" class="btn btn-green" ui-sref-active="btn-green-solid">
+					<button ui-sref="app.read" class="btn btn-green" ui-sref-active="btn-green-solid">
 						<span class="glyphicon glyphicon-book"></span>
 						Read
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="watch" class="btn btn-green" ui-sref-active="btn-green-solid">
+					<button ui-sref="app.watch" class="btn btn-green" ui-sref-active="btn-green-solid">
 						<span class="glyphicon glyphicon-play-circle"></span>
 						Watch
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="listen" class="btn btn-green" ui-sref-active="btn-green-solid">
+					<button ui-sref="app.listen" class="btn btn-green" ui-sref-active="btn-green-solid">
 						<span class="glyphicon glyphicon-music"></span>
 						Listen
 					</button>
@@ -92,23 +80,4 @@
 
 </div>
 
-
-<script src="vendor/angular/angular.js"></script>
-<script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="vendor/angular-ui-utils/ui-utils.js"></script>
-<script src="vendor/angular-bootstrap/ui-bootstrap.js"></script>
-<script src="vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="vendor/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
-<script src="vendor/angular-timeago/src/timeAgo.js"></script>
-<script src="app/app.js"></script>
-<script src="app/controllers/HomeController.js"></script>
-<script src="app/controllers/ArticlesController.js"></script>
-<script src="app/controllers/ListenController.js"></script>
-<script src="app/controllers/AddModalController.js"></script>
-<script src="app/controllers/ProfileController.js"></script>
-<script src="app/controllers/WatchController.js"></script>
-
-
 </div>
-
-</body>
