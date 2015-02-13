@@ -25,7 +25,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'views/home.html',
 			controller: 'HomeController'
 		})
-		.state( 'articles', {
+		.state( 'read', {
 			url: '/read',
 			templateUrl: 'views/articles.html',
 			controller: 'ArticlesController'
