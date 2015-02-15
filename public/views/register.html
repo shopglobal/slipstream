@@ -1,16 +1,19 @@
-<div class="panel registration-panel">
+<div class="panel registration-panel col-md-6 center-block">
 	<h3>Register</h3><br/>
 	<div class="form-group">
-		<label for="regUsername">Username</label>
-		<input type="text" class="username form-control input-white" id="regUsername" ng-model="reg.username">
+		<label for="regUsername" class="dark-text">Username</label>
+		<input type="text" class="username form-control input-green" id="regUsername" ng-model="reg.username">
 	</div>
+
 	<div class="form-group">
-		<label for="regEmail">Email</label>
-		<input type="email" class="email form-control input-white" id="regEmail" ng-model="reg.email">
+		<label for="regPassword" class="dark-text">Password</label>
+		<input type="password" class="username form-control input-green" id="regPassword" ng-model="reg.password">
 	</div>
+
 	<div class="form-group">
-		<label for="regPassword">Password</label>
-		<input type="password" class="username form-control input-white" id="regPassword" ng-model="reg.password">
+		<label for="regEmail" class="dark-text">Email</label>
+		<input type="email" class="email form-control input-green" id="regEmail" ng-model="reg.email">
 	</div>
-	<button class="btn btn-white btn-block" ng-click="register()">Register</button>
+	
+	<button class="btn btn-green-solid btn-block" ng-click="register()">Register</button>
 </div>
