@@ -140,6 +140,11 @@ a { color: $green;
 	.btn { height: 50px; 
 		.glyphicon { margin-right: 25px; } } }
 
+.navbar-white { background-color: transparent;  
+	ul li {
+		&:hover { background: transparent; } 
+		&:hover > a {  color: $green; } } }
+
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none; 
 	.add-container { box-sizing: border-box; max-height: 50px;
 		&:hover { background: transparent; }
