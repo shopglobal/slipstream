@@ -53,7 +53,7 @@ body { background-color: #F2F1F1; font-family: $body-font; }
 
 .login-panel { margin: 0 auto; float: none; color: white; }
 
-.registration-panel { width: 320px; color: white; float: right;  }
+.registration-panel { color: white; float: none;  }
 
 .landing-container { width: 700px; }
 
@@ -79,7 +79,8 @@ a { color: $green;
 .btn-white { background: transparent; border-color: white; color: white; box-shadow: none; text-decoration: none;
 	&:hover { background: white; border-color: white; color: $green; box-shadow: none; text-decoration: none; } }
 
-.btn { font-weight: 700; }
+.btn { font-weight: 700; 
+	&:hover { background-position: none; } }
 
 .btn-highlight { background: transparent; border-color: $highlight; color: $highlight; box-shadow: none; text-decoration: none;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }

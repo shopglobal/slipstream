@@ -19,7 +19,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			.post( '/api/authenticate', $scope.user )
 			.success( function ( data, status ) {
 				$window.sessionStorage.token = data.token
-				location.reload()
+				$state.go( app.home )
 			} )
 			.error( function ( data, status ) {
 				delete $window.sessionStorage.token
@@ -34,7 +34,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			.post( 'api/signup', $scope.reg )
 			.success( function ( data ) {
 				$window.sessionStorage.token = data.token
-				$state.reload()
+				$state.go( app.home )
 			})
 			.error( function ( data, status ) {
 				delete $window.sessionStorage.token
@@ -56,7 +56,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			.delete( '/api/users' )
 			.success( function () {
 				delete $window.sessionStorage.token
-				$state.go( 'home' )
+				$state.go( 'landing' )
 				location.reload()
 			})
 	}
