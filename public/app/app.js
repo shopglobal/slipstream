@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago' ])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely' ])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
 	
@@ -117,16 +117,16 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 // service to add the token the header of the request
 
-.factory('authInterceptor', [ '$window', function ( $window ) {
-	return {
-		request : function (config) {
-			config.headers = config.headers || {}
-			if ( $window.sessionStorage.token ) {
-				config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
+.factory('authInterceptor', [ '$window', function ( $window ) {	
+		return {
+			request : function (config) {
+				config.headers = config.headers || {}
+				if ( $window.sessionStorage.token && config.url !== "http://localhost:8061/iframely") {
+					config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
+				}
+				return config
 			}
-			return config
 		}
-	}
 } ] )
 
 // gets content for infinite scrolling. usage: loadMore( TYPE, AMOUNT )

@@ -217,4 +217,5 @@ a { color: $green;
 // listen panel
 
 .listen-panel { position: relative; 
-	.listen-iframe { margin-bottom: 20px; } }
+	.listen-iframe { height: 100px;  width: 100%; margin-bottom: 70px !important; 
+		iframe { height: 150px !important; } } }
