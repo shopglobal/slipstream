@@ -121,7 +121,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		return {
 			request : function (config) {
 				config.headers = config.headers || {}
-				if ( $window.sessionStorage.token && config.url !== "http://" + location.hostname ":8061/iframely") {
+				var iframelyPath = "http://" + location.hostname + ":8061/iframely"
+				if ( $window.sessionStorage.token && config.url !==  iframelyPath ) {
 					config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
 				}
 				return config
