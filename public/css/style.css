@@ -502,6 +502,8 @@ a {
   position: relative; }
   /* line 220, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .listen-panel .listen-iframe {
-    margin-bottom: 20px; }
+    height: 100px;
+    width: 100%;
+    margin-bottom: 70px !important; }
 
 /*# sourceMappingURL=style.css.map */

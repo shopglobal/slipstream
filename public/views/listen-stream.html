@@ -8,8 +8,8 @@
 				<h2>
 					<a ng-href="{{ song.url }}">{{ song.title }}</h2>
 				</a>
-
-				<iframe width="100%" height="166" scrolling="no" frameborder="no" ng-src="{{ embedUrl( song.songId ) }}" class="listen-iframe"></iframe>
+					
+				<div iframely url="{{song.url}}" class="listen-iframe"></div>
 
 				<div class="meta-text">
 					{{ song.added * 1000 | timeAgo }}
