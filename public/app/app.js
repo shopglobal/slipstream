@@ -121,7 +121,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		return {
 			request : function (config) {
 				config.headers = config.headers || {}
-				if ( $window.sessionStorage.token && config.url !== "http://localhost:8061/iframely") {
+				if ( $window.sessionStorage.token && config.url !== "http://" + location.hostname ":8061/iframely") {
 					config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
 				}
 				return config
@@ -164,79 +164,3 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	return Content
 }])
-
-// getting the items from the read stream for the endless scrolling
-
-// .factory('datasource', [
-//     '$timeout', '$http', function( $timeout, $http ) {
-//         var get;
-//         get = function(index, count, success) {
-//             return $timeout(function() {
-//                 var i, result, _i, _ref;
-//                 result = []
-//                 var articles
-//                 $http
-// 					.get( 'api/stream/read', { params: { 
-// 						show: 10, 
-// 						page: 1 
-// 					} } )
-// 						.success( function ( data ) {
-// 							articles = data
-// 						})
-// 						.error( function ( error ) {
-// 							console.log( 'Error: ' + error)
-// 						})
-//                 for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-//                 	result.push( articles[i] )
-//                 }
-//                 return success( result );
-//             }, 100);
-//         };
-//         return {
-//             get: get
-//         };
-//     }
-// ])
-
-
-// .factory( 'readStream', [ '$timeout', '$http', function ( $timeout, $http ) {
-// 	var get = function ( index, count, success ) {
-// 		return $timeout( function () {
-// 			var results = []
-			
-// 			for (i = _i = index, _ref = index + count - 1; index <= _ref ? _i <= _ref : _i >= _ref; i = index <= _ref ? ++_i : --_i) {
-// 					results.push("item #" + i);
-// 			}
-
-// 			// $http
-// 			// 	.get( 'api/stream/read', { params: { 
-// 			// 		show: 10, 
-// 			// 		page: 1 
-// 			// 	} } )
-// 			// 		.success( function ( data ) {
-// 			// 			results.push( data )
-// 			// 		})
-// 			// 		.error( function ( error ) {
-// 			// 			console.log( 'Error: ' + error)
-// 			// 		})
-
-// 			return success( results )
-// 		}, 1000 )
-// 	}
-	
-// 	return { get : get }
-
-// } ] )
-
-	//
-	// set a scope variable for whether a user is signed in or not
-	//
-	// .factory('authCheck', [ '$window', '$rootScope', function ( $window, $rootScope ) {
-	// 		$rootScope.isLoggedIn = false;
-	//
-	// 		if ( $window.sessionStorage.token ) {
-	// 			$rootScope.isLoggedIn = true;
-	// 		}
-	//
-	// 		return $rootScope.isLoggedIn;
-	// }])
