@@ -27,6 +27,7 @@ exports.add = function ( req, res ) {
 				user: user,
 				title: videoInfo.meta.title,
 				service: videoInfo.meta.site,
+				url: req.body.url,
 				image: imageOriginalPath,
 				imageThumb: imageThumbPath,
 				imageHash: imageHash,

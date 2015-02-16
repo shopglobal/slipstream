@@ -5,7 +5,7 @@ var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 var VideoSchema = new mongoose.Schema ( {
 	user: String,
 	title: String,
-	urls: String,
+	url: String,
 	videoId: String, 	// such as youtube ID
 	service: String, 	// such as "youtube"
 	image: String,

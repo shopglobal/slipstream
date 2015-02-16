@@ -505,5 +505,8 @@ a {
     height: 100px;
     width: 100%;
     margin-bottom: 70px !important; }
+    /* line 221, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    .listen-panel .listen-iframe iframe {
+      height: 150px !important; }
 
 /*# sourceMappingURL=style.css.map */
