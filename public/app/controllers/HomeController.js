@@ -90,16 +90,16 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		})
 	}
 
-	$scope.getEmbed = function ( url ) {
-		$http
-			.get( 'http://localhost:8061/iframely', {
-				params: {
-					url: url
-				}
-			})
-			.success( function ( result ) {
-				return result.html
-			})
-	}
+	// $scope.getEmbed = function ( url ) {
+	// 	$http
+	// 		.get( 'http://10.0.2.1:8061/iframely', {
+	// 			params: {
+	// 				url: url
+	// 			}
+	// 		})
+	// 		.success( function ( result ) {
+	// 			return result.html
+	// 		})
+	// }
 
 }])
