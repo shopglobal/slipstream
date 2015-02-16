@@ -11,7 +11,7 @@
 			template: '<div ng-bind-html="content"></div>',
 			link: function ( scope, element, attrs ) {
 				$http( {
-					url: 'http://localhost:8061/iframely',
+					url: 'http://' + location.hostname + ':8061/iframely',
 					method: 'GET',
 					params: {
 						url: attrs.url
