@@ -8,103 +8,164 @@ var User = require( '../models/userModel' ),
 	getYoutubeId = require( 'get-youtube-id' ),
 	getUser = require( '../helpers/get-user' ),
 	saveImage = require( '../helpers/save-image' ),
+	request = require( 'request' ),
 	Q = require( 'q' )
 
 exports.add = function ( req, res ) {
-	var defer = Q.defer()
 	
-    // check sign in and get user information as 'user' 
-
-    function getUser () {
-		var defer = Q.defer()
-        User.findOne( { token: req.token }, function ( err, user ) {
-			defer.resolve( user )
-		})
-		
-		return defer.promise
-    }
-
-    // split the youtbe videoID from the full URL
-
-    function getVideoId () {
-		var defer = Q.defer()
-		var id = getYoutubeId( req.body.url )
-		
-		defer.resolve( id )
-		return defer.promise	
-    }
+	var defer = Q.defer()
 
     // create the video object to be saved in the databse model
 
-    function makeVideoObject ( data ) {
-		var deferred = Q.defer()
-		var user = data[0]
-		var vData = data[1].items[0]
+    function makeVideoObject ( user, videoInfo ) {
+		var deferred = Q.defer()		
 		
-		
-		saveImage( req.body.type, vData.snippet.thumbnails.high.url )
+		saveImage( req.body.type, videoInfo.links[2].href )
 		.spread( function( imageHash, imageOriginalPath, imageThumbPath ) {
 		
-			video = new Video({
-				user: user._id,
-				title: vData.snippet.title,
-				videoId: vData.id,
-				service: "youtube",
+			var video = new Video({
+				user: user,
+				title: videoInfo.meta.title,
+				service: videoInfo.meta.site,
 				image: imageOriginalPath,
 				imageThumb: imageThumbPath,
 				imageHash: imageHash,
-				description: vData.snippet.description,
+				text: videoInfo.meta.description,
 				added: ( new Date() / 1000 ).toFixed(),
-				date: ( new Date( vData.snippet.publishedAt ) / 1000 ),
-				author: vData.channelId,
-				views: vData.viewCount,
-				duration: vData.contentDetails.duration,
-				rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
+				author: videoInfo.meta.author,
+				views: videoInfo.meta.views,
+				duration: videoInfo.meta.duration,
 			})
+			if ( videoInfo.meta.site == "YoutTube" ) {
+				video.date = ( new Date( videoInfo.meta.date ) / 1000 )
+				video.rating = ( ( 1 - ( videoInfo.meta.likes / videoInfo.meta.dislikes ) ) / Math.pow(10, -2) ).toFixed()
+			}
 			video.save()
 			deferred.resolve( video )
 		})
 		
 		return deferred.promise
     }
-	
-	// authenticate youtube api
-	
-	function authYoutube () {
-		Youtube.authenticate({
-			type: "key",
-			key: "AIzaSyD79gA6KcMnG0vyRgNyfxDpq8ok_Aj6LrE"
-		})
-	}   
 
     // search for new video based on it's ID
 
-    function youtubeFind ( videoId ) {
-		defer = Q.defer()
+	function getVideo () {
+		var deferred = Q.defer()
 		
-		authYoutube()
-
-		video = Youtube.videos.list({
-			part: "statistics,snippet,contentDetails",
-			id: videoId
-		}, function (err, data ) {
-			defer.resolve( data )
+		request( "http://localhost:8061/iframely?url=" + req.body.url, function ( err, response, body ) {
+			deferred.resolve( JSON.parse( body ) )
 		})
-		
-		return defer.promise
+				
+		return deferred.promise
 	}
 	
-	var user = getUser()
-	var videoId = getVideoId()
-	var video = videoId.then( youtubeFind )
-	
-	Q.all( [ getUser(), video ] )
-	.then( makeVideoObject )
-	.then( function ( video ) {
-		return res.json( video )
+	Q.all( [ getUser( req.token ), getVideo() ] )
+	.spread( function ( user, videoInfo ) {
+		makeVideoObject( user, videoInfo )
+		.then( function ( video ) {
+			return res.json( video )
+		})
 	})
 	
+	
 }
+
+
+//exports.add = function ( req, res ) {
+//	var defer = Q.defer()
+//	
+//    // check sign in and get user information as 'user' 
+//
+//    function getUser () {
+//		var defer = Q.defer()
+//        User.findOne( { token: req.token }, function ( err, user ) {
+//			defer.resolve( user )
+//		})
+//		
+//		return defer.promise
+//    }
+//
+//    // split the youtbe videoID from the full URL
+//
+//    function getVideoId () {
+//		var defer = Q.defer()
+//		var id = getYoutubeId( req.body.url )
+//		
+//		defer.resolve( id )
+//		return defer.promise	
+//    }
+//
+//    // create the video object to be saved in the databse model
+//
+//    function makeVideoObject ( data ) {
+//		var deferred = Q.defer()
+//		var user = data[0]
+//		var vData = data[1].items[0]
+//		
+//		
+//		saveImage( req.body.type, vData.snippet.thumbnails.high.url )
+//		.spread( function( imageHash, imageOriginalPath, imageThumbPath ) {
+//		
+//			video = new Video({
+//				user: user._id,
+//				title: vData.snippet.title,
+//				videoId: vData.id,
+//				service: "youtube",
+//				image: imageOriginalPath,
+//				imageThumb: imageThumbPath,
+//				imageHash: imageHash,
+//				description: vData.snippet.description,
+//				added: ( new Date() / 1000 ).toFixed(),
+//				date: ( new Date( vData.snippet.publishedAt ) / 1000 ),
+//				author: vData.channelId,
+//				views: vData.viewCount,
+//				duration: vData.contentDetails.duration,
+//				rating: ( ( 1 - ( vData.statistics.dislikeCount / vData.statistics.likeCount ) ) / Math.pow(10, -2) ).toFixed()
+//			})
+//			video.save()
+//			deferred.resolve( video )
+//		})
+//		
+//		return deferred.promise
+//    }
+//	
+//	// authenticate youtube api
+//	
+//	function authYoutube () {
+//		Youtube.authenticate({
+//			type: "key",
+//			key: "AIzaSyD79gA6KcMnG0vyRgNyfxDpq8ok_Aj6LrE"
+//		})
+//	}   
+//
+//    // search for new video based on it's ID
+//
+//    function youtubeFind ( videoId ) {
+//		defer = Q.defer()
+//		
+//		authYoutube()
+//
+//		video = Youtube.videos.list({
+//			part: "statistics,snippet,contentDetails",
+//			id: videoId
+//		}, function (err, data ) {
+//			defer.resolve( data )
+//		})
+//		
+//		return defer.promise
+//	}
+//	
+//	var user = getUser()
+//	var videoId = getVideoId()
+//	var video = videoId.then( youtubeFind )
+//	
+//	Q.all( [ getUser(), video ] )
+//	.then( makeVideoObject )
+//	.then( function ( video ) {
+//		return res.json( video )
+//	})
+//	
+//}
 	
 exports.stream = function( req, res ) {
 	var show = req.query.show,
