@@ -16,15 +16,15 @@
 				<form name="" class="form-control pull-right add-form-toggle-buttons" ng-init="contentParams.type='read'">
 					<div class="btn-group pull-right">
 						<label for="read" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'read' }}" />
+							<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'app.read' }}" />
 							<span class="glyphicon glyphicon-book"></span>
 						</label>
 						<label for="watch" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'watch' }}" />
+							<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'app.watch' }}" />
 							<span class="glyphicon glyphicon-film"></span>
 						</label>
 						<label for="listen" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'listen' }}" />
+							<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'app.listen' }}" />
 							<span class="glyphicon glyphicon-headphones"></span>
 						</label>
 					</div>
