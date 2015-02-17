@@ -41,6 +41,7 @@
     "request": "^2.51.0",
     "soundcloud-node": "0.0.10",
     "soundclouder": "^0.8.1",
+    "underscore": "^1.7.0",
     "youtube-api": "^0.3.2"
   }
 }
