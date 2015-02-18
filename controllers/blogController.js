@@ -3,60 +3,129 @@ var fs = require('fs'),
 	User = require('../models/userModel.js'),
 	Blog = require('../models/blogModel.js'),
 	tokenManager = require('../config/tokenManager'),
-	article = require('article'),
+//	article = require('article'),
 	async = require('async'),
 	request = require( 'request' ),
-	mongoose = require( 'mongoose-q' )(),
-	saveImage = require( '../helpers/save-image' )
+	Q = require( 'q' ),
+	saveImage = require( '../helpers/save-image' ),
+	getUser = require( '../helpers/get-user' ),
+	read = require( 'node-readability' ),
+	jsdom = require( 'jsdom' )
 
 // adds and item to the articles database with the user's id.
 
 exports.add = function ( req, res ) {
 	
-	User.findOne( { token: req.token }, function ( err, user ) {
-		blogUrl = req.body.url
-
-		request( blogUrl ).pipe( article( blogUrl, function ( err, data ) {
-			if (err)
-				return res.json( err )
-
-			if ( !data )
-				return res.json( "There's no data for some reason. Sorry." ) 
-         
-			// runs function and save info to database
+	function getArticle () {
+		var deferred = Q.defer()
+		
+		read( req.body.url, function( err, article, meta ) {
+			if ( err )
+				return console.log( err )
 			
-			function makeBlog ( callback ) {
-				saveImage( req.body.type, data.image )
-				.spread( function ( imageHash, imageFileOriginal, imageFileThumb ) {
-					var blog = new Blog({
-						user: user._id,
-						title: data.title,
-						text: data.text,
-						image: imageFileOriginal,
-						imageThumb: imageFileThumb,
+			var newArticle = {
+				title: article.title,
+				description: "",
+				images: [],
+				content: article.content
+			}
+			
+			article.close()
+			
+			deferred.resolve( newArticle )
+		})
+		
+		return deferred.promise
+	}
+	
+	/*
+	Replaces external images in the body of the readbale HTML with locally-hosted images. 
+	
+	Accepts: article object
+	
+	Returns: DOM of body section of page with replaced <img> URLS
+	*/
+	function replaceImages ( article ) {
+		var deferred = Q.defer()
+		
+		jsdom.env( article.content, function ( error, window ) {
+			
+			images = window.document.getElementsByTagName( 'img' )
+			
+			Array.prototype.forEach.call( images, function ( each ) {
+				saveImage( req.body.type, each.src )
+				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
+					article.images.push({
+						image: imageOriginalPath,
 						imageHash: imageHash,
-						url: blogUrl,
-						added: ( new Date() / 1000 ).toFixed()
+						imageThumb: imageThumbPath
 					})
-					callback( blog )
+					
+					each.src = imageOriginalPath
 				})
-			}
-
-			
-			function saveBlog ( blog ) {
-				blog.save( function ( err, blog ) {
-					return res.json( blog )
-				})
-			}
-			
-			makeBlog( saveBlog )
-				
 			})
-		)
+			
+			setTimeout( function () {
+				
+				article.content = window.document.body.innerHTML
+					
+				var paragprahs = window.document.body.getElementsByTagName( 'p' )
+				
+				for ( i = 0; i <= 3; i++ ) {
+					if ( paragprahs[i] ) {
+						article.description += " " + paragprahs[i].innerHTML
+						
+						if ( i == 3 ) {
+							deferred.resolve( article )
+						}
+					}
+				}	
+			}, 1500 )
+			
+		}) // end of jsdom
+		
+		return deferred.promise
+	} // end of replaceImages()
+	
+	function saveArticle ( article ) {
+		var deferred = Q.defer()
+		
+		getUser( req.token )
+		.then( function ( user ) {
+			
+			var blog = new Blog({
+				user: user,
+				title: article.title,
+				description: article.description,
+				content: article.content,
+				url: req.body.url,
+				added: ( new Date() / 1).toFixed()
+			})
+			
+			if ( article.images[0] ) {
+				blog.image = article.images[0].image
+				blog.imageThumb = article.images[0].imageThumb
+				blog.imageHash = article.images[0].imageHash
+			}
+			
+			blog.save()
+			
+			deferred.resolve( blog )	
+		})
+		
+		return deferred.promise	
+	}
+	
+	
+	getArticle()
+	.then( replaceImages )
+	.then( saveArticle )
+	.then( function ( article ) {
+		return res.json( article )
 	})
+	
 }
 
-// gets items form the articles database based on the user asking
 
 exports.stream = function ( req, res ) {
 	var show = req.query.show
