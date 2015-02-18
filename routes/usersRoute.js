@@ -16,7 +16,11 @@ router.route('/signup')
 	.post( userController.signUp )
 
 router.route('/add')
-	.post( userController.checkAuthorization, function ( req, res ) {		contentController.add( req, res )
+	.post( userController.checkAuthorization, function ( req, res ) {
+		if ( req.body.type == "read" ) {
+			blogController.add( req, res )
+		}
+		else { contentController.add( req, res ) }
 	})
 
 router.route('/stream/read')
