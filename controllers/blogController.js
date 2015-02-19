@@ -43,7 +43,7 @@ exports.add = function ( req, res ) {
 	
 	Accepts: article object
 	
-	Returns: DOM of body section of page with replaced <img> URLS
+	Returns: article object with images array and replaced URLs in article.content
 	*/
 	function replaceImages ( article ) {
 		var deferred = Q.defer()
@@ -52,7 +52,11 @@ exports.add = function ( req, res ) {
 			
 			images = window.document.getElementsByTagName( 'img' )
 			
-			Array.prototype.forEach.call( images, function ( each ) {
+			console.log( "images: " + images.length )
+			
+			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
+				var deferred = Q.defer()
+				
 				saveImage( req.body.type, each.src )
 				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 					article.images.push({
@@ -62,11 +66,16 @@ exports.add = function ( req, res ) {
 					})
 					
 					each.src = imageOriginalPath
+					
+					deferred.resolve()
 				})
+				
+				return deferred.promise
 			})
 			
-			setTimeout( function () {
-				
+			Q.all( imageMapFunction )
+			.then( function () {
+			
 				article.content = window.document.body.innerHTML
 					
 				var paragprahs = window.document.body.getElementsByTagName( 'p' )
@@ -79,8 +88,8 @@ exports.add = function ( req, res ) {
 							deferred.resolve( article )
 						}
 					}
-				}	
-			}, 1500 )
+				}
+			})
 			
 		}) // end of jsdom
 		
@@ -106,6 +115,7 @@ exports.add = function ( req, res ) {
 				blog.image = article.images[0].image
 				blog.imageThumb = article.images[0].imageThumb
 				blog.imageHash = article.images[0].imageHash
+				blog.images = article.images
 			}
 			
 			blog.save()
