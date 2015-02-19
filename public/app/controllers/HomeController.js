@@ -72,7 +72,6 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		})
 	}
 
-
 	// check if there is sessionStorage, which is probably an auth token
 
 	$scope.$on('$stateChangeStart', function () {
