@@ -11,7 +11,6 @@ app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter
 			templateUrl: "views/reader-modal.html",
 			windowClass: 'reader-modal',
 			controller: 'ReaderModalController',
-			size: 'lg',
 			resolve: {
 				article: function() {
 					return article

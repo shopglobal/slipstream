@@ -1,7 +1,32 @@
-<div class="container-fluid">
+<img src="images/ss_logo_green.png" alt="" class="modal-logo">
+
+<div class="container-fluid reader-container">
 
 <h2>{{ article.title }}</h2>
 
 <div ng-bind-html="article.content"></div>
 
+</div>
+
+<div class="share-links share-links-stacked">
+	
+	<button class="btn btn-green btn-xs no-border btn-x" ng-click="closeModal()">X</button>
+
+	<span class="dropdown">
+
+		<button class="btn dropdown-toggle btn-green no-border" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
+			<span class="glyphicon glyphicon-option-horizontal"></span>
+			<span class="sr-only">
+				Toggle Item Options Menu
+			</span>
+		</button>
+	  
+	  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
+	    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( 'read', article._id ); hideArticle=true">Delete</a></li>
+	  </ul>
+	</span>
+
+	<button class="btn btn-green btn-xs no-border" popover="Right-click and select copy link" popover-trigger="mouseenter" popover-placement="bottom">
+		<a href="{{ article.url }}"><span class="glyphicon glyphicon-share-alt glyphicon-green"></span></a>
+	</button>
 </div>

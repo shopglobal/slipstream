@@ -33,6 +33,7 @@ $green: #00E0AA;
 $green-grey: #212321;
 $red: #E44A39;
 $orange: #FF7E32;
+$grey: #C5C5C5;
 
 $highlight: white;
 $darkbase: $green;
@@ -40,6 +41,7 @@ $darkbase: $green;
 $body-font: Oxygen;
 $headline-font: Oxygen;
 $snippet-font: Oxygen;
+$content-font: Domine;
 
 $list-border: #E9E9E9;
 
@@ -86,7 +88,10 @@ a { color: $green;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
-	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
+	&:hover { background: $green; border-color: $green; color: $green; box-shadow: none; text-decoration: none; } }
+
+.btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
+	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } }
 
 .btn-green-solid { background: $green; color: white;
 	&:active { color: white; }
@@ -116,17 +121,23 @@ a { color: $green;
 .no-border { border: none; background: none;
 	&:hover, &:active { border: none; background: none; box-shadow: none; } }
 
-.btn-delete { color: $red; }
-
 .text-green { color: $green; }
+
+.glyphicon-green { color: $green; 
+	&:hover { color: $green; } }
+
+.glyphicon-grey { color: $grey; 
+	&:hover { color: $grey; } }
 
 .spinner { padding: 15px; }
 
-.btn-delete { position: absolute; top: 0; right: 0; color: $green; font-size: 24px; }
+.btn-x { font-size: 24px; font-family: Oxygen; font-weight: 300; }
 
 .add-form { margin-top: 20px; }
 
 .dark-text { color: $dark-text; }
+
+.modal-logo { position: fixed; top: 0; left: -275px; width: 200px; }
 
 // navigation
 
@@ -137,6 +148,8 @@ a { color: $green;
 	#nav-row-2 { padding-top: 5px; box-sizing: border-box; background: transparent; border: none; } }
 
 .content-toggle { width: 756px; background: white; 
+	.btn-green { 
+		&:hover { color: white; } }
 	.btn { height: 50px; 
 		.glyphicon { margin-right: 25px; } } }
 
@@ -186,10 +199,24 @@ a { color: $green;
 		.preview-thumbnail { width: 150px; float: left; margin: 3px 15px 15px 0; } 
 	.add-row-bottom { padding-right: 0; } } }
 
+.reader-modal { background: rgba( 255, 255, 255, 0.99 ); font-family: $content-font; 
+	.modal-dialog { float: none; width: 50%; max-width: 700px; }
+	.reader-container { margin-top: 15px; }
+	#item-options { margin: 10px 0; padding: 0; }
+	p { font-size: 16px; margin: 17px 0; }
+	img { clear: both; max-width: 100%; margin: 0 auto; display: block; }
+	.modal-content { height: 90%; overflow: scroll; border: 0; box-shadow: 0px 0px 20px 20px white; }
+	.share-links { position: fixed; top: 0; right: -150px; z-index: 100; }
+}
+
 // content
 
 .share-links { position: absolute; bottom: 0; right: 15px; display: block; 
-		.glyphicon { font-size: 24px; color: #C5C5C5; } }
+		.glyphicon { font-size: 24px; } }
+
+.share-links-stacked {
+	button, span { clear: both; display: block; }
+}
 
 .meta-text { color: #C5C5C5; position: absolute; bottom: 0; margin: 6px 0px; }
 
