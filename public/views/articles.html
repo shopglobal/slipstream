@@ -16,7 +16,12 @@
 				<p class="article-snippet">{{ article.text | limitTo: 320 }}... </p>
 
 				<div class="share-links">
+					<button class="btn btn-default no-border" ng-click="openReaderModal( article )">
+						<span class="glyphicon glyphicon-fullscreen"></span>
+					</button>
+
 					<span class="dropdown user-menu">
+
 					  <button class="btn dropdown-toggle no-border" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
 					    <span class="glyphicon glyphicon-option-horizontal"></span>
 					    <span class="sr-only">
