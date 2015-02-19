@@ -4,6 +4,7 @@ var fs = require('fs'),
 	Blog = require('../models/blogModel.js'),
 	tokenManager = require('../config/tokenManager'),
 //	article = require('article'),
+	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 	async = require('async'),
 	request = require( 'request' ),
 	Q = require( 'q' ),
@@ -156,16 +157,12 @@ exports.stream = function ( req, res ) {
 // lets a user delete an article from her stream
 
 exports.delete = function ( req, res ) {
-	User.findOne( { token: req.token }, function ( err, user ) {
-		if (err)
-			return res.json( "Error detelting content: " + error )
-			
-		if (!user)
-			return res.json( "User not found when looking up post." )
+	getUser( req.token )
+	.then( function ( user ) {
 			
  		var contentId = mongoose.Types.ObjectId(req.query.id)
 			
-		Blog.remove( { user: user._id, _id: contentId }, function ( err, blog ) {
+		Blog.remove( { user: user, _id: contentId }, function ( err, blog ) {
 			if (err)
 				return res.json( "Article was not delted. Error: " + err)
 				
