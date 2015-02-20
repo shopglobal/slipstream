@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	bcrypt = require('bcrypt-nodejs')
 
 var UserSchema = new mongoose.Schema({
@@ -15,7 +15,8 @@ var UserSchema = new mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: true
+		required: true,
+		unique: true
 	},
 	joined: Number,
 	token: String
