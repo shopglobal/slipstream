@@ -113,6 +113,11 @@ exports.checkAuthorization = function( req, res, callback ) {
 	}
 }
 
+/*
+This function updates a users password and emails it to them.
+
+TODO: Makes this send a password update link with temporary password as it's own field in the user model. Also, it generates the password before even checking if the email matches a user, which is not efficient. Add a check first.
+*/
 exports.sendPasswordReset = function ( req, res ) {
 	
 	function updateUser ( password ) {
@@ -189,4 +194,56 @@ exports.sendPasswordReset = function ( req, res ) {
 		return res.sendStatus( 500 )
 	})
 	
+}
+
+exports.changePassword = function ( req, res ) {
+	
+	function generatePassword ( user ) {
+		var userObj = {
+			id: user
+		}
+		
+		return Q.Promise( function ( resolve, reject, notify ) {	
+			bcrypt.genSalt( 5, function( err, salt ) {
+				if (err)
+					reject( new Error( "Could not generate temporary password salt." ) )
+
+				bcrypt.hash( req.body.newPassword, salt, null, function( err, hash ) {
+					if (err)
+						reject( new Error( "Could not hash new temporary password." ) )
+
+					userObj.password = hash
+
+					resolve( userObj )
+				})
+			})
+		})
+	}
+	
+	function savePassword ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {	
+			User.findOneAndUpdate( 
+				{ _id: user.id },
+				{ password: user.password } 
+			).exec()
+			.then( function ( user ) {
+				if ( !user )
+					reject( new Error( "Could not save the new password." ) )
+				
+				resolve ( user )
+			}, function ( error ) {
+				reject( new Error( "Could not save the new password." ) )	
+			})
+		})
+	}	
+	
+	getUser( req.token )
+	.then( generatePassword )
+	.then( savePassword )
+	.then( function ( user ) {
+		return res.json( "The password was changed for user." )
+	}, function ( error ) {
+		console.error( error )
+		return res.json( error.message )	
+	})
 }

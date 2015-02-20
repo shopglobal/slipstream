@@ -18,8 +18,11 @@ router.route('/users')
 router.route('/signup')
 	.post( userController.signUp )
 
-router.route( '/reset' )
+router.route( '/user/password/reset' )
 	.get( userController.sendPasswordReset )
+
+router.route( '/user/password/change' )
+	.post( userController.checkAuthorization, userController.changePassword )
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
