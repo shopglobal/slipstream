@@ -4,7 +4,8 @@ var Content = require( '../models/contentModel' ),
 	saveImage = require( '../helpers/save-image' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
-	_ = require( 'underscore' )
+	_ = require( 'underscore' ),
+	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 
 // adds content to users stream.
 
@@ -59,7 +60,7 @@ exports.add = function ( req, res ) {
 	})
 }
 
-exports.stream = function ( req, res, stream ) {
+exports.stream = function ( req, res ) {
 
 	var show = req.query.show,	// the number of items to show per page
 		page = req.query.page,	// the current page being asked for
@@ -88,4 +89,35 @@ exports.stream = function ( req, res, stream ) {
 	})	
 }
 	
+exports.delete = function ( req, res ) {
 	
+	/*
+	Deletes an item from any "content" stream. 
+	
+	Accepts: User ID, but requires content id in scope at req.query.bind
+	
+	Returns: Promise which resolves to the deleted item.
+	*/
+	function deleteItem ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			var contentId = mongoose.Types.ObjectId( req.query.id )
+
+			Content.findOneAndRemove( { user: user, _id: contentId } ).exec()
+			.then( function ( content ) {
+				resolve( content )
+			}, function ( error ) {
+				reject( new Error( "There was an error deleting that content from the stream." ) )
+			})
+		})
+	}
+	
+	getUser( req.token )
+	.then( deleteItem )
+	.then( function ( content ) {
+		return res.json( content )
+	}, function ( error ) {
+		console.error( error )
+		return res.json( error.message )
+	})
+	
+}

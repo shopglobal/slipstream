@@ -41,5 +41,8 @@ router.route('/stream/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		contentController.stream( req, res )
 	})
+	.delete( userController.checkAuthorization, function ( req, res ) {
+		contentController.delete( req, res )
+	})
 
 module.exports = router
