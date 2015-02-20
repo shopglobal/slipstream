@@ -3,13 +3,18 @@ var fs = require( 'fs' ),
 	path = require( 'path' ),
 	easyimg = require( 'easyimage' ),
 	request = require( 'request' ),
-	async = require( 'async' ),
 	Q = require( 'q' )
 
-// this module does it all. it creates an MD5 hash for a name, 
-// saves it to disk, creates and saves a thumbnail, etc
-// USAGE: saveImage( TYPE[STRING], IMAGE-URL[STIRNG] )
-// returns promise with array of [ HASH, ORIGINALPATH, THUMBNAILPATH ]
+ /* 
+ this module does it all. it creates an MD5 hash for an image, 
+ saves it to disk, creates and saves a thumbnail, etc
+ 
+ Usage: saveImage( TYPE[STRING], IMAGE-URL[STIRNG] )
+ 
+ Returns: promise with array of [ HASH, ORIGINALPATH, THUMBNAILPATH ]
+ 
+ TODO: return a promise with an object of image.hash, image.originalPath, image.thumbnailPath
+ */
 
 
 module.exports = function ( type, imageUrl ) {
@@ -19,18 +24,21 @@ module.exports = function ( type, imageUrl ) {
 	var imageExtension = path.extname( imageUrl )
 
 	function hashImage ( image ) {
-		var deferred = Q.defer()
-		
-		var imageHash = crypto.createHash( 'md5' ).update( image ).digest( 'hex' )
-		var returnArray = [ imageHash, image ]
-		
-		deferred.resolve( returnArray )
-		
-		return deferred.promise
+		return Q.promise( function ( resolve, reject, notify ) {
+			
+			var imageHash = crypto.createHash( 'md5' ).update( image ).digest( 'hex' )
+			var returnArray = [ imageHash, image ]
+
+			resolve( returnArray )
+		})
 	}
 	
 	function getImage ( imageUrl ) {
 		var deferred = Q.defer()
+		
+		if ( imageUrl.indexOf( "/") == 0 ) {
+			imageUrl = "https:" + imageUrl
+		}
 		
 		request.get( { url: imageUrl, encoding: 'binary'}, function ( err, response, body ) {
 			if ( err ) 
