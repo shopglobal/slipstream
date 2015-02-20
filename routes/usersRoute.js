@@ -8,12 +8,18 @@ var express = require('express'),
 	secret = require( '../config/secretConfig' ),
 	bodyParser = require('body-parser')
 
+router.route('/authenticate')
+	.post( userController.login )
+
 router.route('/users')
 	.get( userController.checkAuthorization, userController.getUser )
 	.delete( userController.deleteUser )
 
 router.route('/signup')
 	.post( userController.signUp )
+
+router.route( '/reset' )
+	.get( userController.sendPasswordReset )
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
@@ -35,8 +41,5 @@ router.route('/stream/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		contentController.stream( req, res )
 	})
-
-router.route('/authenticate')
-	.post( userController.login )
 
 module.exports = router
