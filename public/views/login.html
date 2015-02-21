@@ -12,12 +12,17 @@
 	<div class="form-group">
 
 		<label for="loginPassword" class="dark-text">Password</label>
-		<input type="password" class="username input-green form-control" id="loginPassword" ng-model="user.password">
+		<input type="password" class="username input-green form-control" id="loginPassword" ng-model="user.password" />
 
 	</div>
 
 	<button class="btn btn-green-solid btn-block" ng-click="login()">Login</button> <br /> 
 
-	<a ui-sref="landing.register" class="pull-right">Register</a>
+	<div class="pull-right login-meta-links">
+		<ul>
+			<li><a ui-sref="landing.register">Register </a></li>
+			<li><a ui-sref="landing.reset"> Forgot password</a></li>
+		</ul>
+	</div>
 
 </div>

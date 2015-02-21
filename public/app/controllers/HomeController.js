@@ -1,4 +1,4 @@
-app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', function( $scope, $state, $urlRouter, $http, $window, $location, $modal ) {
+app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash ) {
 	
 	$scope.user = {
 		username: '',
