@@ -22,7 +22,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$stateProvider
 		.state( 'landing', {
 			url: '/home',
-			templateUrl: 'views/landing.html'
+			templateUrl: 'views/landing.html',
+			controller: 'MainController'
 		})
 		.state( 'landing.login', {
 			url: '/login',
@@ -31,6 +32,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		.state( 'landing.register', {
 			url: '/register',
 			templateUrl: 'views/register.html'
+		})
+		.state( 'landing.reset', {
+			url: '/reset',
+			templateUrl: 'views/landing-reset.html'
 		})
 		.state( 'app', {
 			url: '/app',
@@ -74,7 +79,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$scope.user = {
 		username: '',
-		password: ''
+		password: '',
+		email: ''
 	}
 
 	$scope.reg = {
@@ -114,9 +120,19 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	}
 
 	$scope.resetPassword = function () {
-		if ( $scope.user.username.length == 0 ) {
+		if ( $scope.user.email.length == 0 ) {
 			flash.error = "Email address required!"
-			console.log( ' no username is theree!!')
+		} else {
+			$http
+				.get( 'api/user/password/reset', {
+					params: { email: $scope.user.email }
+				})
+				.success( function () {
+					flash.success = "An reset email was sent."
+				})
+				.error( function ( error ) {
+					flash.error = error
+				})
 		}
 	}
 

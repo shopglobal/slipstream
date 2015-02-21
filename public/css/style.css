@@ -181,6 +181,15 @@ a {
 .dropdown-menu {
   box-shadow: none; }
 
+.flash-alert {
+  position: fixed;
+  width: 20%;
+  left: 50%;
+  margin-left: -10%; }
+
+.fade {
+  position: fixed; }
+
 .no-border {
   border: none;
   background: none; }
@@ -221,6 +230,16 @@ a {
   top: 0;
   left: -275px;
   width: 200px; }
+
+.login-meta-links {
+  color: #5B5A5A; }
+  .login-meta-links ul li {
+    display: inline; }
+  .login-meta-links ul li:first-child {
+    list-style-type: none; }
+  .login-meta-links ul li:nth-child(2):before {
+    content: '\2022';
+    margin: 3px; }
 
 #header .navbar-brand {
   padding-top: 10px; }

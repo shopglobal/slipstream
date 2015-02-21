@@ -116,6 +116,10 @@ a { color: $green;
 
 .dropdown-menu { box-shadow: none; }
 
+.flash-alert { position: fixed; width: 20%; left: 50%; margin-left: -10%; }
+
+.fade { position: fixed; }
+
 // new classes
 
 .no-border { border: none; background: none;
@@ -138,6 +142,12 @@ a { color: $green;
 .dark-text { color: $dark-text; }
 
 .modal-logo { position: fixed; top: 0; left: -275px; width: 200px; }
+
+.login-meta-links { color: $dark-text;
+	ul { 
+	li { display: inline; }
+	li:first-child { list-style-type: none; }
+	li:nth-child(2):before { content:'\2022'; margin: 3px; } } }
 
 // navigation
 
