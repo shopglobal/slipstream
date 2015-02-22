@@ -4,7 +4,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	
 	// sets default state
 
-	$urlRouterProvider.otherwise('/home')
+	$urlRouterProvider.otherwise('/home/splash')
 	
 	// whitelists outside scripts for iframe use
 
@@ -24,6 +24,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			url: '/home',
 			templateUrl: 'views/landing.html',
 			controller: 'MainController'
+		})
+		.state( 'landing.splash', {
+			url: '/splash',
+			templateUrl: 'views/landing-splash.html'
 		})
 		.state( 'landing.login', {
 			url: '/login',
@@ -77,6 +81,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$scope.appName = "SlipStream"
 
+	$scope.currentState = $state.current.name
+
 	$scope.user = {
 		username: '',
 		password: '',
@@ -97,7 +103,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			.post( '/api/authenticate', $scope.user )
 			.success( function ( data, status ) {
 				$window.sessionStorage.token = data.token
-				$state.go( 'app.home' )
+				$state.go( 'app.read' )
 			} )
 			.error( function ( data, status ) {
 				delete $window.sessionStorage.token

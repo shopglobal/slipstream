@@ -72,7 +72,8 @@ h3, h4, h5 { font-weight: 700; color: $green; }
 h2 { margin-top: 0; }
 
 a { color: $green;
-	&:hover { color: $orange; text-decoration: none; } }
+	&:hover { color: $orange; text-decoration: none; } 
+	&.underline { text-decoration: underline; } }
 
 .panel { background: transparent; border-color: white; padding: 20px; box-shadow: none; }
 
@@ -88,7 +89,7 @@ a { color: $green;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
-	&:hover { background: $green; border-color: $green; color: $green; box-shadow: none; text-decoration: none; } }
+	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
 
 .btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
 	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } }
@@ -103,14 +104,20 @@ a { color: $green;
 	.btn-group:last-child { 
 		.btn { border-width: 3px; } } }
 
+.btn-landing-register { margin-top: 30px; }
+
+.btn-font-light { font-weight: 300; }
+
 .input-white { background: transparent; border-color: white; color: white;
 	&:focus { box-shadow: none; border-color: white; outline: none; } }
 
-.input-green { background: transparent; border-color: $green; color: $dark-text;
-	&::-webkit-input-placeholder { color: $green; }
+.input-green { background: transparent; border: 2px solid $green; color: $dark-text;
+	&::-webkit-input-placeholder { color: $dark-text; }
 	&:focus { box-shadow: none; border-color: $green; outline: none; } }
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
+
+ .input-font-lg { font-size: 19px; padding: 30px; }
 
 .form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
@@ -149,6 +156,8 @@ a { color: $green;
 	li:first-child { list-style-type: none; }
 	li:nth-child(2):before { content:'\2022'; margin: 3px; } } }
 
+.landing-jumbotron { margin-top: 15%; }
+
 // navigation
 
 #header { 
@@ -165,8 +174,8 @@ a { color: $green;
 
 .navbar-white { background-color: transparent;  
 	ul li {
-		&:hover { background: transparent; } 
-		&:hover > a {  color: $green; } } }
+		&:hover { background: white; }
+		&:hover > a {  color: $green; background: transparent; } } }
 
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none; 
 	.add-container { box-sizing: border-box; max-height: 50px;
