@@ -11,7 +11,7 @@
 				</a>
 
 				<img ng-src="{{ article.imageThumb }}" class="stream-article-image">
-				<p class="article-snippet">{{ article.text | limitTo: 320 }}... </p>
+				<p class="article-snippet">{{ article.description | limitTo: 320 }}... </p>
 
 				<div class="share-links">
 					<button class="btn btn-grey no-border" ng-click="openReaderModal( article )">

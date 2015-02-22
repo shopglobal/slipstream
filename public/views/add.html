@@ -2,7 +2,7 @@
 		
 		<h2 class="pull-left">Add to Stream</h2>
 
-		<button class="btn pull-right no-border btn-delete" ng-click="cancel()">X</button>
+		<button class="btn pull-right no-border btn-green btn-x" ng-click="cancel()">X</button>
 
 		<div class="add-form clear-fix col-md-12">
 
@@ -43,7 +43,7 @@
 			
 			<div class="preview-text col-md-8">
 				<h4> {{ contentPreview.title }} </h4>
-				<p>{{ contentPreview.text | limitTo: 170 }} ... </p>
+				<p>{{ contentPreview.description | limitTo: 170 }} ... </p>
 			</div>
 	 </div>
 
