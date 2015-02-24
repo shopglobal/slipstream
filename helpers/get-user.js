@@ -2,8 +2,7 @@ var User = require( '../models/userModel' ),
 	Q = require( 'q' )
 
 module.exports = function getUser ( token ) {
-	return Q.Promise( function ( resolve, reject, notify ) {	
-		var deferred = Q.defer()
+	return Q.Promise( function ( resolve, reject, notify ) {
 
 		User.findOne( { token: token } ).exec()
 		.then( function ( data ) {
