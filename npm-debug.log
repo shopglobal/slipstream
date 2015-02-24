@@ -1,0 +1,329 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.35
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/Users/noah/Documents/dev/slipstream',
+5 verbose install   [ 'article',
+5 verbose install     'async',
+5 verbose install     'bcrypt-nodejs',
+5 verbose install     'body-parser',
+5 verbose install     'cookie-parser',
+5 verbose install     'datejs',
+5 verbose install     'easyimage',
+5 verbose install     'express',
+5 verbose install     'express-jwt',
+5 verbose install     'get-youtube-id',
+5 verbose install     'hooker',
+5 verbose install     'install',
+5 verbose install     'jsdom',
+5 verbose install     'jsonwebtoken',
+5 verbose install     'mailgun-js',
+5 verbose install     'mongoose',
+5 verbose install     'mongoose-q',
+5 verbose install     'morgan',
+5 verbose install     'node',
+5 verbose install     'node-readability',
+5 verbose install     'noodlejs',
+5 verbose install     'passport',
+5 verbose install     'passport-http',
+5 verbose install     'passport-local',
+5 verbose install     'q',
+5 verbose install     'request',
+5 verbose install     'soundcloud-node',
+5 verbose install     'soundclouder',
+5 verbose install     'underscore',
+5 verbose install     'youtube-api',
+5 verbose install     'chai',
+5 verbose install     'chai-as-promised',
+5 verbose install     'mocha',
+5 verbose install     'should',
+5 verbose install     'should-promised' ] ]
+6 info preinstall slipstream@0.0.0
+7 verbose readDependencies using package.json deps
+8 verbose already installed skipping express@^4.10.7 /Users/noah/Documents/dev/slipstream
+9 verbose already installed skipping express-jwt@^0.6.2 /Users/noah/Documents/dev/slipstream
+10 verbose already installed skipping get-youtube-id@^0.1.3 /Users/noah/Documents/dev/slipstream
+11 verbose already installed skipping hooker@^0.2.3 /Users/noah/Documents/dev/slipstream
+12 verbose already installed skipping install@^0.1.8 /Users/noah/Documents/dev/slipstream
+13 verbose already installed skipping jsdom@^3.1.1 /Users/noah/Documents/dev/slipstream
+14 verbose already installed skipping jsonwebtoken@^3.2.1 /Users/noah/Documents/dev/slipstream
+15 verbose already installed skipping mailgun-js@^0.6.8 /Users/noah/Documents/dev/slipstream
+16 verbose already installed skipping mongoose@^3.8.21 /Users/noah/Documents/dev/slipstream
+17 verbose already installed skipping mongoose-q@0.0.14 /Users/noah/Documents/dev/slipstream
+18 verbose already installed skipping morgan@^1.5.1 /Users/noah/Documents/dev/slipstream
+19 verbose cache add [ 'node@0.0.0', null ]
+20 verbose cache add name=undefined spec="node@0.0.0" args=["node@0.0.0",null]
+21 verbose parsed url { protocol: null,
+21 verbose parsed url   slashes: null,
+21 verbose parsed url   auth: null,
+21 verbose parsed url   host: null,
+21 verbose parsed url   port: null,
+21 verbose parsed url   hostname: null,
+21 verbose parsed url   hash: null,
+21 verbose parsed url   search: null,
+21 verbose parsed url   query: null,
+21 verbose parsed url   pathname: 'node@0.0.0',
+21 verbose parsed url   path: 'node@0.0.0',
+21 verbose parsed url   href: 'node@0.0.0' }
+22 verbose already installed skipping node-readability@^1.0.1 /Users/noah/Documents/dev/slipstream
+23 verbose already installed skipping noodlejs@^0.3.1 /Users/noah/Documents/dev/slipstream
+24 verbose already installed skipping passport@^0.2.1 /Users/noah/Documents/dev/slipstream
+25 verbose cache add name="node" spec="0.0.0" args=["node","0.0.0"]
+26 verbose parsed url { protocol: null,
+26 verbose parsed url   slashes: null,
+26 verbose parsed url   auth: null,
+26 verbose parsed url   host: null,
+26 verbose parsed url   port: null,
+26 verbose parsed url   hostname: null,
+26 verbose parsed url   hash: null,
+26 verbose parsed url   search: null,
+26 verbose parsed url   query: null,
+26 verbose parsed url   pathname: '0.0.0',
+26 verbose parsed url   path: '0.0.0',
+26 verbose parsed url   href: '0.0.0' }
+27 verbose addNamed [ 'node', '0.0.0' ]
+28 verbose addNamed [ '0.0.0', '0.0.0' ]
+29 verbose already installed skipping passport-http@^0.2.2 /Users/noah/Documents/dev/slipstream
+30 silly lockFile c321b6ea-node-0-0-0 node@0.0.0
+31 verbose lock node@0.0.0 /Users/noah/.npm/c321b6ea-node-0-0-0.lock
+32 verbose already installed skipping passport-local@^1.0.0 /Users/noah/Documents/dev/slipstream
+33 verbose already installed skipping q@^1.1.2 /Users/noah/Documents/dev/slipstream
+34 verbose already installed skipping request@^2.51.0 /Users/noah/Documents/dev/slipstream
+35 verbose already installed skipping soundcloud-node@0.0.10 /Users/noah/Documents/dev/slipstream
+36 verbose already installed skipping soundclouder@^0.8.1 /Users/noah/Documents/dev/slipstream
+37 verbose request where is /node
+38 verbose request registry https://registry.npmjs.org/
+39 verbose request id ffc7a8ff16ad898b
+40 verbose url raw /node
+41 verbose url resolving [ 'https://registry.npmjs.org/', './node' ]
+42 verbose url resolved https://registry.npmjs.org/node
+43 verbose request where is https://registry.npmjs.org/node
+44 info trying registry request attempt 1 at 10:28:35
+45 verbose etag "BWJ3173VMWU79FIC4YM65REKP"
+46 http GET https://registry.npmjs.org/node
+47 verbose already installed skipping underscore@^1.7.0 /Users/noah/Documents/dev/slipstream
+48 verbose already installed skipping youtube-api@^0.3.2 /Users/noah/Documents/dev/slipstream
+49 verbose already installed skipping chai@^2.0.0 /Users/noah/Documents/dev/slipstream
+50 verbose already installed skipping chai-as-promised@^4.2.0 /Users/noah/Documents/dev/slipstream
+51 verbose cache add [ 'mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+51 verbose cache add   null ]
+52 verbose cache add name=undefined spec="mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266" args=["mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266",null]
+53 verbose parsed url { protocol: null,
+53 verbose parsed url   slashes: null,
+53 verbose parsed url   auth: null,
+53 verbose parsed url   host: null,
+53 verbose parsed url   port: null,
+53 verbose parsed url   hostname: null,
+53 verbose parsed url   hash: null,
+53 verbose parsed url   search: null,
+53 verbose parsed url   query: null,
+53 verbose parsed url   pathname: 'mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+53 verbose parsed url   path: 'mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+53 verbose parsed url   href: 'mocha@git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266' }
+54 verbose cache add [ 'should@^5.0.1', null ]
+55 verbose cache add name=undefined spec="should@^5.0.1" args=["should@^5.0.1",null]
+56 verbose parsed url { protocol: null,
+56 verbose parsed url   slashes: null,
+56 verbose parsed url   auth: null,
+56 verbose parsed url   host: null,
+56 verbose parsed url   port: null,
+56 verbose parsed url   hostname: null,
+56 verbose parsed url   hash: null,
+56 verbose parsed url   search: null,
+56 verbose parsed url   query: null,
+56 verbose parsed url   pathname: 'should@^5.0.1',
+56 verbose parsed url   path: 'should@^5.0.1',
+56 verbose parsed url   href: 'should@^5.0.1' }
+57 verbose already installed skipping should-promised@^0.1.0 /Users/noah/Documents/dev/slipstream
+58 verbose already installed skipping article@^1.1.0 /Users/noah/Documents/dev/slipstream
+59 verbose already installed skipping async@^0.9.0 /Users/noah/Documents/dev/slipstream
+60 verbose already installed skipping bcrypt-nodejs@0.0.3 /Users/noah/Documents/dev/slipstream
+61 verbose already installed skipping body-parser@^1.10.1 /Users/noah/Documents/dev/slipstream
+62 verbose already installed skipping cookie-parser@^1.3.3 /Users/noah/Documents/dev/slipstream
+63 verbose already installed skipping datejs@^1.0.0-rc3 /Users/noah/Documents/dev/slipstream
+64 verbose already installed skipping easyimage@^1.1.1 /Users/noah/Documents/dev/slipstream
+65 verbose cache add name="should" spec="^5.0.1" args=["should","^5.0.1"]
+66 verbose parsed url { protocol: null,
+66 verbose parsed url   slashes: null,
+66 verbose parsed url   auth: null,
+66 verbose parsed url   host: null,
+66 verbose parsed url   port: null,
+66 verbose parsed url   hostname: null,
+66 verbose parsed url   hash: null,
+66 verbose parsed url   search: null,
+66 verbose parsed url   query: null,
+66 verbose parsed url   pathname: '^5.0.1',
+66 verbose parsed url   path: '^5.0.1',
+66 verbose parsed url   href: '^5.0.1' }
+67 verbose addNamed [ 'should', '^5.0.1' ]
+68 verbose addNamed [ null, '>=5.0.1-0 <6.0.0-0' ]
+69 silly lockFile 167cc47d-should-5-0-1 should@^5.0.1
+70 verbose lock should@^5.0.1 /Users/noah/.npm/167cc47d-should-5-0-1.lock
+71 verbose cache add name="mocha" spec="git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266" args=["mocha","git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266"]
+72 verbose parsed url { protocol: 'git+https:',
+72 verbose parsed url   slashes: true,
+72 verbose parsed url   auth: null,
+72 verbose parsed url   host: 'github.com',
+72 verbose parsed url   port: null,
+72 verbose parsed url   hostname: 'github.com',
+72 verbose parsed url   hash: null,
+72 verbose parsed url   search: null,
+72 verbose parsed url   query: null,
+72 verbose parsed url   pathname: '/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+72 verbose parsed url   path: '/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+72 verbose parsed url   href: 'git+https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266' }
+73 silly lockFile 8eaa2344-d2913a7f1e820c17055e599ae86e2266 https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266
+74 verbose lock https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266 /Users/noah/.npm/8eaa2344-d2913a7f1e820c17055e599ae86e2266.lock
+75 silly addNameRange { name: 'should', range: '>=5.0.1-0 <6.0.0-0', hasData: false }
+76 verbose addRemoteGit [ 'https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266',
+76 verbose addRemoteGit   'master' ]
+77 verbose request where is /should
+78 verbose request registry https://registry.npmjs.org/
+79 verbose url raw /should
+80 verbose url resolving [ 'https://registry.npmjs.org/', './should' ]
+81 verbose url resolved https://registry.npmjs.org/should
+82 verbose request where is https://registry.npmjs.org/should
+83 info trying registry request attempt 1 at 10:28:35
+84 verbose etag "5V80EIVULX70M83S1DEQGI6BL"
+85 http GET https://registry.npmjs.org/should
+86 http 304 https://registry.npmjs.org/node
+87 silly registry.get cb [ 304,
+87 silly registry.get   { date: 'Tue, 24 Feb 2015 18:28:35 GMT',
+87 silly registry.get     server: 'Apache',
+87 silly registry.get     via: '1.1 varnish',
+87 silly registry.get     'last-modified': 'Tue, 24 Feb 2015 18:28:35 GMT',
+87 silly registry.get     'cache-control': 'max-age=60',
+87 silly registry.get     etag: '"BWJ3173VMWU79FIC4YM65REKP"',
+87 silly registry.get     age: '23',
+87 silly registry.get     'x-served-by': 'cache-sjc3134-SJC',
+87 silly registry.get     'x-cache': 'HIT',
+87 silly registry.get     'x-cache-hits': '1',
+87 silly registry.get     'x-timer': 'S1424802515.898440,VS0,VE0',
+87 silly registry.get     vary: 'Accept',
+87 silly registry.get     'content-length': '0',
+87 silly registry.get     'keep-alive': 'timeout=10, max=50',
+87 silly registry.get     connection: 'Keep-Alive' } ]
+88 verbose etag https://registry.npmjs.org/node from cache
+89 warn deprecated node@0.0.0: To update or install node, go to http://nodejs.org/
+90 http 304 https://registry.npmjs.org/should
+91 silly registry.get cb [ 304,
+91 silly registry.get   { date: 'Tue, 24 Feb 2015 18:28:35 GMT',
+91 silly registry.get     server: 'Apache',
+91 silly registry.get     via: '1.1 varnish',
+91 silly registry.get     'last-modified': 'Tue, 24 Feb 2015 18:28:35 GMT',
+91 silly registry.get     'cache-control': 'max-age=60',
+91 silly registry.get     etag: '"5V80EIVULX70M83S1DEQGI6BL"',
+91 silly registry.get     age: '23',
+91 silly registry.get     'x-served-by': 'cache-sjc3129-SJC',
+91 silly registry.get     'x-cache': 'HIT',
+91 silly registry.get     'x-cache-hits': '1',
+91 silly registry.get     'x-timer': 'S1424802515.911264,VS0,VE0',
+91 silly registry.get     vary: 'Accept',
+91 silly registry.get     'content-length': '0',
+91 silly registry.get     'keep-alive': 'timeout=10, max=50',
+91 silly registry.get     connection: 'Keep-Alive' } ]
+92 verbose etag https://registry.npmjs.org/should from cache
+93 silly lockFile c321b6ea-node-0-0-0 node@0.0.0
+94 silly lockFile c321b6ea-node-0-0-0 node@0.0.0
+95 silly addNameRange number 2 { name: 'should', range: '>=5.0.1-0 <6.0.0-0', hasData: true }
+96 silly addNameRange versions [ 'should',
+96 silly addNameRange   [ '0.0.1',
+96 silly addNameRange     '0.0.2',
+96 silly addNameRange     '0.0.3',
+96 silly addNameRange     '0.0.4',
+96 silly addNameRange     '0.1.0',
+96 silly addNameRange     '0.2.0',
+96 silly addNameRange     '0.2.1',
+96 silly addNameRange     '0.3.0',
+96 silly addNameRange     '0.3.1',
+96 silly addNameRange     '0.3.2',
+96 silly addNameRange     '0.4.0',
+96 silly addNameRange     '0.4.1',
+96 silly addNameRange     '0.4.2',
+96 silly addNameRange     '0.5.0',
+96 silly addNameRange     '0.5.1',
+96 silly addNameRange     '0.6.0',
+96 silly addNameRange     '0.6.1',
+96 silly addNameRange     '0.6.2',
+96 silly addNameRange     '0.6.3',
+96 silly addNameRange     '1.0.0',
+96 silly addNameRange     '1.1.0',
+96 silly addNameRange     '1.1.1',
+96 silly addNameRange     '1.2.0',
+96 silly addNameRange     '1.2.1',
+96 silly addNameRange     '1.2.2',
+96 silly addNameRange     '1.3.0',
+96 silly addNameRange     '2.0.0',
+96 silly addNameRange     '2.0.1',
+96 silly addNameRange     '2.0.2',
+96 silly addNameRange     '2.1.0',
+96 silly addNameRange     '2.1.1',
+96 silly addNameRange     '3.0.0',
+96 silly addNameRange     '3.0.1',
+96 silly addNameRange     '3.1.0',
+96 silly addNameRange     '3.1.1',
+96 silly addNameRange     '3.1.2',
+96 silly addNameRange     '3.1.3',
+96 silly addNameRange     '3.1.4',
+96 silly addNameRange     '3.2.0-beta1',
+96 silly addNameRange     '3.2.0',
+96 silly addNameRange     '3.3.0',
+96 silly addNameRange     '3.3.1',
+96 silly addNameRange     '3.3.2',
+96 silly addNameRange     '4.0.0',
+96 silly addNameRange     '4.0.1',
+96 silly addNameRange     '4.0.3',
+96 silly addNameRange     '4.0.4',
+96 silly addNameRange     '4.1.0',
+96 silly addNameRange     '4.2.0',
+96 silly addNameRange     '4.2.1',
+96 silly addNameRange     '4.3.0',
+96 silly addNameRange     '4.3.1',
+96 silly addNameRange     '4.4.0',
+96 silly addNameRange     '4.4.1',
+96 silly addNameRange     '4.4.2',
+96 silly addNameRange     '4.4.3',
+96 silly addNameRange     '4.4.4',
+96 silly addNameRange     '4.5.0',
+96 silly addNameRange     '4.5.1',
+96 silly addNameRange     '4.5.2',
+96 silly addNameRange     '4.6.0',
+96 silly addNameRange     '4.6.1',
+96 silly addNameRange     '4.6.2',
+96 silly addNameRange     '4.6.3',
+96 silly addNameRange     '4.6.4',
+96 silly addNameRange     '4.6.5',
+96 silly addNameRange     '5.0.0',
+96 silly addNameRange     '5.0.1' ] ]
+97 verbose addNamed [ 'should', '5.0.1' ]
+98 verbose addNamed [ '5.0.1', '5.0.1' ]
+99 silly lockFile 09d5b271-should-5-0-1 should@5.0.1
+100 verbose lock should@5.0.1 /Users/noah/.npm/09d5b271-should-5-0-1.lock
+101 silly lockFile 09d5b271-should-5-0-1 should@5.0.1
+102 silly lockFile 09d5b271-should-5-0-1 should@5.0.1
+103 silly lockFile 167cc47d-should-5-0-1 should@^5.0.1
+104 silly lockFile 167cc47d-should-5-0-1 should@^5.0.1
+105 error git clone https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266 Cloning into bare repository '/Users/noah/.npm/_git-remotes/https-github-com-mochajs-mocha-tree-fc2414d3d2913a7f1e820c17055e599ae86e2266-8eaa2344'...
+105 error git clone https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266 fatal: repository 'https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266/' not found
+106 silly lockFile 8eaa2344-d2913a7f1e820c17055e599ae86e2266 https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266
+107 silly lockFile 8eaa2344-d2913a7f1e820c17055e599ae86e2266 https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266
+108 error Error: Command failed: Cloning into bare repository '/Users/noah/.npm/_git-remotes/https-github-com-mochajs-mocha-tree-fc2414d3d2913a7f1e820c17055e599ae86e2266-8eaa2344'...
+108 error fatal: repository 'https://github.com/mochajs/mocha/tree/fc2414d3d2913a7f1e820c17055e599ae86e2266/' not found
+108 error
+108 error     at ChildProcess.exithandler (child_process.js:658:15)
+108 error     at ChildProcess.emit (events.js:98:17)
+108 error     at maybeClose (child_process.js:766:16)
+108 error     at Socket.<anonymous> (child_process.js:979:11)
+108 error     at Socket.emit (events.js:95:17)
+108 error     at Pipe.close (net.js:466:12)
+109 error If you need help, you may report this *entire* log,
+109 error including the npm and node versions, at:
+109 error     <http://github.com/npm/npm/issues>
+110 error System Darwin 14.1.0
+111 error command "node" "/usr/local/bin/npm" "install"
+112 error cwd /Users/noah/Documents/dev/slipstream
+113 error node -v v0.10.35
+114 error npm -v 1.4.28
+115 error code 128
+116 verbose exit [ 1, true ]

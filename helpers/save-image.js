@@ -19,7 +19,7 @@ var fs = require( 'fs' ),
 
 module.exports = function ( type, imageUrl ) {
 	
-	var deferred = Q.defer()
+	return Q.Promise( function ( resolve, reject, notify ) {
 	
 	var imageExtension = path.extname( imageUrl )
 
@@ -101,8 +101,8 @@ module.exports = function ( type, imageUrl ) {
 	.spread( writeThumbnail )
 	.spread( function( imageHash, originalFinalPath, thumbFinalPath ) {
 		var returnArray = [ imageHash, originalFinalPath, thumbFinalPath ]
-		deferred.resolve( returnArray )
+		resolve( returnArray )
 	})
 	
-	return deferred.promise	
+	})
 }
