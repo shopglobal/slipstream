@@ -2,14 +2,14 @@ var chai = require( 'chai' ),
 	chaiAsPromised = require( 'chai-as-promised' ),
 	assert = require( 'chai' ).assert,
 	should = require( 'chai' ).should(),
-	saveImage = require( 'helpers/save-image' ),
+	saveImage = require( '../helpers/save-image' ),
 	path = require( 'path' ),
-	getUser = require( 'helpers/get-user' ),
+	getUser = require( '../helpers/get-user' ),
 	httpMocks = require( 'node-mocks-http' ),
 	app = require( 'server.js' ),
-	userController = require( 'controllers/userController' ),
+	userController = require( '../controllers/userController' ),
 	request = require( 'request' ),
-	User = require( 'models/userModel' ),
+	User = require( '../models/userModel' ),
 	shortid = require( 'shortid' )
 
 chai.use( chaiAsPromised )
