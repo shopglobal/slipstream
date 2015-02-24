@@ -2,10 +2,8 @@ var chai = require( 'chai' ),
 	chaiAsPromised = require( 'chai-as-promised' ),
 	assert = require( 'chai' ).assert,
 	should = require( 'chai' ).should(),
-	saveImage = require( 'helpers/save-image' ),
 	Mocha = require( 'mocha' ),
-	path = require( 'path' ),
-	getUser = require( 'helpers/get-user' )
+	path = require( 'path' )
 
 chai.use( chaiAsPromised )
 
