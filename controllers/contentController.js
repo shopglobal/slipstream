@@ -11,19 +11,27 @@ var Content = require( '../models/contentModel' ),
 
 exports.add = function ( req, res ) {
 	
+	console.log( req.body )
+	
 	function getContent () {
-		var deferred = Q.defer()
+		return Q.Promise( function ( resolve, reject, notify ) {
 		
 		request( "http://localhost:8061/iframely?url=" + req.body.url,
 				function ( err, response, body ) {
-			deferred.resolve( JSON.parse( body ) )
+			if ( err || response.statusCode != 200 )
+				reject( new Error( "Error from embed server: " + body + " -> " + req.body.url ) )
+				
+			if ( !body )
+				reject( new Error( "Error from embed server. No body returned." ) )
+			
+			resolve( JSON.parse( body ) )
 		})
 				
-		return deferred.promise
+		})
 	}
 	
 	function makeContent( user, contentInfo ) {
-		var deferred = Q.defer()
+		return Q.Promise( function ( resolve, reject, notify ) {
 		
 		var content = new Content( _.extend({
 			user: user,
@@ -39,16 +47,15 @@ exports.add = function ( req, res ) {
 				content.imageThumb = imageThumbPath
 				content.imageHash = imageHash
 				
-				deferred.resolve( content )
+				content.save()
+				resolve( content )
 			})
-		}
-		else {
-			deferred.resolve( content )
+		} else {
+			content.save()
+			resolve( content )
 		}
 		
-		content.save()
-		
-		return deferred.promise
+		})
 	}
 	
 	Q.all( [ getUser( req.token ), getContent() ] )
@@ -56,7 +63,14 @@ exports.add = function ( req, res ) {
 		makeContent( user, contentInfo )
 		.then( function ( content ) {
 			return res.json( content )	
+		}, function ( error ) {
+			console.error( error )
+			return res.status(500).send( error.message )
 		})
+	})
+	.catch( function ( error ) {
+		console.error( error )
+		return res.status(500).send( { error: error.message } )
 	})
 }
 
@@ -100,6 +114,9 @@ exports.delete = function ( req, res ) {
 	*/
 	function deleteItem ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			if ( !req.query.id )
+				reject( new Error( "There doesn't seem to be an id given." ) )
+			
 			var contentId = mongoose.Types.ObjectId( req.query.id )
 
 			Content.findOneAndRemove( { user: user, _id: contentId } ).exec()
@@ -115,9 +132,10 @@ exports.delete = function ( req, res ) {
 	.then( deleteItem )
 	.then( function ( content ) {
 		return res.json( content )
-	}, function ( error ) {
+	})
+	.catch( function ( error ) {
 		console.error( error )
-		return res.json( error.message )
+		return res.status( 500 ).send( { Error: error.message } )
 	})
 	
 }
