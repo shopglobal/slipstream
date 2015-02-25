@@ -8,7 +8,7 @@
     "url": "https://github.com/OKNoah/slipstream"
   },
   "scripts": {
-    "test": "node test-runner.js"
+    "test": "mocha"
   },
   "keywords": [
     "social",
