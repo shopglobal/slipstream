@@ -219,6 +219,62 @@ describe( 'Add content', function () {
 		})
 	})
 	
+	describe( 'Youtube in listen stream', function () {
+		
+		it( 'should add Youtube to listen stream and return item', function ( done ) {
+			
+			this.timeout( 5000 )
+			
+			request({
+				method: 'POST',
+				url: 'https://localhost:8443/api/add',
+				json: true,
+				strictSSL: false,
+				body: {
+					"type": "listen",
+					"url": "https://www.youtube.com/watch?v=uxfRLNiSikM"
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+				
+					newTestContent.youtube.id = body._id
+
+					body.should.include.keys( 'user' )
+
+					done()
+			})
+		})
+	})
+	
+	describe( 'Add soundcloud', function () {
+		
+		it( 'should add Soundcloud to listen stream and return item', function ( done ) {
+			
+			this.timeout( 5000 )
+			
+			request({
+				method: 'POST',
+				url: 'https://localhost:8443/api/add',
+				json: true,
+				strictSSL: false,
+				body: {
+					"type": "listen",
+					"url": "https://soundcloud.com/braxe1/sets/alan-braxe-moments-in-time-ep"
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+				
+					newTestContent.youtube.id = body._id
+
+					body.should.include.keys( 'user' )
+
+					done()
+			})
+		})
+	})
+	
 })
 
 /*
