@@ -11,6 +11,6 @@ var mocha = new Mocha()
 
 mocha.addFile( path.join( __dirname, "/test/test.js" ) )
 
-mocha.run( function () {
-	process.exit()
+mocha.run( function( failures ) {
+//	process.exit()
 })

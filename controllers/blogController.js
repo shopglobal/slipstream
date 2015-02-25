@@ -162,19 +162,14 @@ exports.delete = function ( req, res ) {
 			
  		var contentId = mongoose.Types.ObjectId(req.query.id)
 			
-		Blog.remove( { user: user, _id: contentId }, function ( err, blog ) {
-			if (err)
-				return res.json( "Article was not delted. Error: " + err)
-				
-			if (!blog)
-				return res.json( {
-					message: "Could not find any article",
-//					"contentId": contentId,
-//					"user": user._id
-				})
-				
-			return res.json( "Article, " + blog.title + " was delted" )
+		Blog.findOneAndRemove( { user: user, _id: contentId } ).exec()
+		.then( function ( result ) {
+			return res.json( result )
 		})
+		.catch( function ( error ) {
+			return res.status( 500 ).send( { Error: error.message } )
+		})
+					
 	})
 }
 

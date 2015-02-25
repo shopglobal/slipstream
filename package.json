@@ -40,7 +40,8 @@
     "q": "^1.1.2",
     "request": "^2.51.0",
     "soundclouder": "^0.8.1",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+	"iframely": "git+https://f81df4889519e14d96629abebff6680c65a4eca8:x-oauth-basic@github.com/OKNoah/iframely.git"
   },
   "devDependencies": {
     "chai": "^2.0.0",
