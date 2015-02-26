@@ -277,6 +277,68 @@ describe( 'Add content', function () {
 	
 })
 
+describe( 'Stream content', function () {
+	
+	describe( 'GET /api/stream/read', function() {
+		
+		it( 'should return list of articles for the read stream', function( done ) {
+			
+			request({
+				method: 'GET',
+				url: 'https://localhost:8443/api/stream/read',
+				json: true,
+				strictSSL: false,
+				qs: {
+					"page": 1,
+					"show": 2
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+					if ( err ) done( err )
+
+					response.statusCode.should.equal( 200 )
+					body.should.be.an( "array" )
+					body.should.include.deep.property( '1.title', 'BBC News - Obama vetoes Keystone oil pipeline bill' )
+
+					done()
+			})
+			
+		})
+		
+	})
+	
+	describe( 'GET /api/stream/listen', function() {
+		
+		it( 'should return list of Listen items', function( done ) {
+			
+			request({
+				method: 'GET',
+				url: 'https://localhost:8443/api/stream/listen',
+				json: true,
+				strictSSL: false,
+				qs: {
+					"page": 1,
+					"show": 2
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+					if ( err ) done( err )
+
+					response.statusCode.should.equal( 200 )
+					body.should.be.an( "array" )
+					body.should.include.deep.property( '0.title', 'Scion AV Presents: ALAN BRAXE - MOMENTS IN TIME EP by ALAN BRAXE' )
+
+					done()
+			})
+			
+		})
+		
+	})
+
+})
+
 /*
 Tests deleting content
 */
