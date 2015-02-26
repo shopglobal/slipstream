@@ -473,25 +473,21 @@ a {
     height: 0;
     clear: both; }
 
-.video-panel {
+.item-panel {
   position: relative; }
-  .video-panel .video-description {
+  .item-panel .item-description {
     margin-bottom: 15px; }
-  .video-panel h2 {
-    margin: 0; }
-
-.video-iframe {
-  height: 428px;
-  padding: 0;
-  margin: 15px 0; }
-
-.listen-panel {
-  position: relative; }
-  .listen-panel .listen-iframe {
+  .item-panel .listen-iframe {
     height: 100px;
     width: 100%;
     margin-bottom: 70px !important; }
-    .listen-panel .listen-iframe iframe {
+    .item-panel .listen-iframe iframe {
       height: 150px !important; }
+  .item-panel h2 {
+    margin: 0; }
+  .item-panel .watch-iframe {
+    height: 428px;
+    padding: 0;
+    margin: 15px 0; }
 
 /*# sourceMappingURL=style.css.map */
