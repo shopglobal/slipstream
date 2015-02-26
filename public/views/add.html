@@ -13,18 +13,18 @@
 			<div class="clear-fix"></div>
 			
 			<div class="add-form-toggle col-md-4">
-				<form name="" class="form-control pull-right add-form-toggle-buttons" ng-init="contentParams.type='read'">
+				<form name="" class="form-control pull-right add-form-toggle-buttons" >
 					<div class="btn-group pull-right">
 						<label for="read" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="read" ng-model="contentParams.type" name="type" value="read" ng-checked="{{ currentState == 'app.read' }}" />
+							<input type="radio" id="read" name="type" value="read" ng-checked="{{ currentState == 'app.read' }}" ng-model="contentParams.type" />
 							<span class="glyphicon glyphicon-book"></span>
 						</label>
 						<label for="watch" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="watch" ng-model="contentParams.type" name="type" value="watch" ng-checked="{{ currentState == 'app.watch' }}" />
+							<input type="radio" id="watch" name="type" value="watch" ng-checked="{{ currentState == 'app.watch' }}" ng-model="contentParams.type" />
 							<span class="glyphicon glyphicon-film"></span>
 						</label>
 						<label for="listen" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="listen" ng-model="contentParams.type" name="type" value="listen" ng-checked="{{ currentState == 'app.listen' }}" />
+							<input type="radio" id="listen" name="type" value="listen" ng-checked="{{ currentState == 'app.listen' }}" ng-model="contentParams.type" />
 							<span class="glyphicon glyphicon-headphones"></span>
 						</label>
 					</div>

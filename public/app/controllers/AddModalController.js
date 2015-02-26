@@ -5,7 +5,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
-		type: ''
+		type: $state.current.name.split(".")[1]
 	}
 
 	// attempts to detect if a user deletes the url in the url field and
