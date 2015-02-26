@@ -5,13 +5,12 @@ var Content = require( '../models/contentModel' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
 	_ = require( 'underscore' ),
+	log = require( '../helpers/logger.js' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 
 // adds content to users stream.
 
 exports.add = function ( req, res ) {
-	
-	console.log( req.body )
 	
 	function getContent () {
 		return Q.Promise( function ( resolve, reject, notify ) {
@@ -64,12 +63,12 @@ exports.add = function ( req, res ) {
 		.then( function ( content ) {
 			return res.json( content )	
 		}).catch( function ( error ) {
-			console.error( error )
+			log.error( error )
 			return res.status(500).send( error.message )
 		})
 	})
 	.catch( function ( error ) {
-		console.error( error )
+		log.error( error )
 		return res.status(500).send( { error: error.message } )
 	})
 }
@@ -102,7 +101,7 @@ exports.stream = function ( req, res ) {
 		return res.json( results )
 	})
 	.catch( function ( error ) {
-		console.error( error )
+		log.error( error )
 		return res.status( 500 ).send( { error: error.message } )
 	})
 }
@@ -138,7 +137,7 @@ exports.delete = function ( req, res ) {
 		return res.json( content )
 	})
 	.catch( function ( error ) {
-		console.error( error )
+		log.error( error )
 		return res.status( 500 ).send( { Error: error.message } )
 	})
 	

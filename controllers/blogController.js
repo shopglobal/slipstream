@@ -11,6 +11,7 @@ var fs = require('fs'),
 	saveImage = require( '../helpers/save-image' ),
 	getUser = require( '../helpers/get-user' ),
 	read = require( 'node-readability' ),
+	log = require( '../helpers/logger.js' ),
 	jsdom = require( 'jsdom' )
 
 // adds and item to the articles database with the user's id.
@@ -22,7 +23,7 @@ exports.add = function ( req, res ) {
 		
 		read( req.body.url, function( err, article, meta ) {
 			if ( err )
-				return console.log( err )
+				return log.error( err )
 			
 			var newArticle = {
 				title: article.title,
@@ -52,8 +53,6 @@ exports.add = function ( req, res ) {
 		jsdom.env( article.content, function ( error, window ) {
 			
 			images = window.document.getElementsByTagName( 'img' )
-			
-			console.log( "images: " + images.length )
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
 				var deferred = Q.defer()
@@ -132,6 +131,7 @@ exports.add = function ( req, res ) {
 	.then( replaceImages )
 	.then( saveArticle )
 	.then( function ( article ) {
+		log.info( { title: article.title, url: article.url }, "Article saved" )
 		return res.json( article )
 	})
 	

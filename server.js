@@ -8,6 +8,7 @@ var http = require('http'),
 	secret = require('./config/secretConfig'),
 	jwt = require('jsonwebtoken'),
 	morgan = require('morgan'),
+	log = require( './helpers/logger.js' ),
 	portToUse = 8443
 
 var indexPath = path.join(__dirname, 'public')
@@ -22,7 +23,7 @@ mongoose.connect('mongodb://localhost/slipstream')
 app = express();
 
 app	
-	.use(morgan('dev'))
+	.use( morgan( 'dev' ) )
 	.use(bodyParser.urlencoded({ extended: true }))
 	.use(bodyParser.json())
 	.use( '/api', require('./routes/usersRoute.js') )
@@ -36,7 +37,7 @@ https
 //	res.sendFile(indexPath)
 //})
 
-console.log("Running on port " + portToUse)
+log.info("Running on port " + portToUse)
 
 if ( process.argv[2] == "-test" ) {
 	var chai = require( 'chai' ),
