@@ -253,15 +253,10 @@ a { color: $green;
 
 // video
 
-.video-panel { position: relative; 
-	.video-description { margin-bottom: 15px; }
-	h2 { margin: 0; } }
-	
-.video-info {  }
-.video-iframe { height: 428px; padding: 0; margin: 15px 0; }
-
-// listen panel
-
-.listen-panel { position: relative; 
+.item-panel { position: relative; 
+	.item-description { margin-bottom: 15px; }
 	.listen-iframe { height: 100px;  width: 100%; margin-bottom: 70px !important; 
-		iframe { height: 150px !important; } } }
+		iframe { height: 150px !important; } }
+	h2 { margin: 0; }	
+	.video-info {  }
+	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } }

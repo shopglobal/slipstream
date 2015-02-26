@@ -1,6 +1,6 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive'])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ct.ui.router.extras' ])
 
-.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
+.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', '$futureStateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider, $futureStateProvider ) {
 	
 	// sets default state
 
@@ -51,6 +51,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'views/home.html',
 			controller: 'HomeController'
 		})
+		.state( 'app.profile', {
+			url: '/profile',
+			templateUrl: 'views/profile.html',
+			controller: 'ProfileController'
+		})
 		.state( 'app.read', {
 			url: '/read',
 			templateUrl: 'views/articles.html',
@@ -58,23 +63,38 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		})
 		.state( 'app.watch', {
 			url: '/watch',
-			templateUrl: 'views/watch-stream.html',
-			controller: 'WatchController'
-		})
-		.state( 'app.login', {
-			url: '/login',
-			templateUrl: 'views/login.html'
-		})
-		.state( 'app.profile', {
-			url: '/profile',
-			templateUrl: 'views/profile.html',
-			controller: 'ProfileController'
+			templateUrl: 'app/views/stream-content.html',
+			controller: 'ContentController'
 		})
 		.state( 'app.listen', {
 			url: '/listen',
-			templateUrl: 'views/listen-stream.html',
-			controller: 'ListenController'
+			templateUrl: 'app/views/stream-content.html',
+			controller: 'ContentController'
 		})
+
+	/*	
+	Config for dynamic states for content streams
+	*/	
+	/*$futureStateProvider.addResolve( function( $q, $timeout ) {
+        var d = $q.defer()
+        
+        $timeout(function() { 
+            d.resolve("When this resolves, future state provider will re-sync the state/url");
+        }, 1000)
+
+        return d.promise;
+    });
+    
+    var futureState = { 
+    	type: 'ngload', 
+    	stateName: 'foo', 
+    	url: '/foo', 
+    	src: 'foo.js' 
+    };
+
+    $futureStateProvider.futureState(futureState);
+    
+    $futureStateProvider.stateFactory('ngload', dynamicStateFactory);*/
 }])
 
 .controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, Content, flash ) {
@@ -194,3 +214,20 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	return Content
 }])
+
+var dynamicStateFactory = function( $q, $timeout, futureState ) {
+    var d = $q.defer();
+    $timeout(function() {
+    	console.log( futureState )
+      
+		var fullUiRouterState = {
+			name: futureState.stateName,
+			url: futureState.urlPrefix,
+			template: 'app/views/stream-content.html'
+		}
+
+		d.resolve(fullUiRouterState); // Async resolve of ui-router state promise
+    }, 1000);
+
+    return d.promise; // ui-router state promise returned
+}
