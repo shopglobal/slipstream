@@ -11,6 +11,7 @@ var fs = require('fs'),
 	saveImage = require( '../helpers/save-image' ),
 	getUser = require( '../helpers/get-user' ),
 	read = require( 'node-readability' ),
+	log = require( '../helpers/logger.js' ),
 	jsdom = require( 'jsdom' )
 
 // adds and item to the articles database with the user's id.
@@ -22,7 +23,7 @@ exports.add = function ( req, res ) {
 		
 		read( req.body.url, function( err, article, meta ) {
 			if ( err )
-				return console.log( err )
+				return log.error( err )
 			
 			var newArticle = {
 				title: article.title,
@@ -52,8 +53,6 @@ exports.add = function ( req, res ) {
 		jsdom.env( article.content, function ( error, window ) {
 			
 			images = window.document.getElementsByTagName( 'img' )
-			
-			console.log( "images: " + images.length )
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
 				var deferred = Q.defer()
@@ -132,6 +131,7 @@ exports.add = function ( req, res ) {
 	.then( replaceImages )
 	.then( saveArticle )
 	.then( function ( article ) {
+		log.info( { title: article.title, url: article.url }, "Article saved" )
 		return res.json( article )
 	})
 	
@@ -142,15 +142,18 @@ exports.stream = function ( req, res ) {
 	var show = req.query.show
 	var page = req.query.page
 	
-	User.findOne( { token: req.token }, function ( err, user ) {
-		if( err )
-			return res.sendStatus(403)
+	getUser( req.token )
+	.then( function ( user ) {
 			
-		Blog.find( { $query: { user: user.id }, $orderby: { added: -1 } } )
+		Blog.find( { $query: { user: user }, $orderby: { added: -1 } } )
 		.skip( page > 0 ? (( page - 1) * show) : 0).limit( show ).exec()
 		.then( function ( result ) {
 			return res.json( result )
 		})
+		
+	})
+	.catch( function ( error ) {
+		return res.status( 500 ).send( { "Error": error.message } )
 	})
 }
 
@@ -166,10 +169,10 @@ exports.delete = function ( req, res ) {
 		.then( function ( result ) {
 			return res.json( result )
 		})
-		.catch( function ( error ) {
-			return res.status( 500 ).send( { Error: error.message } )
-		})
 					
+	})
+	.catch( function ( error ) {
+			return res.status( 500 ).send( { Error: error.message } )
 	})
 }
 

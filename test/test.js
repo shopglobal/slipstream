@@ -5,7 +5,6 @@ var chai = require( 'chai' ),
 	saveImage = require( '../helpers/save-image' ),
 	path = require( 'path' ),
 	getUser = require( '../helpers/get-user' ),
-	httpMocks = require( 'node-mocks-http' ),
 	userController = require( '../controllers/userController' ),
 	blogController = require( '../controllers/blogController' ),
 	request = require( 'request' ),
@@ -219,6 +218,124 @@ describe( 'Add content', function () {
 		})
 	})
 	
+	describe( 'Youtube in listen stream', function () {
+		
+		it( 'should add Youtube to listen stream and return item', function ( done ) {
+			
+			this.timeout( 5000 )
+			
+			request({
+				method: 'POST',
+				url: 'https://localhost:8443/api/add',
+				json: true,
+				strictSSL: false,
+				body: {
+					"type": "listen",
+					"url": "https://www.youtube.com/watch?v=uxfRLNiSikM"
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+				
+					newTestContent.youtube.id = body._id
+
+					body.should.include.keys( 'user' )
+
+					done()
+			})
+		})
+	})
+	
+	describe( 'Add soundcloud', function () {
+		
+		it( 'should add Soundcloud to listen stream and return item', function ( done ) {
+			
+			this.timeout( 5000 )
+			
+			request({
+				method: 'POST',
+				url: 'https://localhost:8443/api/add',
+				json: true,
+				strictSSL: false,
+				body: {
+					"type": "listen",
+					"url": "https://soundcloud.com/braxe1/sets/alan-braxe-moments-in-time-ep"
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+				
+					newTestContent.youtube.id = body._id
+
+					body.should.include.keys( 'user' )
+
+					done()
+			})
+		})
+	})
+	
+})
+
+describe( 'Stream content', function () {
+	
+	describe( 'GET /api/stream/read', function() {
+		
+		it( 'should return list of articles for the read stream', function( done ) {
+			
+			request({
+				method: 'GET',
+				url: 'https://localhost:8443/api/stream/read',
+				json: true,
+				strictSSL: false,
+				qs: {
+					"page": 1,
+					"show": 2
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+					if ( err ) done( err )
+
+					response.statusCode.should.equal( 200 )
+					body.should.be.an( "array" )
+					body.should.include.deep.property( '1.title', 'BBC News - Obama vetoes Keystone oil pipeline bill' )
+
+					done()
+			})
+			
+		})
+		
+	})
+	
+	describe( 'GET /api/stream/listen', function() {
+		
+		it( 'should return list of Listen items', function( done ) {
+			
+			request({
+				method: 'GET',
+				url: 'https://localhost:8443/api/stream/listen',
+				json: true,
+				strictSSL: false,
+				qs: {
+					"page": 1,
+					"show": 2
+				},
+				headers: {
+					"Authorization": "Bearer " + newTestUser.token
+				} }, function ( err, response, body ) {
+					if ( err ) done( err )
+
+					response.statusCode.should.equal( 200 )
+					body.should.be.an( "array" )
+					body.should.include.deep.property( '0.title', 'Scion AV Presents: ALAN BRAXE - MOMENTS IN TIME EP by ALAN BRAXE' )
+
+					done()
+			})
+			
+		})
+		
+	})
+
 })
 
 /*

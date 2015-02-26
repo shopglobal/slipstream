@@ -5,13 +5,12 @@ var Content = require( '../models/contentModel' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
 	_ = require( 'underscore' ),
+	log = require( '../helpers/logger.js' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 
 // adds content to users stream.
 
 exports.add = function ( req, res ) {
-	
-	console.log( req.body )
 	
 	function getContent () {
 		return Q.Promise( function ( resolve, reject, notify ) {
@@ -63,13 +62,13 @@ exports.add = function ( req, res ) {
 		makeContent( user, contentInfo )
 		.then( function ( content ) {
 			return res.json( content )	
-		}, function ( error ) {
-			console.error( error )
+		}).catch( function ( error ) {
+			log.error( error )
 			return res.status(500).send( error.message )
 		})
 	})
 	.catch( function ( error ) {
-		console.error( error )
+		log.error( error )
 		return res.status(500).send( { error: error.message } )
 	})
 }
@@ -81,26 +80,30 @@ exports.stream = function ( req, res ) {
 		stream = req.params.stream	// the type of content to get
 	
 	function getStream ( user ) {
-		var deferred = Q.defer()
+		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		Content.find( { $and: [
-			{ user: user },
-			{ stream: stream }
-		] } ).sort( { added: -1 } )
-		.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
-		.exec()
-		.then( function( results ) {
-			deferred.resolve( results )
+			Content.find( { $and: [
+				{ user: user },
+				{ stream: stream }
+			] } ).sort( { added: -1 } )
+			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
+			.exec()
+			.then( function( results ) {
+				resolve( results )
+			})
+			
 		})
-		
-		return deferred.promise		
 	}
 	
 	getUser( req.token )
 	.then( getStream )
 	.then( function ( results ) {
 		return res.json( results )
-	})	
+	})
+	.catch( function ( error ) {
+		log.error( error )
+		return res.status( 500 ).send( { error: error.message } )
+	})
 }
 	
 exports.delete = function ( req, res ) {
@@ -134,7 +137,7 @@ exports.delete = function ( req, res ) {
 		return res.json( content )
 	})
 	.catch( function ( error ) {
-		console.error( error )
+		log.error( error )
 		return res.status( 500 ).send( { Error: error.message } )
 	})
 	

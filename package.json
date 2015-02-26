@@ -21,6 +21,7 @@
     "async": "^0.9.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.10.1",
+    "bunyan": "^1.3.4",
     "cookie-parser": "^1.3.3",
     "datejs": "^1.0.0-rc3",
     "easyimage": "^1.1.1",
@@ -28,9 +29,11 @@
     "express-jwt": "^0.6.2",
     "get-youtube-id": "^0.1.3",
     "hooker": "^0.2.3",
+    "iframely": "git+https://f81df4889519e14d96629abebff6680c65a4eca8:x-oauth-basic@github.com/OKNoah/iframely.git",
     "install": "^0.1.8",
     "jsdom": "^3.1.1",
     "jsonwebtoken": "^3.2.1",
+    "logrotate-stream": "^0.2.5",
     "mailgun-js": "^0.6.8",
     "mongoose": "^3.8.21",
     "mongoose-q": "0.0.14",
@@ -40,8 +43,7 @@
     "q": "^1.1.2",
     "request": "^2.51.0",
     "soundclouder": "^0.8.1",
-    "underscore": "^1.7.0",
-	"iframely": "git+https://f81df4889519e14d96629abebff6680c65a4eca8:x-oauth-basic@github.com/OKNoah/iframely.git"
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "chai": "^2.0.0",

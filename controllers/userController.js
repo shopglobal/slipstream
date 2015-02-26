@@ -5,6 +5,7 @@ var User = require( '../models/userModel' ),
 	bodyParser = require('body-parser'),
 	crypto = require( 'crypto' ),
 	bcrypt = require( 'bcrypt-nodejs' ),
+	log = require( '../helpers/logger.js' ),
 	Q = require( 'q' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
@@ -20,7 +21,7 @@ exports.login = function ( req, res ) {
 			return res.json( { message: "Something went wrong " } )
 
 		if ( !user )
-			return console.log( "Username: " + req.body.user + " Password: " + req.body.user )
+			return log.error( { user: req.body.user }, "User not found at login" )
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
 			if (err)
@@ -35,7 +36,7 @@ exports.login = function ( req, res ) {
 						 token: user.token
 					})
 				} else {
-					return res.json( { message: "Something went wrong." } )
+					return res.status( 500 ).send( { error: "Something went wrong." } )
 				}
 			}
 
@@ -108,8 +109,8 @@ exports.checkAuthorization = function( req, res, callback ) {
 		req.token = bearerToken
 		return callback()
 	} else {
-		console.log(req.headers)
-		return res.json("Token authorization failed." )
+		log.error( { headers: req.headers }, "Token authorization failed." )
+		return res.status( 500 ).send( "Token authorization failed." )
 	}
 }
 
@@ -190,8 +191,8 @@ exports.sendPasswordReset = function ( req, res ) {
 	.then( function ( body ) {
 		return res.json( body )
 	}, function ( error ) {
-		console.log( error )
-		return res.sendStatus( 500 )
+		log.error( error, "Password reset error" )
+		return res.status( 500 ).send( { error: error.message } )
 	})
 	
 }
@@ -243,7 +244,7 @@ exports.changePassword = function ( req, res ) {
 	.then( function ( user ) {
 		return res.json( "The password was changed for user." )
 	}, function ( error ) {
-		console.error( error )
-		return res.json( error.message )	
+		log.error( error )
+		return res.status( 500 ).send( { error: error.message } )
 	})
 }
