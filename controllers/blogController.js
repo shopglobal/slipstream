@@ -142,15 +142,18 @@ exports.stream = function ( req, res ) {
 	var show = req.query.show
 	var page = req.query.page
 	
-	User.findOne( { token: req.token }, function ( err, user ) {
-		if( err )
-			return res.sendStatus(403)
+	getUser( req.token )
+	.then( function ( user ) {
 			
-		Blog.find( { $query: { user: user.id }, $orderby: { added: -1 } } )
+		Blog.find( { $query: { user: user }, $orderby: { added: -1 } } )
 		.skip( page > 0 ? (( page - 1) * show) : 0).limit( show ).exec()
 		.then( function ( result ) {
 			return res.json( result )
 		})
+		
+	})
+	.catch( function ( error ) {
+		return res.status( 500 ).send( { "Error": error.message } )
 	})
 }
 
@@ -166,10 +169,10 @@ exports.delete = function ( req, res ) {
 		.then( function ( result ) {
 			return res.json( result )
 		})
-		.catch( function ( error ) {
-			return res.status( 500 ).send( { Error: error.message } )
-		})
 					
+	})
+	.catch( function ( error ) {
+			return res.status( 500 ).send( { Error: error.message } )
 	})
 }
 
