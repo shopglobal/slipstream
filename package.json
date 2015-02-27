@@ -44,6 +44,7 @@
     "node-readability": "^1.0.1",
     "q": "^1.1.2",
     "request": "^2.51.0",
+    "s3": "^4.4.0",
     "soundclouder": "^0.8.1",
     "underscore": "^1.7.0"
   },

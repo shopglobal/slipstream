@@ -1,5 +1,6 @@
 node_modules
 public/vendor
+.env
 .brackets.json
 public/images/blogs/**
 public/images/read/**
