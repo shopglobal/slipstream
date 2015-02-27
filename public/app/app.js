@@ -12,7 +12,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		'self',
 		'https://www.youtube.com/**',
 		'https://w.soundcloud.com/**',
-		'https://api.soundcloud.com/**'
+		'https://api.soundcloud.com/**',
+		'https://reedoo.link/**'
 	] )
 
 	// add the custom service to add Authenticaiotn to header
@@ -22,43 +23,43 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	$stateProvider
 		.state( 'landing', {
 			url: '/home',
-			templateUrl: 'views/landing.html',
+			templateUrl: 'app/views/landing.html',
 			controller: 'MainController'
 		})
 		.state( 'landing.splash', {
 			url: '/splash',
-			templateUrl: 'views/landing-splash.html'
+			templateUrl: 'app/views/landing-splash.html'
 		})
 		.state( 'landing.login', {
 			url: '/login',
-			templateUrl: 'views/login.html'
+			templateUrl: 'app/views/login.html'
 		})
 		.state( 'landing.register', {
 			url: '/register',
-			templateUrl: 'views/register.html'
+			templateUrl: 'app/views/register.html'
 		})
 		.state( 'landing.reset', {
 			url: '/reset',
-			templateUrl: 'views/landing-reset.html'
+			templateUrl: 'app/views/landing-reset.html'
 		})
 		.state( 'app', {
 			url: '/app',
-			templateUrl: 'views/app.html',
+			templateUrl: 'app/views/app.html',
 			controller: 'MainController'
 		})
 		.state( 'app.home', {
 			url: '/main',
-			templateUrl: 'views/home.html',
+			templateUrl: 'app/views/home.html',
 			controller: 'HomeController'
 		})
 		.state( 'app.profile', {
 			url: '/profile',
-			templateUrl: 'views/profile.html',
+			templateUrl: 'app/views/profile.html',
 			controller: 'ProfileController'
 		})
 		.state( 'app.read', {
 			url: '/read',
-			templateUrl: 'views/articles.html',
+			templateUrl: 'app/views/articles.html',
 			controller: 'ArticlesController'
 		})
 		.state( 'app.watch', {
@@ -170,7 +171,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		return {
 			request : function (config) {
 				config.headers = config.headers || {}
-				var iframelyPath = "http://" + location.hostname + ":8061/iframely"
+				var iframelyPath = "https://" + location.hostname + ":8061/iframely"
 				if ( $window.sessionStorage.token && config.url !==  iframelyPath ) {
 					config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
 				}
