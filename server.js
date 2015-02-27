@@ -12,10 +12,10 @@ var http = require('http'),
 
 var indexPath = path.join(__dirname, 'public')
 
-var options = {
-	key: fs.readFileSync( 'ssl.key'),
-	cert: fs.readFileSync( 'ssl.crt' )
-}
+//var options = {
+//	key: fs.readFileSync( 'ssl.key'),
+//	cert: fs.readFileSync( 'ssl.crt' )
+//}
 
 mongoose.connect( process.env.MONGOLAB_URI )
 
@@ -28,8 +28,8 @@ app
 	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
 
-https
-	.createServer( options, app ).listen( process.env.PORT )
+http
+	.createServer( app ).listen( process.env.PORT )
 
 //app.get('/', function( req, res ) {
 //	res.writeHead( 200, { 'Content-Type': 'text/plain' } )
