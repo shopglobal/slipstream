@@ -138,8 +138,7 @@ a {
     color: white; }
   .btn-green-solid:hover {
     background: #00E0AA;
-    color: white;
-    border: none; }
+    color: white; }
 
 .btn-group-thick:nth-child(2) {
   border-width: 3px;

@@ -8,7 +8,7 @@ app.controller('ArticlesController', ['$scope', '$window', '$state', '$urlRouter
 		console.log( "modal should open ")
 
 		var modalInstance = $modal.open( {
-			templateUrl: "views/reader-modal.html",
+			templateUrl: "app/views/reader-modal.html",
 			windowClass: 'reader-modal',
 			controller: 'ReaderModalController',
 			resolve: {

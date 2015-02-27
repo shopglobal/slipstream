@@ -14,8 +14,8 @@ var http = require('http'),
 var indexPath = path.join(__dirname, 'public')
 
 var options = {
-	key: fs.readFileSync( 'server.key'),
-	cert: fs.readFileSync( 'server.crt' )
+	key: fs.readFileSync( 'ssl.key'),
+	cert: fs.readFileSync( 'ssl.crt' )
 }
 
 mongoose.connect('mongodb://localhost/slipstream')

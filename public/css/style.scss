@@ -96,7 +96,7 @@ a { color: $green;
 
 .btn-green-solid { background: $green; color: white;
 	&:active { color: white; }
-	&:hover { background: $green; color: white; border: none; } }
+	&:hover { background: $green; color: white; } }
 
 .btn-group-thick { 
 	&:nth-child(2) { border-width: 3px; border-color: red; }

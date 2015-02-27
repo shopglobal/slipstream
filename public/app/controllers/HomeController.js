@@ -66,7 +66,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.openAddModal = function () {
 		var modalInstance = $modal.open( {
-			templateUrl: "views/add.html",
+			templateUrl: "app/views/add.html",
 			controller: 'AddModalController',
 			windowClass: 'add-modal'
 		})

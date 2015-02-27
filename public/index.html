@@ -11,11 +11,11 @@
 <body ng-app="SlipStream" ng-controller="MainController">
 
 	<div flash-alert="error" active-class="in alert alert-danger flash-alert" class="fade">
-		<span class="alert-message text-center">{{flash.message}}</span>
+		<p class="alert-message text-center">{{flash.message}}</p>
 	</div>
 
 	<div flash-alert="success" active-class="in alert alert-success flash-alert" class="fade">
-		<span class="alert-message text-center">{{flash.message}}</span>
+		<p class="alert-message text-center">{{flash.message}}</p>
 	</div>
 
 	<div ui-view id="viewport" height="100%"></div>
