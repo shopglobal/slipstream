@@ -9,12 +9,12 @@ module.exports = require( 'bunyan' ).createLogger( {
 	name: "SlipStream",
 	streams: [ { 
 		level: 'error',
-		path: __dirname + '/logs/error.log',
+		path: '../logs/error.log',
 		type: 'rotating-file'
 	},
 	{
 		level: 'info',
-		path: __dirname + '/logs/info.log',
+		path: '../logs/info.log',
 		type: 'rotating-file' 
 	}]
 })
