@@ -102,7 +102,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$scope.appName = "SlipStream"
 
-	$scope.currentState = $state.current.name
+	$scope.$state = $state
 
 	$scope.user = {
 		username: '',
