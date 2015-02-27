@@ -1,2 +1,2 @@
-web: node node_modules/iframely/server
+worker: node node_modules/iframely/server
 web: node server
