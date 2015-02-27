@@ -18,7 +18,7 @@ var options = {
 	cert: fs.readFileSync( 'ssl.crt' )
 }
 
-mongoose.connect('mongodb://localhost/slipstream')
+mongoose.connect( process.env.MONGOLAB_URI )
 
 app = express();
 
