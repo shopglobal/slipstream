@@ -3,6 +3,3 @@ public/vendor
 .env
 .brackets.json
 public/images/blogs/**
-public/images/read/**
-public/images/watch/**
-public/images/listen/**
