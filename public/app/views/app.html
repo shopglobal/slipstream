@@ -6,7 +6,7 @@
 
 <div id="header">
 	
-	<nav class="navbar navbar-default navbar-green" id="nav-row-1">
+	<nav class="navbar navbar-default navbar-green navbar-fixed-top" id="nav-row-1">
 		<div class="container">
 			<div class="navbar-header">
 				<button class="navbar-toggle collapsed">
@@ -48,9 +48,10 @@
 		</div>
 	</nav>
 
-	<nav class="navbar navbar-default" role="navigation" id="nav-row-2">
-		<div class="container">
-			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="nav-row-2" >
+		<div class="container" >
+			
+			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick" ng-hide=" $state.includes('app.profile') " >
 				<div class="btn-group">
 					<button ui-sref="app.read" class="btn btn-green" ui-sref-active="btn-green-solid">
 						<span class="glyphicon glyphicon-book"></span>
@@ -70,11 +71,29 @@
 					</button>
 				</div>
 			</div>
+
+			<div class="content-toggle center-block button-back navbar-fixed-top" id="nav-row-2" ng-show=" $state.includes('app.profile') ">
+				<div class="container container-padded no-padding">
+					<div class="col-md-12">
+						<a ui-sref="app.read">← Back to streams</a>
+					</div>
+				</div>
+			</div>
+
 		</div>
 	</nav>
+	
+	<!-- <div class="button-back navbar-fixed-top" id="nav-row-2" ng-show=" $state.includes('app.profile') ">
+		<div class="container">
+			<div class="col-md-12">
+				<a ui-sref="app.read">← Back to streams</a>
+			</div>
+		</div>
+	</div> -->
+
 </div>
 
-<div class="container">
+<div class="container container-stream">
 
 	<div ui-view id="viewport" height="100%"></div>
 

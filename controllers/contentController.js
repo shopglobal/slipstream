@@ -15,9 +15,11 @@ exports.add = function ( req, res ) {
 	function getContent () {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		request( "http://localhost:8061/iframely?url=" + req.body.url,
-				function ( err, response, body ) {
-			if ( err || response.statusCode != 200 )
+		request( {
+			strictSSL: false,
+			url: "https://localhost:8061/iframely?url=" + req.body.url
+			}, function ( err, response, body ) {
+			if ( err || response.statusCode !== 200 )
 				reject( new Error( "Error from embed server: " + body + " -> " + req.body.url ) )
 				
 			if ( !body )

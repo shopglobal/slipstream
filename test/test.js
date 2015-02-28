@@ -26,6 +26,7 @@ newTestContent = {
 	youtube: {}
 }
 
+var PORT = process.env.PORT
 
 /*
 Tests the user related functions
@@ -38,7 +39,7 @@ describe( 'UserController', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:8443/api/signup',
+				url: 'https://localhost:' + PORT + '/api/signup',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -109,7 +110,7 @@ describe( 'GetUser', function () {
 			
 				request({
 					method: 'GET',
-					url: 'https://localhost:8443/api/users',
+					url: 'https://localhost:' + PORT + '/api/users',
 					json: true,
 					strictSSL: false,
 					headers: {
@@ -140,7 +141,7 @@ describe( 'Add content', function () {
 			
 				request({
 					method: 'POST',
-					url: 'https://localhost:8443/api/add',
+					url: 'https://localhost:' + PORT + '/api/add',
 					json: true,
 					strictSSL: false,
 					body: {
@@ -169,7 +170,7 @@ describe( 'Add content', function () {
 			
 				request({
 					method: 'POST',
-					url: 'https://localhost:8443/api/add',
+					url: 'https://localhost:' + PORT + '/api/add',
 					json: true,
 					strictSSL: false,
 					body: {
@@ -198,7 +199,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:8443/api/add',
+				url: 'https://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -226,7 +227,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:8443/api/add',
+				url: 'https://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -254,7 +255,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:8443/api/add',
+				url: 'https://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -284,7 +285,7 @@ describe( 'Stream content', function () {
 			
 			request({
 				method: 'GET',
-				url: 'https://localhost:8443/api/stream/read',
+				url: 'https://localhost:' + PORT + '/api/stream/read',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -313,7 +314,7 @@ describe( 'Stream content', function () {
 			
 			request({
 				method: 'GET',
-				url: 'https://localhost:8443/api/stream/listen',
+				url: 'https://localhost:' + PORT + '/api/stream/listen',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -349,7 +350,7 @@ describe( 'Delete content', function () {
 			
 			request({
 				method: 'DELETE',
-				url: 'https://localhost:8443/api/stream/read',
+				url: 'https://localhost:' + PORT + '/api/stream/read',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,
@@ -376,7 +377,7 @@ describe( 'Delete content', function () {
 			
 			request({
 				method: 'DELETE',
-				url: 'https://localhost:8443/api/stream/watch',
+				url: 'https://localhost:' + PORT + '/api/stream/watch',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,

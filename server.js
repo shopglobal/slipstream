@@ -8,17 +8,16 @@ var http = require('http'),
 	secret = require('./config/secretConfig'),
 	jwt = require('jsonwebtoken'),
 	morgan = require('morgan'),
-	log = require( './helpers/logger.js' ),
-	portToUse = 8443
+	log = require( './helpers/logger.js' )
 
 var indexPath = path.join(__dirname, 'public')
 
-var options = {
-	key: fs.readFileSync( 'ssl.key'),
-	cert: fs.readFileSync( 'ssl.crt' )
-}
+//var options = {
+//	key: fs.readFileSync( 'ssl.key'),
+//	cert: fs.readFileSync( 'ssl.crt' )
+//}
 
-mongoose.connect('mongodb://localhost/slipstream')
+mongoose.connect( process.env.MONGOLAB_URI )
 
 app = express();
 
@@ -29,15 +28,15 @@ app
 	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
 
-https
-	.createServer( options, app ).listen( portToUse )
+http
+	.createServer( app ).listen( process.env.PORT )
 
 //app.get('/', function( req, res ) {
 //	res.writeHead( 200, { 'Content-Type': 'text/plain' } )
 //	res.sendFile(indexPath)
 //})
 
-log.info("Running on port " + portToUse)
+log.info( "Running on port " + process.env.PORT )
 
 if ( process.argv[2] == "-test" ) {
 	var chai = require( 'chai' ),
