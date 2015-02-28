@@ -6,17 +6,17 @@
 
 			<div class="stream-article panel panel-green" ng-repeat="article in articles.items" ng-hide="hideArticle">
 		        
-				<a target="_blank" href="{{ article.url }}">
+				<a ng-click="openReaderModal( article )" class="cursor-pointer">
 					<h2>{{ article.title }}</h2>
 				</a>
 
-				<img ng-src="{{ article.imageThumb }}" class="stream-article-image">
+				<img ng-click="openReaderModal( article )" ng-src="{{ article.imageThumb }}" class="stream-article-image cursor-pointer">
 				<p class="article-snippet">{{ article.description | limitTo: 320 }}... </p>
 
 				<div class="share-links">
-					<button class="btn btn-grey no-border" ng-click="openReaderModal( article )">
+					<!-- <button class="btn btn-grey no-border" ng-click="openReaderModal( article )">
 						<span class="glyphicon glyphicon-fullscreen"></span>
-					</button>
+					</button> -->
 
 					<span class="dropdown user-menu">
 
