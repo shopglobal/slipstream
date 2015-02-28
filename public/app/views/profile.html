@@ -1,21 +1,33 @@
+<div class="content-list panel-profile">
+	<div class="container-fluid container-padded">
 
-<div class="col-md-6">
-  <div class="form-group">
-    <label for="">Username: </label>
-    <input type="text" class="form-control input-green" placeholder=" {{ user.username }} ">
-  </div>
+		<h1>Profile</h1>
+		<p class="dark-text">Change basic account settings</p><br />
 
-  <div class="form-group">
-    <label for="">Email: </label>
-    <input type="email" class="form-control input-green" placeholder=" {{ user.email }} ">
-  </div>
+		<div class="form-group col-md-8 no-padding">
+			<label for="dark-text">Username: </label>
+			<input type="text" class="form-control input-green input-font-lg" placeholder=" {{ user.username }} ">
+		</div>
 
-  <div class="form-group">
-    <label for="">Joined: </label>
-    {{ user.joined * 1000 | date:'MMMM dd, yyyy' }}
-  </div>
-</div>
+		<div class="form-group col-md-8 no-padding">
+			<label for="" class="dark-text">Email: </label>
+			<input type="email" class="form-control input-green input-font-lg" placeholder=" {{ user.email }} ">
+		</div>
 
-<div class="col-md 6">
-  <button class="btn btn-warning btn-green" ng-click="deleteAccount()">Delete Account</button>
+		<div class="clearfix"></div>
+
+		<div class="">
+			<button class="btn btn-green-solid btn-font-light" ng-click="">Save changes</button>
+		</div><br />
+
+		<div class="">
+			<a ng-click"">Delete Account</a>
+		</div>
+
+		<div class="meta-text-right">
+			User since {{ user.joined * 1000 | date:'MMMM dd, yyyy' }}
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
 </div>

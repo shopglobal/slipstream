@@ -59,7 +59,8 @@ body {
 /* line 68, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 h1, h2 {
   font-weight: 300;
-  color: #00E0AA; }
+  color: #00E0AA;
+  margin-top: 0; }
 
 /* line 70, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 h3, h4, h5 {
@@ -264,36 +265,36 @@ a {
   color: #00E0AA; }
 
 /* line 137, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.dark-text {
+  color: #5B5A5A; }
+
+/* line 139, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .glyphicon-green {
   color: #00E0AA; }
-  /* line 138, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 140, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .glyphicon-green:hover {
     color: #00E0AA; }
 
-/* line 140, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 142, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .glyphicon-grey {
   color: #C5C5C5; }
-  /* line 141, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 143, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .glyphicon-grey:hover {
     color: #C5C5C5; }
 
-/* line 143, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 145, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .spinner {
   padding: 15px; }
 
-/* line 145, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 147, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .btn-x {
   font-size: 24px;
   font-family: Oxygen;
   font-weight: 300; }
 
-/* line 147, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 149, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .add-form {
   margin-top: 20px; }
-
-/* line 149, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
-.dark-text {
-  color: #5B5A5A; }
 
 /* line 151, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .modal-logo {
@@ -324,22 +325,31 @@ a {
 .container-stream {
   margin-top: 125px; }
 
-/* line 166, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 163, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.panel-profile {
+  position: relative; }
+
+/* line 165, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.no-padding {
+  padding-left: 0;
+  padding-right: 0; }
+
+/* line 170, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 #header .navbar-brand {
   padding-top: 10px; }
-  /* line 167, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 171, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #header .navbar-brand #logo {
     height: 30px; }
-/* line 168, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 172, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 #header #nav-row-1 {
   margin-bottom: 28px;
   background-color: #00E0AA;
   box-shadow: 5px 5px 5px #D3D2D2;
   z-index: 1000; }
-  /* line 169, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 173, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #header #nav-row-1 .dropdown-menu {
     z-index: 1000; }
-/* line 170, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 174, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 #header #nav-row-2 {
   padding-top: 5px;
   box-sizing: border-box;
@@ -348,228 +358,236 @@ a {
   z-index: 900;
   margin-top: 60px; }
 
-/* line 172, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 176, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .content-toggle {
   width: 756px;
   background: white; }
-  /* line 174, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 178, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .content-toggle .btn-green:hover {
     color: white; }
-  /* line 175, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 179, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .content-toggle .btn {
     height: 50px; }
-    /* line 176, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 180, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .content-toggle .btn .glyphicon {
       margin-right: 25px; }
 
-/* line 178, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 182, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .navbar-white {
   background-color: transparent; }
-  /* line 180, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 184, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-white ul li:hover {
     background: white; }
-  /* line 181, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 185, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-white ul li:hover > a {
     color: #00E0AA;
     background: transparent; }
 
-/* line 183, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 187, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .navbar-green {
   background-color: transparent;
   background-image: none;
   border-radius: 0;
   border: none; }
-  /* line 184, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 188, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green .add-container {
     box-sizing: border-box;
     max-height: 50px; }
-    /* line 185, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 189, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .add-container:hover {
       background: transparent; }
-    /* line 186, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 190, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .add-container:hover > a, .navbar-green .add-container:hover > a:visited, .navbar-green .add-container a:visited {
       color: white; }
-    /* line 187, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 191, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .add-container a {
       padding: 7px; }
-    /* line 188, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 192, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .add-container .add-button {
       font-size: 24px;
       font-weight: 700;
       padding: 5px 8px;
       border: 3px solid white;
       border-radius: 5px; }
-  /* line 189, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 193, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green .navbar-brand {
     color: white; }
-    /* line 190, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 194, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .navbar-brand:hover {
       color: white; }
-  /* line 191, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 195, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green .user-menu-button {
     padding: 12px 15px; }
-    /* line 192, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 196, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .user-menu-button .btn, .navbar-green .user-menu-button .btn:hover {
       color: white; }
-  /* line 193, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 197, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green .user-menu a {
     color: #00E0AA; }
-    /* line 194, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 198, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .user-menu a:visited {
       color: #00E0AA; }
-    /* line 195, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 199, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .navbar-green .user-menu a:hover {
       background-color: #00E0AA;
       color: white; }
-  /* line 197, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 201, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li:hover {
     background: #00E0AA; }
-  /* line 198, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 202, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .navbar-green ul li:hover > a:visited, .navbar-green ul li:hover > a {
     color: white; }
 
-/* line 202, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 206, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .add-modal {
   background-color: rgba(255, 255, 255, 0.75); }
-  /* line 203, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 207, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .add-modal .modal-dialog {
     width: 625px; }
-  /* line 204, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 208, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .add-modal .modal-content {
     box-shadow: none;
     border-color: #00E0AA; }
 
-/* line 206, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 210, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 #addModal {
   margin-top: 15px;
   margin-bottom: 15px; }
-  /* line 207, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 211, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .add-form {
     padding: 0;
     margin: 0; }
-    /* line 208, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 212, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .add-form .add-form-text {
       padding: 0; }
-    /* line 209, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 213, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .add-form .add-form-toggle {
       padding: 0;
       margin: 0; }
-      /* line 210, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+      /* line 214, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
       #addModal .add-form .add-form-toggle .add-form-toggle-buttons {
         min-width: 100px;
         border: none;
         box-shadow: none;
         padding: 0;
         margin: 7px 0; }
-  /* line 211, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 215, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .type-toggle {
     border: 2px solid #00E0AA;
     font-size: 18px;
     padding: 2px 20px 3px 20px; }
-    /* line 212, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 216, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input {
       visibility: hidden;
       position: absolute; }
-    /* line 213, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 217, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input + span {
       color: #ccc; }
-    /* line 214, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 218, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input:hover + span {
       color: white; }
-    /* line 215, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 219, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input:checked + span {
       color: #00E0AA; }
-    /* line 216, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 220, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input:checked:hover + span {
       color: white; }
-  /* line 217, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 221, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .url-line {
     width: 99%;
     border-width: 0 0 2px 0;
     border-radius: 0;
     box-shadow: none; }
-  /* line 218, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 222, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #addModal .article-preview {
     padding-top: 20px; }
-    /* line 219, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 223, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .article-preview .preview-text {
       padding: 0;
       margin: 0; }
-      /* line 220, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+      /* line 224, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
       #addModal .article-preview .preview-text h4 {
         margin: 0;
         padding: 0; }
-    /* line 221, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 225, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .article-preview .preview-thumbnail {
       width: 150px;
       float: left;
       margin: 3px 15px 15px 0; }
-    /* line 222, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 226, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .article-preview .add-row-bottom {
       padding-right: 0; }
 
-/* line 224, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 228, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .reader-modal {
   background: rgba(255, 255, 255, 0.99);
   font-family: Domine; }
-  /* line 225, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 229, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal .modal-dialog {
     float: none;
     width: 50%;
     max-width: 700px; }
-  /* line 226, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 230, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal .reader-container {
     margin-top: 15px; }
-  /* line 227, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 231, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal #item-options {
     margin: 10px 0;
     padding: 0; }
-  /* line 228, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 232, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal p {
     font-size: 16px;
     margin: 17px 0; }
-  /* line 229, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 233, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal img {
     clear: both;
     max-width: 100%;
     margin: 0 auto;
     display: block; }
-  /* line 230, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 234, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal .modal-content {
     height: 90%;
     overflow: scroll;
     border: 0;
     box-shadow: 0px 0px 20px 20px white; }
-  /* line 231, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 235, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .reader-modal .share-links {
     position: fixed;
     top: 0;
     right: -150px;
     z-index: 100; }
 
-/* line 236, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 240, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .share-links {
   position: absolute;
   bottom: 0;
   right: 15px;
   display: block; }
-  /* line 237, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 241, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .share-links .glyphicon {
     font-size: 24px; }
 
-/* line 240, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 244, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .share-links-stacked button, .share-links-stacked span {
   clear: both;
   display: block; }
 
-/* line 243, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 247, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .meta-text {
   color: #C5C5C5;
   position: absolute;
   bottom: 0;
   margin: 6px 0px; }
 
-/* line 245, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 249, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.meta-text-right {
+  color: #C5C5C5;
+  position: absolute;
+  bottom: 0;
+  margin: 15px;
+  right: 0; }
+
+/* line 251, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .content-list {
   background-color: white;
   border-radius: 5px;
@@ -578,11 +596,16 @@ a {
   max-width: 754px;
   margin: 0 auto; }
 
-/* line 247, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 253, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .list-container {
   height: 100%; }
 
-/* line 251, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 255, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.container-padded {
+  padding-top: 15px;
+  padding-bottom: 15px; }
+
+/* line 259, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .stream-article {
   clear: both;
   position: relative;
@@ -592,44 +615,44 @@ a {
   box-shadow: none;
   padding-bottom: 30.5px;
   margin-bottom: 9.5px; }
-  /* line 252, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 260, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article h2 {
     margin-top: 0;
     font-family: Oxygen;
     color: #00E0AA; }
-  /* line 253, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 261, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article .article-snippet {
     font-family: Oxygen;
     line-height: 22px; }
-  /* line 254, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 262, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article .stream-article-image {
     float: left;
     float: left;
     margin-right: 15px;
     width: 200px; }
-  /* line 255, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 263, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .stream-article .clearfix {
     height: 0;
     clear: both; }
 
-/* line 259, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+/* line 267, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .item-panel {
   position: relative; }
-  /* line 260, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 268, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .item-panel .item-description {
     margin-bottom: 15px; }
-  /* line 261, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 269, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .item-panel .listen-iframe {
     height: 100px;
     width: 100%;
     margin-bottom: 70px !important; }
-    /* line 262, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+    /* line 270, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     .item-panel .listen-iframe iframe {
       height: 150px !important; }
-  /* line 263, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 271, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .item-panel h2 {
     margin: 0; }
-  /* line 265, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+  /* line 273, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .item-panel .watch-iframe {
     height: 428px;
     padding: 0;
