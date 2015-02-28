@@ -13,7 +13,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		'https://www.youtube.com/**',
 		'https://w.soundcloud.com/**',
 		'https://api.soundcloud.com/**',
-		'https://reedoo.link/**'
+		'https://reedoo.link/**',
+		'https://glacial-sea-2323.herokuapp.com'
 	] )
 
 	// add the custom service to add Authenticaiotn to header
@@ -171,7 +172,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		return {
 			request : function (config) {
 				config.headers = config.headers || {}
-				var iframelyPath = "https://" + location.hostname + ":8061/iframely"
+				var iframelyPath = "https://glacial-sea-2323.herokuapp.com/iframely"
 				if ( $window.sessionStorage.token && config.url !==  iframelyPath ) {
 					config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token
 				}
