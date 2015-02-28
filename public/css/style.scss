@@ -89,10 +89,14 @@ a { color: $green;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
-	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } }
+	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } 
+	&.no-border { 
+		&:hover, &:active { color: $green; } } }
 
 .btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
-	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } }
+	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } 
+	&.no-border { 
+		&:hover, &:active { color: $grey; } } }
 
 .btn-green-solid { background: $green; color: white;
 	&:active { color: white; }
