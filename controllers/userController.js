@@ -16,19 +16,20 @@ var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 // check the username and password and returns token if verified
 //
 exports.login = function ( req, res ) {
-	User.findOne( { username: req.body.username }, function ( err, user ) {
-		if (err)
-			return res.json( { message: "Something went wrong " } )
-
-		if ( !user )
+	User.findOne( { username: req.body.username } )
+	.exec()
+	.then( function ( user ) {
+		if ( !user ) {
+			log.error( { username: req.body.username }, "Error logging in." )
 			return log.error( { user: req.body.user }, "User not found at login" )
+		}
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
 			if (err)
-				return res.json( { message: err } )
+				return res.status( 500 ).send( { error: error.message } )
 
 			if ( !isMatch )
-				return res.json( { message: "Your password wasn't authenticated." } )
+				return res.status( 403 ).send( { message: "Your password wasn't authenticated." } )
 
 			else {
 				if (user) {
@@ -41,6 +42,10 @@ exports.login = function ( req, res ) {
 			}
 
 		} )
+		
+	}, function ( error ) {
+		log.error( error )
+		return res.status( 500 ).send( { error: error.message } )
 	})
 }
 
