@@ -354,7 +354,7 @@ a {
 #header #nav-row-1 {
   margin-bottom: 28px;
   background-color: #00E0AA;
-  box-shadow: 5px 5px 5px #D3D2D2;
+  box-shadow: 0px 5px 5px #D3D2D2;
   z-index: 1000; }
   /* line 179, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   #header #nav-row-1 .dropdown-menu {
