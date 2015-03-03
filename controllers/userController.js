@@ -194,7 +194,7 @@ exports.sendPasswordReset = function ( req, res ) {
 	.then( updateUser )
 	.then( emailTemporaryPassword )
 	.then( function ( body ) {
-		return res.json( body )
+		return res.status( 200 ).send( "A reset email was sent." )
 	}, function ( error ) {
 		log.error( error, "Password reset error" )
 		return res.status( 500 ).send( { error: error.message } )

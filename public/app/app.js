@@ -105,6 +105,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$scope.$state = $state
 
+	console.log( $state.includes( 'landing.login' ) )
+
 	$scope.user = {
 		username: '',
 		password: '',
@@ -155,8 +157,8 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				.get( 'api/user/password/reset', {
 					params: { email: $scope.user.email }
 				})
-				.success( function () {
-					flash.success = "An reset email was sent."
+				.success( function ( data ) {
+					flash.success = data
 				})
 				.error( function ( error ) {
 					flash.error = error
