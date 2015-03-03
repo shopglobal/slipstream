@@ -1,6 +1,7 @@
 app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', function( $scope, $window, $state, $urlRouter, $http, $modalInstance ) {
 
 	$scope.currentState = $state.current.name
+	$scope.tags = []
 	$scope.showPreview = false
 	$scope.showSpinner = false
 	$scope.contentParams = {

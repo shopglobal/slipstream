@@ -11,11 +11,11 @@
 <body ng-app="SlipStream" ng-controller="MainController">
 
 	<div flash-alert="error" active-class="in alert alert-danger flash-alert" class="fade">
-		<p class="alert-message text-center">{{flash.message}}</p>
+		<p class="alert-message text-center">{{ flash.message }}</p>
 	</div>
 
 	<div flash-alert="success" active-class="in alert alert-success flash-alert" class="fade">
-		<p class="alert-message text-center">{{flash.message}}</p>
+		<p class="alert-message text-center">{{ flash.message }}</p>
 	</div>
 
 	<div ui-view id="viewport" height="100%"></div>
@@ -32,6 +32,7 @@
 <script src="vendor/angular-sanitize/angular-sanitize.js"></script>
 <script src="vendor/angular-flash/dist/angular-flash.js"></script>
 <script src="vendor/ui-router-extras/release/ct-ui-router-extras.js"></script>
+<script src="vendor/ng-tags-input/ng-tags-input.js"></script>
 <script src="app/directives/iframely.js"></script>
 <!-- <script src="app/filters/iframely.js"></script> -->
 <script src="app/app.js"></script>

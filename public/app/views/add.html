@@ -7,7 +7,7 @@
 		<div class="add-form clear-fix col-md-12">
 
 			<div class="add-form-text col-md-8">
-				<input type="text" class="form-control input-green url-line" ng-model="contentParams.url" placeholder="Paste URL" ng-change="addContent(); blankCheck()">
+				<input type="text" class="form-control input-green input-line" ng-model="contentParams.url" placeholder="Paste URL" ng-change="addContent(); blankCheck()">
 			</div>
 
 			<div class="clear-fix"></div>
@@ -33,9 +33,9 @@
 
 		</div>
 
-		<div class="spinner" ng-show="showSpinner">
-			<img class="center-block" src="images/spinner.gif" >
-		</div>
+	<div class="spinner" ng-show="showSpinner">
+		<img class="center-block" src="images/spinner.gif" >
+	</div>
 
 	 <div class="article-preview" ng-show="showPreview">
 			
@@ -48,6 +48,9 @@
 	 </div>
 
 	 <div class="clear-fix col-md-12 add-row-bottom">
+
+
+		<tags-input ng-model="tags" class="input-line input-green no-padding col-md-8" ng-show="showPreview"></tags-input>
 
 		<!-- <div class="container-fluid col-md-6">
 			 <button class="col-md-6 btn btn-green-solid btn-block" ng-click="deleteItem(); showPreview=false" ng-show="showPreview">Cancel (Delete)</button>

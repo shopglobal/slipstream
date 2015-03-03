@@ -1,6 +1,6 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ct.ui.router.extras' ])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ngTagsInput' ])
 
-.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', '$futureStateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider, $futureStateProvider ) {
+.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
 	
 	// sets default state
 
@@ -99,13 +99,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
     $futureStateProvider.stateFactory('ngload', dynamicStateFactory);*/
 }])
 
-.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, Content, flash ) {
+.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, Content, $flash ) {
 
 	$scope.appName = "SlipStream"
 
 	$scope.$state = $state
-
-	console.log( $state.includes( 'landing.login' ) )
 
 	$scope.user = {
 		username: '',
@@ -131,7 +129,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			} )
 			.error( function ( data, status ) {
 				delete $window.sessionStorage.token
-				console.log( "Error signing in: " + status )
+				$flash.error = "Error signing in." 
 			} )
 	}
 
@@ -151,17 +149,17 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	$scope.resetPassword = function () {
 		if ( $scope.user.email.length == 0 ) {
-			flash.error = "Email address required!"
+			$flash.error = "Email address required!"
 		} else {
 			$http
 				.get( 'api/user/password/reset', {
 					params: { email: $scope.user.email }
 				})
 				.success( function ( data ) {
-					flash.success = data
+					$flash.success = data
 				})
 				.error( function ( error ) {
-					flash.error = error
+					$flash.error = error
 				})
 		}
 	}
@@ -219,19 +217,19 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	return Content
 }])
 
-var dynamicStateFactory = function( $q, $timeout, futureState ) {
-    var d = $q.defer();
-    $timeout(function() {
-    	console.log( futureState )
+// var dynamicStateFactory = function( $q, $timeout, futureState ) {
+//     var d = $q.defer();
+//     $timeout(function() {
+//     	console.log( futureState )
       
-		var fullUiRouterState = {
-			name: futureState.stateName,
-			url: futureState.urlPrefix,
-			template: 'app/views/stream-content.html'
-		}
+// 		var fullUiRouterState = {
+// 			name: futureState.stateName,
+// 			url: futureState.urlPrefix,
+// 			template: 'app/views/stream-content.html'
+// 		}
 
-		d.resolve(fullUiRouterState); // Async resolve of ui-router state promise
-    }, 1000);
+// 		d.resolve(fullUiRouterState); // Async resolve of ui-router state promise
+//     }, 1000);
 
-    return d.promise; // ui-router state promise returned
-}
+//     return d.promise; // ui-router state promise returned
+// }
