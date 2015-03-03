@@ -294,7 +294,8 @@ a {
 
 /* line 151, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .spinner {
-  padding: 15px; }
+  padding: 15px;
+  clear: both; }
 
 /* line 153, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
 .btn-x {

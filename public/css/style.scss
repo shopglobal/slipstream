@@ -148,7 +148,7 @@ a { color: $green;
 .glyphicon-grey { color: $grey; 
 	&:hover { color: $grey; } }
 
-.spinner { padding: 15px; }
+.spinner { padding: 15px; clear: both; }
 
 .btn-x { font-size: 24px; font-family: Oxygen; font-weight: 300; }
 
