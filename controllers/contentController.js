@@ -6,6 +6,7 @@ var Content = require( '../models/contentModel' ),
 	Q = require( 'q' ),
 	_ = require( 'underscore' ),
 	log = require( '../helpers/logger.js' ),
+	bodyParser = require( 'body-parser' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 
 // adds content to users stream.
@@ -140,6 +141,37 @@ exports.delete = function ( req, res ) {
 	.catch( function ( error ) {
 		log.error( error )
 		return res.status( 500 ).send( { Error: error.message } )
+	})
+	
+}
+
+exports.addTags = function ( req, res ) {
+
+	function addTag ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var tags = req.body.tags,
+				contentId = mongoose.Types.ObjectId( req.body.id )
+			
+			Content.findOneAndUpdate( { user: user, _id: contentId }, { $pushAll: { tags: tags } } )
+			.exec()
+			.then( function ( result ) {
+				resolve( result )
+			}, function ( error ) {
+				reject( new Error( "Could not add new tags." ) )
+			})
+			
+		})
+	}
+	
+	getUser( req.token )
+	.then( addTag )
+	.then( function ( result ) {
+		return res.status( 200 ).send( "Added: " + result.tags )
+	})
+	.catch( function ( error ) {
+		log.error( error )
+		return res.status( 500 ).send( error.message )
 	})
 	
 }

@@ -45,7 +45,7 @@ exports.login = function ( req, res ) {
 		
 	}, function ( error ) {
 		log.error( error )
-		return res.status( 500 ).send( { error: error.message } )
+		return res.status( 500 ).send( error.message )
 	})
 }
 

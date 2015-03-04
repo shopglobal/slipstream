@@ -1,4 +1,4 @@
-app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', function( $scope, $window, $state, $urlRouter, $http, $modalInstance ) {
+app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', function( $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash ) {
 
 	$scope.currentState = $state.current.name
 	$scope.tags = []
@@ -64,9 +64,30 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	// "adds" the article by simple closing the modal and reloading
 	// the state without deleting the article
 
-	$scope.done = function() {
-		$modalInstance.close()
-		$state.reload()
+	$scope.done = function( id ) {
+		if( $scope.tags.length === 0 ) {
+			$modalInstance.close()
+			$state.reload()
+		} else {
+			var tagArray = []
+
+			$scope.tags.forEach( function ( each ) {
+				tagArray.push( each.text )
+			})
+
+			$http
+				.post( '/api/tags', { 
+					id: $scope.contentPreview._id,
+					tags: tagArray
+				})
+				.success( function ( result ) {
+					$modalInstance.close()
+					$state.reload()
+				})
+				.error( function ( error ) {
+					$flash.error = error
+				})
+		}
 	}
 
 }])

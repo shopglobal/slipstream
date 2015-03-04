@@ -32,6 +32,10 @@ router.route('/add')
 		else { contentController.add( req, res ) }
 	})
 
+router.route('/tags')
+	.post( userController.checkAuthorization, contentController.addTags )
+	
+
 router.route('/stream/read')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		blogController.stream( req, res )
