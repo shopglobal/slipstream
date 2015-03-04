@@ -20,7 +20,7 @@ exports.add = function ( req, res ) {
 			url: process.env.IFRAMELY_URL + "/iframely?url=" + req.body.url
 			}, function ( err, response, body ) {
 			if ( err || response.statusCode !== 200 )
-				reject( new Error( "Error from embed server: " + body + " -> " + req.body.url ) )
+				reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
 				
 			if ( !body )
 				reject( new Error( "Error from embed server. No body returned." ) )
