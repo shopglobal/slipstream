@@ -184,9 +184,6 @@ exports.deleteTag = function ( req, res ) {
 			var contentId = mongoose.Types.ObjectId( req.query.id ),
 				tag = JSON.parse( req.query.tag )
 			
-			console.log( tag )
-			console.log( tag.text )
-			
 			Content.update( 
 				{ user: user, _id: contentId, "tags": tag },
 				{ $pull: { "tags": tag } } )

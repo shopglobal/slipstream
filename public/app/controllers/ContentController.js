@@ -18,4 +18,18 @@ app.controller('ContentController', ['$scope', '$window', '$state', '$urlRouter'
 			})
 	}
 
+	$scope.tagRemoved = function ( tag, contentId ) {
+		$http
+			.delete( '/api/tags', { params: {
+				id: contentId,
+				tag: tag
+			} } )
+			.success( function ( result ) {
+				$flash.success = "Tag removed."
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+	}
+
 }])
