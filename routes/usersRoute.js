@@ -34,6 +34,7 @@ router.route('/add')
 
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
+	.delete( userController.checkAuthorization, contentController.deleteTag )
 	
 
 router.route('/stream/read')

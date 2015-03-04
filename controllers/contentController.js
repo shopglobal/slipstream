@@ -175,3 +175,41 @@ exports.addTags = function ( req, res ) {
 	})
 	
 }
+
+exports.deleteTag = function ( req, res ) {
+	
+	function deleteTag ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var contentId = mongoose.Types.ObjectId( req.query.id ),
+				tag = JSON.parse( req.query.tag )
+			
+			console.log( tag )
+			console.log( tag.text )
+			
+			Content.update( 
+				{ user: user, _id: contentId, "tags": tag },
+				{ $pull: { "tags": tag } } )
+			.exec()
+			.then( function ( result ) {
+				resolve( result )
+			}, function ( error ) {
+				reject( new Error( "Could not remove that tag." ) )
+			})
+			
+		})
+	}
+	
+	getUser( req.token )
+	.then( deleteTag )
+	.then( function ( result ) {
+		if ( result == 0 )
+			return res.status( 500 ).send( "Could not remove tag, it wasn't found." )
+		
+		return res.status( 200 ).send( "Tag removed." )
+	})
+	.catch( function ( error ) {
+		log.error( error )
+		return res.status( 500 ).send( error.message )
+	})
+}
