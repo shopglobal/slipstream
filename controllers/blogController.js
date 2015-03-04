@@ -175,5 +175,3 @@ exports.delete = function ( req, res ) {
 			return res.status( 500 ).send( { Error: error.message } )
 	})
 }
-
-

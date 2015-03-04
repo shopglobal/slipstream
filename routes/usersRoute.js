@@ -36,15 +36,6 @@ router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
 	.delete( userController.checkAuthorization, contentController.deleteTag )
 	
-
-router.route('/stream/read')
-	.get( userController.checkAuthorization, function ( req, res ) {
-		blogController.stream( req, res )
-	})
-	.delete( userController.checkAuthorization, function ( req, res ) {
-		blogController.delete( req, res )
-	})
-
 router.route('/stream/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		contentController.stream( req, res )

@@ -10,6 +10,7 @@ var ContentSchema = new mongoose.Schema( {
 	service: String,	// such as youtube
 	author: String,		// who made it on the parent site (eg youtube)
 	tags: Array,
+	images: Array,
 	image: String, 		// full-size image derived from content, if any
 	imageThumb: String,	// path to thumbnail version
 	imageHash: String,	// md5 hash of the image
