@@ -273,10 +273,11 @@ a { color: $green;
 // video
 
 .item-panel { position: relative; 
-	.item-description { margin-bottom: 15px; }
+	.item-description { margin-bottom: 10px; }
 	.listen-iframe { height: 100px;  width: 100%; margin-bottom: 70px !important; 
 		iframe { height: 150px !important; } }
-	h2 { margin: 0; }	
+	.content-tags { margin-bottom: 15px; }
+	h2 { margin: 0; }
 	.video-info {  }
 	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } }
 
@@ -299,8 +300,6 @@ tags-input .host:active {
 }
 
 tags-input .tags {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
   padding: 1px;
   overflow: hidden;
   word-wrap: break-word;
@@ -328,7 +327,6 @@ tags-input .tags .tag-item {
   font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
   height: 26px;
   line-height: 25px;
-  border: 1px solid #acacac;
   border-radius: 3px;
   background: -webkit-linear-gradient(top, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);
   background: linear-gradient(to bottom, #f0f9ff 0%, #cbebff 47%, #a1dbff 100%);

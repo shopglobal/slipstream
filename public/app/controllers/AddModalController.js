@@ -69,16 +69,10 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 			$modalInstance.close()
 			$state.reload()
 		} else {
-			var tagArray = []
-
-			$scope.tags.forEach( function ( each ) {
-				tagArray.push( each.text )
-			})
-
 			$http
 				.post( '/api/tags', { 
 					id: $scope.contentPreview._id,
-					tags: tagArray
+					tags: $scope.tags
 				})
 				.success( function ( result ) {
 					$modalInstance.close()

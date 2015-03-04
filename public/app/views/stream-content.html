@@ -13,6 +13,15 @@
 					{{ item.description | limitTo: 200 }} ...
 				</div>
 
+				<div class="content-tags">
+					<tags-input 
+						ng-model="item.tags" 
+						on-tag-added="tagAdded( $tag, item._id )"
+						on-tag-removed="tagRemoved( $tag, item._id )"
+						class="no-padding">
+					</tags-input>
+				</div>
+
 				<div class="date-added-ago pull-left meta-text">
 					{{ item.added | timeAgo }}
 				</div>
