@@ -1,4 +1,4 @@
-app.controller('ContentController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash',function( $scope, $window, $state, $urlRouter, $http, Content, $flash ) {
+app.controller('ContentController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
 	$scope.currentStream = $state.current.name.split(".")[1]
 
@@ -30,6 +30,21 @@ app.controller('ContentController', ['$scope', '$window', '$state', '$urlRouter'
 			.error( function ( error ) {
 				$flash.error = error
 			})
+	}
+
+	$scope.openReaderModal = function ( article ) {
+		console.log( "modal should open ")
+
+		var modalInstance = $modal.open( {
+			templateUrl: "app/views/reader-modal.html",
+			windowClass: 'reader-modal',
+			controller: 'ReaderModalController',
+			resolve: {
+				article: function() {
+					return article
+				}
+			}
+		})
 	}
 
 }])

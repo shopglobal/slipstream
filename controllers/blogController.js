@@ -2,12 +2,14 @@ var fs = require('fs'),
 	path = require('path'),
 	User = require('../models/userModel.js'),
 	Blog = require('../models/blogModel.js'),
+	Content = require('../models/contentModel.js'),
 	tokenManager = require('../config/tokenManager'),
 //	article = require('article'),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 	async = require('async'),
 	request = require( 'request' ),
 	Q = require( 'q' ),
+	_ = require( 'underscore' ),
 	saveImage = require( '../helpers/save-image' ),
 	getUser = require( '../helpers/get-user' ),
 	read = require( 'node-readability' ),
@@ -102,21 +104,13 @@ exports.add = function ( req, res ) {
 		getUser( req.token )
 		.then( function ( user ) {
 			
-			var blog = new Blog({
+			var blog = new Content( _.extend({
 				user: user,
-				title: article.title,
-				description: article.description,
-				content: article.content,
+				stream: 'read',
+				text: article.content,
 				url: req.body.url,
 				added: ( new Date() / 1).toFixed()
-			})
-			
-			if ( article.images[0] ) {
-				blog.image = article.images[0].image
-				blog.imageThumb = article.images[0].imageThumb
-				blog.imageHash = article.images[0].imageHash
-				blog.images = article.images
-			}
+			}, article ) )
 			
 			blog.save()
 			
@@ -132,46 +126,11 @@ exports.add = function ( req, res ) {
 	.then( saveArticle )
 	.then( function ( article ) {
 		log.info( { title: article.title, url: article.url }, "Article saved" )
-		return res.json( article )
-	})
-	
-}
-
-
-exports.stream = function ( req, res ) {
-	var show = req.query.show
-	var page = req.query.page
-	
-	getUser( req.token )
-	.then( function ( user ) {
-			
-		Blog.find( { $query: { user: user }, $orderby: { added: -1 } } )
-		.skip( page > 0 ? (( page - 1) * show) : 0).limit( show ).exec()
-		.then( function ( result ) {
-			return res.json( result )
-		})
-		
+		return res.status( 200 ).json( article )
 	})
 	.catch( function ( error ) {
-		return res.status( 500 ).send( { "Error": error.message } )
+		log.error( error )
+		return res.status( 500 ).send( error.message )
 	})
-}
-
-// lets a user delete an article from her stream
-
-exports.delete = function ( req, res ) {
-	getUser( req.token )
-	.then( function ( user ) {
-			
- 		var contentId = mongoose.Types.ObjectId(req.query.id)
-			
-		Blog.findOneAndRemove( { user: user, _id: contentId } ).exec()
-		.then( function ( result ) {
-			return res.json( result )
-		})
-					
-	})
-	.catch( function ( error ) {
-			return res.status( 500 ).send( { Error: error.message } )
-	})
+	
 }
