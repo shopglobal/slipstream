@@ -264,20 +264,18 @@ a { color: $green;
 
 // articles
 
-.stream-article { clear: both; position: relative; border-color: $list-border; border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; padding-bottom: 30.5px; margin-bottom: 9.5px;
-	h2 { margin-top: 0; font-family: $headline-font; color: $darkbase; }
-	.article-snippet { font-family: $snippet-font; line-height: 22px; }
-	.stream-article-image { float: left; float: left; margin-right: 15px; width: 200px; }
-	.clearfix { height: 0; clear: both; } }
+.clearfix { height: 0; clear: both; }
 
 // video
 
-.item-panel { position: relative; 
-	.item-description { margin-bottom: 10px; }
+.panel-item { position: relative; border-bottom: 1px solid #ddd; border-radius: 0px; padding-bottom: 40px; margin-bottom: 0px;
+	&:last-child { border-bottom: 0px; }
+	.item-description {  }
+	.stream-article-image { float: left; float: left; margin-right: 15px; width: 200px; }
+	.meta-text, .share-links { padding-bottom: 20px; }
 	.listen-iframe { height: 100px;  width: 100%; margin-bottom: 70px !important; 
 		iframe { height: 150px !important; } }
-	.content-tags { margin-bottom: 15px; }
-	h2 { margin: 0; }
+	.content-tags {  margin: 10px 0 10px -5px;  }
 	.video-info {  }
 	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } }
 
@@ -289,7 +287,7 @@ tags-input *, tags-input *:before, tags-input *:after {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
-tags-input .host { position: relative; margin-top: 5px; margin-bottom: 5px; }
+tags-input .host { position: relative; }
 
 tags-input .host:active { outline: none; }
 

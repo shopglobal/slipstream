@@ -4,7 +4,7 @@
 
 		<div infinite-scroll="content.loadMore( currentStream, 2)" infinite-scroll-immediate-check="true">
 		
-			<div class="panel item-panel" ng-repeat="item in content.items" ng-hide="hideItem">
+			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
 				<h2 ng-hide=" $state.includes( 'app.read' ) ">{{ item.title }}</h2>
 
 				<a ng-click="openReaderModal( item )" class="cursor-pointer" ng-show=" $state.includes( 'app.read' ) ">
@@ -15,7 +15,11 @@
 
 				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].imageThumb }}" class="stream-article-image cursor-pointer" ng-show=" $state.includes( 'app.read' ) ">
 
-				<span class="item-description" ng-bind-html=" item.description | limitTo: 400 "></span> ...
+				<div class="item-description">
+					<span class="" ng-bind-html=" item.description | limitTo: 400 "></span> ...
+				</div>
+
+				<div class="clearfix"></div>
 
 				<div class="content-tags">
 					<tags-input 
