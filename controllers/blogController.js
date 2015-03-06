@@ -14,32 +14,37 @@ var fs = require('fs'),
 	getUser = require( '../helpers/get-user' ),
 	read = require( 'node-readability' ),
 	log = require( '../helpers/logger.js' ),
-	jsdom = require( 'jsdom' )
+	jsdom = require( 'jsdom' ),
+	crypto = require( 'crypto' ),
+	ImageResolver = require( 'image-resolver' ),
+	imageResolver = new ImageResolver(),
+	s3sig = require( 'amazon-s3-url-signer' ),
+	BlitLine = require( 'simple_blitline_node' ),
+	blitline = new BlitLine()
 
 // adds and item to the articles database with the user's id.
 
 exports.add = function ( req, res ) {
 	
 	function getArticle () {
-		var deferred = Q.defer()
+		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		read( req.body.url, function( err, article, meta ) {
-			if ( err )
-				return log.error( err )
-			
-			var newArticle = {
-				title: article.title,
-				description: "",
-				images: [],
-				content: article.content
-			}
-			
-			article.close()
-			
-			deferred.resolve( newArticle )
+			read( req.body.url, function( err, article, meta ) {
+				if ( err )
+					reject( new Error( "Problem reading article." ) )
+					
+				var newArticle = {
+					title: article.title,
+					description: "",
+					images: [],
+					content: article.content
+				}
+				
+				article.close()
+
+				resolve( newArticle )
+			})
 		})
-		
-		return deferred.promise
 	}
 	
 	/*
@@ -50,14 +55,15 @@ exports.add = function ( req, res ) {
 	Returns: article object with images array and replaced URLs in article.content
 	*/
 	function replaceImages ( article ) {
-		var deferred = Q.defer()
+		return Q.Promise( function ( resolve, reject, notify ) {
 		
 		jsdom.env( article.content, function ( error, window ) {
 			
 			images = window.document.getElementsByTagName( 'img' )
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
-				var deferred = Q.defer()
+				return Q.promise( function ( resolve, reject, notify ) {
+					
 				
 				saveImage( req.body.type, each.src )
 				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
@@ -69,10 +75,10 @@ exports.add = function ( req, res ) {
 					
 					each.src = imageOriginalPath
 					
-					deferred.resolve()
+					resolve()
 				})
 				
-				return deferred.promise
+				})
 			})
 			
 			Q.all( imageMapFunction )
@@ -87,7 +93,7 @@ exports.add = function ( req, res ) {
 						article.description += " " + paragprahs[i].innerHTML
 						
 						if ( i == 3 ) {
-							deferred.resolve( article )
+							resolve( article )
 						}
 					}
 				}
@@ -95,7 +101,7 @@ exports.add = function ( req, res ) {
 			
 		}) // end of jsdom
 		
-		return deferred.promise
+		})
 	} // end of replaceImages()
 	
 	function saveArticle ( article ) {
@@ -120,9 +126,34 @@ exports.add = function ( req, res ) {
 		return deferred.promise	
 	}
 	
+	function resolveImage ( article ) {
+		return Q.Promise( function ( resolve, reject, notify ) {			
+			if ( article.images.length > 0 )
+				return resolve( article )
+			
+			imageResolver.register(new ImageResolver.FileExtension())
+			imageResolver.register(new ImageResolver.MimeType())
+			imageResolver.register(new ImageResolver.Opengraph())
+			imageResolver.register(new ImageResolver.Webpage())
+				
+			imageResolver.resolve( req.body.url, function ( result ) {
+				saveImage( req.body.type, result.image )
+				.spread( function ( hash, orig, thumb ) {
+					article.images.push({
+						image: orig,
+						imageHash: hash,
+						imageThumb: thumb
+					})
+					
+					resolve( article )
+				})
+			})
+		})
+	}
 	
 	getArticle()
 	.then( replaceImages )
+	.then( resolveImage )
 	.then( saveArticle )
 	.then( function ( article ) {
 		log.info( { title: article.title, url: article.url }, "Article saved" )
