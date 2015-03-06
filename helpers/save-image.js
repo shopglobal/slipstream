@@ -1,10 +1,10 @@
 var fs = require( 'fs' ),
 	crypto = require( 'crypto' ),
 	path = require( 'path' ),
-	easyimg = require( 'easyimage' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
-	s3 = require( 's3' )
+	s3 = require( 's3' ),
+	lwip = require( 'lwip' )
 
 s3Client = s3.createClient( {
 	s3Options: {
@@ -101,29 +101,48 @@ module.exports = function ( type, imageUrl ) {
 	
 	function writeThumbnail ( image ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var destination = image.rootDir + image.thumbPath
 
-			easyimg.rescrop({
-				src: image.rootDir + image.originalPath,
-				dst: image.rootDir + image.thumbPath,
-				width: 250, height: 140,
-				cropwidth: 250, cropheight: 140,
-				x: 0, y: 0,
-				fill: true			
-			}).then( function ( file ) {
-				uploader = s3Client.uploadFile({
-					localFile: image.rootDir + image.thumbPath,
-					s3Params: {
-						Bucket: process.env.PLANTER_BUCKET_NAME,
-						Key: image.thumbPath
-					}
+			lwip.open( image.rootDir + image.originalPath, function( err, result ) {
+				if ( err )
+					reject( new Error( "Error loading image to make thumbnail." ) )
+					
+				result.resize( 400, function ( err, result ) {
+					result.crop( 400, 224, function( err, result ) {
+						result.writeFile( destination, function( err ) {
+							
+							uploader = s3Client.uploadFile({
+								localFile: image.rootDir + image.thumbPath,
+								s3Params: {
+									Bucket: process.env.PLANTER_BUCKET_NAME,
+									Key: image.thumbPath
+								}
+							})
+							
+							uploader.on( 'end', function ( data ) {
+								image.awsThumb = s3.getPublicUrl( process.env.PLANTER_BUCKET_NAME, image.thumbPath)
+
+								resolve( image )
+							})
+							
+						})
+					})
 				})
-
-				uploader.on( 'end', function ( data ) {
-					image.awsThumb = s3.getPublicUrl( process.env.PLANTER_BUCKET_NAME, image.thumbPath)
-
-					resolve( image )
-				})
+				
 			})
+			
+//			easyimg.rescrop({
+//				src: image.rootDir + image.originalPath,
+//				dst: image.rootDir + image.thumbPath,
+//				width: 250, height: 140,
+//				cropwidth: 250, cropheight: 140,
+//				x: 0, y: 0,
+//				fill: true			
+//			})
+
+
+
 		})
 	}
 	

@@ -30,7 +30,7 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			read( req.body.url, function( err, article, meta ) {
-				if ( err )
+				if ( err || !article )
 					reject( new Error( "Problem reading article." ) )
 					
 				var newArticle = {
@@ -93,6 +93,7 @@ exports.add = function ( req, res ) {
 						article.description += " " + paragprahs[i].innerHTML
 						
 						if ( i == 3 ) {
+							window.close()
 							resolve( article )
 						}
 					}
