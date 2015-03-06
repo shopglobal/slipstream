@@ -32,7 +32,8 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 				$scope.showSpinner = false
 			})
 			.error( function ( error, status ) {
-				console.log( "Error adding article: " + error + "| status: " + status + " | params: " + $scope.contentParams.url )
+				$scope.showSpinner = false
+				$flash.error = "Problem adding content."
 			})
 	}
 
