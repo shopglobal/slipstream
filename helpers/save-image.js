@@ -4,14 +4,19 @@ var fs = require( 'fs' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
 	s3 = require( 's3' ),
-	lwip = require( 'lwip' )
+	lwip = require( 'lwip' ),
+	knox = require( 'knox' ),
+	pxget = require( 'readimage' ),
+	fileType = require( 'file-type' ),
+	http = require( 'http' ),
+	https = require( 'https' ),
+	gm = require( 'gm' )
 
-s3Client = s3.createClient( {
-	s3Options: {
-		accessKeyId: process.env.PLANTER_S3_ACCESS_KEY_ID,
-		secretAccessKey: process.env.PLANTER_S3_SECRET_ACCESS_KEY
-	}
-})
+var s3Client = knox.createClient( {
+	key: process.env.PLANTER_S3_ACCESS_KEY_ID,
+	secret: process.env.PLANTER_S3_SECRET_ACCESS_KEY,
+	bucket: process.env.PLANTER_BUCKET_NAME
+} )
 
  /* 
  this module does it all. it creates an MD5 hash for an image, 
@@ -28,131 +33,92 @@ module.exports = function ( type, imageUrl ) {
 	
 	return Q.Promise( function ( resolve, reject, notify ) {
 	
-	var imageExtension = path.extname( imageUrl )
-	
-	var image = {
-		extension: path.extname( imageUrl )
-	}
-	
-	function getImage ( imageUrl ) {
-		return Q.promise( function ( resolve, reject, notify ) {
 		
-			if ( imageUrl.indexOf( "/") == 0 ) {
-				imageUrl = "https:" + imageUrl
+	function saveOrig ( imageUrl ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var image = {
+				extension: path.extname( imageUrl )
 			}
-
-			request.get( { url: imageUrl, encoding: 'binary'}, function ( err, response, body ) {
-				if ( err ) 
-					reject( new Error( err ) )
-					
-				image.buffer = body
-
-				resolve( image )
-			})
-		})
-	}
-
-	function hashImage ( image ) {
-		return Q.promise( function ( resolve, reject, notify ) {
 			
-			image.hash = crypto.createHash( 'md5' ).update( image.buffer ).digest( 'hex' )
-			
-			resolve( image )
-		})
-	}
-	
-	function makeFilePaths ( image ) {
-		return Q.Promise( function ( resolve, reject, notify ) {
-		
-			image.rootDir = path.join( __dirname, "../public/images/" ) // path to photo dir, with trailing slash
-			image.originalPath = type + "/" + image.hash + "-orig" + image.extension
-			image.thumbPath = type + "/" + image.hash + "-thumb" + image.extension
-//			image.returnArray = [ imageRootDir, imageFileOriginal, imageFileThumb, imageBuffer, imageHash ]
-			resolve( image )
+			gm( request( imageUrl ) )
+				.format( function( err, value ) {
+					if ( err ) return reject ( new Error ( err ) )
 
-		})
-	}
-	
-	function writeImage ( image ) {
-		return Q.promise( function( resolve, reject, notify ) {
-			
-			fs.writeFile( image.rootDir + image.originalPath, image.buffer, 'binary', function ( err ) {
-				if ( err )
-					reject( new Error( err.message) )
-
-				uploader = s3Client.uploadFile({
-					localFile: image.rootDir + image.originalPath,
-					s3Params: {
-						Bucket: process.env.PLANTER_BUCKET_NAME,
-						Key: image.originalPath
-					}
+					image.type = value
 				})
+				.stream( image.type, function ( err, stdout, stderr ) {
+					if ( err ) return reject( new Error( err ) )
 
-				uploader.on( 'end', function ( data ) {
-					image.awsOriginal = s3.getPublicUrl( process.env.PLANTER_BUCKET_NAME, image.originalPath)
+					var bufs = []
 
-					resolve( image )
-				})
+					stdout.on( 'data', function ( d ) {
+						bufs.push( d )
+					})
 
-			})
-		
-		})
-	}
-	
-	function writeThumbnail ( image ) {
-		return Q.Promise( function ( resolve, reject, notify ) {
-			
-			var destination = image.rootDir + image.thumbPath
+					stdout.on( 'end', function () {
+						var buf = Buffer.concat( bufs )
 
-			lwip.open( image.rootDir + image.originalPath, function( err, result ) {
-				if ( err )
-					reject( new Error( "Error loading image to make thumbnail." ) )
-					
-				result.resize( 400, function ( err, result ) {
-					result.crop( 400, 224, function( err, result ) {
-						result.writeFile( destination, function( err ) {
-							
-							uploader = s3Client.uploadFile({
-								localFile: image.rootDir + image.thumbPath,
-								s3Params: {
-									Bucket: process.env.PLANTER_BUCKET_NAME,
-									Key: image.thumbPath
-								}
-							})
-							
-							uploader.on( 'end', function ( data ) {
-								image.awsThumb = s3.getPublicUrl( process.env.PLANTER_BUCKET_NAME, image.thumbPath)
+						image.hash = crypto.createHash( 'md5' ).update( buf ).digest( 'hex' )
+
+						console.log ( image.hash )
+
+						uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig" + image.extension, {
+							'Content-Length': buf.length,
+							'Content-Type': 'image/jpeg'
+						}, function ( err, result ) {
+							if ( err ) return reject( new Error( err ) )
+
+							if ( result.statusCode == 200 ) {
+								image.orig = uploader.url
 
 								resolve( image )
-							})
-							
+							}
 						})
 					})
 				})
-				
-			})
-			
-//			easyimg.rescrop({
-//				src: image.rootDir + image.originalPath,
-//				dst: image.rootDir + image.thumbPath,
-//				width: 250, height: 140,
-//				cropwidth: 250, cropheight: 140,
-//				x: 0, y: 0,
-//				fill: true			
-//			})
+		})
+	}
+		
+	function saveThumb ( image ) {
+		return Q.promise( function ( resolve, reject, notify ) {
+								
+			gm( request( image.orig ) )
+				.crop( 400, 224, 0, 0 )
+				.stream( image.type, function ( err, stdout, stderr ) {
+					if ( err ) return reject( new Error( err ) )
 
+					var bufs = []
 
+					stdout.on( 'data', function ( d ) {
+						bufs.push( d )
+					})
 
+					stdout.on( 'end', function () {
+						var buf = Buffer.concat( bufs )
+
+						uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb" + image.extension, {
+							'Content-Length': buf.length,
+							'Content-Type': 'image/jpeg'
+						}, function ( err, result ) {
+							if ( err ) return reject( new Error( err ) )
+
+							if ( result.statusCode == 200 ) {
+								image.thumb = uploader.url
+
+								resolve( image )
+							}
+						})					
+					})
+				})
 		})
 	}
 	
-	getImage( imageUrl )
-	.then( hashImage )
-	.then( makeFilePaths )
-	.then( writeImage )
-	.then( writeThumbnail )
+	saveOrig( imageUrl )
+	.then( saveThumb )
 	.then( function( image ) {
-		var returnArray = [ image.hash, image.awsOriginal, image.awsThumb ]
+		var returnArray = [ image.hash, image.orig, image.thumb ]
+		console.log( returnArray )
 		resolve( returnArray )
 	})
 	.catch( function( error ) {

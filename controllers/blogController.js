@@ -1,7 +1,6 @@
 var fs = require('fs'),
 	path = require('path'),
 	User = require('../models/userModel.js'),
-	Blog = require('../models/blogModel.js'),
 	Content = require('../models/contentModel.js'),
 	tokenManager = require('../config/tokenManager'),
 //	article = require('article'),
@@ -59,12 +58,18 @@ exports.add = function ( req, res ) {
 		
 		jsdom.env( article.content, function ( error, window ) {
 			
-			images = window.document.getElementsByTagName( 'img' )
+			var images = window.document.getElementsByTagName( 'img' ),
+				paragprahs = window.document.body.getElementsByTagName( 'p' )
 			
-			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
-				return Q.promise( function ( resolve, reject, notify ) {
-					
-				
+			article.content = window.document.body.innerHTML
+
+			for ( i = 0; i <= 3; i++ ) {
+				if ( paragprahs[i] ) {
+					article.description += " " + paragprahs[i].innerHTML
+				}
+			}
+			
+			Array.prototype.forEach.call( images, function ( each, index ) {
 				saveImage( req.body.type, each.src )
 				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 					article.images.push({
@@ -74,36 +79,17 @@ exports.add = function ( req, res ) {
 					})
 					
 					each.src = imageOriginalPath
-					
-					resolve()
 				})
-				
-				})
+				if ( index + 1 == images.length ) {
+					window.close()
+					resolve( article )
+				}		
 			})
-			
-			Q.all( imageMapFunction )
-			.then( function () {
-			
-				article.content = window.document.body.innerHTML
-					
-				var paragprahs = window.document.body.getElementsByTagName( 'p' )
-				
-				for ( i = 0; i <= 3; i++ ) {
-					if ( paragprahs[i] ) {
-						article.description += " " + paragprahs[i].innerHTML
-						
-						if ( i == 3 ) {
-							window.close()
-							resolve( article )
-						}
-					}
-				}
-			})
+
+		})
 			
 		}) // end of jsdom
-		
-		})
-	} // end of replaceImages()
+	}// end of replaceImages()
 	
 	function saveArticle ( article ) {
 		var deferred = Q.defer()
@@ -147,6 +133,9 @@ exports.add = function ( req, res ) {
 					})
 					
 					resolve( article )
+				})
+				.catch( function ( error ) {
+					reject( new Error( error ) )
 				})
 			})
 		})
