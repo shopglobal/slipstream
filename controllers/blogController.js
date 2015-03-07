@@ -61,15 +61,9 @@ exports.add = function ( req, res ) {
 			var images = window.document.getElementsByTagName( 'img' ),
 				paragprahs = window.document.body.getElementsByTagName( 'p' )
 			
-			article.content = window.document.body.innerHTML
-
-			for ( i = 0; i <= 3; i++ ) {
-				if ( paragprahs[i] ) {
-					article.description += " " + paragprahs[i].innerHTML
-				}
-			}
-			
-			Array.prototype.forEach.call( images, function ( each, index ) {
+			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
+				var deferred = Q.defer()
+				
 				saveImage( req.body.type, each.src )
 				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 					article.images.push({
@@ -79,12 +73,31 @@ exports.add = function ( req, res ) {
 					})
 					
 					each.src = imageOriginalPath
+					
+					deferred.resolve()
 				})
-				if ( index + 1 == images.length ) {
-					window.close()
-					resolve( article )
-				}		
+				
+				return deferred.promise
 			})
+			
+			Q.all( imageMapFunction )
+			.then( function () {
+			
+				article.content = window.document.body.innerHTML
+				
+				for ( i = 0; i <= 3; i++ ) {
+					if ( paragprahs[i] ) {
+						article.description += " " + paragprahs[i].innerHTML
+						
+						if ( i == 3 ) {
+							window.close()
+							resolve( article )
+						}
+					}
+				}
+			})
+			
+			
 
 		})
 			

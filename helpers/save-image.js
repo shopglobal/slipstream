@@ -63,7 +63,7 @@ module.exports = function ( type, imageUrl ) {
 
 						console.log ( image.hash )
 
-						uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig" + image.extension, {
+						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig" + image.extension, {
 							'Content-Length': buf.length,
 							'Content-Type': 'image/jpeg'
 						}, function ( err, result ) {
@@ -97,7 +97,7 @@ module.exports = function ( type, imageUrl ) {
 					stdout.on( 'end', function () {
 						var buf = Buffer.concat( bufs )
 
-						uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb" + image.extension, {
+						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb" + image.extension, {
 							'Content-Length': buf.length,
 							'Content-Type': 'image/jpeg'
 						}, function ( err, result ) {
