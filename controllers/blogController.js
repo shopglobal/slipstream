@@ -59,25 +59,25 @@ exports.add = function ( req, res ) {
 		jsdom.env( article.content, function ( error, window ) {
 			
 			var images = window.document.getElementsByTagName( 'img' ),
-				paragprahs = window.document.body.getElementsByTagName( 'p' )
+				paragraphs = window.document.body.getElementsByTagName( 'p' )
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
-				var deferred = Q.defer()
+				return Q.Promise( function ( resolve, reject, notify ) {
 				
-				saveImage( req.body.type, each.src )
-				.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
-					article.images.push({
-						image: imageOriginalPath,
-						imageHash: imageHash,
-						imageThumb: imageThumbPath
+					saveImage( req.body.type, each.src )
+					.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
+						article.images.push({
+							image: imageOriginalPath,
+							imageHash: imageHash,
+							imageThumb: imageThumbPath
+						})
+
+						each.src = imageOriginalPath
+
+						resolve()
 					})
-					
-					each.src = imageOriginalPath
-					
-					deferred.resolve()
-				})
 				
-				return deferred.promise
+				})
 			})
 			
 			Q.all( imageMapFunction )
@@ -85,16 +85,21 @@ exports.add = function ( req, res ) {
 			
 				article.content = window.document.body.innerHTML
 				
-				for ( i = 0; i <= 3; i++ ) {
-					if ( paragprahs[i] ) {
-						article.description += " " + paragprahs[i].innerHTML
+				for ( i = 0; i <= 2; i++ ) {
+					if ( paragraphs[i] ) {
+						article.description += " " + paragraphs[i].innerHTML
 						
-						if ( i == 3 ) {
+						console.log( paragraphs[i].innerHTML )
+						
+						if ( i == 2 || i == ( paragraphs.length - 1 ) ) {
 							window.close()
 							resolve( article )
 						}
 					}
 				}
+			})
+			.catch( function ( error ) {
+				reject( new Error( error ) )
 			})
 			
 			
@@ -128,7 +133,7 @@ exports.add = function ( req, res ) {
 	
 	function resolveImage ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {			
-			if ( article.images.length > 0 )
+			if ( article.images.length != 0 )
 				return resolve( article )
 			
 			imageResolver.register(new ImageResolver.FileExtension())
