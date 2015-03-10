@@ -4,10 +4,8 @@ var fs = require( 'fs' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
 	s3 = require( 's3' ),
-	lwip = require( 'lwip' ),
 	knox = require( 'knox' ),
-	pxget = require( 'readimage' ),
-	fileType = require( 'file-type' ),
+	mime = require( 'mime' ),
 	http = require( 'http' ),
 	https = require( 'https' ),
 	gm = require( 'gm' )
@@ -37,14 +35,13 @@ module.exports = function ( type, imageUrl ) {
 	function saveOrig ( imageUrl ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			var image = {
-				extension: path.extname( imageUrl )
-			}
+			var image = {}
 			
 			gm( request( imageUrl ) )
 				.format( function( err, value ) {
 					if ( err ) return reject ( new Error ( err ) )
 
+					image.extension = mime.extension( mime.lookup( value ) )
 					image.type = value
 				})
 				.stream( image.type, function ( err, stdout, stderr ) {
@@ -60,12 +57,12 @@ module.exports = function ( type, imageUrl ) {
 						var buf = Buffer.concat( bufs )
 
 						image.hash = crypto.createHash( 'md5' ).update( buf ).digest( 'hex' )
+						
+						console.error( image )
 
-						console.log ( image.hash )
-
-						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig" + image.extension, {
+						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig." + image.extension, {
 							'Content-Length': buf.length,
-							'Content-Type': 'image/jpeg'
+							'Content-Type': image.type
 						}, function ( err, result ) {
 							if ( err ) return reject( new Error( err ) )
 
@@ -84,7 +81,8 @@ module.exports = function ( type, imageUrl ) {
 		return Q.promise( function ( resolve, reject, notify ) {
 								
 			gm( request( image.orig ) )
-				.crop( 400, 224, 0, 0 )
+				.resize( 400 )
+				.crop( 400, 224 )
 				.stream( image.type, function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
 
@@ -97,9 +95,9 @@ module.exports = function ( type, imageUrl ) {
 					stdout.on( 'end', function () {
 						var buf = Buffer.concat( bufs )
 
-						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb" + image.extension, {
+						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb." + image.extension, {
 							'Content-Length': buf.length,
-							'Content-Type': 'image/jpeg'
+							'Content-Type': image.type
 						}, function ( err, result ) {
 							if ( err ) return reject( new Error( err ) )
 
@@ -118,7 +116,6 @@ module.exports = function ( type, imageUrl ) {
 	.then( saveThumb )
 	.then( function( image ) {
 		var returnArray = [ image.hash, image.orig, image.thumb ]
-		console.log( returnArray )
 		resolve( returnArray )
 	})
 	.catch( function( error ) {
