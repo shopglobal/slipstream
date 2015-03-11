@@ -34,7 +34,7 @@ exports.add = function ( req, res ) {
 		})
 	}*/
 	
-	function getArticle () {
+	function getArticle ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			imageResolver.register(new ImageResolver.FileExtension())
@@ -43,6 +43,7 @@ exports.add = function ( req, res ) {
 			imageResolver.register(new ImageResolver.Webpage())
 			
 			var newArticle = new Content({
+				user: user,
 				images: [],
 				processing: true,
 				stream: 'read',
@@ -145,32 +146,27 @@ exports.add = function ( req, res ) {
 	function saveArticle ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 
-			getUser( req.token )
-			.then( function ( user ) {
-				
-				var blog = {
-						user: user,
-						processing: false,
-						text: article.content,
-						description: article.description,
-						images: article.images
-					}
+			var blog = {
+				processing: false,
+				text: article.content,
+				description: article.description,
+				images: article.images
+			}
 
-				Content.findOneAndUpdate( 
-					{ _id: article._id }, 
-					{ $set: blog } )
-				.exec()
-				.then( function ( blog ) {
-					resolve( blog )	
-				}, function ( error ) {
-					reject( new Error( error ) )
-				})
+			Content.findOneAndUpdate( 
+				{ _id: article._id }, 
+				{ $set: blog } )
+			.exec()
+			.then( function ( blog ) {
+				resolve( blog )	
+			}, function ( error ) {
+				reject( new Error( error ) )
 			})
-		
 		})
 	}
 	
-	getArticle()
+	getUser( req.token )
+	.then( getArticle )
 	.then( function ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			article.save( function ( err, article ) {

@@ -43,6 +43,7 @@ module.exports = function ( type, imageUrl ) {
 			}
 			
 			gm( request( imageUrl ) )
+				.resize( '1340>' )
 				.format( function( err, value ) {
 					if ( err ) return reject ( new Error ( "Could not determine format for image" ) )
 					
@@ -95,7 +96,8 @@ module.exports = function ( type, imageUrl ) {
 		return Q.promise( function ( resolve, reject, notify ) {
 								
 			gm( request( image.orig ) )
-				.resize( 400 )
+				.setFormat("jpg")
+				.resize( '400>' )
 				.crop( 400, 224 )
 				.stream( function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
@@ -109,9 +111,9 @@ module.exports = function ( type, imageUrl ) {
 					stdout.on( 'end', function () {
 						var buf = Buffer.concat( bufs )
 
-						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb." + image.extension, {
+						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-thumb.JPEG", {
 							'Content-Length': buf.length,
-							'Content-Type': image.type
+							'Content-Type': 'image/jpeg'
 						}, function ( err, result ) {
 							if ( err ) return reject( new Error( err ) )
 							
