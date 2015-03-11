@@ -140,7 +140,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			.post( 'api/signup', $scope.reg )
 			.success( function ( data ) {
 				$window.sessionStorage.token = data.token
-				$state.reload()
+				$state.go( 'app.read' )
 			})
 			.error( function ( data, status ) {
 				delete $window.sessionStorage.token
