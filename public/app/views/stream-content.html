@@ -16,7 +16,7 @@
 				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].imageThumb }}" class="stream-article-image cursor-pointer" ng-show=" $state.includes( 'app.read' ) ">
 
 				<div class="item-description">
-					<span class="" ng-bind-html=" item.description | limitTo: 400 "></span> ...
+					{{ item.description | stripTags | limitTo: 300 }} ...
 				</div>
 
 				<div class="clearfix"></div>
