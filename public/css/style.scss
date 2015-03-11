@@ -160,7 +160,7 @@ a { color: $green;
 	ul { 
 	li { display: inline; }
 	li:first-child { list-style-type: none; }
-	li:nth-child(2):before { content:'\2022'; margin: 3px; } } }
+	li:nth-child(2):before { content:'\2022'; margin: 3px; margin-right: 7px; } } }
 
 .landing-jumbotron { margin-top: 15%; }
 
