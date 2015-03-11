@@ -63,8 +63,6 @@ module.exports = function ( type, imageUrl ) {
 						var buf = Buffer.concat( bufs )
 
 						image.hash = crypto.createHash( 'md5' ).update( buf ).digest( 'hex' )
-						
-						console.error( image )
 
 						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig." + image.extension, {
 							'Content-Length': buf.length,
@@ -97,7 +95,7 @@ module.exports = function ( type, imageUrl ) {
 								
 			gm( request( image.orig ) )
 				.setFormat("jpg")
-				.resize( '400>' )
+				.resize( 400 )
 				.crop( 400, 224 )
 				.stream( function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
@@ -140,7 +138,6 @@ module.exports = function ( type, imageUrl ) {
 		resolve( returnArray )
 	})
 	.catch( function( error ) {
-		console.log( imageUrl )
 		reject( new Error( error.message ) )
 	})
 	

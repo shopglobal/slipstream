@@ -4,6 +4,15 @@
 
 <h2>{{ article.title }}</h2>
 
+<div class="reader-processing" ng-show=" article.processing ">
+	<h3 class="text-center dark-text btn-font-light font-sans-serif">
+		We're still processing this article.
+	</h3>
+	<h4 class="text-center dark-text btn-font-light font-sans-serif">
+		Check back later when we've imported all it's content.
+	</h4>
+</div>
+
 <div ng-bind-html="article.text"></div>
 
 </div>

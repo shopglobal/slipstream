@@ -114,6 +114,8 @@ a { color: $green;
 
 .btn-font-light { font-weight: 300; }
 
+.font-sans-serif { font-family: $body-font; }
+
 .input-white { background: transparent; border-color: white; color: white;
 	&:focus { box-shadow: none; border-color: white; outline: none; } }
 
