@@ -70,7 +70,7 @@ exports.add = function ( req, res ) {
 
 						_.extend( newArticle, {
 							title: data.title,
-							description: "",
+							description: data.content.split(0, 300),
 							content: data.content } )
 
 						data.close()
