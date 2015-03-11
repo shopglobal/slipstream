@@ -20,6 +20,7 @@
   "dependencies": {
     "amazon-s3-url-signer": "0.0.7",
     "article": "^1.1.0",
+    "article-title": "^1.0.1",
     "async": "^0.9.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.10.1",

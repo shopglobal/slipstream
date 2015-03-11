@@ -35,16 +35,21 @@ module.exports = function ( type, imageUrl ) {
 	function saveOrig ( imageUrl ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			var image = {}
+			var imgType = mime.lookup( imageUrl )
+			
+			var image = {
+				type: imgType,
+				extension: mime.extension( imgType )
+			}
 			
 			gm( request( imageUrl ) )
 				.format( function( err, value ) {
-					if ( err ) return reject ( new Error ( err ) )
-
-					image.extension = mime.extension( mime.lookup( value ) )
-					image.type = value
+					if ( err ) return reject ( new Error ( "Could not determine format for image" ) )
+					
+					image.extension = value
+					image.type = mime.lookup( image.extension )
 				})
-				.stream( image.type, function ( err, stdout, stderr ) {
+				.stream( function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
 
 					var bufs = []
@@ -62,14 +67,19 @@ module.exports = function ( type, imageUrl ) {
 
 						var uploader = s3Client.putBuffer( buf, type + "/" + image.hash + "-orig." + image.extension, {
 							'Content-Length': buf.length,
-							'Content-Type': image.type
+							'Content-Type': mime.lookup( image.extension )
 						}, function ( err, result ) {
 							if ( err ) return reject( new Error( err ) )
-
+							
+							buf = null
+							bufs = null							
+							
 							if ( result.statusCode == 200 ) {
 								image.orig = uploader.url
 
 								resolve( image )
+							} if ( result.statusCode != 200 ) {
+								reject( new Error( result ) )
 							}
 						})
 					})
@@ -77,13 +87,17 @@ module.exports = function ( type, imageUrl ) {
 		})
 	}
 		
+	/*Saves a thumbnail
+	
+	TODO: Limit animated GIFS and request full image from external http again
+	*/	
 	function saveThumb ( image ) {
 		return Q.promise( function ( resolve, reject, notify ) {
 								
 			gm( request( image.orig ) )
 				.resize( 400 )
 				.crop( 400, 224 )
-				.stream( image.type, function ( err, stdout, stderr ) {
+				.stream( function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
 
 					var bufs = []
@@ -100,11 +114,16 @@ module.exports = function ( type, imageUrl ) {
 							'Content-Type': image.type
 						}, function ( err, result ) {
 							if ( err ) return reject( new Error( err ) )
-
+							
+							buf = null
+							bufs = null
+							
 							if ( result.statusCode == 200 ) {
 								image.thumb = uploader.url
 
 								resolve( image )
+							} else if ( !result.statusCode == 200 ) {
+								reject( new Error( result ) )
 							}
 						})					
 					})
@@ -119,6 +138,7 @@ module.exports = function ( type, imageUrl ) {
 		resolve( returnArray )
 	})
 	.catch( function( error ) {
+		console.log( imageUrl )
 		reject( new Error( error.message ) )
 	})
 	

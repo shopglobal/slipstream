@@ -24,7 +24,8 @@ var ContentSchema = new mongoose.Schema( {
 	rating: Number,		// the rating of the item if applicable
 	likes: Number, 		// number of lives on parent site
 	dislikes: Number, 	// number of dislikes on parent site
-	shares: Number		// number of times share on social media/email
+	shares: Number,		// number of times share on social media/email
+	processing: Boolean // whether the item is still being loaded in the background
 })
 
 module.exports = mongoose.model( 'Content', ContentSchema )

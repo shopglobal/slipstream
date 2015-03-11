@@ -3,7 +3,7 @@ var fs = require('fs'),
 	User = require('../models/userModel.js'),
 	Content = require('../models/contentModel.js'),
 	tokenManager = require('../config/tokenManager'),
-//	article = require('article'),
+	article = require('article'),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
 	async = require('async'),
 	request = require( 'request' ),
@@ -17,6 +17,7 @@ var fs = require('fs'),
 	crypto = require( 'crypto' ),
 	ImageResolver = require( 'image-resolver' ),
 	imageResolver = new ImageResolver(),
+	articleTitle = require( 'article-title' ),
 	s3sig = require( 'amazon-s3-url-signer' ),
 	BlitLine = require( 'simple_blitline_node' ),
 	blitline = new BlitLine()
@@ -25,23 +26,60 @@ var fs = require('fs'),
 
 exports.add = function ( req, res ) {
 	
+/*	function getPreview () {
+		return Q.Promise( function ( resolve, reject, notify ) {
+		
+			reuest( req.body.url ).pipe( article( req.body.url, fun
+			
+		})
+	}*/
+	
 	function getArticle () {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-			read( req.body.url, function( err, article, meta ) {
-				if ( err || !article )
-					reject( new Error( "Problem reading article." ) )
-					
-				var newArticle = {
-					title: article.title,
-					description: "",
-					images: [],
-					content: article.content
-				}
-				
-				article.close()
+			imageResolver.register(new ImageResolver.FileExtension())
+			imageResolver.register(new ImageResolver.MimeType())
+			imageResolver.register(new ImageResolver.Opengraph())
+			imageResolver.register(new ImageResolver.Webpage())
+			
+			var newArticle = new Content({
+				images: [],
+				processing: true,
+				stream: 'read',
+				url: req.body.url,
+				added: ( new Date() / 1).toFixed()
+			})
+			
+			imageResolver.resolve( req.body.url, function ( result ) {
+				if ( !result.image ) return resolve( article )
 
-				resolve( newArticle )
+				saveImage( req.body.type, result.image )
+				.spread( function ( hash, orig, thumb ) {
+					newArticle.images.push({
+						image: orig,
+						imageHash: hash,
+						imageThumb: thumb
+					})
+				})
+				.then( function () {
+
+					read( req.body.url, function( err, data, meta ) {
+						if ( err || !data )
+							reject( new Error( "Problem reading article." ) )
+
+						_.extend( newArticle, {
+							title: data.title,
+							description: "",
+							content: data.content } )
+
+						data.close()
+
+						resolve( newArticle )
+					})
+				})
+				.catch( function ( error ) {
+					reject( new Error( error ) )
+				})
 			})
 		})
 	}
@@ -63,7 +101,7 @@ exports.add = function ( req, res ) {
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
 				return Q.Promise( function ( resolve, reject, notify ) {
-				
+					
 					saveImage( req.body.type, each.src )
 					.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 						article.images.push({
@@ -89,8 +127,6 @@ exports.add = function ( req, res ) {
 					if ( paragraphs[i] ) {
 						article.description += " " + paragraphs[i].innerHTML
 						
-						console.log( paragraphs[i].innerHTML )
-						
 						if ( i == 2 || i == ( paragraphs.length - 1 ) ) {
 							window.close()
 							resolve( article )
@@ -101,75 +137,58 @@ exports.add = function ( req, res ) {
 			.catch( function ( error ) {
 				reject( new Error( error ) )
 			})
-			
-			
-
 		})
 			
 		}) // end of jsdom
 	}// end of replaceImages()
 	
 	function saveArticle ( article ) {
-		var deferred = Q.defer()
-		
-		getUser( req.token )
-		.then( function ( user ) {
-			
-			var blog = new Content( _.extend({
-				user: user,
-				stream: 'read',
-				text: article.content,
-				url: req.body.url,
-				added: ( new Date() / 1).toFixed()
-			}, article ) )
-			
-			blog.save()
-			
-			deferred.resolve( blog )	
-		})
-		
-		return deferred.promise	
-	}
-	
-	function resolveImage ( article ) {
-		return Q.Promise( function ( resolve, reject, notify ) {			
-			if ( article.images.length != 0 )
-				return resolve( article )
-			
-			imageResolver.register(new ImageResolver.FileExtension())
-			imageResolver.register(new ImageResolver.MimeType())
-			imageResolver.register(new ImageResolver.Opengraph())
-			imageResolver.register(new ImageResolver.Webpage())
+		return Q.Promise( function ( resolve, reject, notify ) {
+
+			getUser( req.token )
+			.then( function ( user ) {
 				
-			imageResolver.resolve( req.body.url, function ( result ) {
-				saveImage( req.body.type, result.image )
-				.spread( function ( hash, orig, thumb ) {
-					article.images.push({
-						image: orig,
-						imageHash: hash,
-						imageThumb: thumb
-					})
-					
-					resolve( article )
-				})
-				.catch( function ( error ) {
+				var blog = {
+						user: user,
+						processing: false,
+						text: article.content,
+						description: article.description,
+						images: article.images
+					}
+
+				Content.findOneAndUpdate( 
+					{ _id: article._id }, 
+					{ $set: blog } )
+				.exec()
+				.then( function ( blog ) {
+					resolve( blog )	
+				}, function ( error ) {
 					reject( new Error( error ) )
 				})
 			})
+		
 		})
 	}
 	
 	getArticle()
+	.then( function ( article ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			article.save( function ( err, article ) {
+				console.log( article._id )
+				res.status( 200 ).json( article )
+				resolve( article )
+			})
+		})		
+	})
 	.then( replaceImages )
-	.then( resolveImage )
 	.then( saveArticle )
 	.then( function ( article ) {
 		log.info( { title: article.title, url: article.url }, "Article saved" )
-		return res.status( 200 ).json( article )
+		return
 	})
 	.catch( function ( error ) {
 		log.error( error )
-		return res.status( 500 ).send( error.message )
+		return
 	})
 	
 }
