@@ -32,6 +32,9 @@ router.route('/add')
 		else { contentController.add( req, res ) }
 	})
 
+router.route( '/search' )
+	.get( userController.checkAuthorization, contentController.search )
+
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
 	.delete( userController.checkAuthorization, contentController.deleteTag )

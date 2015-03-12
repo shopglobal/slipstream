@@ -1,6 +1,9 @@
 'use strict'
 
-var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
+var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+	Algolia = require( 'algolia-search' ),
+	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
+	index = algolia.initIndex('Contents')
 
 var ContentSchema = new mongoose.Schema( {
 	user: String,		// ther user._id that this item belongs to
@@ -26,6 +29,19 @@ var ContentSchema = new mongoose.Schema( {
 	dislikes: Number, 	// number of dislikes on parent site
 	shares: Number,		// number of times share on social media/email
 	processing: Boolean // whether the item is still being loaded in the background
+})
+
+/*
+The code below saves, deletes or updates items in our third-party search index. It may not be require later when we have a dedicated MongoDB library that we can connect it to, which requires admin rights.
+*/
+ContentSchema.pre( 'save', function( callback ) {
+	index.addObject( this, function ( err, data ) {
+		callback()
+	}, this._id )
+})
+
+ContentSchema.post( 'remove', function( item ) {
+	index.deleteObject( item._id )
 })
 
 module.exports = mongoose.model( 'Content', ContentSchema )

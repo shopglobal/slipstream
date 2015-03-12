@@ -7,7 +7,11 @@ var Content = require( '../models/contentModel' ),
 	_ = require( 'underscore' ),
 	log = require( '../helpers/logger.js' ),
 	bodyParser = require( 'body-parser' ),
-	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
+	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+	Algolia = require( 'algolia-search' ),
+	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
+	index = algolia.initIndex('Contents'),
+	html_strip = require( 'htmlstrip-native' )
 
 // adds content to users stream.
 
@@ -34,27 +38,30 @@ exports.add = function ( req, res ) {
 	function makeContent( user, contentInfo ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		var content = new Content( _.extend({
-			user: user,
-			stream: req.body.type,
-			added: ( new Date() / 1).toFixed(),
-			url: req.body.url
-		}, contentInfo.meta ))
-		
-		if ( contentInfo.links[2].href ) {
-			saveImage( req.body.type, contentInfo.links[2].href )
-			.spread( function( imageHash, imageOriginalPath, imageThumbPath) {
-				content.image = imageOriginalPath
-				content.imageThumb = imageThumbPath
-				content.imageHash = imageHash
-				
-				content.save()
-				resolve( content )
-			})
-		} else {
-			content.save()
-			resolve( content )
-		}
+			var content = new Content( _.extend({
+				user: user,
+				stream: req.body.type,
+				added: ( new Date() / 1).toFixed(),
+				url: req.body.url
+			}, contentInfo.meta ))
+
+			if ( contentInfo.links[2].href ) {
+				saveImage( req.body.type, contentInfo.links[2].href )
+				.spread( function( imageHash, imageOriginalPath, imageThumbPath) {
+					content.images.push( {
+						orig: imageOriginalPath,
+						thumb: imageThumbPath,
+						hash: imageHash		
+					})
+					saveContent()
+				})
+			} else { saveContent() }
+			
+			function saveContent () {
+				content.save( function ( err, result ) {
+					resolve( result )
+				})
+			}
 		
 		})
 	}
@@ -124,8 +131,12 @@ exports.delete = function ( req, res ) {
 			
 			var contentId = mongoose.Types.ObjectId( req.query.id )
 
-			Content.findOneAndRemove( { user: user, _id: contentId } ).exec()
+			Content.findOneAndRemove( { user: user, _id: contentId } )
+			.exec()
 			.then( function ( content ) {
+				if ( !content ) reject( new Error( "There was an error deleting that content from the stream." ) )
+				
+				index.deleteObject( content._id )
 				resolve( content )
 			}, function ( error ) {
 				reject( new Error( "There was an error deleting that content from the stream." ) )
@@ -140,7 +151,7 @@ exports.delete = function ( req, res ) {
 	})
 	.catch( function ( error ) {
 		log.error( error )
-		return res.status( 500 ).send( { Error: error.message } )
+		return res.status( 500 ).json( error.message )
 	})
 	
 }
@@ -156,6 +167,10 @@ exports.addTags = function ( req, res ) {
 			Content.findOneAndUpdate( { user: user, _id: contentId }, { $pushAll: { tags: tags } } )
 			.exec()
 			.then( function ( result ) {
+				tags.forEach( function ( each ) {
+					index.partialUpdateObject( { 'tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
+				})
+				
 				resolve( result )
 			}, function ( error ) {
 				reject( new Error( "Could not add new tags." ) )
@@ -184,11 +199,13 @@ exports.deleteTag = function ( req, res ) {
 			var contentId = mongoose.Types.ObjectId( req.query.id ),
 				tag = JSON.parse( req.query.tag )
 			
-			Content.update( 
+			Content.findOneAndUpdate( 
 				{ user: user, _id: contentId, "tags": tag },
 				{ $pull: { "tags": tag } } )
 			.exec()
 			.then( function ( result ) {
+				index.partialUpdateObject( { 'tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
+				
 				resolve( result )
 			}, function ( error ) {
 				reject( new Error( "Could not remove that tag." ) )
@@ -209,4 +226,14 @@ exports.deleteTag = function ( req, res ) {
 		log.error( error )
 		return res.status( 500 ).send( error.message )
 	})
+}
+
+exports.search = function ( req, res ) {
+	
+	index.search( req.query.terms, function( error, result ) {
+		if ( error ) return res.status( 500 ).json( result )
+		
+		return res.status( 200 ).json( result.hits )
+	})
+	
 }
