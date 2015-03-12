@@ -21,7 +21,7 @@ exports.login = function ( req, res ) {
 	.then( function ( user ) {
 		if ( !user ) {
 			log.error( { username: req.body.username }, "Error logging in." )
-			return log.error( { user: req.body.user }, "User not found at login" )
+			return res.status( 403 ).json( "Error loggin in with those credentials" )
 		}
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
