@@ -168,7 +168,7 @@ exports.addTags = function ( req, res ) {
 			.exec()
 			.then( function ( result ) {
 				tags.forEach( function ( each ) {
-					index.partialUpdateObject( { 'tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
+					index.partialUpdateObject( { '_tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
 				})
 				
 				resolve( result )
@@ -204,7 +204,7 @@ exports.deleteTag = function ( req, res ) {
 				{ $pull: { "tags": tag } } )
 			.exec()
 			.then( function ( result ) {
-				index.partialUpdateObject( { 'tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
+				index.partialUpdateObject( { '_tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
 				
 				resolve( result )
 			}, function ( error ) {
@@ -230,10 +230,18 @@ exports.deleteTag = function ( req, res ) {
 
 exports.search = function ( req, res ) {
 	
-	index.search( req.query.terms, function( error, result ) {
-		if ( error ) return res.status( 500 ).json( result )
-		
-		return res.status( 200 ).json( result.hits )
+	getUser( req.token )
+	.then( function ( user ) {
+	
+		index.search( req.query.terms, function( error, result ) {
+			if ( error ) return res.status( 500 ).json( result )
+
+			return res.status( 200 ).json( result.hits )
+		}, { facets: '*', facetFilters: [ 'user:' + user ] } )
+	
+	})
+	.catch( function ( error ) {
+		return res.status( 500 ).json( error.message )
 	})
 	
 }

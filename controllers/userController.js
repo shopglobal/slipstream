@@ -31,15 +31,8 @@ exports.login = function ( req, res ) {
 			if ( !isMatch )
 				return res.status( 403 ).send( { message: "Your password wasn't authenticated." } )
 
-			else {
-				if (user) {
-					res.json({
-						 token: user.token
-					})
-				} else {
-					return res.status( 500 ).send( { error: "Something went wrong." } )
-				}
-			}
+			else 
+				res.status( 200 ).json( { token: user.token } )
 
 		} )
 		
