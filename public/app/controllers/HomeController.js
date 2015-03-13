@@ -1,6 +1,22 @@
-app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash ) {
-	
-	$scope.query = ''
+app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search ) {
+
+	$scope.currentStream = $state.current.name.split(".")[1]
+
+	$scope.content = new Content()
+
+	// $scope.search = new Search()
+
+	$scope.doSearch = function() {
+		if ( $scope.search.query.length < 1 ) {
+			$scope.content = new Content()
+			$scope.content.loadMore( $state.current.name.split(".")[1], 2)
+			return
+		}
+
+		$scope.content = new Search()
+		$scope.content.query = $scope.search.query
+		$scope.content.loadMore( $state.current.name.split(".")[1], 2 )
+	}
 
 	// logs user out by deleting session storage and reloading the app
 
@@ -48,20 +64,46 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		})
 	}
 
-	$scope.search = function() {
-		if ( $scope.query == '' )
-			return $scope.hits = null
-
+	$scope.tagAdded = function ( tag, contentId ) {
 		$http
-			.get( '/api/search', { params: 
-				{ terms: $scope.query }
-			} )
-			.success( function ( results ) {
-				$scope.hits = results
+			.post( '/api/tags', { 
+				id: contentId,
+				tags: [ tag ]
+			})
+			.success( function ( result ) {
+				$flash.success = "Tag added."
 			})
 			.error( function ( error ) {
 				$flash.error = error
 			})
 	}
 
+	$scope.tagRemoved = function ( tag, contentId ) {
+		$http
+			.delete( '/api/tags', { params: {
+				id: contentId,
+				tag: tag
+			} } )
+			.success( function ( result ) {
+				$flash.success = "Tag removed."
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+	}
+
+	$scope.openReaderModal = function ( article ) {
+		console.log( "modal should open ")
+
+		var modalInstance = $modal.open( {
+			templateUrl: "app/views/reader-modal.html",
+			windowClass: 'reader-modal',
+			controller: 'ReaderModalController',
+			resolve: {
+				article: function() {
+					return article
+				}
+			}
+		})
+	}
 }])

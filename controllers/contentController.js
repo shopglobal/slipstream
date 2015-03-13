@@ -237,7 +237,7 @@ exports.search = function ( req, res ) {
 			if ( error ) return res.status( 500 ).json( result )
 
 			return res.status( 200 ).json( result.hits )
-		}, { facets: '*', facetFilters: [ 'user:' + user ] } )
+		}, { facets: '*', facetFilters: [ 'user:' + user, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
 	
 	})
 	.catch( function ( error ) {

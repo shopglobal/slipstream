@@ -1,62 +1,59 @@
-<div ng-controller="ContentController as content" class="list-container">
+<div class="content-list">
 
-	<div class="content-list">
+	<div infinite-scroll="content.loadMore( currentStream, 2)" infinite-scroll-immediate-check="true">
 
-		<div infinite-scroll="content.loadMore( currentStream, 2)" infinite-scroll-immediate-check="true">
-		
-			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
-				<h2 ng-hide=" $state.includes( 'app.read' ) ">{{ item.title }}</h2>
+		<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
+			<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title"></h2>
 
-				<a ng-click="openReaderModal( item )" class="cursor-pointer" ng-show=" $state.includes( 'app.read' ) ">
-					<h2>{{ item.title }}</h2>
-				</a>
+			<a ng-click="openReaderModal( item )" class="cursor-pointer" ng-show=" item.stream == 'read' ">
+				<h2 data-ng-bind="item.title"></h2>
+			</a>
 
-				<div ng-class="{ 'watch-iframe' : currentStream == 'watch', 'listen-iframe' : currentStream == 'listen' }" iframely url="{{ item.url }}" ng-hide=" $state.includes( 'app.read' ) "></div>
+			<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-hide=" item.stream == 'read' "></div>
 
-				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].imageThumb }}" class="stream-article-image cursor-pointer" ng-show=" $state.includes( 'app.read' ) ">
+			<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].imageThumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
 
-				<div class="item-description" ng-hide=" $state.includes( 'app.listen' ) ">
-					{{ item.description | stripTags | limitTo: 300 }} ...
-				</div>
-
-				<div class="clearfix"></div>
-
-				<div class="content-tags">
-					<tags-input 
-						ng-model="item.tags" 
-						on-tag-added="tagAdded( $tag, item._id )"
-						on-tag-removed="tagRemoved( $tag, item._id )"
-						class="no-padding">
-					</tags-input>
-				</div>
-
-				<div class="date-added-ago pull-left meta-text">
-					{{ item.added | timeAgo }}
-				</div>
-
-				<div class="share-links">
-					<span class="dropdown user-menu">
-					  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
-					    <span class="glyphicon glyphicon-option-horizontal glyphicon-grey"></span>
-					    <span class="sr-only">
-							Toggle Item Options Menu
-						</span>
-					  </button>
-					  
-					  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
-					    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true">Delete</a></li>
-					  </ul>
-					</span>
-
-					<button class="btn btn-grey btn-xs no-border">
-						<a href="{{ item.url }}"><span class="glyphicon glyphicon-share-alt glyphicon-grey"></span></a>
-					</button>
-				</div>
-				
-				<div class="clearfix"></div>
+			<div class="item-description" ng-hide=" item.stream == 'listen' ">
+				<span ng-bind="item.description | stripTags | limitTo: 300"></span> ...
 			</div>
 
+			<div class="clearfix"></div>
+
+			<div class="content-tags">
+				<tags-input 
+					ng-model="item.tags" 
+					on-tag-added="tagAdded( $tag, item._id )"
+					on-tag-removed="tagRemoved( $tag, item._id )"
+					class="no-padding">
+				</tags-input>
+			</div>
+
+			<div class="date-added-ago pull-left meta-text">
+				<span ng-bind="item.added | timeAgo"></span>
+			</div>
+
+			<div class="share-links">
+				<span class="dropdown user-menu">
+				  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
+				    <span class="glyphicon glyphicon-option-horizontal glyphicon-grey"></span>
+				    <span class="sr-only">
+						Toggle Item Options Menu
+					</span>
+				  </button>
+				  
+				  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
+				    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true">Delete</a></li>
+				  </ul>
+				</span>
+
+				<button class="btn btn-grey btn-xs no-border">
+					<a href="{{ item.url }}"><span class="glyphicon glyphicon-share-alt glyphicon-grey"></span></a>
+				</button>
+			</div>
+			
+			<div class="clearfix"></div>
 		</div>
+
 
 	</div>
 
