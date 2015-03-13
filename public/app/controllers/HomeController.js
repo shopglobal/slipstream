@@ -1,45 +1,6 @@
 app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash ) {
 	
-	$scope.user = {
-		username: '',
-		password: ''
-	}
-
-	$scope.reg = {
-		username: '',
-		password: '',
-		email: ''
-	}
-
-	// logs in. signs in and returns the user's token into her
-	// session storage
-
-	$scope.login = function() {
-		$http
-			.post( '/api/authenticate', $scope.user )
-			.success( function ( data, status ) {
-				$window.sessionStorage.token = data.token
-				$state.go( app.home )
-			} )
-			.error( function ( data, status ) {
-				delete $window.sessionStorage.token
-				console.log( "Error signing in: " + status )
-			} )
-	}
-
-	// registartion 
-
-	$scope.register = function () {
-		$http
-			.post( 'api/signup', $scope.reg )
-			.success( function ( data ) {
-				$window.sessionStorage.token = data.token
-				$state.go( app.home )
-			})
-			.error( function ( data, status ) {
-				delete $window.sessionStorage.token
-			})
-	}
+	$scope.query = ''
 
 	// logs user out by deleting session storage and reloading the app
 
@@ -47,7 +8,6 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			delete $window.sessionStorage.token
 			$state.go( 'landing.login' )
 	}
-
 
 	// deletes the currently signed-in account
 
@@ -60,7 +20,6 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 				location.reload()
 			})
 	}
-
 
 	// opens the "add content" model when a user click's "add"
 
@@ -89,16 +48,20 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		})
 	}
 
-	// $scope.getEmbed = function ( url ) {
-	// 	$http
-	// 		.get( 'http://10.0.2.1:8061/iframely', {
-	// 			params: {
-	// 				url: url
-	// 			}
-	// 		})
-	// 		.success( function ( result ) {
-	// 			return result.html
-	// 		})
-	// }
+	$scope.search = function() {
+		if ( $scope.query == '' )
+			return $scope.hits = null
+
+		$http
+			.get( '/api/search', { params: 
+				{ terms: $scope.query }
+			} )
+			.success( function ( results ) {
+				$scope.hits = results
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+	}
 
 }])

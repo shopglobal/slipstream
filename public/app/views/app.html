@@ -22,6 +22,14 @@
 				</a>
 			</div>
 			<div class="collpase navbar-collapse">
+				<ul class="nav navbar-nav navbar-center">
+					<li class="navbar-form">
+						<div class="form-group">
+							<input type="text" class="form-control narvbar-search" ng-keyup="search()" ng-model="query" />
+						</div>
+					</li>
+				</ul>
+
 				<ul class="nav navbar-nav navbar-right">
 					<li class="add-container">
 						<a href="" ng-click="openAddModal()"><div class="add-button">+</div></a>
@@ -94,6 +102,12 @@
 </div>
 
 <div class="container container-stream">
+
+	<div ng-show="hits">
+		<div ng-repeat="hit in hits">
+			{{ hit.title }}
+		</div>
+	</div>
 
 	<div ui-view id="viewport" height="100%"></div>
 
