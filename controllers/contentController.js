@@ -10,8 +10,7 @@ var Content = require( '../models/contentModel' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	Algolia = require( 'algolia-search' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents'),
-	html_strip = require( 'htmlstrip-native' )
+	index = algolia.initIndex('Contents')
 
 // adds content to users stream.
 

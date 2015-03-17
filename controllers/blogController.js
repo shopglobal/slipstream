@@ -4,7 +4,7 @@ var fs = require('fs'),
 	Content = require('../models/contentModel.js'),
 	tokenManager = require('../config/tokenManager'),
 	article = require('article'),
-	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
+	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	async = require('async'),
 	request = require( 'request' ),
 	Q = require( 'q' ),
@@ -19,8 +19,7 @@ var fs = require('fs'),
 	imageResolver = new ImageResolver(),
 	articleTitle = require( 'article-title' ),
 	s3sig = require( 'amazon-s3-url-signer' ),
-	BlitLine = require( 'simple_blitline_node' ),
-	blitline = new BlitLine()
+	htmlStripper = require( 'htmlstrip-native' )
 
 // adds and item to the articles database with the user's id.
 
@@ -67,11 +66,18 @@ exports.add = function ( req, res ) {
 					read( req.body.url, function( err, data, meta ) {
 						if ( err || !data )
 							reject( new Error( "Problem reading article." ) )
+							
+						var description = htmlStripper.html_strip( data.content, {
+							include_script : false,
+    						include_style : false,
+    						compact_whitespace : true } ).substring( 0, 400 )
 
 						_.extend( newArticle, {
 							title: data.title,
-							description: data.content.split(0, 300),
+							description: description,
 							content: data.content } )
+						
+						console.log( data.content )
 
 						data.close()
 
@@ -123,17 +129,10 @@ exports.add = function ( req, res ) {
 			.then( function () {
 			
 				article.content = window.document.body.innerHTML
-				
-				for ( i = 0; i <= 2; i++ ) {
-					if ( paragraphs[i] ) {
-						article.description += " " + paragraphs[i].innerHTML
-						
-						if ( i == 2 || i == ( paragraphs.length - 1 ) ) {
-							window.close()
-							resolve( article )
-						}
-					}
-				}
+
+				window.close()
+				resolve( article )
+
 			})
 			.catch( function ( error ) {
 				reject( new Error( error ) )
