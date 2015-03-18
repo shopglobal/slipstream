@@ -137,6 +137,10 @@ a { color: $green;
 
 .fade { position: fixed; }
 
+.feedback-btn-gray { font-family: $body-font; background: white; }
+
+.feedback-btn { box-shadow: none !important; }
+
 // new classes
 
 .no-border { border: none; background: none;
