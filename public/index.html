@@ -8,7 +8,7 @@
 <link href="css/style.css" rel="stylesheet">
 <!-- endbuild -->
 
-<body ng-app="SlipStream" ng-controller="MainController">
+<body ng-app="SlipStream" ng-controller="MainController" ng-class="{ 'landing' : $state.includes( 'landing' ), 'app' : $state.includes( 'app' ) }">
 
 	<angular-feedback></angular-feedback>
 

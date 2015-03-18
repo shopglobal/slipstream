@@ -51,7 +51,9 @@ $dark-text: #5B5A5A;
 
 // containers and wrappers
 
-body { background-color: #F2F1F1; font-family: $body-font; }
+body.app { background-color: #F2F1F1; font-family: $body-font; }
+
+body.landing { background-color: white; font-family: $body-font; }
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
@@ -213,6 +215,8 @@ a { color: $green;
 	ul li {
 		&:hover { background: $darkbase; }
 		&:hover > a:visited, &:hover > a { color: white; } } }
+
+footer { bottom: 0; position: absolute; }
 
 // modals
 
