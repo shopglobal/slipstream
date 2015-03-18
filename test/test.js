@@ -39,7 +39,7 @@ describe( 'UserController', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:' + PORT + '/api/signup',
+				url: 'http://localhost:' + PORT + '/api/signup',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -110,7 +110,7 @@ describe( 'GetUser', function () {
 			
 				request({
 					method: 'GET',
-					url: 'https://localhost:' + PORT + '/api/users',
+					url: 'http://localhost:' + PORT + '/api/users',
 					json: true,
 					strictSSL: false,
 					headers: {
@@ -141,7 +141,7 @@ describe( 'Add content', function () {
 			
 				request({
 					method: 'POST',
-					url: 'https://localhost:' + PORT + '/api/add',
+					url: 'http://localhost:' + PORT + '/api/add',
 					json: true,
 					strictSSL: false,
 					body: {
@@ -170,12 +170,12 @@ describe( 'Add content', function () {
 			
 				request({
 					method: 'POST',
-					url: 'https://localhost:' + PORT + '/api/add',
+					url: 'http://localhost:' + PORT + '/api/add',
 					json: true,
 					strictSSL: false,
 					body: {
 						"type": "read",
-						"url": "https://medium.com/message/archive-fever-2a330b627274"
+						"url": "http://medium.com/message/archive-fever-2a330b627274"
 					},
 					headers: {
 						"Authorization": "Bearer " + newTestUser.token
@@ -199,7 +199,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:' + PORT + '/api/add',
+				url: 'http://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -227,7 +227,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:' + PORT + '/api/add',
+				url: 'http://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -255,7 +255,7 @@ describe( 'Add content', function () {
 			
 			request({
 				method: 'POST',
-				url: 'https://localhost:' + PORT + '/api/add',
+				url: 'http://localhost:' + PORT + '/api/add',
 				json: true,
 				strictSSL: false,
 				body: {
@@ -285,7 +285,7 @@ describe( 'Stream content', function () {
 			
 			request({
 				method: 'GET',
-				url: 'https://localhost:' + PORT + '/api/stream/read',
+				url: 'http://localhost:' + PORT + '/api/stream/read',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -314,7 +314,7 @@ describe( 'Stream content', function () {
 			
 			request({
 				method: 'GET',
-				url: 'https://localhost:' + PORT + '/api/stream/listen',
+				url: 'http://localhost:' + PORT + '/api/stream/listen',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -350,7 +350,7 @@ describe( 'Delete content', function () {
 			
 			request({
 				method: 'DELETE',
-				url: 'https://localhost:' + PORT + '/api/stream/read',
+				url: 'http://localhost:' + PORT + '/api/stream/read',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,
@@ -377,7 +377,7 @@ describe( 'Delete content', function () {
 			
 			request({
 				method: 'DELETE',
-				url: 'https://localhost:' + PORT + '/api/stream/watch',
+				url: 'http://localhost:' + PORT + '/api/stream/watch',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,
