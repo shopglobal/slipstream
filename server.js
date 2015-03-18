@@ -10,7 +10,7 @@ var http = require('http'),
 	morgan = require('morgan'),
 	log = require( './helpers/logger.js' )
 
-var indexPath = path.join(__dirname, 'public')
+var indexPath = path.join(__dirname, process.env.PUBLIC_FOLDER)
 
 //var options = {
 //	key: fs.readFileSync( 'ssl.key'),

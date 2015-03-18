@@ -3,12 +3,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
+<!-- build:css css/style.css-->
 <link href="vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
-<script src="vendor/jquery/dist/jquery.min.js"></script>
-<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+<!-- endbuild -->
 
 <body ng-app="SlipStream" ng-controller="MainController">
+
+	<angular-feedback></angular-feedback>
 
 	<div flash-alert="error" active-class="in alert alert-danger flash-alert" class="fade">
 		<p class="alert-message text-center">{{ flash.message }}</p>
@@ -22,7 +24,13 @@
 
 </body>
 
+<!-- build:jsdeps vendor/deps.js -->
+<script src="vendor/jquery/dist/jquery.min.js"></script>
+<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
 <script src="vendor/angular/angular.js"></script>
+<!-- endbuild -->
+
+<!-- build:js vendor/vendor.js -->
 <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="vendor/angular-ui-utils/ui-utils.js"></script>
 <script src="vendor/angular-bootstrap/ui-bootstrap.js"></script>
@@ -34,15 +42,19 @@
 <script src="vendor/ui-router-extras/release/ct-ui-router-extras.js"></script>
 <script src="vendor/ng-tags-input/ng-tags-input.js"></script>
 <script src="vendor/angular-filter/dist/angular-filter.js"></script>
+<script src="vendor/html2canvas/build/html2canvas.js"></script>
+<script src="vendor/angular-send-feedback/dist/angular-send-feedback.js"></script>
+<!-- endbuild -->
+
+<!-- build:appjs app.js -->
 <script src="app/directives/iframely.js"></script>
-<!-- <script src="app/filters/iframely.js"></script> -->
 <script src="app/app.js"></script>
 <script src="app/controllers/HomeController.js"></script>
 <script src="app/controllers/ArticlesController.js"></script>
 <script src="app/controllers/AddModalController.js"></script>
 <script src="app/controllers/ReaderModalController.js"></script>
 <script src="app/controllers/ProfileController.js"></script>
-<!-- <script src="app/controllers/ContentController.js"></script> -->
+<!-- endbuild -->
 
 </div>
 

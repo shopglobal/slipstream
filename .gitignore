@@ -7,3 +7,5 @@ public/vendor
 public/images/blogs/**
 
 .env
+
+build

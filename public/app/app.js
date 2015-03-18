@@ -246,7 +246,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				this.page++	
 				this.busy = false
 
-
 			}.bind(this))
 
 	}
