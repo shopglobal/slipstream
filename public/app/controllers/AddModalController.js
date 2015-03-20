@@ -12,18 +12,22 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	// attempts to detect if a user deletes the url in the url field and
 	// deletes the last stream entry if they do
 
-	$scope.blankCheck = function () {
-		if ( $scope.contentParams.url.length === 0 ) {
-			$scope.showPreview = false
-			$scope.showSpinner = false
-			$scope.deleteItem()
-		}
+	blankCheck = function () {
+		
 	}
 
 	// adds article ontent to the user's database and stream
 
 	$scope.addContent = function () {
 		$scope.showSpinner = true
+
+		if ( $scope.contentParams.url.length === 0 ) {
+			$scope.showPreview = false
+			$scope.showSpinner = false
+			$scope.deleteItem()
+			return
+		}
+
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
