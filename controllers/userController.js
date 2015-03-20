@@ -6,7 +6,8 @@ var User = require( '../models/userModel' ),
 	crypto = require( 'crypto' ),
 	bcrypt = require( 'bcrypt-nodejs' ),
 	log = require( '../helpers/logger.js' ),
-	Q = require( 'q' )
+	Q = require( 'q' ),
+	Betakey = require( '../models/betakey-model' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
@@ -52,15 +53,43 @@ exports.signUp = function ( req, res ) {
 		email: req.body.email,
 		joined: ( new Date() / 1000 ).toFixed()
 	})
+	
+	function betakeyCheck () {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			Betakey.findOne( { key: req.body.betakey }, function ( err, betakey ) {
+				if ( err || !betakey ) return reject( new Error( "Could not find that key" ) )
+				
+				if ( betakey.used ) return reject( new Error( "Sorry, beta key aleady used." ) )
+				
+				betakey.update(
+					{ used: ( new Date() / 1 ).toFixed(), user: req.body.email } )
+				.exec()
+				.then( function ( result ) {
+					resolve( result )
+				}, function ( error ) {
+					reject( new Error( "Error using beta key. Try again." ) )
+				})
+			})
+		})
+	}
+	
+	betakeyCheck()
+	.then( function ( betakey ) {
+		user.save(function( err, user ) {
+			if (err)
+				return res.send( err )
 
-	user.save(function( err, user ) {
-		if (err)
-			return res.send( err )
-
-		user.token = jwt.sign(user , secret.secretToken )
-		user.save( function ( err, user ) {
-			res.json( user )
-		} )
+			user.token = jwt.sign(user , secret.secretToken )
+			user.save( function ( err, user ) {
+				return res.status( 200 ).json( user )
+			} )
+		})		
+	})
+	.catch( function ( error ) {
+		console.error( error )
+		
+		res.status( 500 ).json( error.message )
 	})
 }
 
@@ -199,7 +228,7 @@ exports.changePassword = function ( req, res ) {
 	
 	function generatePassword ( user ) {
 		var userObj = {
-			id: user
+			id: user._id
 		}
 		
 		return Q.Promise( function ( resolve, reject, notify ) {	

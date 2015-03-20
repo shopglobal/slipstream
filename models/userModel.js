@@ -13,13 +13,16 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	tempPassword: String,
 	email: {
 		type: String,
 		required: true,
 		unique: true
 	},
 	joined: Number,
-	token: String
+	token: String,
+	role: String,
+	permissions: Array
 })
 
 // 

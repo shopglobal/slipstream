@@ -42,7 +42,7 @@ exports.add = function ( req, res ) {
 			imageResolver.register(new ImageResolver.Webpage())
 			
 			var newArticle = new Content({
-				user: user,
+				user: user._id,
 				images: [],
 				processing: true,
 				stream: 'read',
