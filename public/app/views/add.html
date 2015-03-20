@@ -39,14 +39,13 @@
 
 	 <div class="article-preview" ng-show="showPreview">
 			
-			<img ng-src="{{ contentPreview.imageThumb }}" class="preview-thumbnail" ng-hide=" contentParams.type == 'read'">
+		<img ng-src="{{ contentPreview.images[0].thumb }}" class="preview-thumbnail" >
+		
+		<div class="preview-text col-md-8">
+			<h4> {{ contentPreview.title }} </h4>
+			<p>{{ contentPreview.description | stripTags | limitTo: 170 }} ... </p>
+		</div>
 
-			<img ng-src="{{ contentPreview.images[0].imageThumb }}" class="preview-thumbnail" ng-show=" contentParams.type == 'read'" >
-			
-			<div class="preview-text col-md-8">
-				<h4> {{ contentPreview.title }} </h4>
-				<p>{{ contentPreview.description | stripTags | limitTo: 170 }} ... </p>
-			</div>
 	 </div>
 
 	 <div class="clear-fix col-md-12 add-row-bottom">

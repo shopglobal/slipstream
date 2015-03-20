@@ -56,9 +56,9 @@ exports.add = function ( req, res ) {
 				saveImage( req.body.type, result.image )
 				.spread( function ( hash, orig, thumb ) {
 					newArticle.images.push({
-						image: orig,
-						imageHash: hash,
-						imageThumb: thumb
+						orig: orig,
+						hash: hash,
+						thumb: thumb
 					})
 				})
 				.then( function () {

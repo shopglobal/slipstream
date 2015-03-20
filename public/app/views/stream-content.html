@@ -13,7 +13,7 @@
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-hide=" item.stream == 'read' "></div>
 
-				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].imageThumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
+				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
 
 				<div class="item-description" ng-hide=" item.stream == 'listen' ">
 					<span ng-bind="item.description | stripTags | limitTo: 300"></span> ...
