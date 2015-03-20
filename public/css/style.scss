@@ -133,7 +133,7 @@ a { color: $green;
 
 .dropdown-menu { box-shadow: none; }
 
-.flash-alert { position: fixed; width: 20%; left: 50%; margin-left: -10%; }
+.flash-alert { position: fixed; width: 20%; left: 50%; margin-left: -10%; z-index: 7000; top: 0;}
 
 .fade { position: fixed; }
 
@@ -313,22 +313,13 @@ tags-input .host { position: relative; }
 
 tags-input .host:active { outline: none; }
 
-tags-input .tags { padding: 1px; overflow: hidden; word-wrap: break-word; cursor: text; background-color: transparent; border: none; }
-
-tags-input .tags.focused { outline: none;	-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
+tags-input { font: 17px "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 300;
+	.tags { padding: 1px; overflow: hidden; word-wrap: break-word; cursor: text; background-color: transparent; border: none;
+		.tag-item { margin: 2px; padding: 2px 10px; display: inline-block; float: left; line-height: initial; border-radius: 3px; }
+		.input { border: 0; outline: none; margin: 2px; padding: 0; padding-left: 5px; float: left; height: 26px; } }
+	.tags.focused { outline: none;	-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; } }
 
 tags-input .tags .tag-list { margin: 0; padding: 0; list-style-type: none; }
-
-tags-input .tags .tag-item {
-	margin: 2px;
-	padding: 2px 10px;
-	display: inline-block;
-	float: left;
-	font: 17px "Helvetica Neue", Helvetica, Arial, sans-serif;
-	// height: 26px;
-	line-height: initial;
-	border-radius: 3px;
-}
 
 tags-input .tags .tag-item.selected {
 	background: -webkit-linear-gradient(top, #febbbb 0%, #fe9090 45%, #ff5c5c 100%);
@@ -338,16 +329,7 @@ tags-input .tags .tag-item.selected {
 tags-input .tags .tag-item .remove-button:active {
 	color: red;
 }
-tags-input .tags .input {
-	border: 0;
-	outline: none;
-	margin: 2px;
-	padding: 0;
-	padding-left: 5px;
-	float: left;
-	height: 26px;
-	font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+
 tags-input .tags .input.invalid-tag {
 	color: red;
 }
@@ -383,7 +365,6 @@ tags-input .autocomplete .suggestion-item {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: black;
 	background-color: white;
 }
@@ -396,11 +377,10 @@ tags-input .autocomplete .suggestion-item.selected em {
 	background-color: #0097cf;
 }
 tags-input .autocomplete .suggestion-item em {
-	font: normal bold 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: black;
 	background-color: white;
 }
 
-.tag-item { background: #D0D0D0 !important; border: none !important; color: white; padding: 2 10; height: auto; font-size: 20px; vertical-align: middle; }
+.tag-item { background: #D0D0D0 !important; border: none !important; color: white; padding: 2 10; height: auto; vertical-align: middle; }
 
 .remove-button { color: white !important; margin: -5px 0 0 5px; padding: 0; border: none; background: none; cursor: pointer; vertical-align: middle; display: inline-block; }
