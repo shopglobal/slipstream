@@ -57,6 +57,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'app/views/profile.html',
 			controller: 'ProfileController'
 		})
+		.state( 'app.admin', {
+			url: '/admin',
+			templateUrl: 'app/views/app-admin.html',
+			controller: 'AdminController'
+		})
 		.state( 'app.read', {
 			url: '/read',
 			templateUrl: 'app/views/stream-content.html'

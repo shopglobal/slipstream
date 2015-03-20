@@ -1,0 +1,15 @@
+<div class="content-list panel-profile">
+	<div class="container-fluid container-padded">
+
+		<h1>Admin</h1>
+		<p class="dark-text">Perform admin tasks</p><br />
+
+		<button class="btn btn-green" ng-click="getBetaKeys( 10 )">10 new beta keys</button>
+
+		<div ng-show="newBetaKeys" ng-repeat="key in newBetaKeys">
+			<p>{{ key }}<p>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>
