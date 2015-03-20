@@ -33,8 +33,6 @@
     "ui-router-extras": "~0.0.13",
     "ng-tags-input": "~2.2.0",
     "angular-filter": "~0.5.4",
-    "angular-send-feedback": "git@github.com:OKNoah/angular-feedback-http.git#0e2db590346db5588e9d1ea26ceac494bc1a9af9",
-    "html2canvas": "~0.4.1",
     "angular-feedback": "bglick/angular-feedback#f2558ff4f9881580f3c188f643bf2f69f63d1f22"
   },
   "resolutions": {
