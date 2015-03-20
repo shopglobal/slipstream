@@ -593,6 +593,7 @@ footer {
   .reader-modal img {
     clear: both;
     max-width: 100%;
+    height: auto;
     margin: 0 auto;
     display: block; }
   /* line 255, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
