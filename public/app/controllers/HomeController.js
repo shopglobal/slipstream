@@ -9,13 +9,13 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	$scope.doSearch = function() {
 		if ( $scope.search.query.length < 1 ) {
 			$scope.content = new Content()
-			$scope.content.loadMore( $state.current.name.split(".")[1], 2)
+			$scope.content.loadMore( $state.current.name.split(".")[1], 3)
 			return
 		}
 
 		$scope.content = new Search()
 		$scope.content.query = $scope.search.query
-		$scope.content.loadMore( $state.current.name.split(".")[1], 2 )
+		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
 	}
 
 	// logs user out by deleting session storage and reloading the app
@@ -59,6 +59,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.deleteItem = function ( type, id ) {
 		$http.delete( 'api/stream/' + type, { params: { id: id } } )
+		.success( function ( data, status ) {
+			$scope.content.loadMore( $state.current.name.split(".")[1], 2 )
+		})
 		.error( function ( error ) {
 			console.log( error )
 		})

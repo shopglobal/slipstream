@@ -9,13 +9,6 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 		type: $state.current.name.split(".")[1]
 	}
 
-	// attempts to detect if a user deletes the url in the url field and
-	// deletes the last stream entry if they do
-
-	blankCheck = function () {
-		
-	}
-
 	// adds article ontent to the user's database and stream
 
 	$scope.addContent = function () {

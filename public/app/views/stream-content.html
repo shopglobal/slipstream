@@ -2,7 +2,7 @@
 
 	<div class="content-list">
 
-		<div infinite-scroll="content.loadMore( currentStream, 2)" infinite-scroll-immediate-check="true">
+		<div infinite-scroll="content.loadMore( currentStream, 3)" infinite-scroll-immediate-check="true">
 
 			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
 				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title"></h2>
