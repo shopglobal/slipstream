@@ -16,7 +16,6 @@ var fs = require('fs'),
 	jsdom = require( 'jsdom' ),
 	crypto = require( 'crypto' ),
 	ImageResolver = require( 'image-resolver' ),
-	imageResolver = new ImageResolver(),
 	articleTitle = require( 'article-title' ),
 	s3sig = require( 'amazon-s3-url-signer' ),
 	htmlStripper = require( 'htmlstrip-native' )
@@ -25,16 +24,10 @@ var fs = require('fs'),
 
 exports.add = function ( req, res ) {
 	
-/*	function getPreview () {
-		return Q.Promise( function ( resolve, reject, notify ) {
-		
-			reuest( req.body.url ).pipe( article( req.body.url, fun
-			
-		})
-	}*/
-	
 	function getArticle ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var imageResolver = new ImageResolver()
 		
 			imageResolver.register(new ImageResolver.FileExtension())
 			imageResolver.register(new ImageResolver.MimeType())
@@ -51,7 +44,7 @@ exports.add = function ( req, res ) {
 			})
 			
 			imageResolver.resolve( req.body.url, function ( result ) {
-				if ( !result.image ) return resolve( article )
+				if ( !result ) return resolve( article )
 
 				saveImage( req.body.type, result.image )
 				.spread( function ( hash, orig, thumb ) {
@@ -76,8 +69,6 @@ exports.add = function ( req, res ) {
 							title: data.title,
 							description: description,
 							content: data.content } )
-						
-						console.log( data.content )
 
 						data.close()
 
@@ -183,7 +174,7 @@ exports.add = function ( req, res ) {
 	})
 	.catch( function ( error ) {
 		log.error( error )
-		return
+		return res.status( 500 ).json( error.message )
 	})
 	
 }
