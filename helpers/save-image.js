@@ -30,7 +30,6 @@ var s3Client = knox.createClient( {
 module.exports = function ( type, imageUrl ) {
 	
 	return Q.Promise( function ( resolve, reject, notify ) {
-	
 		
 	function saveOrig ( imageUrl ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
@@ -40,6 +39,10 @@ module.exports = function ( type, imageUrl ) {
 			var image = {
 				type: imgType,
 				extension: mime.extension( imgType )
+			}
+			
+			if ( imageUrl.indexOf( "/" ) == 0 ) {
+				imageUrl = "https:" + imageUrl
 			}
 			
 			gm( request( imageUrl ) )
