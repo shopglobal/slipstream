@@ -30,12 +30,12 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 		$http
 			.post( '/api/authenticate', $scope.user )
 			.success( function ( data, status ) {
-				$window.sessionStorage.token = data.token
+				$window.localStorage.token = data.token
 				$state.go( 'app.read' )
 			} )
 			.error( function ( error ) {
 				console.log( error )
-				delete $window.sessionStorage.token
+				delete $window.localStorage.token
 				$flash.error = "Error signing in." 
 			} )
 	}
@@ -46,12 +46,12 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 		$http
 			.post( 'api/signup', $scope.reg )
 			.success( function ( data ) {
-				$window.sessionStorage.token = data.token
+				$window.localStorage.token = data.token
 				$state.go( 'app.read' )
 			})
 			.error( function ( error ) {
 				$flash.error = error
-				delete $window.sessionStorage.token
+				delete $window.localStorage.token
 			})
 	}
 
