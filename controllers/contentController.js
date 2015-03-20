@@ -38,7 +38,7 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			var content = new Content( _.extend({
-				user: user,
+				user: user._id,
 				stream: req.body.type,
 				added: ( new Date() / 1).toFixed(),
 				url: req.body.url
@@ -91,7 +91,7 @@ exports.stream = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			Content.find( { $and: [
-				{ user: user },
+				{ user: user._id },
 				{ stream: stream }
 			] } ).sort( { added: -1 } )
 			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
@@ -130,7 +130,7 @@ exports.delete = function ( req, res ) {
 			
 			var contentId = mongoose.Types.ObjectId( req.query.id )
 
-			Content.findOneAndRemove( { user: user, _id: contentId } )
+			Content.findOneAndRemove( { user: user._id, _id: contentId } )
 			.exec()
 			.then( function ( content ) {
 				if ( !content ) reject( new Error( "There was an error deleting that content from the stream." ) )
@@ -163,7 +163,7 @@ exports.addTags = function ( req, res ) {
 			var tags = req.body.tags,
 				contentId = mongoose.Types.ObjectId( req.body.id )
 			
-			Content.findOneAndUpdate( { user: user, _id: contentId }, { $pushAll: { tags: tags } } )
+			Content.findOneAndUpdate( { user: user._id, _id: contentId }, { $pushAll: { tags: tags } } )
 			.exec()
 			.then( function ( result ) {
 				tags.forEach( function ( each ) {
@@ -199,7 +199,7 @@ exports.deleteTag = function ( req, res ) {
 				tag = JSON.parse( req.query.tag )
 			
 			Content.findOneAndUpdate( 
-				{ user: user, _id: contentId, "tags": tag },
+				{ user: user._id, _id: contentId, "tags": tag },
 				{ $pull: { "tags": tag } } )
 			.exec()
 			.then( function ( result ) {
@@ -236,7 +236,7 @@ exports.search = function ( req, res ) {
 			if ( error ) return res.status( 500 ).json( result )
 
 			return res.status( 200 ).json( result.hits )
-		}, { facets: '*', facetFilters: [ 'user:' + user, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
+		}, { facets: '*', facetFilters: [ 'user:' + user._id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
 	
 	})
 	.catch( function ( error ) {

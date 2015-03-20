@@ -11,8 +11,6 @@
 
 <body ng-app="SlipStream" ng-controller="MainController" ng-class="{ 'landing' : $state.includes( 'landing' ), 'app' : $state.includes( 'app' ) }">
 
-	<angular-feedback options="feedbackOptions"></angular-feedback>
-
 	<div flash-alert="error" active-class="in alert alert-danger flash-alert" class="fade">
 		<p class="alert-message text-center">{{ flash.message }}</p>
 	</div>
@@ -44,12 +42,13 @@
 <script src="vendor/ng-tags-input/ng-tags-input.js"></script>
 <script src="vendor/angular-filter/dist/angular-filter.js"></script>
 <script src="vendor/html2canvas/build/html2canvas.js"></script>
-<script src="vendor/angular-send-feedback/dist/angular-send-feedback.js"></script>
+<script src="vendor/angular-feedback/dist/angular-feedback.js"></script>
 <!-- endbuild -->
 
 <!-- build:appjs app.js -->
 <script src="app/directives/iframely.js"></script>
 <script src="app/app.js"></script>
+<script src="app/controllers/MainController.js"></script>
 <script src="app/controllers/HomeController.js"></script>
 <script src="app/controllers/ArticlesController.js"></script>
 <script src="app/controllers/AddModalController.js"></script>

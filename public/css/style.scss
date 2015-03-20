@@ -292,6 +292,15 @@ footer { bottom: 0; position: absolute; }
 	.video-info {  }
 	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } }
 
+// feedback
+
+feedback-widget { position: fixed; right: 25px; bottom: 0; 
+	.form-group { width: 500px; background: rgba( 0, 0, 0, 0.87 ); padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
+
+.lbl-feedback-comment { color: white; }
+
+.txt-feedback-comment { margin-bottom: 15px; }
+
 /* ng-tags-input Angular module style */
 tags-input { }
 

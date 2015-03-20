@@ -1,4 +1,4 @@
-var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ngTagsInput', 'angular.filter', 'angular-send-feedback' ])
+var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ngTagsInput', 'angular.filter', '$feedback.directives' ])
 
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider ) {
 	
@@ -69,103 +69,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			url: '/listen',
 			templateUrl: 'app/views/stream-content.html'
 		})
-
-	/*	
-	Config for dynamic states for content streams
-	*/	
-	/*$futureStateProvider.addResolve( function( $q, $timeout ) {
-        var d = $q.defer()
-        
-        $timeout(function() { 
-            d.resolve("When this resolves, future state provider will re-sync the state/url");
-        }, 1000)
-
-        return d.promise;
-    });
-    
-    var futureState = { 
-    	type: 'ngload', 
-    	stateName: 'foo', 
-    	url: '/foo', 
-    	src: 'foo.js' 
-    };
-
-    $futureStateProvider.futureState(futureState);
-    
-    $futureStateProvider.stateFactory('ngload', dynamicStateFactory);*/
-}])
-
-.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, $flash ) {
-
-	$scope.appName = "SlipStream"
-
-	$scope.$state = $state
-
-	$scope.user = {
-		username: '',
-		password: '',
-		email: ''
-	}
-
-	$scope.reg = {
-		username: '',
-		password: '',
-		email: ''
-	}
-
-	$scope.feedbackOptions = {
-		ajaxURL: '/api/feedback',
-		postBrowserInfo: true,
-		postURL: true
-	}
-
-	// logs in. signs in and returns the user's token into her
-	// session storage
-
-	$scope.login = function() {
-		$http
-			.post( '/api/authenticate', $scope.user )
-			.success( function ( data, status ) {
-				$window.sessionStorage.token = data.token
-				$state.go( 'app.read' )
-			} )
-			.error( function ( data, status ) {
-				delete $window.sessionStorage.token
-				$flash.error = "Error signing in." 
-			} )
-	}
-
-	// registartion 
-
-	$scope.register = function () {
-		$http
-			.post( 'api/signup', $scope.reg )
-			.success( function ( data ) {
-				$window.sessionStorage.token = data.token
-				$state.go( 'app.read' )
-			})
-			.error( function ( data, status ) {
-				delete $window.sessionStorage.token
-			})
-	}
-
-	$scope.resetPassword = function () {
-		if ( $scope.user.email.length == 0 ) {
-			$flash.error = "Email address required!"
-		} else {
-			$http
-				.get( 'api/user/password/reset', {
-					params: { email: $scope.user.email }
-				})
-				.success( function ( data ) {
-					$flash.success = data
-				})
-				.error( function ( error ) {
-					$flash.error = error
-				})
-		}
-	}
-
 }])
 
 // service to add the token the header of the request
@@ -258,20 +161,3 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 	return Search
 }])
-
-// var dynamicStateFactory = function( $q, $timeout, futureState ) {
-//     var d = $q.defer();
-//     $timeout(function() {
-//     	console.log( futureState )
-      
-// 		var fullUiRouterState = {
-// 			name: futureState.stateName,
-// 			url: futureState.urlPrefix,
-// 			template: 'app/views/stream-content.html'
-// 		}
-
-// 		d.resolve(fullUiRouterState); // Async resolve of ui-router state promise
-//     }, 1000);
-
-//     return d.promise; // ui-router state promise returned
-// }

@@ -6,7 +6,9 @@ var express = require('express'),
 	blogController = require( '../controllers/blogController' ),
 	contentController = require( '../controllers/contentController' ),
 	secret = require( '../config/secretConfig' ),
-	bodyParser = require('body-parser')
+	bodyParser = require('body-parser'),
+	feedbackController = require( '../controllers/feedback-controller' ),
+	betakeyController = require( '../controllers/betakey-controller' )
 
 router.route('/authenticate')
 	.post( userController.login )
@@ -34,6 +36,12 @@ router.route('/add')
 
 router.route( '/search' )
 	.get( userController.checkAuthorization, contentController.search )
+
+router.route( '/feedback' )
+	.post( userController.checkAuthorization, feedbackController.add )
+
+router.route( '/betakeys' )
+	.get( userController.checkAuthorization, betakeyController.add )
 
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )

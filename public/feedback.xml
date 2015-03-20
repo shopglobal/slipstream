@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<external_stories type='array'>
+	<external_story>
+		<external_id>550b4dc2b72bfd09b44df9c9</external_id>
+		<name>AAGAHGHGHHHGHGHGHGHGHGH</name>
+		<description>AAGAHGHGHHHGHGHGHGHGHGH</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at>1426804162754</created_at>
+		<story_type>bug</story_type>
+		<estimate type="intiger">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>550b4ea9f9b0b6bfb507845e</external_id>
+		<name>i'm hungry!</name>
+		<description>i'm hungry!</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at>1426804393700</created_at>
+		<story_type>bug</story_type>
+		<estimate type="intiger">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>550b4f5d015d16a3b6c4ea5b</external_id>
+		<name>seriously i could die</name>
+		<description>seriously i could die</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at>1426804573199</created_at>
+		<story_type>bug</story_type>
+		<estimate type="intiger">1</estimate>
+	</external_story>
+</external_stories type='array'>

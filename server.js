@@ -23,8 +23,8 @@ app = express();
 
 app	
 	.use( morgan( 'dev' ) )
-	.use(bodyParser.urlencoded({ extended: true }))
-	.use(bodyParser.json())
+	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
+	.use( bodyParser.json( { limit: '50mb' } ) )
 	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
 
