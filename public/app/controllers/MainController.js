@@ -1,4 +1,4 @@
-app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, $flash ) {
+app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, Content, $flash ) {
 
 	$scope.appName = "SlipStream"
 
@@ -13,7 +13,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 	$scope.reg = {
 		username: '',
 		password: '',
-		email: ''
+		email: '',
+		betakey: ''
 	}
 
 	$scope.feedbackOptions = {
@@ -32,7 +33,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				$window.sessionStorage.token = data.token
 				$state.go( 'app.read' )
 			} )
-			.error( function ( data, status ) {
+			.error( function ( error ) {
+				console.log( error )
 				delete $window.sessionStorage.token
 				$flash.error = "Error signing in." 
 			} )
@@ -47,7 +49,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				$window.sessionStorage.token = data.token
 				$state.go( 'app.read' )
 			})
-			.error( function ( data, status ) {
+			.error( function ( error ) {
+				$flash.error = error
 				delete $window.sessionStorage.token
 			})
 	}
