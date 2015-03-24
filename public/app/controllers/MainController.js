@@ -32,7 +32,7 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.success( function ( data, status ) {
 				$window.localStorage.token = data.token
 				mixpanel.identify( data.id )
-				mixpanel.event( "Logged in" )
+				mixpanel.track( "Logged in" )
 				$state.go( 'app.read' )
 			} )
 			.error( function ( error ) {
@@ -55,7 +55,9 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				    "$email": data.email,
 				    "$created": new Date(),
 				    "$last_login": new Date(),
+				    "$name": data.username
 				})
+				mixpanel.track( "Registered" )
 				$state.go( 'app.read' )
 			})
 			.error( function ( error ) {
@@ -67,15 +69,22 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 	$scope.resetPassword = function () {
 		if ( $scope.user.email.length == 0 ) {
 			$flash.error = "Email address required!"
+			mixpanel.track( "Password reset failed", {
+				error: "Email address required!"
+			})
 		} else {
 			$http
 				.get( 'api/user/password/reset', {
 					params: { email: $scope.user.email }
 				})
 				.success( function ( data ) {
+					mixpanel.track( "Password reset" )
 					$flash.success = data
 				})
 				.error( function ( error ) {
+					mixpanel.track( "Password reset failed", {
+						error: error
+					} )
 					$flash.error = error
 				})
 		}

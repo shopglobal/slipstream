@@ -18,6 +18,10 @@
 					}
 				})
 				.then( function ( result ) {
+					mixpanel.track( "Embed viewed", {
+						embed_url: attrs.url
+					})
+					console.log( result.data )
 					scope.content = $sce.trustAsHtml( result.data.html )
 				})
 			}

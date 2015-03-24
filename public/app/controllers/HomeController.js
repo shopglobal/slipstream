@@ -4,6 +4,10 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.content = new Content()
 
+	mixpanel.track( "Viewed stream", {
+		stream: $state.current.name.split(".")[1]
+	})
+
 	// $scope.search = new Search()
 
 	$scope.doSearch = function() {
@@ -16,7 +20,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		$scope.content = new Search()
 		$scope.content.query = $scope.search.query
 		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
-		mixpanel.track( "Searched for " + $scope.search.query )
+		mixpanel.track( "Searched", { 
+			query: $scope.search.query
+		} )
 	}
 
 	// logs user out by deleting session storage and reloading the app
@@ -52,7 +58,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	// check if there is sessionStorage, which is probably an auth token
 
 	$scope.$on('$stateChangeStart', function () {
-		if ( $window.sessionStorage.length !== 1 ) {
+		if ( $window.localStorage.length !== 1 ) {
 			$state.go( 'landing.login ')
 		}
 	})
@@ -62,6 +68,11 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	$scope.deleteItem = function ( type, id ) {
 		$http.delete( 'api/stream/' + type, { params: { id: id } } )
 		.success( function ( data, status ) {
+			mixpanel.track( "Deleted item", {
+				stream: type,
+				content_id: id
+			})
+			console.log( data )
 			$scope.content.loadMore( $state.current.name.split(".")[1], 2 )
 		})
 		.error( function ( error ) {
@@ -77,6 +88,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			})
 			.success( function ( result ) {
 				$flash.success = "Tag added."
+				mixpanel.track( "Added tag", {
+					tag: tag
+				})
 			})
 			.error( function ( error ) {
 				$flash.error = error
@@ -91,6 +105,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			} } )
 			.success( function ( result ) {
 				$flash.success = "Tag removed."
+				mixpanel.track( "Removed tag", {
+					tag: tag
+				})
 			})
 			.error( function ( error ) {
 				$flash.error = error
@@ -99,6 +116,10 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.openReaderModal = function ( article ) {
 		console.log( "modal should open ")
+
+		mixpanel.track( "Opened reader", {
+			article: article
+		})
 
 		var modalInstance = $modal.open( {
 			templateUrl: "app/views/reader-modal.html",

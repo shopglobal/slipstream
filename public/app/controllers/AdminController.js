@@ -10,6 +10,9 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 			})
 			.success( function ( data, status ) {
 				$scope.newBetaKeys = data
+				mixpanel.track( "Made beta keys", {
+					amount: amount
+				})
 			})
 			.error( function ( error ) {
 				$flash.error = error

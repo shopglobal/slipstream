@@ -9,6 +9,8 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 		type: $state.current.name.split(".")[1]
 	}
 
+	mixpanel.track( "Add modal opened" )
+
 	// adds article ontent to the user's database and stream
 
 	$scope.addContent = function () {
@@ -27,6 +29,12 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 				$scope.contentPreview = data
 				$scope.showPreview = true
 				$scope.showSpinner = false
+				console.log( data )
+				mixpanel.track( "Added content", {
+					stream: $scope.contentParams.type,
+					title: data.title,
+					url: $scope.contentParams.url
+				})
 			})
 			.error( function ( error, status ) {
 				$scope.showSpinner = false
@@ -54,8 +62,12 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	// changes
 
 	$scope.cancel = function() {
-		if ( $scope.showPreview === true )
+		if ( $scope.showPreview === true ) {
+			mixpanel.track( "Add item cancelled", {
+				url: $scope.contentParams.url
+			})
 			$scope.deleteItem()
+		}
 		$modalInstance.close()
 	}
 
@@ -65,6 +77,10 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	$scope.done = function( id ) {
 		if( $scope.tags.length === 0 ) {
 			$modalInstance.close()
+			mixpanel.track( "Add modal done", {
+				url: $scope.contentParams.url,
+				title: $scope.contentPreview.title
+			} )
 			$state.reload()
 		} else {
 			$http
@@ -74,6 +90,15 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 				})
 				.success( function ( result ) {
 					$modalInstance.close()
+					mixpanel.track( "Add modal done", {
+						url: $scope.contentParams.url,
+						title: $scope.contentPreview.title
+					})
+					mixpanel.track( "Tags added",{
+						title: $scope.contentPreview.title,
+						url: $scope.contentParams.url,
+						tags: $scope.tags
+					})
 					$state.reload()
 				})
 				.error( function ( error ) {
