@@ -3,10 +3,8 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 	$scope.getBetaKeys = function( amount ) {
 		
 		$http
-			.get( '/api/betakeys', {
-				params: {
-					amount: amount
-				}
+			.post( '/api/betakeys', {
+				amount: amount
 			})
 			.success( function ( data, status ) {
 				$scope.newBetaKeys = data
@@ -18,4 +16,10 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 				$flash.error = error
 			})
 	}
+
+	$http
+		.get( '/api/betakeys' )
+		.success( function ( data, status ) {
+			$scope.oldBetaKeys = data
+		})
 }])
