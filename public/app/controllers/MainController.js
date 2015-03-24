@@ -31,6 +31,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.post( '/api/authenticate', $scope.user )
 			.success( function ( data, status ) {
 				$window.localStorage.token = data.token
+				mixpanel.identify( data.id )
+				mixpanel.event( "Logged in" )
 				$state.go( 'app.read' )
 			} )
 			.error( function ( error ) {
@@ -47,6 +49,13 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.post( 'api/signup', $scope.reg )
 			.success( function ( data ) {
 				$window.localStorage.token = data.token
+				mixpanel.identify( data.id )
+				mixpanel.people.set({
+				    "id": data._id,
+				    "$email": data.email,
+				    "$created": new Date(),
+				    "$last_login": new Date(),
+				})
 				$state.go( 'app.read' )
 			})
 			.error( function ( error ) {

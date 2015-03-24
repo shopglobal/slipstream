@@ -16,12 +16,14 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		$scope.content = new Search()
 		$scope.content.query = $scope.search.query
 		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+		mixpanel.track( "Searched for " + $scope.search.query )
 	}
 
 	// logs user out by deleting session storage and reloading the app
 
 	$scope.logout = function() {
 			delete $window.sessionStorage.token
+			mixpanel.track( "Logged out" )
 			$state.go( 'landing.login' )
 	}
 

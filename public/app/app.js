@@ -82,8 +82,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		return {
 			request : function (config) {
 				config.headers = config.headers || {}
-				var iframelyPath = "https://glacial-sea-2323.herokuapp.com/iframely"
-				if ( $window.localStorage.token && config.url !==  iframelyPath ) {
+				if ( $window.localStorage.token && config.url.indexOf( "iframely" ) == -1 ) {
 					config.headers.Authorization = 'Bearer ' + $window.localStorage.token
 				}
 				return config

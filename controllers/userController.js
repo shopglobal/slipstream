@@ -33,7 +33,7 @@ exports.login = function ( req, res ) {
 				return res.status( 403 ).send( { message: "Your password wasn't authenticated." } )
 
 			else 
-				res.status( 200 ).json( { token: user.token } )
+				res.status( 200 ).json( { token: user.token, id: user._id } )
 
 		} )
 		
