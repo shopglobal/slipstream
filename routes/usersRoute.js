@@ -41,7 +41,9 @@ router.route( '/feedback' )
 	.post( userController.checkAuthorization, feedbackController.add )
 
 router.route( '/betakeys' )
-	.get( userController.checkAuthorization, betakeyController.add )
+	.post( userController.checkAuthorization, betakeyController.add )
+	.get( userController.checkAuthorization, betakeyController.show )
+
 
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
