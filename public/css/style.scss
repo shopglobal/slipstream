@@ -225,7 +225,11 @@ a { color: $green;
 		&:hover { background: $darkbase; }
 		&:hover > a:visited, &:hover > a { color: white; } } }
 
-footer { bottom: 0; position: absolute; }
+.wrapper { min-height: 100%; position: relative; }
+
+#viewport { padding-bottom: 40px; }
+
+footer { bottom: 0; position: absolute; height: 25px; }
 
 // modals
 

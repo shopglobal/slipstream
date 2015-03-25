@@ -15,6 +15,8 @@ mixpanel.init("fb14ea6067cae81fca2065decd9b3629");</script>
 <!-- endbuild -->
 
 <body ng-app="SlipStream" ng-controller="MainController" ng-class="{ 'landing' : $state.includes( 'landing' ), 'app' : $state.includes( 'app' ) }">
+	
+	<div class="wrapper">
 
 	<div flash-alert="error" active-class="in alert alert-danger flash-alert" class="fade">
 		<p class="alert-message text-center">{{ flash.message }}</p>
@@ -25,6 +27,8 @@ mixpanel.init("fb14ea6067cae81fca2065decd9b3629");</script>
 	</div>
 
 	<div ui-view id="viewport" height="100%"></div>
+
+	</div>
 
 </body>
 
