@@ -7,7 +7,8 @@ var User = require( '../models/userModel' ),
 	bcrypt = require( 'bcrypt-nodejs' ),
 	log = require( '../helpers/logger.js' ),
 	Q = require( 'q' ),
-	Betakey = require( '../models/betakey-model' )
+	Betakey = require( '../models/betakey-model' ),
+	getUser = require( '../helpers/get-user' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
@@ -22,18 +23,18 @@ exports.login = function ( req, res ) {
 	.then( function ( user ) {
 		if ( !user ) {
 			log.error( { username: req.body.username }, "Error logging in." )
-			return res.status( 403 ).json( "Error loggin in with those credentials" )
+			return res.status( 403 ).json( "Error logging in with those credentials." )
 		}
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
 			if (err)
-				return res.status( 500 ).send( { error: error.message } )
+				return res.status( 500 ).json( err )
 
 			if ( !isMatch )
-				return res.status( 403 ).send( { message: "Your password wasn't authenticated." } )
+				return res.status( 403 ).send( "Your password wasn't authenticated." )
 
 			else 
-				res.status( 200 ).json( { token: user.token, id: user._id } )
+				return res.status( 200 ).json( { token: user.token, id: user._id } )
 
 		} )
 		
@@ -102,10 +103,10 @@ exports.signUp = function ( req, res ) {
 //
 exports.getUser = function( req, res ) {
 	User.findOne( { token: req.token }, function( err, user ) {
-		if (err)
-			res.send(err)
+		if ( err || !user )
+			return res.status( 500 ).json( "Error getting that user info." )
 
-		res.json({
+		return res.status( 200 ).json({
 			id: user._id,
 			username: user.username,
 			email: user.email,
@@ -229,7 +230,26 @@ exports.sendPasswordReset = function ( req, res ) {
 	
 }
 
+/*
+ENDPOINT: /api/user/password/change
+
+ACCEPTS: oldPassword and newPassword
+
+DESCRIPTION: Confirms a users old password and sets a new password.
+*/
 exports.changePassword = function ( req, res ) {
+	
+	function verifyOldPassword ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			user.verifyPassword( req.body.oldPassword, function( err, isMatch ) {
+				if ( err || !isMatch )
+					return res.status( 403 ).send( { message: "Please verify your old password." } )
+
+				else 
+					resolve( user )
+			} )
+		})
+	}
 	
 	function generatePassword ( user ) {
 		var userObj = {
@@ -243,7 +263,7 @@ exports.changePassword = function ( req, res ) {
 
 				bcrypt.hash( req.body.newPassword, salt, null, function( err, hash ) {
 					if (err)
-						reject( new Error( "Could not hash new temporary password." ) )
+						return reject( new Error( "Could not hash new temporary password." ) )
 
 					userObj.password = hash
 
@@ -271,12 +291,13 @@ exports.changePassword = function ( req, res ) {
 	}	
 	
 	getUser( req.token )
+	.then( verifyOldPassword )
 	.then( generatePassword )
 	.then( savePassword )
 	.then( function ( user ) {
-		return res.json( "The password was changed for user." )
+		return res.json( "Your password was changed." )
 	}, function ( error ) {
 		log.error( error )
-		return res.status( 500 ).send( { error: error.message } )
+		return res.status( 500 ).json( error.message )
 	})
 }

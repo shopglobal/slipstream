@@ -1,6 +1,9 @@
-// controls the user profile screen
+app.controller('ProfileController', ['$scope', '$state', '$urlRouter', '$http', '$modal', 'flash', function( $scope, $state, $urlRouter, $http, $modal, $flash) {
 
-app.controller('ProfileController', ['$scope', '$state', '$urlRouter', '$http', '$modal', function( $scope, $state, $urlRouter, $http, $modal ) {
+	$scope.passwords = {
+		newPassword: "",
+		oldPassword: ""
+	}
 
 	$http
 		.get( '/api/users' )
@@ -10,5 +13,25 @@ app.controller('ProfileController', ['$scope', '$state', '$urlRouter', '$http', 
 			.error( function( error ) {
 				console.log( "Error retrieving user: " + error )
 			})
+
+	$scope.changePassword = function () {
+		$http
+			.post( '/api/user/password/change', {
+				newPassword: $scope.passwords.newPassword,
+				oldPassword: $scope.passwords.oldPassword
+			})
+			.success( function ( data ) {
+				mixpanel.track( "Password changed", {
+					result: "success"
+				})
+				location.reload()
+			})
+			.error( function ( error ) {
+				mixpanel.track( "Password change error", {
+					error: error
+				})
+				$flash.error = error
+			})
+	}
 
 }])
