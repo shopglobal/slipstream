@@ -165,6 +165,7 @@ a { color: $green;
 .modal-logo { position: fixed; top: 0; left: -275px; width: 200px; }
 
 .login-meta-links { color: $dark-text;
+	a { text-decoration: underline; }
 	ul { 
 	li { display: inline; }
 	li:first-child { list-style-type: none; }
