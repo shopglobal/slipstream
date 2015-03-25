@@ -66,6 +66,18 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			})
 	}
 
+	$scope.deleteAccount = function () {
+		$http
+			.delete( '/api/users' )
+			.success( function ( data ) {
+				mixpanel.track( "Account deleted" )
+				$state.go( 'landing.splash' )
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+	}
+
 	$scope.resetPassword = function () {
 		if ( $scope.user.email.length == 0 ) {
 			$flash.error = "Email address required!"

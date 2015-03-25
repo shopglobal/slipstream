@@ -15,7 +15,7 @@ router.route('/authenticate')
 
 router.route('/users')
 	.get( userController.checkAuthorization, userController.getUser )
-	.delete( userController.deleteUser )
+	.delete( userController.checkAuthorization, userController.deleteUser )
 
 router.route('/signup')
 	.post( userController.signUp )

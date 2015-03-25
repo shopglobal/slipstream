@@ -82,7 +82,7 @@ exports.signUp = function ( req, res ) {
 	.then( function ( betakey ) {
 		user.save(function( err, user ) {
 			if (err)
-				return res.send( err )
+				return res.status( 500 ).json( err )
 
 			user.token = jwt.sign(user , secret.secretToken )
 			user.save( function ( err, user ) {
@@ -118,11 +118,12 @@ exports.getUser = function( req, res ) {
 // delete a user
 //
 exports.deleteUser = function( req, res ) {
-	User.remove( { token: req.token }, function( err, user) {
-		if (err)
-			res.send(err)
-
-		res.json("User removed.")
+	User.findOneAndRemove( { token: req.token } ).exec()
+	.then( function ( data ) {
+		return res.status( 200 ).json( "User removed. Bye." )		
+	}, function ( error ) {
+		console.log( error )		
+		return res.status( 500 ).json( error )		
 	})
 }
 

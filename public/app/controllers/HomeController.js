@@ -59,7 +59,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.$on('$stateChangeStart', function () {
 		if ( $window.localStorage.length !== 1 ) {
-			$state.go( 'landing.login ')
+			$state.go( 'landing.login')
 		}
 	})
 
