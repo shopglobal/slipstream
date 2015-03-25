@@ -52,11 +52,21 @@ UserSchema.pre( 'save', function(callback) {
 // adds verifyPassword method to user schema
 // 
 UserSchema.methods.verifyPassword = function( password, callback ) {
-	bcrypt.compare(password, this.password, function(err, isMatch) {
-		if (err)
-			return callback(err)
-
-		callback( null, isMatch )
+	
+	var tempPassword = this.tempPassword
+	
+	bcrypt.compare(password, this.password, function( err, isMatch ) {
+		if (err) return callback(err)
+			
+		if ( !isMatch ) {
+			bcrypt.compare( password, tempPassword, function ( err, isMatch ) {
+				if ( err ) return callback( err )
+				
+				return callback( null, isMatch )
+			})
+		} else {
+			return callback( null, isMatch )
+		}
 	})
 }
 

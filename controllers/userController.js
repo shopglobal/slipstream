@@ -43,9 +43,13 @@ exports.login = function ( req, res ) {
 	})
 }
 
-//
-// new user sign up
-//
+/*
+ENDPOINT: /api/signup
+
+METHOD: POST
+
+DESCRIPTION: Accepts email, password, username and beta-key
+*/
 exports.signUp = function ( req, res ) {
 	var user = new User({
 		username: req.body.username,
@@ -152,7 +156,7 @@ exports.sendPasswordReset = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			User.findOneAndUpdate( 
 				{ email: req.query.email },
-				{ password: password.encryptedPassword } 
+				{ tempPassword: password.encryptedPassword } 
 			).exec()
 			.then( function ( user ) {
 				if ( !user )
