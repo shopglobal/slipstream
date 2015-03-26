@@ -18,7 +18,8 @@ var fs = require('fs'),
 	ImageResolver = require( 'image-resolver' ),
 	articleTitle = require( 'article-title' ),
 	s3sig = require( 'amazon-s3-url-signer' ),
-	htmlStripper = require( 'htmlstrip-native' )
+	htmlStripper = require( 'htmlstrip-native' ),
+	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
 
@@ -55,24 +56,22 @@ exports.add = function ( req, res ) {
 					})
 				})
 				.then( function () {
-
-					read( req.body.url, function( err, data, meta ) {
-						if ( err || !data )
-							reject( new Error( "Problem reading article." ) )
-							
-						var description = htmlStripper.html_strip( data.content, {
+					readability( req.body.url, { sanitize: true, userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.4.10 (KHTML, like Gecko) Version/8.0.4 Safari/600.4.10" })
+					.then( function ( article ) {
+						var description = htmlStripper.html_strip( article.content, {
 							include_script : false,
     						include_style : false,
     						compact_whitespace : true } ).substring( 0, 400 )
 
 						_.extend( newArticle, {
-							title: data.title,
+							title: article.title,
 							description: description,
-							content: data.content } )
-
-						data.close()
-
-						resolve( newArticle )
+							content: article.content } )
+						
+						resolve( newArticle )						
+					})
+					.catch( function ( error ) {
+						reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
 					})
 				})
 				.catch( function ( error ) {
