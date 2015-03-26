@@ -11,7 +11,7 @@
 					<h2 data-ng-bind="item.title"></h2>
 				</a>
 
-				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-hide=" item.stream == 'read' "></div>
+				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 
 				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
 
