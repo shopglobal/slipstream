@@ -116,6 +116,8 @@ a { color: $green;
 
 .btn-font-light { font-weight: 300; }
 
+.btn-back { position: absolute; top: -125px; }
+
 .font-sans-serif { font-family: $body-font; }
 
 .input-white { background: transparent; border-color: white; color: white;
