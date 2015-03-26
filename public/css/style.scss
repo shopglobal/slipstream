@@ -158,7 +158,8 @@ a { color: $green;
 
 .spinner { padding: 15px; clear: both; }
 
-.btn-x { font-size: 24px; font-family: Oxygen; font-weight: 300; }
+.btn-x { font-size: 24px; font-family: Oxygen; font-weight: 300;
+	img { width: 50%; height: auto; } }
 
 .add-form { margin-top: 20px; }
 
@@ -181,7 +182,7 @@ a { color: $green;
 
 .input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; }
 
-.navbar-center { position: absolute; left: 50%; margin-left: -142.5px; }
+.navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
 
 // admin
 
@@ -239,13 +240,14 @@ footer { bottom: 0; position: absolute; height: 25px; }
 .add-modal { background-color: rgba( 41, 41, 59, 0.70);
 	.done-button { margin: 0; padding: 0; position: absolute; right: 0; bottom: 0; }
 	.modal-dialog { width: 625px; }
-	.modal-content { box-shadow: none; background: rgba( 255, 255, 255, .99);  } }
+	.modal-content { box-shadow: none; background: rgba( 255, 255, 255, .98);  } }
 
-#addModal { margin-top: 15px; margin-bottom: 15px;
+#addModal { margin-top: 15px; margin-bottom: 15px; position: relative;
+	.btn-x { position: absolute; top: -10px; right: -13px; }
 	.add-form { padding: 0; margin: 0; 
 		.add-form-text { padding: 0 } 
 		.add-form-toggle { padding: 0; margin: 0;
-			.add-form-toggle-buttons { min-width: 100px; border: none; box-shadow: none; padding: 0; margin: 7px 0; } } }
+			.add-form-toggle-buttons { min-width: 100px; border: none; box-shadow: none; padding: 0; margin: 7px 0; background: transparent; } } }
 	.type-toggle { border: 2px solid $green; font-size: 18px; padding: 2px 20px 3px 20px;
 		& > input { visibility: hidden; position: absolute; }
 		& > input + span { color: #ccc; }
@@ -265,8 +267,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 	p { font-size: 16px; margin: 17px 0; }
 	img { clear: both; max-width: 100%; height: auto; margin: 0 auto; display: block; }
 	.modal-content { height: 90%; overflow: scroll; border: 0; box-shadow: 0px 0px 20px 20px white; }
-	.share-links { position: fixed; top: 0; right: -150px; z-index: 100; }
-}
+	.share-links { position: fixed; top: 0; right: -150px; z-index: 100; } }
 
 // content
 
