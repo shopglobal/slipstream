@@ -2,7 +2,7 @@
 		
 		<h2 class="pull-left">Add to Stream</h2>
 
-		<button class="btn pull-right no-border btn-green btn-x" ng-click="cancel()">
+		<button class="btn pull-right no-border btn-x" ng-click="cancel()">
 			<img src="images/x_addmodal.png" alt="">
 		</button>
 
@@ -15,18 +15,18 @@
 			<div class="clear-fix"></div>
 			
 			<div class="add-form-toggle col-md-4">
-				<form name="" class="form-control pull-right add-form-toggle-buttons" >
+				<form name="" class="form-control pull-right add-form-toggle-buttons" toggle-buttons>
 					<div class="btn-group pull-right">
 						<label for="read" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="read" name="type" value="read" ng-checked="{{ currentState == 'app.read' }}" ng-model="contentParams.type" />
+							<input type="radio" id="read" name="type" value="read" ng-checked=" currentState == 'app.read' " ng-model="contentParams.type" class="input-add-checkbox" />
 							<span class="glyphicon glyphicon-book"></span>
 						</label>
 						<label for="watch" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="watch" name="type" value="watch" ng-checked="{{ currentState == 'app.watch' }}" ng-model="contentParams.type" />
-							<span class="glyphicon glyphicon-film"></span>
+							<input type="radio" id="watch" name="type" value="watch" ng-checked=" currentState == 'app.watch' " ng-model="contentParams.type" class="input-add-checkbox" />
+							<span class="glyphicon glyphicon-play-circle"></span>
 						</label>
 						<label for="listen" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="listen" name="type" value="listen" ng-checked="{{ currentState == 'app.listen' }}" ng-model="contentParams.type" />
+							<input type="radio" id="listen" name="type" value="listen" ng-checked=" currentState == 'app.listen' " ng-model="contentParams.type" class="input-add-checkbox" />
 							<span class="glyphicon glyphicon-headphones"></span>
 						</label>
 					</div>

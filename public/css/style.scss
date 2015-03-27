@@ -29,7 +29,7 @@
 	font-weight: 700;
 }
 
-$green: #00E0AA;
+$green: #00E0AA	;
 $green-grey: #212321;
 $red: #E44A39;
 $orange: #FF7E32;
@@ -93,7 +93,7 @@ a { color: $green;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
-	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } 
+	&:hover { background: $green !important; border-color: $green; color: white; box-shadow: none; text-decoration: none; } 
 	&.no-border { 
 		&:hover, &:active { color: $green; } } }
 
@@ -256,7 +256,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		& > input { visibility: hidden; position: absolute; }
 		& > input + span { color: #ccc; }
 		& > input:hover + span { color: $highlight; }
-		& > input:checked + span { color: $darkbase; }
+		& > input:checked + span { color: $highlight; }
 		& > input:checked:hover + span { color: $highlight; } }
 	.article-preview { padding-top: 20px;
 		.preview-text { padding: 0; margin: 0; 
@@ -276,7 +276,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 // content
 
 .share-links { position: absolute; bottom: 0; right: 15px; display: block; 
-		.glyphicon { font-size: 24px; } }
+	.glyphicon { font-size: 24px; } }
 
 .share-links-stacked {
 	button, span { clear: both; display: block; }

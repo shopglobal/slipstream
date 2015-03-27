@@ -149,7 +149,7 @@ a {
   text-decoration: none; }
   /* line 96, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
   .btn-green:hover {
-    background: #00E0AA;
+    background: #00E0AA !important;
     border-color: #00E0AA;
     color: white;
     box-shadow: none;
@@ -612,7 +612,7 @@ footer {
       color: white; }
     /* line 259, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input:checked + span {
-      color: #00E0AA; }
+      color: white; }
     /* line 260, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
     #addModal .type-toggle > input:checked:hover + span {
       color: white; }

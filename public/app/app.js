@@ -183,3 +183,28 @@ app.directive('ngReallyClick', [ function() {
         }
     }
 }])
+
+app.directive( 'toggleButtons', [ function () {
+	return {
+		link: function ( scope, element ) {
+			var toggleButtons = element.find( '.input-add-checkbox' )
+
+			function checkState() {
+				Array.prototype.forEach.call( toggleButtons, function( each ) {
+					if ( each.checked )
+						each.parentNode.style.backgroundColor = "#00E0AA"
+					else if ( !each.checked )
+						each.parentNode.style.backgroundColor = "transparent"
+				})
+			}
+
+			Array.prototype.forEach.call( toggleButtons, function (each) {
+				each.addEventListener( 'click', function () {
+					checkState()
+				})
+			})
+
+			setTimeout(checkState(), 1000)
+		}
+	}
+}]) 
