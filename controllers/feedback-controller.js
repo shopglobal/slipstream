@@ -32,7 +32,7 @@ exports.add = function ( req, res ) {
 					description: req.body.feedback.comment,
 					requested_by: username,
 					created_at: ( new Date() / 1 ).toFixed(),
-					story_type: 'bug',
+					story_type: 'feature',
 					estimate: 1
 				})
 
@@ -54,14 +54,18 @@ exports.add = function ( req, res ) {
 				var xml = builder.create( "external_stories", { encoding: 'UTF-8' } )
 				
 				results.forEach( function( each ) {
+					var dateObj = new Date( each.created_at )
+					
+					var dateCreated = dateObj.getFullYear() + "/" + dateObj.getUTCMonth() + "/" + dateObj.getDay() + " " + dateObj.getHours() + ":" + dateObj.getUTCMinutes() + ":" + dateObj.getUTCSeconds() + " UTC"
+					
 					xml.ele( 'external_story' )
 						.ele( 'external_id', each._id.toString() )
 						.insertAfter( 'name', each.name )
 						.insertAfter( 'description', each.description )
 						.insertAfter( 'requested_by', each.requested_by )
-						.insertAfter( 'created_at', each.created_at )
+						.insertAfter( 'created_at', { type: "datetime" }, dateCreated )
 						.insertAfter( 'story_type', each.story_type )
-						.insertAfter( 'estimate', { type: 'intiger' }, each.estimate )
+						.insertAfter( 'estimate', { type: 'integer' }, 1)
 				})
 				
 				xmlString = xml.end( { pretty: true, indent: '	', offset: 0, newline: '\n' } )
@@ -77,7 +81,7 @@ exports.add = function ( req, res ) {
 	.then( function( xml ) {
 		var xmlParts = xml.split( 'external_stories', 2 )
 		
-		var xmlFinal = xmlParts[0] + 'external_stories type="array"' + xmlParts[1] + 'external_stories >'
+		var xmlFinal = xmlParts[0] + 'external_stories type="array"' + xmlParts[1] + 'external_stories>'
 		
 		fs.writeFile( xmlOutput, xmlFinal, function( err ) {
 			if ( err ) return res.status( 500 ).json( "Could not save feedback." )
