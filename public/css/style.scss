@@ -195,9 +195,11 @@ a { color: $green;
 #header { 
 	.navbar-brand { padding-top: 10px;
 		#logo { height: 30px; } }
-	.narvbar-search { background-color: #6BECC9; height: 28px; border: none; color: white; font-weight: 700;
+	.narvbar-search { background-color: #6BECC9; height: 28px; border: none; color: $dark-text; font-weight: 300;
 		&::-webkit-input-placeholder { color: #D9FEF3; font-weight: 700; text-align: center; font-size: 17px; line-height: 20px;
-			&:before { content: "\e003"; font-family: 'Glyphicons Halflings'; font-size: 14px; padding-right: 3px; } } }
+			&:before { content: "\e003"; font-family: 'Glyphicons Halflings'; font-size: 14px; padding-right: 3px; } } 
+		&:focus { background-color: white; transition: background-color 400ms linear; 
+			&::-webkit-input-placeholder { color: $grey; transition: color 400ms linear; margin-left: 0; transition: margin-left 400ms linear; } } }
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
 		.dropdown-menu { z-index: 1000; }
 		.navbar-center input[type='text'] { width: 255px; } } 
