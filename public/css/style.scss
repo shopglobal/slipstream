@@ -29,6 +29,12 @@
 	font-weight: 700;
 }
 
+@font-face {
+	font-family: 'BrandIcons';
+	src: url('../fonts/brandico.woff');
+	font-style: normal;
+}
+
 $green: #00E0AA	;
 $green-grey: #212321;
 $red: #E44A39;
@@ -93,9 +99,9 @@ a { color: $green;
 	&:hover { background: $highlight; color: $darkbase; box-shadow: none; text-decoration: none; } }
 
 .btn-green { background: transparent; border: solid 2px $green; color: $green; box-shadow: none; text-decoration: none;
-	&:hover { background: $green !important; border-color: $green; color: white; box-shadow: none; text-decoration: none; } 
+	&:hover { background: $green; border-color: $green; color: white; box-shadow: none; text-decoration: none; } 
 	&.no-border { 
-		&:hover, &:active { color: $green; } } }
+		&:hover, &:active { color: $green; background: transparent; } } }
 
 .btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
 	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } 
@@ -185,6 +191,10 @@ a { color: $green;
 .input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; }
 
 .navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
+
+.icon-logo { font-family: 'BrandIcons'; }
+
+.icon-twitter:after { content: "\F303"; }
 
 // admin
 
@@ -276,11 +286,12 @@ footer { bottom: 0; position: absolute; height: 25px; }
 // content
 
 .share-links { position: absolute; bottom: 0; right: 15px; display: block; 
-	.glyphicon { font-size: 24px; } }
+	.glyphicon { font-size: 24px; }
+	.dropdown-menu {
+		li .glyphicon { font-size: 14px; } } }
 
 .share-links-stacked {
-	button, span { clear: both; display: block; }
-}
+	button, span { clear: both; display: block; } }
 
 .meta-text { color: #C5C5C5; position: absolute; bottom: 0; margin: 6px 0px; }
 

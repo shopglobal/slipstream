@@ -44,13 +44,11 @@
 					  </button>
 					  
 					  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
-					    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true">Delete</a></li>
+					    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true"><span class="glyphicon glyphicon-trash"></span>  Delete</a></li>
 					  </ul>
 					</span>
 
-					<button class="btn btn-grey btn-xs no-border">
-						<a href="{{ item.url }}"><span class="glyphicon glyphicon-share-alt glyphicon-grey"></span></a>
-					</button>
+					<ng-include src="'app/views/menu-share.html'"></ng-include>
 				</div>
 				
 				<div class="clearfix"></div>
