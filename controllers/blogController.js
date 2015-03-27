@@ -56,7 +56,7 @@ exports.add = function ( req, res ) {
 					})
 				})
 				.then( function () {
-					readability( req.body.url, { sanitize: true, userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/600.4.10 (KHTML, like Gecko) Version/8.0.4 Safari/600.4.10" })
+					readability( req.body.url, { sanitize: true })
 					.then( function ( article ) {
 						var description = htmlStripper.html_strip( article.content, {
 							include_script : false,
@@ -71,6 +71,8 @@ exports.add = function ( req, res ) {
 						resolve( newArticle )						
 					})
 					.catch( function ( error ) {
+						console.error( error )
+						
 						reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
 					})
 				})
