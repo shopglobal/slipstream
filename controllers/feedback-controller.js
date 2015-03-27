@@ -51,7 +51,7 @@ exports.add = function ( req, res ) {
 			Feedback.find( {} ).exec()
 			.then( function ( results ) {
 			
-				var xml = builder.create( "external_stories", { encoding: 'UTF-8' } )
+				var xml = builder.create( "external_stories", { encoding: 'UTF-8' } ).att( 'type', 'array' )
 				
 				results.forEach( function( each ) {
 					var dateObj = new Date( each.created_at )
@@ -79,11 +79,7 @@ exports.add = function ( req, res ) {
 	.then( makeFeedback )
 	.then( createXml )
 	.then( function( xml ) {
-		var xmlParts = xml.split( 'external_stories', 2 )
-		
-		var xmlFinal = xmlParts[0] + 'external_stories type="array"' + xmlParts[1] + 'external_stories>'
-		
-		fs.writeFile( xmlOutput, xmlFinal, function( err ) {
+		fs.writeFile( xmlOutput, xml, function( err ) {
 			if ( err ) return res.status( 500 ).json( "Could not save feedback." )
 			
 			var uploader = s3Client.putFile( xmlOutput, '/feedback.xml', function ( err, result ) {
