@@ -1,22 +1,24 @@
 <div class="panel login-panel col-md-6">
 	
 	<h2 class="text-center dark-text">Login</h2><br />
+	
+	<form ng-submit="login()">
+		<div class="form-group">
 
-	<div class="form-group">
+			<label for="loginUsername" class="dark-text">Username</label>
+			<input type="text" class="username input-green form-control input-font-lg" id="loginUsername" ng-model="user.username">
 
-		<label for="loginUsername" class="dark-text">Username</label>
-		<input type="text" class="username input-green form-control input-font-lg" id="loginUsername" ng-model="user.username">
+		</div>
 
-	</div>
+		<div class="form-group">
 
-	<div class="form-group">
+			<label for="loginPassword" class="dark-text">Password</label>
+			<input type="password" class="username input-green form-control input-font-lg" id="loginPassword" ng-model="user.password" />
 
-		<label for="loginPassword" class="dark-text">Password</label>
-		<input type="password" class="username input-green form-control input-font-lg" id="loginPassword" ng-model="user.password" />
+		</div>
 
-	</div>
-
-	<button class="btn btn-green-solid btn-block btn-lg btn-font-light" ng-click="login()">Sign in</button> <br /> 
+		<button class="btn btn-green-solid btn-block btn-lg btn-font-light" ng-click="login()">Sign in</button> <br />
+	</form>
 
 	<div class="pull-right login-meta-links">
 		<ul>
