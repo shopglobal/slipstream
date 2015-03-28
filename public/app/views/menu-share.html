@@ -1,6 +1,6 @@
 <span class="dropdown menu-share">
 	<button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-share" data-toggle="dropdown" aria-expanded="true">
-		<span class="glyphicon glyphicon-share-alt glyphicon-grey"></span>
+		<span class="glyphicon glyphicon-send glyphicon-grey"></span>
 		<span class="sr-only">
 		Toggle Item Share Menu
 	</span>
@@ -8,6 +8,5 @@
 	
 	<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
 		<li role="presentation"><a href="https://twitter.com/intent/tweet?text={{ item.title | limitTo: 99 }}&via=getslipstream" target="_blank"><span class="icon-logo icon-twitter"></span> Tweet</a></li>
-		<li role="presentation"><a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Original</a></li>
 	</ul>
 </span>
