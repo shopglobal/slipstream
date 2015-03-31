@@ -192,7 +192,7 @@ app.directive( 'toggleButtons', [ function () {
 			function checkState() {
 				Array.prototype.forEach.call( toggleButtons, function( each ) {
 					if ( each.checked )
-						each.parentNode.style.backgroundColor = "#00E0AA"
+						each.parentNode.style.backgroundColor = "#5CD298"
 					else if ( !each.checked )
 						each.parentNode.style.backgroundColor = "transparent"
 				})
@@ -204,7 +204,7 @@ app.directive( 'toggleButtons', [ function () {
 				})
 			})
 
-			setTimeout(checkState(), 1000)
+			setTimeout(checkState(), 2000)
 		}
 	}
 }]) 

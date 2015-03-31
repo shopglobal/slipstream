@@ -35,7 +35,7 @@
 	font-style: normal;
 }
 
-$green: #5CD298	;
+$green: #5CD298;
 $green-grey: #212321;
 $red: #E44A39;
 $orange: #FF7E32;
@@ -274,8 +274,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 			.add-form-toggle-buttons { min-width: 100px; border: none; box-shadow: none; padding: 0; margin: 7px 0; background: transparent; } } }
 	.type-toggle { border: 2px solid $green; font-size: 18px; padding: 2px 20px 3px 20px;
 		& > input { visibility: hidden; position: absolute; }
-		& > input + span { color: #ccc; }
-		& > input:hover + span { color: $highlight; }
+		& > input + span { color: $green; }
 		& > input:checked + span { color: $highlight; }
 		& > input:checked:hover + span { color: $highlight; } }
 	.article-preview { padding-top: 20px;
