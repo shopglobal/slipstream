@@ -35,7 +35,7 @@
 	font-style: normal;
 }
 
-$green: #00E0AA	;
+$green: #5CD298	;
 $green-grey: #212321;
 $red: #E44A39;
 $orange: #FF7E32;
@@ -216,6 +216,10 @@ a { color: $green;
 			&:before { content: "\e003"; font-family: 'Glyphicons Halflings'; font-size: 14px; padding-right: 3px; } } 
 		&:focus { background-color: white; transition: background-color 400ms linear; 
 			&::-webkit-input-placeholder { color: $grey; transition: color 400ms linear; margin-left: 0; transition: margin-left 400ms linear; } } }
+	.container-discovery { margin-right: 100px; position: relative;
+		a { padding: 5px 0 0 0; height: 28px; color: #80E1B9; font-weight: 500; font-size: 19px; }
+			.text-discovery { position: absolute; top: 14px; }
+			img { width: auto; height: 37px; } }
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
 		.dropdown-menu { z-index: 1000; }
 		.navbar-center input[type='text'] { width: 255px; } } 

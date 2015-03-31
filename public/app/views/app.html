@@ -27,6 +27,15 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
+					<li class="container-discovery">
+						<a href="" class="a-discovery">
+							<img src="images/binoculars_discovery.png" alt="" class="img-discovery">
+							<span class="text-discovery">
+								Discover
+							</span> 
+						</a>
+					</li>
+
 					<li class="add-container">
 						<a href="" ng-click="openAddModal()"><div class="add-button">+</div></a>
 					</li>
@@ -55,7 +64,7 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="nav-row-2" >
 		<div class="container" >
 			
-			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick" ng-hide=" $state.includes('app.profile') " >
+			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick" ng-hide=" $state.includes('app.profile') || $state.includes('app.admin') " >
 				<div class="btn-group">
 					<button ui-sref="app.read" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}">
 						<span class="glyphicon glyphicon-book"></span>
