@@ -66,13 +66,13 @@
     "q": "^1.1.2",
     "random-key": "^0.3.2",
     "read-chunk": "^1.0.1",
+    "readable-proxy": "OKNoah/readable-proxy-jsdom#8fe343ee0746a42185ab8c095c8b5d2fe4d2dd21",
     "request": "^2.51.0",
     "s3": "^4.4.0",
     "soundclouder": "^0.8.1",
     "uglify-js": "^2.4.17",
     "underscore": "^1.7.0",
-    "xmlbuilder": "^2.6.2",
-    "readable-proxy": "OKNoah/readable-proxy-jsdom#27d6acdd3d1215cefd8a70ec7d1832da30f872b5"
+    "xmlbuilder": "^2.6.2"
   },
   "devDependencies": {
     "chai": "^2.0.0",

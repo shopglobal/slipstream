@@ -10,7 +10,7 @@ angular.module( 'iframely', [])
 		template: '<div ng-bind-html="content"></div>',
 		link: function ( scope, element, attrs ) {
 			$http( {
-				url: 'http://localhost:8061/iframely',
+				url: 'https://glacial-sea-2323.herokuapp.com/iframely',
 				method: 'GET',
 				params: {
 					url: attrs.url
