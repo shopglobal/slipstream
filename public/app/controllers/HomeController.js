@@ -1,5 +1,7 @@
 app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search ) {
 
+	$window.scrollTo( 0, 0 )
+
 	$scope.currentStream = $state.current.name.split(".")[1]
 
 	$scope.content = new Content()
