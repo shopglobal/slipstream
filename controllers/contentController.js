@@ -38,11 +38,14 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			var content = new Content( _.extend({
-				user: user._id,
-				stream: req.body.type,
-				added: ( new Date() / 1).toFixed(),
 				url: req.body.url
 			}, contentInfo.meta ))
+			
+			var users = content.users.create({
+				user: user._id,
+				added: ( new Date() / 1).toFixed(),
+				stream: req.body.type
+			})
 
 			if ( contentInfo.links[2].href ) {
 				saveImage( req.body.type, contentInfo.links[2].href )

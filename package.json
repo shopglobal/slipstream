@@ -66,7 +66,7 @@
     "q": "^1.1.2",
     "random-key": "^0.3.2",
     "read-chunk": "^1.0.1",
-    "readable-proxy": "OKNoah/readable-proxy-jsdom#8fe343ee0746a42185ab8c095c8b5d2fe4d2dd21",
+    "readable-proxy": "OKNoah/readable-proxy-jsdom#7242f7eb369815ed9de895dc74c8446a7ca36194",
     "request": "^2.51.0",
     "s3": "^4.4.0",
     "soundclouder": "^0.8.1",

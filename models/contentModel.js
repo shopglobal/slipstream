@@ -5,6 +5,18 @@ var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex('Contents')
 
+/*
+This first model is for the subdocuments. These record the instances that a user saves the article. It lacks the article text and is inserted in the main article object within an array.article
+*/
+var UsersSchema = new mongoose.Schema({
+	user: String,
+	steam: String,
+	author: String,
+	tags: Array,
+	thumb: Number,
+	added: Number
+})
+
 var ContentSchema = new mongoose.Schema( {
 	user: String,		// ther user._id that this item belongs to
 	stream: String,		// the stream it will apppear in for that user
@@ -28,7 +40,8 @@ var ContentSchema = new mongoose.Schema( {
 	likes: Number, 		// number of lives on parent site
 	dislikes: Number, 	// number of dislikes on parent site
 	shares: Number,		// number of times share on social media/email
-	processing: Boolean // whether the item is still being loaded in the background
+	processing: Boolean, // whether the item is still being loaded in the background
+	users: [ UsersSchema ]	// includes users sub-document
 })
 
 /*

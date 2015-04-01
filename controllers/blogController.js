@@ -28,6 +28,27 @@ exports.add = function ( req, res ) {
 	function getArticle ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
+			/*
+			If the article already exists, save the user to it and return the article, minus the `users` sub-document
+			*/
+			Content.findOne( { url: req.body.url } ).exec()
+			.then( function ( result ) {
+				if ( result ) {
+					console.log( "Article already exists: " + result.title )
+					var users = result.users.push({
+						user: user._id,
+						added: ( new Date() / 1).toFixed(),
+						stream: 'read'
+					})
+					result.save()
+					return res.status( 200 ).json({
+						title: result.title,
+						description: result. description,
+						images: result.images
+					})
+				}
+			})
+			
 			var imageResolver = new ImageResolver()
 		
 			imageResolver.register(new ImageResolver.FileExtension())
@@ -36,12 +57,9 @@ exports.add = function ( req, res ) {
 			imageResolver.register(new ImageResolver.Webpage())
 			
 			var newArticle = new Content({
-				user: user._id,
 				images: [],
 				processing: true,
-				stream: 'read',
-				url: req.body.url,
-				added: ( new Date() / 1).toFixed()
+				url: req.body.url
 			})
 			
 			imageResolver.resolve( req.body.url, function ( result ) {
@@ -93,6 +111,13 @@ exports.add = function ( req, res ) {
 	function replaceImages ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
+		/*
+		Will skip replacing images if it's already been done
+		*/
+		if ( article.images > 1 ) {
+			return resolve( article )
+		}
+		
 		jsdom.env( article.content, function ( error, window ) {
 			
 			var images = window.document.getElementsByTagName( 'img' ),
@@ -136,22 +161,41 @@ exports.add = function ( req, res ) {
 	
 	function saveArticle ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			getUser( req.token )
+			.then( function( user ) {
+				article.users.push({ 
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: 'read'			
+				})
+			})
+			.then( function() {
+			
+				/*
+				If the article already has two or more users in the `users` sub-document, then it must have been added before. So we save just the new user to the sub-document.
+				*/
+				if ( article.users.length >= 2 ) {
+					console.log( "Adding user to article: " + article.title )
+					article.save()
+					return resolve( article )
+				}
 
-			var blog = {
-				processing: false,
-				text: article.content,
-				description: article.description,
-				images: article.images
-			}
+				var blog = {
+					processing: false,
+					text: article.content,
+					description: article.description,
+					images: article.images,
+					users: article.users
+				}
 
-			Content.findOneAndUpdate( 
-				{ _id: article._id }, 
-				{ $set: blog } )
-			.exec()
-			.then( function ( blog ) {
-				resolve( blog )	
-			}, function ( error ) {
-				reject( new Error( error ) )
+				article.update( { $set: blog } )
+				.exec()
+				.then( function ( blog ) {
+					resolve( blog )	
+				}, function ( error ) {
+					reject( new Error( error ) )
+				})
 			})
 		})
 	}
