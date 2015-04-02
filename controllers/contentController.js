@@ -131,7 +131,7 @@ exports.stream = function ( req, res ) {
 					'users.stream': stream
 				} },
 				{ $project: { 
-					_id: '$_id', 
+					_id: '$users._id',
 					title: '$title', 
 					url: '$url', 
 					images: '$images',
@@ -140,7 +140,7 @@ exports.stream = function ( req, res ) {
 					user: '$users.user',
 					stream: '$users.stream',
 					text: '$text',
-					processing: '$processing'
+					processing: '$processing',
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },
@@ -183,16 +183,16 @@ exports.delete = function ( req, res ) {
 				reject( new Error( "There doesn't seem to be an id given." ) )
 			
 			var contentId = mongoose.Types.ObjectId( req.query.id )
-
-			Content.findOneAndRemove( { user: user._id, _id: contentId } )
-			.exec()
-			.then( function ( content ) {
-				if ( !content ) reject( new Error( "There was an error deleting that content from the stream." ) )
+			
+			Content.findOne( { 'users._id': req.query.id } ).exec()
+			.then( function ( result ) {
+				console.log( result )
 				
-				index.deleteObject( content._id )
-				resolve( content )
-			}, function ( error ) {
-				reject( new Error( "There was an error deleting that content from the stream." ) )
+				var remove = result.users.id( contentId ).remove()
+				
+				result.save()
+				
+				resolve( result )
 			})
 		})
 	}
@@ -200,7 +200,7 @@ exports.delete = function ( req, res ) {
 	getUser( req.token )
 	.then( deleteItem )
 	.then( function ( content ) {
-		return res.json( content )
+		return res.status( 200 ).json( "Item temoved: " + content.title )
 	})
 	.catch( function ( error ) {
 		log.error( error )
