@@ -16,35 +16,59 @@ var Content = require( '../models/contentModel' ),
 
 exports.add = function ( req, res ) {
 	
-	function getContent () {
+	function getContent ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
-		
-		request( {
-			url: process.env.IFRAMELY_URL + "/iframely?url=" + req.body.url
-			}, function ( err, response, body ) {
-			if ( err || response.statusCode !== 200 )
-				reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
-				
-			if ( !body )
-				reject( new Error( "Error from embed server. No body returned." ) )
-			
-			resolve( JSON.parse( body ) )
+					
+		/*
+		If the article already exists, save the user to it and return the article, minus the `users` sub-document
+		*/
+		Content.findOne( { url: req.body.url } ).exec()
+		.then( function ( result ) {
+			if ( result ) {
+				console.log( "Article already exists: " + result.title )
+				var users = result.users.push({
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: req.body.type
+				})
+				result.save()
+				return res.status( 200 ).json({
+					title: result.title,
+					description: result. description,
+					images: result.images
+				})
+			} else {
+				request( {
+					url: process.env.IFRAMELY_URL + "/iframely?url=" + req.body.url
+					}, function ( err, response, body ) {
+					if ( err || response.statusCode !== 200 )
+						reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
+
+					if ( !body )
+						reject( new Error( "Error from embed server. No body returned." ) )
+
+					resolve( JSON.parse( body ) )
+				})
+			}
 		})
 				
 		})
 	}
 	
-	function makeContent( user, contentInfo ) {
+	function makeContent( contentInfo ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			var content = new Content( _.extend({
 				url: req.body.url
 			}, contentInfo.meta ))
 			
-			var users = content.users.create({
-				user: user._id,
-				added: ( new Date() / 1).toFixed(),
-				stream: req.body.type
+			getUser( req.token )
+			.then( function ( user ) {
+				var users = content.users.push({
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: req.body.type
+				})
 			})
 
 			if ( contentInfo.links[2].href ) {
@@ -68,15 +92,14 @@ exports.add = function ( req, res ) {
 		})
 	}
 	
-	Q.all( [ getUser( req.token ), getContent() ] )
-	.spread( function ( user, contentInfo ) {
-		makeContent( user, contentInfo )
-		.then( function ( content ) {
-			return res.json( content )	
-		}).catch( function ( error ) {
-			log.error( error )
-			return res.status(500).send( error.message )
-		})
+	getUser( req.token )
+	.then( getContent )
+	.then( makeContent )
+	.then( function ( content ) {
+		return res.json( content )	
+	}).catch( function ( error ) {
+		log.error( error )
+		return res.status(500).send( error.message )
 	})
 	.catch( function ( error ) {
 		log.error( error )
@@ -88,19 +111,47 @@ exports.stream = function ( req, res ) {
 
 	var show = req.query.show,	// the number of items to show per page
 		page = req.query.page,	// the current page being asked for
-		stream = req.params.stream	// the type of content to get
+		stream = req.params.stream,	// the type of content to get
+		skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
 	
 	function getStream ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-			Content.find( { $and: [
-				{ user: user._id },
-				{ stream: stream }
-			] } ).sort( { added: -1 } )
-			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
+//			Content.find( { users: { $elemMatch: {
+//				'user': user._id,
+//				'stream': stream
+//			} } } )
+			
+			console.log( show )
+				
+			Content.aggregate( [
+				{ $unwind: '$users' },
+				{ $match: { 
+					'users.user': user.id, 
+					'users.stream': stream
+				} },
+				{ $project: { 
+					_id: '$_id', 
+					title: '$title', 
+					url: '$url', 
+					images: '$images',
+					description: '$description',
+					added: '$users.added',
+					user: '$users.user',
+					stream: '$users.stream',
+					text: '$text',
+					processing: '$processing'
+				} },
+				{ $sort: { added: -1 } },
+				{ $skip: skip },
+				{ $limit: 3 }
+			] )
+//			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
 			.exec()
-			.then( function( results ) {
+			.then( function( results ) { 
+				
 				resolve( results )
+
 			})
 			
 		})

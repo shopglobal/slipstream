@@ -10,7 +10,7 @@ This first model is for the subdocuments. These record the instances that a user
 */
 var UsersSchema = new mongoose.Schema({
 	user: String,
-	steam: String,
+	stream: String,
 	author: String,
 	tags: Array,
 	thumb: Number,
@@ -18,21 +18,12 @@ var UsersSchema = new mongoose.Schema({
 })
 
 var ContentSchema = new mongoose.Schema( {
-	user: String,		// ther user._id that this item belongs to
-	stream: String,		// the stream it will apppear in for that user
 	title: String,		// title of the item
 	url: String,		// direc link the non-embed browser version of
 	service: String,	// such as youtube
 	author: String,		// who made it on the parent site (eg youtube)
-	tags: Array,
-	images: Array,
-	image: String, 		// full-size image derived from content, if any
-	imageThumb: String,	// path to thumbnail version
-	imageHash: String,	// md5 hash of the image
 	description: String,	// description of content
 	text: String, 		// full text of content
-	snippet: String,	// text to be used in preview
-	added: Number, 		// date content was added in JS time
 	date: String,		// date of post on parent site (youtube, etc)
 	views: Number,		// number of views on the parent site
 	duration: Number,	// how long it is
