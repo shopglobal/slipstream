@@ -231,9 +231,9 @@ app.directive( 'toggleButtons', [ function () {
 
 			function checkState() {
 				Array.prototype.forEach.call( toggleButtons, function( each ) {
-					if ( each.checked )
+					if ( scope.contentParams && each.value === scope.contentParams.type )
 						each.parentNode.style.backgroundColor = "#5CD298"
-					else if ( !each.checked )
+					else
 						each.parentNode.style.backgroundColor = "transparent"
 				})
 			}
