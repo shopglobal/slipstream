@@ -218,14 +218,11 @@ exports.addTags = function ( req, res ) {
 			var tags = req.body.tags,
 				contentId = mongoose.Types.ObjectId( req.body.id )
 			
-			console.log( tags )
-			
 			Content.update( 
 				{ 'users._id': contentId },
 				{ $pushAll: { 'users.$.tags': tags } }
 			).exec()
 			.then( function ( result ) { 
-				console.log( result )
 				resolve( result )
 			}, function ( error ) {
 				if ( error ) return reject( error )
@@ -257,12 +254,12 @@ exports.deleteTag = function ( req, res ) {
 			var contentId = mongoose.Types.ObjectId( req.query.id ),
 				tag = JSON.parse( req.query.tag )
 			
-			Content.findOneAndUpdate( 
-				{ user: user._id, _id: contentId, "tags": tag },
-				{ $pull: { "tags": tag } } )
+			Content.update( 
+				{ 'users._id': contentId },
+				{ $pull: { 'users.$.tags': tag } } )
 			.exec()
 			.then( function ( result ) {
-				index.partialUpdateObject( { '_tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
+//				index.partialUpdateObject( { '_tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
 				
 				resolve( result )
 			}, function ( error ) {
