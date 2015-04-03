@@ -127,6 +127,9 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	return Content
 }])
 
+/*
+A service for searching using Algolia, but through our back-end
+*/
 .factory( 'Search', [ '$http', 'flash', function( $http, $flash ) {
 
 	var Search = function () {
@@ -164,6 +167,43 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 	}
 
 	return Search
+}])
+
+/*
+A service for using our Discover feature
+*/
+.factory( 'Discover', [ '$http', 'flash', function( $http, $flash ) {
+
+	var Discover = function () {
+		this.items = []
+		this.busy = false
+		this.page = 0
+	}
+
+	Discover.prototype.loadMore = function ( stream, show ) {
+		if ( this.busy )
+			return
+
+		this.busy = true
+
+		$http
+			.get( '/api/discover/popular/' + stream, { params: { 
+				page: this.page,
+				show: show
+			} } )
+			.success( function ( results ) {
+				console.log( results )
+				for( i = 0; i < results.length; i++) {
+					this.items.push( results[i] )
+				}
+
+				this.page++	
+				this.busy = false
+
+			}.bind(this))
+	}
+
+	return Discover
 }])
 
 /**

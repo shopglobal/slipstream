@@ -1,10 +1,10 @@
-app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search ) {
+app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover ) {
 
 	$window.scrollTo( 0, 0 )
 
 	$scope.currentStream = $state.current.name.split(".")[1]
-
 	$scope.content = new Content()
+	$scope.discoverMode = false
 
 	mixpanel.track( "Viewed stream", {
 		stream: $state.current.name.split(".")[1]
@@ -25,6 +25,19 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		mixpanel.track( "Searched", { 
 			query: $scope.search.query
 		} )
+	}
+
+	$scope.discover = function() {
+		$scope.discoverMode = !$scope.discoverMode
+
+		if ( $scope.discoverMode == true ) {
+			$scope.content = new Discover()
+			$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+		} 
+		if ( $scope.discoverMode == false ) {
+			$scope.content = new Content()
+			$scope.content.loadMore( $state.current.name.split(".")[1], 3)
+		}
 	}
 
 	// logs user out by deleting session storage and reloading the app
