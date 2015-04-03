@@ -141,6 +141,7 @@ exports.stream = function ( req, res ) {
 					stream: '$users.stream',
 					text: '$text',
 					processing: '$processing',
+					tags: '$users.tags'
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },
@@ -217,20 +218,15 @@ exports.addTags = function ( req, res ) {
 			var tags = req.body.tags,
 				contentId = mongoose.Types.ObjectId( req.body.id )
 			
-			Content.findOne( 
-				{ 'users.user': user.id, 'users._id': contentId }
+			console.log( tags )
+			
+			Content.update( 
+				{ 'users._id': contentId },
+				{ $pushAll: { 'users.$.tags': tags } }
 			).exec()
-			.then( function ( result ) {
-				
-				var result_tags = result.users.update(
-					{ 'users.user': user.id, 'users._id': contentId },
-					{ $push: { '$users.tags': { $each: [ 'hi', 'what-up' ] } } } )
-				
-				result.save( function ( error, data ) {
-					if ( error ) return reject( error )
-					
-					resolve( "Tag added to: " + result.title )
-				})
+			.then( function ( result ) { 
+				console.log( result )
+				resolve( result )
 			}, function ( error ) {
 				if ( error ) return reject( error )
 			})
