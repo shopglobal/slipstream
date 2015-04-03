@@ -217,18 +217,29 @@ exports.addTags = function ( req, res ) {
 			var tags = req.body.tags,
 				contentId = mongoose.Types.ObjectId( req.body.id )
 			
-			Content.findOneAndUpdate( { user: user._id, _id: contentId }, { $pushAll: { tags: tags } } )
-			.exec()
+			Content.findOne( 
+				{ 'users.user': user.id, 'users._id': contentId }
+			).exec()
 			.then( function ( result ) {
-				tags.forEach( function ( each ) {
-					index.partialUpdateObject( { '_tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
-				})
 				
-				resolve( result )
+				console.log( result )
+				
+				var result_tags = result.users.update(
+					{ 'users.user': user.id, 'users._id': contentId },
+					{ $push: { '$users.tags': { $each: [ 'hi', 'what-up' ] } } } )
+				
+				result.save( function ( error, data ) {
+					if ( error ) return reject( error )
+					
+					resolve( "Tag added to: " + result.title )
+				})
 			}, function ( error ) {
-				reject( new Error( "Could not add new tags." ) )
+				if ( error ) return reject( error )
 			})
-			
+//				tags.forEach( function ( each ) {
+//					index.partialUpdateObject( { '_tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
+//				})
+				
 		})
 	}
 	

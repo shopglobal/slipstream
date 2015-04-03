@@ -8,7 +8,8 @@ var express = require('express'),
 	secret = require( '../config/secretConfig' ),
 	bodyParser = require('body-parser'),
 	feedbackController = require( '../controllers/feedback-controller' ),
-	betakeyController = require( '../controllers/betakey-controller' )
+	betakeyController = require( '../controllers/betakey-controller' ),
+	discoveryController = require( '../controllers/discovery-controller' )
 
 router.route('/authenticate')
 	.post( userController.login )
@@ -44,10 +45,16 @@ router.route( '/betakeys' )
 	.post( userController.checkAuthorization, betakeyController.add )
 	.get( userController.checkAuthorization, betakeyController.show )
 
-
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
 	.delete( userController.checkAuthorization, contentController.deleteTag )
+
+router.route( '/discover/:measure/:stream' )
+	.get( userController.checkAuthorization, function ( req, res ) {
+		if ( req.params.measure == 'popular' ) {
+			discoveryController.popular( req, res )
+		}
+	})
 	
 router.route('/stream/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
