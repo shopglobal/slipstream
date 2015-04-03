@@ -109,7 +109,7 @@ exports.add = function ( req, res ) {
 
 exports.stream = function ( req, res ) {
 
-	var show = req.query.show,	// the number of items to show per page
+	var show = parseInt( req.query.show ),	// the number of items to show per page
 		page = req.query.page,	// the current page being asked for
 		stream = req.params.stream,	// the type of content to get
 		skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
@@ -122,7 +122,7 @@ exports.stream = function ( req, res ) {
 //				'stream': stream
 //			} } } )
 			
-			console.log( show )
+			console.log( "Stream: " + show + " " + skip + " " + page )
 				
 			Content.aggregate( [
 				{ $unwind: '$users' },
@@ -144,7 +144,7 @@ exports.stream = function ( req, res ) {
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },
-				{ $limit: 3 }
+				{ $limit: show }
 			] )
 //			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
 			.exec()

@@ -9,14 +9,14 @@ exports.popular = function( req, res) {
 		var show = parseInt( req.query.show ),	// the number of items to show per page
 			page = req.query.page,	// the current page being asked for
 			stream = req.params.stream,	// the type of content to get
-			skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ), // amount to skip
-			testNum = 3
+			skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
 		
-		console.log( show + " " + skip + " " + page )
+		console.log( "Discover: " + show + " " + skip + " " + page )
 			
 		Content.aggregate( [
 			{ $unwind: '$users' },
 			{ $match: { 'users.stream': stream } },
+			{ $sort: { 'users.added': -1 } },
 			{ $group: { 
 				_id: '$_id',
 				title: { $first: '$title' },
@@ -24,10 +24,11 @@ exports.popular = function( req, res) {
 				images: { $first: '$images' },
 				stream: { $first: '$users.stream' },
 				text: { $first: '$text' },
+				added: { $first: '$users.added' },
 				url: { $first: '$url' },
 				saveCount: { $sum: 1 } } 
 			},
-			{ $sort: { saveCount: -1 } },
+			{ $sort: { saveCount: -1, added: -1 } },
 			{ $skip: skip },
 			{ $limit: show }
 		] )
