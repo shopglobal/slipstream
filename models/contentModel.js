@@ -25,6 +25,7 @@ var ContentSchema = new mongoose.Schema( {
 	description: String,	// description of content
 	text: String, 		// full text of content
 	date: String,		// date of post on parent site (youtube, etc)
+	images: Array,
 	views: Number,		// number of views on the parent site
 	duration: Number,	// how long it is
 	rating: Number,		// the rating of the item if applicable

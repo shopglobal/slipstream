@@ -222,8 +222,6 @@ exports.addTags = function ( req, res ) {
 			).exec()
 			.then( function ( result ) {
 				
-				console.log( result )
-				
 				var result_tags = result.users.update(
 					{ 'users.user': user.id, 'users._id': contentId },
 					{ $push: { '$users.tags': { $each: [ 'hi', 'what-up' ] } } } )
