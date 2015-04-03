@@ -16,7 +16,7 @@ exports.popular = function( req, res) {
 		Content.aggregate( [
 			{ $unwind: '$users' },
 			{ $match: { 'users.stream': stream } },
-			{ $sort: { 'users.added': -1 } },
+			{ $sort: { 'users.added': 1 } },
 			{ $group: { 
 				_id: '$_id',
 				title: { $first: '$title' },
