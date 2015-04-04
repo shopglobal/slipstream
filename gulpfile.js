@@ -28,7 +28,7 @@ gulp.task( 'minify', function() {
 
 gulp.task( 'minifyViews', function() {
 	return gulp.src( './public/app/views/*.html' )
-		.pipe( minifyHtml({ empty: true }) )
+		// .pipe( minifyHtml({ empty: true }) )
 		.pipe( gulp.dest( './build/app/views/' ) )
 })
 
