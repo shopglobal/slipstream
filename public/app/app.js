@@ -244,7 +244,29 @@ app.directive( 'toggleButtons', [ function () {
 				})
 			})
 
-			setTimeout(checkState(), 2000)
+			setTimeout(checkState(), 1000)
 		}
 	}
-}]) 
+}])
+
+app.directive( 'buttonDiscover', [ function () {
+	return {
+		link: function( scope, element ) {
+			var discoverButton = element.find( '.a-discovery' ),
+				modeDiscover = false
+
+			console.log( discoverButton )
+
+			discoverButton[0].addEventListener( 'click', function () {
+
+				if ( !modeDiscover ) {
+					modeDiscover = !modeDiscover
+					discoverButton[0].setAttribute( 'class', 'mode-discover' )
+				} else if ( modeDiscover ) {
+					modeDiscover = !modeDiscover
+					discoverButton[0].setAttribute( 'class', '' )
+				}
+			})
+		}
+	}
+}])
