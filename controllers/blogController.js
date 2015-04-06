@@ -35,16 +35,22 @@ exports.add = function ( req, res ) {
 			.then( function ( result ) {
 				if ( result ) {
 					console.log( "Article already exists: " + result.title )
-					var users = result.users.push({
+					
+					var users = result.users.create({
 						user: user._id,
 						added: ( new Date() / 1).toFixed(),
 						stream: 'read'
 					})
-					result.save()
-					return res.status( 200 ).json({
-						title: result.title,
-						description: result. description,
-						images: result.images
+					
+					var push = result.users.push( users )
+					
+					result.save( function( error, result ) {
+						return res.status( 200 ).json({
+							'_id': users._id,
+							title: result.title,
+							description: result.description,
+							images: result.images
+						})	
 					})
 				}
 			})
