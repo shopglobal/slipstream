@@ -69,6 +69,14 @@ exports.add = function ( req, res ) {
 						processing: true,
 						url: req.body.url
 					})
+					
+					var newUser = newArticle.users.create( {
+						stream: 'read',
+						user: user._id,
+						added: ( new Date() / 1 ).toFixed()
+					} )
+					
+					newArticle.users.push( newUser )
 
 					imageResolver.resolve( req.body.url, function ( result ) {
 						if ( !result ) return resolve( article )
@@ -136,13 +144,6 @@ exports.add = function ( req, res ) {
 	function replaceImages ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		/*
-		Will skip replacing images if it's already been done
-		*/
-		if ( article.images > 1 ) {
-			return resolve( article )
-		}
-		
 		jsdom.env( article.content, function ( error, window ) {
 			
 			var images = window.document.getElementsByTagName( 'img' ),
@@ -187,40 +188,17 @@ exports.add = function ( req, res ) {
 	function saveArticle ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			getUser( req.token )
-			.then( function( user ) {
-				article.users.push({ 
-					user: user._id,
-					added: ( new Date() / 1).toFixed(),
-					stream: 'read'			
-				})
-			})
-			.then( function() {
-			
-				/*
-				If the article already has two or more users in the `users` sub-document, then it must have been added before. So we save just the new user to the sub-document.
-				*/
-				if ( article.users.length >= 2 ) {
-					console.log( "Adding user to article: " + article.title )
-					article.save()
-					return resolve( article )
-				}
+			var blog = {
+				processing: false,
+				images: article.images,
+				text: article.content
+			}
 
-				var blog = {
-					processing: false,
-					text: article.content,
-					description: article.description,
-					images: article.images,
-					users: article.users
-				}
-
-				article.update( { $set: blog } )
-				.exec()
-				.then( function ( blog ) {
-					resolve( blog )	
-				}, function ( error ) {
-					reject( new Error( error ) )
-				})
+			article.update( { $set: blog } ).exec()
+			.then( function ( blog ) {
+				resolve( blog )	
+			}, function ( error ) {
+				reject( new Error( error ) )
 			})
 		})
 	}
