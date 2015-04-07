@@ -60,6 +60,7 @@
     "mongoose": "3.8.23",
     "mongoose-q": "0.0.16",
     "morgan": "^1.5.1",
+    "newrelic": "^1.18.1",
     "node": "0.0.0",
     "node-readability": "^1.0.1",
     "pause-stream": "0.0.11",
