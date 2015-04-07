@@ -20,7 +20,8 @@ var fs = require('fs'),
 	s3sig = require( 'amazon-s3-url-signer' ),
 	htmlStripper = require( 'htmlstrip-native' ),
 	needle = require( 'needle' ),
-	readability = require( 'node-readability' )
+	readability = require( 'node-readability' ),
+	urlExpand = require( 'url-expand' )
 //	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
@@ -32,8 +33,10 @@ exports.add = function ( req, res ) {
 			
 			/*
 			If the article already exists, save the user to it and return the article, minus the `users` sub-document
-			*/
-			Content.findOne( { url: req.body.url } ).exec()
+			*/			
+			urlExpand( req.body.url, function( error, url ) {
+	
+			Content.findOne( { url: url } ).exec()
 			.then( function ( result ) {
 				if ( result ) {
 					var users = result.users.create({
@@ -117,6 +120,8 @@ exports.add = function ( req, res ) {
 						})
 					})		
 				}	
+			})
+			
 			})
 		})
 	}

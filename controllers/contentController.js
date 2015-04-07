@@ -10,7 +10,8 @@ var Content = require( '../models/contentModel' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	Algolia = require( 'algolia-search' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents')
+	index = algolia.initIndex('Contents'),
+	urlExpand = require( 'url-expand' )
 
 // adds content to users stream.
 
@@ -22,34 +23,47 @@ exports.add = function ( req, res ) {
 		/*
 		If the article already exists, save the user to it and return the article, minus the `users` sub-document
 		*/
-		Content.findOne( { url: req.body.url } ).exec()
-		.then( function ( result ) {
-			if ( result ) {
-				console.log( "Article already exists: " + result.title )
-				var users = result.users.push({
-					user: user._id,
-					added: ( new Date() / 1).toFixed(),
-					stream: req.body.type
-				})
-				result.save()
-				return res.status( 200 ).json({
-					title: result.title,
-					description: result. description,
-					images: result.images
-				})
-			} else {
-				request( {
-					url: process.env.IFRAMELY_URL + "/iframely?url=" + req.body.url
-					}, function ( err, response, body ) {
-					if ( err || response.statusCode !== 200 )
-						reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
+		urlExpand( req.body.url, function ( error, url ) {
+			
+			console.log( url )
+			
+			Content.findOne( { url: url } ).exec()
+			.then( function ( result ) {
+				if ( result ) {
+					console.log( "Content already exists: " + result.title )
+					var newUser = result.users.create({
+						user: user._id,
+						added: ( new Date() / 1).toFixed(),
+						stream: req.body.type
+					})
+					
+					var pushUser = result.users.push( newUser )
+					
+					result.save()
+					return res.status( 200 ).json({
+						title: result.title,
+						description: result. description,
+						images: result.images
+					})
+				} else {
+					request( {
+						url: process.env.IFRAMELY_URL + "/iframely?url=" + url
+						}, function ( err, response, body ) {
+						if ( err || response.statusCode !== 200 )
+							reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
 
-					if ( !body )
-						reject( new Error( "Error from embed server. No body returned." ) )
+						if ( !body )
+							reject( new Error( "Error from embed server. No body returned." ) )
+							
+						var parsedBody = JSON.parse( body )
+						
+						parsedBody.url = url
 
-					resolve( JSON.parse( body ) )
-				})
-			}
+						resolve( parsedBody )
+					})
+				}
+			})
+		
 		})
 				
 		})
@@ -57,9 +71,11 @@ exports.add = function ( req, res ) {
 	
 	function makeContent( contentInfo ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			console.log( contentInfo.url )
 		
 			var content = new Content( _.extend({
-				url: req.body.url
+				url: contentInfo.url
 			}, contentInfo.meta ))
 			
 			getUser( req.token )
@@ -292,7 +308,7 @@ exports.search = function ( req, res ) {
 			if ( error ) return res.status( 500 ).json( result )
 
 			return res.status( 200 ).json( result.hits )
-		}, { facets: '*', facetFilters: [ 'user:' + user._id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
+		}, { facets: '*', facetFilters: [ 'users.user:' + user._id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
 	
 	})
 	.catch( function ( error ) {
