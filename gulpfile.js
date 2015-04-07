@@ -21,7 +21,7 @@ gulp.task( 'minify', function() {
 			html: [ minifyHtml({ empty: true }) ],
 			appjs: [ uglify() ],
 			jsdeps: [ uglify() ]
-			// css: [ minifyCss(), 'concat' ]
+			css: [ minifyCss(), 'concat' ]
 		}))
 		.pipe( gulp.dest( './build/' ) )
 })
