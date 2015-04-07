@@ -33,8 +33,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		if ( $scope.discoverMode == true ) {
 			$scope.content = new Discover()
 			$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
-		} 
-		if ( $scope.discoverMode == false ) {
+		} else if ( $scope.discoverMode == false ) {
 			$scope.content = new Content()
 			$scope.content.loadMore( $state.current.name.split(".")[1], 3)
 		}
