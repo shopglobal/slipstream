@@ -19,7 +19,9 @@ var fs = require('fs'),
 	articleTitle = require( 'article-title' ),
 	s3sig = require( 'amazon-s3-url-signer' ),
 	htmlStripper = require( 'htmlstrip-native' ),
-	readability = require( 'readable-proxy' ).scrape
+	needle = require( 'needle' ),
+	readability = require( 'node-readability' )
+//	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
 
@@ -34,8 +36,6 @@ exports.add = function ( req, res ) {
 			Content.findOne( { url: req.body.url } ).exec()
 			.then( function ( result ) {
 				if ( result ) {
-					console.log( "Article already exists: " + result.title )
-					
 					var users = result.users.create({
 						user: user._id,
 						added: ( new Date() / 1).toFixed(),
@@ -45,64 +45,78 @@ exports.add = function ( req, res ) {
 					var push = result.users.push( users )
 					
 					result.save( function( error, result ) {
-						return res.status( 200 ).json({
+						return resolve({
 							'_id': users._id,
 							title: result.title,
 							description: result.description,
-							images: result.images
-						})	
+							images: result.images,
+							alreadySaved: true
+						})
 					})
-				}
-			})
-			
-			var imageResolver = new ImageResolver()
-		
-			imageResolver.register(new ImageResolver.FileExtension())
-			imageResolver.register(new ImageResolver.MimeType())
-			imageResolver.register(new ImageResolver.Opengraph())
-			imageResolver.register(new ImageResolver.Webpage())
-			
-			var newArticle = new Content({
-				images: [],
-				processing: true,
-				url: req.body.url
-			})
-			
-			imageResolver.resolve( req.body.url, function ( result ) {
-				if ( !result ) return resolve( article )
+				} else {
+					var imageResolver = new ImageResolver()
 
-				saveImage( req.body.type, result.image )
-				.spread( function ( hash, orig, thumb ) {
-					newArticle.images.push({
-						orig: orig,
-						hash: hash,
-						thumb: thumb
-					})
-				})
-				.then( function () {
-					readability( req.body.url, { sanitize: true })
-					.then( function ( article ) {
-						var description = htmlStripper.html_strip( article.content, {
-							include_script : false,
-    						include_style : false,
-    						compact_whitespace : true } ).substring( 0, 400 )
+					imageResolver.register(new ImageResolver.FileExtension())
+					imageResolver.register(new ImageResolver.MimeType())
+					imageResolver.register(new ImageResolver.Opengraph())
+					imageResolver.register(new ImageResolver.Webpage())
 
-						_.extend( newArticle, {
-							title: article.title,
-							description: description,
-							content: article.content } )
-						
-						resolve( newArticle )						
+					var newArticle = new Content({
+						images: [],
+						processing: true,
+						url: req.body.url
 					})
-					.catch( function ( error ) {
-						console.error( error )
-						
-						reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
-					})
-				})
-				.catch( function ( error ) {
-					reject( new Error( error ) )
-				})
+
+					imageResolver.resolve( req.body.url, function ( result ) {
+						if ( !result ) return resolve( article )
+
+						saveImage( req.body.type, result.image )
+						.spread( function ( hash, orig, thumb ) {
+							newArticle.images.push({
+								orig: orig,
+								hash: hash,
+								thumb: thumb
+							})
+						})
+						.then( function () {
+							needle.get( req.body.url, {
+								compressed: true,
+								follow_max: 5
+							}, function( error, response ) {
+								if ( error ) return reject( error )
+								
+								readability( response.body, function ( error, article, meta ) {
+									if ( error ) {
+										article.close()
+
+										return reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
+									}
+
+									var description = htmlStripper.html_strip( article.content, {
+										include_script : false,
+										include_style : false,
+										compact_whitespace : true } ).substring( 0, 400 )
+
+									var a = _.extend( newArticle, {
+										title: article.title,
+										description: description,
+										content: article.content } )
+
+									var b = new Content( newArticle )
+
+									res.status( 200 ).json( newArticle )
+
+									article.close()
+
+									resolve( newArticle )					
+								})
+							})
+							.catch( function ( error ) {
+								reject( new Error( error ) )
+							})
+						})
+					})		
+				}	
 			})
 		})
 	}
@@ -209,19 +223,18 @@ exports.add = function ( req, res ) {
 	getUser( req.token )
 	.then( getArticle )
 	.then( function ( article ) {
-		return Q.Promise( function ( resolve, reject, notify ) {
+		if( article.alreadySaved ) {
+			return res.status( 200 ).json( article )
+		} else {
 			article.save( function ( err, article ) {
-				console.log( article._id )
-				res.status( 200 ).json( article )
-				resolve( article )
+				replaceImages( article )
+				.then( saveArticle )
+				.then( function ( article ) {
+					log.info( { title: article.title, url: article.url }, "Article saved" )
+					return
+				})
 			})
-		})		
-	})
-	.then( replaceImages )
-	.then( saveArticle )
-	.then( function ( article ) {
-		log.info( { title: article.title, url: article.url }, "Article saved" )
-		return
+		}
 	})
 	.catch( function ( error ) {
 		log.error( error )
