@@ -20,7 +20,7 @@ gulp.task( 'minify', function() {
 			js: [ uglify() ],
 			html: [ minifyHtml({ empty: true }) ],
 			appjs: [ uglify() ],
-			jsdeps: [ uglify() ]
+			jsdeps: [ uglify() ],
 			css: [ minifyCss(), 'concat' ]
 		}))
 		.pipe( gulp.dest( './build/' ) )
