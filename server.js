@@ -1,3 +1,5 @@
+require( 'newrelic' )
+
 var http = require('http'),
 	https = require( 'https' ),
 	fs = require('fs'),
@@ -9,8 +11,6 @@ var http = require('http'),
 	jwt = require('jsonwebtoken'),
 	morgan = require('morgan'),
 	log = require( './helpers/logger.js' )
-
-require( 'newrelic' )
 
 var indexPath = path.join(__dirname, process.env.PUBLIC_FOLDER)
 
