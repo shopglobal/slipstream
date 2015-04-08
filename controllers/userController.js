@@ -128,6 +128,37 @@ exports.deleteUser = function( req, res ) {
 	})
 }
 
+/*
+Follow a user
+*/
+exports.follow = function( req, res ) {
+	
+	getUser( req.token )
+	.then( function ( user ) {
+		user.follow( req.body.id )
+		.then( function ( result ) {
+			if ( !result ) return res.status( 500 ).json( "User could not be followed." )
+			
+			return res.status( 200 ).json( "User followed." )
+		})
+	})
+}
+
+/*
+Unfollow user.
+*/
+exports.unFollow = function ( req, res ) {
+	
+	User.findOne( { token: req.token }, function ( error, user ) {
+		user.unfollow( req.body.id )
+		.onResolve( function ( err, result ) {
+			if ( err || !result ) return res.status( 500 ).json( "User could not be unfollowed." )
+			
+			return res.status( 200 ).json( "User unfollowed." )
+		})
+	})
+}
+
 //
 // check that the request has an authorization header and attach it to
 // the req as req.token
