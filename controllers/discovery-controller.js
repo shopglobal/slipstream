@@ -22,6 +22,7 @@ exports.popular = function( req, res) {
 				title: { $first: '$title' },
 				description: { $first: '$description' },
 				images: { $first: '$images' },
+				user: { $first: '$users.user' },
 				stream: { $first: '$users.stream' },
 				text: { $first: '$text' },
 				added: { $first: '$users.added' },

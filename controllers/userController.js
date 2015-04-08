@@ -159,6 +159,19 @@ exports.unFollow = function ( req, res ) {
 	})
 }
 
+/*
+Accepts: _id of user.
+
+Returns: username of that user.
+*/
+exports.getName = function ( req, res ) {
+	User.findOne( { _id: req.query.id }, function ( error, user ) {
+		if ( error || !user ) return res.status( 500 ).json( error )
+		
+		return res.status( 200 ).send( user.username )
+	})
+}
+
 //
 // check that the request has an authorization header and attach it to
 // the req as req.token

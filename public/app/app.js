@@ -270,3 +270,39 @@ app.directive( 'buttonDiscover', [ function () {
 		}
 	}
 }])
+
+app.directive( 'userName', [ function ( userId ) {
+	return {
+		scope: {
+			id: '=',
+			username: '&'
+		},
+		template: ' <span ng-bind="username"></span> ',
+		controller: function( $scope, $http ) {
+			$http
+				.get( '/api/user/name', {
+					params: { id: $scope.id }
+				})
+				.success( function ( result ) {
+					$scope.username = result
+				})
+				.error( function ( error ) {
+					console.log( error )
+					$scope.username = "[Deleted]"
+				})
+		}
+
+/*		link: function ( userId, scope, element, http ) {
+			http
+				.get( '/api/user/name', {
+					params: { id: id }
+				})
+				.success( function ( result ) {
+					return result
+				})
+				.error( function ( error ) {
+					return error 
+				})
+		}*/
+	}
+}])

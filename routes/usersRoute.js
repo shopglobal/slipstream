@@ -33,6 +33,9 @@ router.route( '/user/follow' )
 router.route( '/user/unfollow' )
 	.post( userController.checkAuthorization, userController.unFollow )
 
+router.route( '/user/name' )
+	.get( userController.checkAuthorization, userController.getName )
+
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {
