@@ -38,6 +38,8 @@
 				</div>
 
 				<div class="share-links">
+					<ng-include src="'app/views/menu-share.html'"></ng-include>
+				
 					<span class="dropdown user-menu">
 					  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
 					    <span class="glyphicon glyphicon-option-horizontal glyphicon-grey"></span>
@@ -51,8 +53,6 @@
 					    <li role="presentation"><a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Original</a></li>
 					  </ul>
 					</span>
-
-					<ng-include src="'app/views/menu-share.html'"></ng-include>
 				</div>
 				
 				<div class="clearfix"></div>

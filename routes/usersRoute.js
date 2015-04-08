@@ -27,6 +27,12 @@ router.route( '/user/password/reset' )
 router.route( '/user/password/change' )
 	.post( userController.checkAuthorization, userController.changePassword )
 
+router.route( '/user/follow' )
+	.post( userController.checkAuthorization, userController.follow )
+
+router.route( '/user/unfollow' )
+	.post( userController.checkAuthorization, userController.unFollow )
+
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {
