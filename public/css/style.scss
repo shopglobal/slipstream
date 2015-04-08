@@ -336,11 +336,11 @@ footer { bottom: 0; position: absolute; height: 25px; }
 
 .panel-item { position: relative; border-bottom: 1px solid #ddd; border-radius: 0px; padding-bottom: 25px; margin-bottom: 0px;
 	&:last-child { border-bottom: 0px; }
-	.item-description {  }
+	.item-description { margin-bottom: 15px; }
 	.stream-article-image { float: left; float: left; margin-right: 15px; width: 200px; }
 	.listen-iframe { height: 100px;  width: 100%; margin-bottom: 70px !important; 
 		iframe { height: 150px !important; } }
-	.content-tags {  margin: 10px 0 10px -5px;  }
+	.content-tags {  margin: 10px 0 10px -3px; }
 	.video-info {  }
 	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } }
 

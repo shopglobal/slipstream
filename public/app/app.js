@@ -291,18 +291,5 @@ app.directive( 'userName', [ function ( userId ) {
 					$scope.username = "[Deleted]"
 				})
 		}
-
-/*		link: function ( userId, scope, element, http ) {
-			http
-				.get( '/api/user/name', {
-					params: { id: id }
-				})
-				.success( function ( result ) {
-					return result
-				})
-				.error( function ( error ) {
-					return error 
-				})
-		}*/
 	}
 }])
