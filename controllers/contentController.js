@@ -25,12 +25,9 @@ exports.add = function ( req, res ) {
 		*/
 		urlExpand( req.body.url, function ( error, url ) {
 			
-			console.log( url )
-			
 			Content.findOne( { url: url } ).exec()
 			.then( function ( result ) {
 				if ( result ) {
-					console.log( "Content already exists: " + result.title )
 					var newUser = result.users.create({
 						user: user._id,
 						added: ( new Date() / 1).toFixed(),
@@ -72,8 +69,6 @@ exports.add = function ( req, res ) {
 	function makeContent( contentInfo ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			console.log( contentInfo.url )
-		
 			var content = new Content( _.extend({
 				url: contentInfo.url
 			}, contentInfo.meta ))
@@ -133,13 +128,6 @@ exports.stream = function ( req, res ) {
 	function getStream ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-//			Content.find( { users: { $elemMatch: {
-//				'user': user._id,
-//				'stream': stream
-//			} } } )
-			
-			console.log( "Stream: " + show + " " + skip + " " + page )
-				
 			Content.aggregate( [
 				{ $unwind: '$users' },
 				{ $match: { 
@@ -203,8 +191,6 @@ exports.delete = function ( req, res ) {
 			
 			Content.findOne( { 'users._id': req.query.id } ).exec()
 			.then( function ( result ) {
-				console.log( result )
-				
 				var remove = result.users.id( contentId ).remove()
 				
 				result.save()
