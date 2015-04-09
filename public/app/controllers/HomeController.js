@@ -2,9 +2,16 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$window.scrollTo( 0, 0 )
 
-	$scope.currentStream = $state.current.name.split(".")[1]
-	$scope.content = new Content()
-	$scope.discoverMode = false
+	$scope.mode = window.localStorage.mode
+
+	if ( $scope.mode != 'discover' ) {
+		$scope.currentStream = $state.current.name.split(".")[1]
+		$scope.content = new Content()
+	} else if ( $scope.mode == 'discover' ) {
+		$scope.content = new Discover()
+		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+	}
+	
 
 	mixpanel.track( "Viewed stream", {
 		stream: $state.current.name.split(".")[1]
@@ -28,15 +35,17 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	}
 
 	$scope.discover = function() {
-		$scope.discoverMode = !$scope.discoverMode
-
-		if ( $scope.discoverMode == true ) {
-			$scope.content = new Discover()
-			$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
-		} else if ( $scope.discoverMode == false ) {
-			$scope.content = new Content()
-			$scope.content.loadMore( $state.current.name.split(".")[1], 3)
-		}
+		setTimeout( function () {
+			if ( $scope.mode == 'discover' ) {
+				$scope.content = new Discover()
+				$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+				$state.reload()
+			} else {
+				$scope.content = new Content()
+				$scope.content.loadMore( $state.current.name.split(".")[1], 3)
+				$state.reload()
+			}
+		}, 50)
 	}
 
 	// logs user out by deleting session storage and reloading the app

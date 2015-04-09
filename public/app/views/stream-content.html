@@ -20,7 +20,7 @@
 
 					<div class="clearfix"></div>
 
-					<div class="content-tags" ng-if=" !discoverMode ">
+					<div class="content-tags" ng-if=" mode != 'discover' ">
 						<tags-input 
 							ng-model="item.tags" 
 							on-tag-added="tagAdded( $tag, item._id )"
@@ -34,8 +34,8 @@
 				<div class="clearfix"></div>
 
 				<div class="date-added-ago pull-left meta-text">
-					<span ng-bind="item.added | timeAgo" ng-hide="discoverMode"></span>
-					<span ng-if="discoverMode">
+					<span ng-bind="item.added | timeAgo" ng-hide=" mode == 'discover' "></span>
+					<span ng-if=" mode == 'discover' ">
 						Saved by <span user-name id=" item.user " ></span> and
 						<span ng-bind="item.saveCount"></span> other<span ng-show="item.saveCount > 1">s</span>
 					</span>

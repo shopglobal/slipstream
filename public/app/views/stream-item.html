@@ -1,0 +1,63 @@
+<div class="content-list">	
+	
+	<div infinite-scroll="content.loadMore( currentStream, 3)" infinite-scroll-immediate-check="true">	
+
+		<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
+			<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title"></h2>
+
+			<a ng-click="openReaderModal( item )" class="cursor-pointer" ng-show=" item.stream == 'read' ">
+				<h2 data-ng-bind="item.title"></h2>
+			</a>
+
+			<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
+
+			<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
+
+			<div class="item-description" ng-hide=" item.stream == 'listen' ">
+				<span ng-bind="item.description | stripTags | limitTo: 260"></span> ...
+
+				<div class="clearfix"></div>
+
+				<div class="content-tags" ng-if=" mode != 'discover' ">
+					<tags-input 
+						ng-model="item.tags" 
+						on-tag-added="tagAdded( $tag, item._id )"
+						on-tag-removed="tagRemoved( $tag, item._id )"
+						class="no-padding">
+					</tags-input>
+				</div>
+
+			</div>
+
+			<div class="clearfix"></div>
+
+			<div class="date-added-ago pull-left meta-text">
+				<span ng-if=" mode == 'discover' ">
+					Saved by <span user-name id=" item.user " ></span> and
+					<span ng-bind="item.saveCount"></span> other<span ng-show="item.saveCount > 1">s</span>
+				</span>
+				<span ng-bind="item.added | timeAgo"></span>
+			</div>
+
+			<div class="share-links">
+				<ng-include src="'app/views/menu-share.html'"></ng-include>
+
+				<span class="dropdown user-menu">
+				  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
+				    <span class="glyphicon glyphicon-option-horizontal glyphicon-grey"></span>
+				    <span class="sr-only">
+						Toggle Item Options Menu
+					</span>
+				  </button>
+				  
+				  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
+				    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true"><span class="glyphicon glyphicon-trash"></span>  Delete</a></li>
+				    <li role="presentation"><a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Original</a></li>
+				  </ul>
+				</span>
+			</div>
+			
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>

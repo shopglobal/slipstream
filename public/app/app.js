@@ -252,18 +252,23 @@ app.directive( 'toggleButtons', [ function () {
 app.directive( 'buttonDiscover', [ function () {
 	return {
 		link: function( scope, element ) {
-			var discoverButton = element.find( '.a-discovery' ),
-				modeDiscover = false
+			var discoverButton = element.find( '.a-discovery' )
+
+			if ( window.localStorage.mode == 'discover' ) {
+				discoverButton[0].setAttribute( 'class', 'mode-discover' )
+			} else if ( window.localStorage.mode != 'discover' ) {
+				discoverButton[0].setAttribute( 'class', '' )
+			}
 
 			console.log( discoverButton )
 
 			discoverButton[0].addEventListener( 'click', function () {
 
-				if ( !modeDiscover ) {
-					modeDiscover = !modeDiscover
+				if ( window.localStorage.mode != 'discover' ) {
+					window.localStorage.mode = 'discover'
 					discoverButton[0].setAttribute( 'class', 'mode-discover' )
-				} else if ( modeDiscover ) {
-					modeDiscover = !modeDiscover
+				} else if ( window.localStorage.mode == 'discover' ) {
+					window.localStorage.mode = null
 					discoverButton[0].setAttribute( 'class', '' )
 				}
 			})
