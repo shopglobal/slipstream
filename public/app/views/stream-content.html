@@ -53,8 +53,12 @@
 					  </button>
 					  
 					  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
-					    <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true"><span class="glyphicon glyphicon-trash"></span>  Delete post</a></li>
-					    <li role="presentation"><a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Open original</a></li>
+					    <li role="presentation" ng-hide=" mode == 'discover' ">
+					    	<a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true"><span class="glyphicon glyphicon-trash"></span>  Delete post</a>
+					    </li>
+					    <li role="presentation">
+					    	<a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Open original</a>
+					    </li>
 					  </ul>
 					</span>
 				</div>
