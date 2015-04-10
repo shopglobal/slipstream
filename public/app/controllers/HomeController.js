@@ -11,7 +11,6 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		$scope.content = new Discover()
 		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
 	}
-	
 
 	mixpanel.track( "Viewed stream", {
 		stream: $state.current.name.split(".")[1]

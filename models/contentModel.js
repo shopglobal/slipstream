@@ -3,7 +3,8 @@
 var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	Algolia = require( 'algolia-search' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents')
+	index = algolia.initIndex('Contents'),
+	textSearch = require( 'mongoose-text-search' )
 
 /*
 This first model is for the subdocuments. These record the instances that a user saves the article. It lacks the article text and is inserted in the main article object within an array.article
@@ -39,14 +40,18 @@ var ContentSchema = new mongoose.Schema( {
 /*
 The code below saves, deletes or updates items in our third-party search index. It may not be require later when we have a dedicated MongoDB library that we can connect it to, which requires admin rights.
 */
-ContentSchema.pre( 'save', function( callback ) {
-	index.addObject( this, function ( err, data ) {
-		callback()
-	}, this._id )
-})
+/*ContentSchema.post( 'save', function( callback ) {
+	
+
+	})
+})*/
 
 ContentSchema.post( 'remove', function( item ) {
 	index.deleteObject( item._id )
 })
+
+ContentSchema.plugin( textSearch )
+
+ContentSchema.index( { 'users.tags': 'text' } )
 
 module.exports = mongoose.model( 'Content', ContentSchema )

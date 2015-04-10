@@ -10,7 +10,7 @@ var Content = require( '../models/contentModel' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	Algolia = require( 'algolia-search' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents'),
+	index = algolia.initIndex( 'Contents' ),
 	urlExpand = require( 'url-expand' )
 
 // adds content to users stream.
@@ -36,11 +36,26 @@ exports.add = function ( req, res ) {
 					
 					var pushUser = result.users.push( newUser )
 					
-					result.save()
+					result.save( function () {
+						index.addObject( { 
+							title: result.title,
+							url: result.url,
+							description: result.description,
+							text: result.text,
+							date: result.date,
+							user: newUser.user,
+							added: newUser.added,
+							stream: newUser.stream
+						}, function ( err, data ) {
+							if ( err ) console.log( err )
+						}, newUser._id )
+					})
+										
 					return res.status( 200 ).json({
 						title: result.title,
 						description: result. description,
-						images: result.images
+						images: result.images,
+						_id: newUser._id
 					})
 				} else {
 					request( {
@@ -75,11 +90,28 @@ exports.add = function ( req, res ) {
 			
 			getUser( req.token )
 			.then( function ( user ) {
-				var users = content.users.push({
+				var users = content.users.create({
 					user: user._id,
 					added: ( new Date() / 1).toFixed(),
 					stream: req.body.type
 				})
+				
+				content.users.push( users )
+				
+				var content = {
+					title: content.title,
+					url: content.url,
+					description: content.description,
+					text: content.text,
+					date: content.date,
+					user: users.user,
+					added: users.added,
+					stream: users.stream
+				}
+				
+				index.addObject( content, function ( err, data ) {
+					if ( err ) console.log( err )
+				}, users._id )
 			})
 
 			if ( contentInfo.links[2].href ) {
@@ -96,7 +128,9 @@ exports.add = function ( req, res ) {
 			
 			function saveContent () {
 				content.save( function ( err, result ) {
-					resolve( result )
+					content._id = users._id
+					
+					resolve( content )
 				})
 			}
 		
@@ -193,9 +227,11 @@ exports.delete = function ( req, res ) {
 			.then( function ( result ) {
 				var remove = result.users.id( contentId ).remove()
 				
-				result.save()
-				
-				resolve( result )
+				result.save( function ( error, output ) {
+					index.deleteObject( contentId )
+					
+					resolve( result )
+				})
 			})
 		})
 	}
@@ -224,14 +260,16 @@ exports.addTags = function ( req, res ) {
 				{ 'users._id': contentId },
 				{ $pushAll: { 'users.$.tags': tags } }
 			).exec()
-			.then( function ( result ) { 
+			.then( function ( result ) {
+				
+				tags.forEach( function ( each ) {
+					index.partialUpdateObject( { '_tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': contentId } )
+				})
+				
 				resolve( result )
 			}, function ( error ) {
 				if ( error ) return reject( error )
 			})
-//				tags.forEach( function ( each ) {
-//					index.partialUpdateObject( { '_tags': { 'value': each.text, '_operation': 'AddUnique' }, 'objectID': result._id } )
-//				})
 				
 		})
 	}
@@ -261,7 +299,7 @@ exports.deleteTag = function ( req, res ) {
 				{ $pull: { 'users.$.tags': tag } } )
 			.exec()
 			.then( function ( result ) {
-//				index.partialUpdateObject( { '_tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': result._id } )
+				index.partialUpdateObject( { '_tags': { 'value': tag.text, '_operation': 'Remove' }, 'objectID': contentId } )
 				
 				resolve( result )
 			}, function ( error ) {
@@ -287,6 +325,23 @@ exports.deleteTag = function ( req, res ) {
 
 exports.search = function ( req, res ) {
 	
+	/*
+	Some search code for if we use our local server for it later.
+	*/
+	/*	
+	getUser( req.token )
+	.then( function ( user ) {
+		
+		Content.textSearch( req.query.terms, {
+//			filter: { 'users.user': user.id }
+		}, function ( error, results ) {
+			if ( error ) return res.status( 500 ).json( error )
+			
+			return res.status( 200 ).json( results.results )
+		})
+	})
+	*/
+	
 	getUser( req.token )
 	.then( function ( user ) {
 	
@@ -294,7 +349,7 @@ exports.search = function ( req, res ) {
 			if ( error ) return res.status( 500 ).json( result )
 
 			return res.status( 200 ).json( result.hits )
-		}, { facets: '*', facetFilters: [ 'users.user:' + user._id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
+		}, { facetFilters: [ 'user:' + user.id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
 	
 	})
 	.catch( function ( error ) {
