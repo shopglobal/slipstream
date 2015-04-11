@@ -34,7 +34,7 @@ exports.add = function ( req, res ) {
 						stream: req.body.type
 					})
 					
-					var pushUser = result.users.push( newUser )
+					result.users.push( newUser )
 					
 					result.save( function () {
 						index.addObject( { 
@@ -98,35 +98,31 @@ exports.add = function ( req, res ) {
 				
 				content.users.push( users )
 				
-				var content = {
-					title: content.title,
-					url: content.url,
-					description: content.description,
-					text: content.text,
-					date: content.date,
-					user: users.user,
-					added: users.added,
-					stream: users.stream
-				}
+				content.user = users.user
+				content.added = users.added
+				content.stream = users.stream
 				
 				index.addObject( content, function ( err, data ) {
 					if ( err ) console.log( err )
 				}, users._id )
-			})
-
-			if ( contentInfo.links[2].href ) {
-				saveImage( req.body.type, contentInfo.links[2].href )
-				.spread( function( imageHash, imageOriginalPath, imageThumbPath) {
-					content.images.push( {
-						orig: imageOriginalPath,
-						thumb: imageThumbPath,
-						hash: imageHash		
+				
+				/*
+				If there is a picture, save and record it. Then save.
+				*/
+				if ( contentInfo.links[2].href ) {
+					saveImage( req.body.type, contentInfo.links[2].href )
+					.spread( function( imageHash, imageOriginalPath, imageThumbPath) {
+						content.images.push( {
+							orig: imageOriginalPath,
+							thumb: imageThumbPath,
+							hash: imageHash		
+						})
+						saveContent( users )
 					})
-					saveContent()
-				})
-			} else { saveContent() }
+				} else { saveContent( users ) }
+			})
 			
-			function saveContent () {
+			function saveContent ( users ) {
 				content.save( function ( err, result ) {
 					content._id = users._id
 					
