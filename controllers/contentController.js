@@ -353,3 +353,46 @@ exports.search = function ( req, res ) {
 	})
 	
 }
+
+exports.following = function ( req, res ) {
+	
+	getUser( req.token )
+	.then( function ( user ) {
+		
+		var following = []
+		
+		var array = user.following.forEach( function ( each ) {
+			following.push( each.user )
+		})
+		
+		Content.aggregate( [
+			{ $unwind: '$users' },
+			{ $match: { 
+				'users.user': { $in: following }, 
+				'users.stream': req.params.stream } },
+			{ $project: { 
+				_id: '$users._id',
+				title: '$title', 
+				url: '$url', 
+				images: '$images',
+				description: '$description',
+				added: '$users.added',
+				user: '$users.user',
+				stream: '$users.stream',
+				text: '$text',
+				processing: '$processing',
+				tags: '$users.tags'
+			} },
+			{ $sort: { added: -1 } }
+			/*{ $skip: skip },
+			{ $limit: show }*/
+		] ).exec()
+		.then( function ( results ) {
+			return res.status( 200 ).json( results )
+		}, function ( error ) {
+			console.log( error )
+
+			return res.status( 500 ).json( error )
+		})
+	})
+}

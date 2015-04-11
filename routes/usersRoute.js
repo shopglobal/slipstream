@@ -73,4 +73,8 @@ router.route('/stream/:stream')
 		contentController.delete( req, res )
 	})
 
+router.route( '/following/:stream' )
+	.get( userController.checkAuthorization, contentController.following )
+	
+
 module.exports = router
