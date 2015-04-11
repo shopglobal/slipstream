@@ -7,3 +7,4 @@ public/vendor
 public/images/blogs/**
 
 .env
+newrelic_agent.log
