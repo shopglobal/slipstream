@@ -18,15 +18,15 @@
 				<form name="" class="form-control pull-right add-form-toggle-buttons" toggle-buttons>
 					<div class="btn-group pull-right">
 						<label for="read" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="read" name="type" value="read"  ng-model="contentParams.type" class="input-add-checkbox" />
+							<input type="radio" id="read" name="type" value="read" ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-book"></span>
 						</label>
-						<label for="watch" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="watch" name="type" value="watch"  ng-model="contentParams.type" class="input-add-checkbox" />
+						<label for="watch" type="button" class="type-toggle btn btn-green" >
+							<input type="radio" id="watch" name="type" value="watch"  ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-play-circle"></span>
 						</label>
-						<label for="listen" type="button" class="type-toggle btn btn-green">
-							<input type="radio" id="listen" name="type" value="listen" ng-model="contentParams.type" class="input-add-checkbox" />
+						<label for="listen" type="button" class="type-toggle btn btn-green" >
+							<input type="radio" id="listen" name="type" value="listen" ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-headphones"></span>
 						</label>
 					</div>

@@ -1,4 +1,4 @@
-app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', function( $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash ) {
+app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', '$timeout', function( $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash, $timeout ) {
 
 	$scope.currentState = $state.current.name
 	$scope.tags = []
@@ -40,11 +40,28 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 					title: data.title,
 					url: $scope.contentParams.url
 				})
+				return
 			})
 			.error( function ( error, status ) {
 				$scope.showSpinner = false
 				$flash.error = "Problem adding content."
+				return
 			})
+	}
+
+	/*If the stream is switched after the URL is put in, delete the old one and save it again in the new stream.*/
+	$scope.switchStream = function () {
+		if ( $scope.contentParams.url.length >= 5 ) {
+			$scope.showPreview = false
+			$scope.showSpinner = true
+			$scope.deleteItem()
+			$timeout( function () {
+				$scope.addContent()
+				return
+			}, 1500 )			
+		} else {
+			return
+		}
 	}
 
 	// deletes article content from the user's databse and stream
