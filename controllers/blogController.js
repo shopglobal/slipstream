@@ -180,13 +180,18 @@ exports.add = function ( req, res ) {
 	function replaceImages ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
-		jsdom.env( article.content, function ( error, window ) {
+		jsdom.env( article.content, {
+			features: {
+				ProcessExternalResources: false
+			}
+		}, function ( error, window ) {
 			
-			var images = window.document.getElementsByTagName( 'img' ),
-				paragraphs = window.document.body.getElementsByTagName( 'p' )
+			var images = window.document.getElementsByTagName( 'img' )			
 			
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
 				return Q.Promise( function ( resolve, reject, notify ) {
+					
+					console.log( each.src )
 					
 					saveImage( req.body.type, each.src )
 					.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
@@ -199,6 +204,9 @@ exports.add = function ( req, res ) {
 						each.src = imageOriginalPath
 
 						resolve()
+					})
+					.catch( function ( error ) {
+						reject( error )
 					})
 				
 				})
@@ -252,6 +260,9 @@ exports.add = function ( req, res ) {
 				.then( function ( article ) {
 					log.info( { title: article.title, url: article.url }, "Article saved" )
 					return
+				})
+				.catch( function ( error ) {
+					console.log( error )
 				})
 			})
 		}
