@@ -23,6 +23,11 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 			return
 		}
 
+		if ( $scope.contentPreview ) {
+			$scope.showPreview = false
+			$scope.deleteItem()
+		}
+
 		$http
 			.post( '/api/add', $scope.contentParams )
 			.success( function ( data, status ) {
@@ -50,8 +55,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 			id: $scope.contentPreview._id
 		}})
 		.success( function( data ) {
-			$scope.contentParams.url = ""
-
+			// $scope.contentParams.url = ""
 		})
 		.error( function( error ) {
 			console.log( error )

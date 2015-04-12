@@ -9,7 +9,7 @@
 		<div class="add-form clear-fix col-md-12">
 
 			<div class="add-form-text col-md-8">
-				<input type="text" class="form-control input-green input-line" ng-model="contentParams.url" placeholder="Paste URL" ng-change="addContent(); blankCheck()">
+				<input type="text" class="form-control input-green input-line" ng-model="contentParams.url" placeholder="Paste URL" ng-change="addContent(); blankCheck()" ng-model-options="{ debounce: 1000 }">
 			</div>
 
 			<div class="clear-fix"></div>
