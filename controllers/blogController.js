@@ -21,7 +21,10 @@ var fs = require('fs'),
 	htmlStripper = require( 'htmlstrip-native' ),
 	needle = require( 'needle' ),
 	readability = require( 'node-readability' ),
-	urlExpand = require( 'url-expand' )
+	urlExpand = require( 'url-expand' ),
+	Algolia = require( 'algolia-search' ),
+	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
+	index = algolia.initIndex( 'Contents' )
 //	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
@@ -48,6 +51,23 @@ exports.add = function ( req, res ) {
 					var push = result.users.push( users )
 					
 					result.save( function( error, result ) {
+						
+						/*
+						Save the item to Algolia
+						*/
+						index.addObject( { 
+							title: result.title,
+							url: result.url,
+							description: result.description,
+							text: result.text,
+							date: result.date,
+							user: users.user,
+							added: users.added,
+							stream: users.stream
+						}, function ( err, data ) {
+							if ( err ) console.log( err )
+						}, users._id )
+						
 						return resolve({
 							'_id': users._id,
 							title: result.title,
@@ -114,6 +134,22 @@ exports.add = function ( req, res ) {
 										content: article.content } )
 
 									var b = new Content( newArticle )
+									
+									/*
+									Save to Alglia search.
+									*/
+									index.addObject( { 
+										title: newArticle.title,
+										url: newArticle.url,
+										description: newArticle.description,
+										text: newArticle.content,
+										date: newArticle.date,
+										user: newUser.user,
+										added: newUser.added,
+										stream: newUser.stream
+									}, function ( err, data ) {
+										if ( err ) console.log( err )
+									}, newUser._id )
 
 									res.status( 200 ).json( newArticle )
 
@@ -196,6 +232,7 @@ exports.add = function ( req, res ) {
 
 			article.update( { $set: blog } ).exec()
 			.then( function ( blog ) {
+				
 				resolve( blog )	
 			}, function ( error ) {
 				reject( new Error( error ) )

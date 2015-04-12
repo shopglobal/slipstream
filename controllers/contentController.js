@@ -98,11 +98,16 @@ exports.add = function ( req, res ) {
 				
 				content.users.push( users )
 				
-				content.user = users.user
-				content.added = users.added
-				content.stream = users.stream
+				var searchIndex = {
+					user: users.user,
+					added: users.added,
+					stream: users.stream,
+					text: content.text,
+					description: content.description,
+					title: content.title
+				}
 				
-				index.addObject( content, function ( err, data ) {
+				index.addObject( searchIndex, function ( err, data ) {
 					if ( err ) console.log( err )
 				}, users._id )
 				
