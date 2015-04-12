@@ -191,8 +191,6 @@ exports.add = function ( req, res ) {
 			imageMapFunction = Array.prototype.map.call( images, function ( each, index ) {
 				return Q.Promise( function ( resolve, reject, notify ) {
 					
-					console.log( each.src )
-					
 					saveImage( req.body.type, each.src )
 					.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 						article.images.push({

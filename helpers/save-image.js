@@ -98,8 +98,11 @@ module.exports = function ( type, imageUrl ) {
 								
 			gm( request( image.orig ) )
 				.setFormat("jpg")
-				.resize( 400 )
-				.crop( 400, 224 )
+				.rawSize( 400, 224 )
+				.gravity( 'Center' )
+				.resize( 400, '224^' )
+				.extent( 400, 224 )
+				.noProfile()
 				.stream( function ( err, stdout, stderr ) {
 					if ( err ) return reject( new Error( err ) )
 
@@ -141,7 +144,7 @@ module.exports = function ( type, imageUrl ) {
 		resolve( returnArray )
 	})
 	.catch( function( error ) {
-		reject( new Error( error.message ) )
+		reject( new Error( error ) )
 	})
 	
 	})
