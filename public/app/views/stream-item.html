@@ -13,12 +13,12 @@
 
 			<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
 
-			<div class="item-description" ng-hide=" item.stream == 'listen' ">
-				<span ng-bind="item.description | stripTags | limitTo: 260"></span> ...
+			<div class="item-description">
+				<span ng-hide=" item.stream == 'listen' "><span ng-bind="item.description | stripTags | limitTo: 260"></span> ...</span>
 
 				<div class="clearfix"></div>
 
-				<div class="content-tags" ng-if=" mode != 'discover' ">
+				<div class="content-tags">
 					<tags-input 
 						ng-model="item.tags" 
 						on-tag-added="tagAdded( $tag, item._id )"
