@@ -154,7 +154,7 @@ a { color: $green;
 	&:before { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 7px solid $list-border; top: -7px; right: 8px; content: ''; position: absolute; }
 	li { border-bottom: 1px solid $list-border ;
 		&:last-child { border-bottom: none; }
-		a { text-align: center; color: $dark-text;
+		a { text-align: left; color: $dark-text;
 			.glyphicon { font-size: 14px; } } } }
 
 // new classes

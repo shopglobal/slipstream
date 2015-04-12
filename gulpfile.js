@@ -37,9 +37,9 @@ gulp.task( 'copyFonts', function() {
 		.pipe( gulp.dest('build/fonts') )
 })
 
-gulp.task( 'copyFontsBS', function() {
-	gulp.src( 'public/vendor/bootstrap/fonts/*' )
-		.pipe( gulp.dest('build/fonts') )
+gulp.task( 'copyBS', function() {
+	gulp.src( 'public/vendor/bootstrap/dist/**/*' )
+		.pipe( gulp.dest('build/vendor/bootstrap/dist') )
 })
 
 gulp.task( 'copyImages', function() {
@@ -47,10 +47,11 @@ gulp.task( 'copyImages', function() {
 		.pipe( gulp.dest('build/images') )
 })
 
+
 gulp.task( 'default', [
 	'minify',
 	'minifyViews',
 	'copyFonts',
-	'copyFontsBS',
+	'copyBS',
 	'copyImages'
 ])
