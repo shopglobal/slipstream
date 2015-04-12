@@ -159,7 +159,7 @@ a { color: $green;
 
 // new classes
 
-.no-border { border: none; background: none;
+.no-border { border: none; background: none; box-shadow: none !important;
 	&:hover, &:active { border: none; background: none; box-shadow: none; } }
 
 .text-green { color: $green; }
