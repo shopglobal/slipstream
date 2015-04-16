@@ -84,7 +84,8 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 
 	$scope.cancel = function() {
 		if ( $scope.showPreview === true ) {
-			mixpanel.track( "Add item cancelled", {
+			mixpanel.track( "Adding", {
+				action: "Cancelled",
 				url: $scope.contentParams.url
 			})
 			$scope.deleteItem()
@@ -98,7 +99,8 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	$scope.done = function( id ) {
 		if( $scope.tags.length === 0 ) {
 			$modalInstance.close()
-			mixpanel.track( "Add modal done", {
+			mixpanel.track( "Adding", {
+				action: "Done",
 				url: $scope.contentParams.url,
 				title: $scope.contentPreview.title
 			} )
@@ -111,11 +113,13 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 				})
 				.success( function ( result ) {
 					$modalInstance.close()
-					mixpanel.track( "Add modal done", {
+					mixpanel.track( "Adding", {
+						action: "Done",
 						url: $scope.contentParams.url,
 						title: $scope.contentPreview.title
 					})
-					mixpanel.track( "Tags added",{
+					mixpanel.track( "Tagging", {
+						action: "Added",
 						title: $scope.contentPreview.title,
 						url: $scope.contentParams.url,
 						tags: $scope.tags

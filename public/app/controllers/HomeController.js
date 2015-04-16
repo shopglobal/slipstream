@@ -12,7 +12,8 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
 	}
 
-	mixpanel.track( "Viewed stream", {
+	mixpanel.track( "Stream", {
+		action: "Viewed",
 		stream: $state.current.name.split(".")[1]
 	})
 
@@ -51,7 +52,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 
 	$scope.logout = function() {
 			delete $window.sessionStorage.token
-			mixpanel.track( "Logged out" )
+			mixpanel.track( "User", {
+				action: "Sign out"
+			} )
 			$state.go( 'landing.login' )
 	}
 
@@ -110,7 +113,8 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			})
 			.success( function ( result ) {
 				$flash.success = "Tag added."
-				mixpanel.track( "Added tag", {
+				mixpanel.track( "Taggin", {
+					action: "Added",
 					tag: tag
 				})
 			})
@@ -127,7 +131,8 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 			} } )
 			.success( function ( result ) {
 				$flash.success = "Tag removed."
-				mixpanel.track( "Removed tag", {
+				mixpanel.track( "Tagging", {
+					action: "Removed",
 					tag: tag
 				})
 			})
@@ -139,7 +144,8 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	$scope.openReaderModal = function ( article ) {
 		console.log( "modal should open ")
 
-		mixpanel.track( "Opened reader", {
+		mixpanel.track( "Reader", {
+			action: "Opened",
 			article: article
 		})
 

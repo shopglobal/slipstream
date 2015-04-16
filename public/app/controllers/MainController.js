@@ -57,7 +57,9 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				    "$last_login": new Date(),
 				    "$name": data.username
 				})
-				mixpanel.track( "Registered" )
+				mixpanel.track( "User", {
+					action: "Registered"
+				} )
 				$state.go( 'app.read' )
 			})
 			.error( function ( error ) {
@@ -70,7 +72,9 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 		$http
 			.delete( '/api/users' )
 			.success( function ( data ) {
-				mixpanel.track( "Account deleted" )
+				mixpanel.track( "User", {
+					action: "Delete account"
+				} )
 				$state.go( 'landing.splash' )
 			})
 			.error( function ( error ) {
@@ -81,7 +85,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 	$scope.resetPassword = function () {
 		if ( $scope.user.email.length == 0 ) {
 			$flash.error = "Email address required!"
-			mixpanel.track( "Password reset failed", {
+			mixpanel.track( "User", {
+				action: "Password reset failed",
 				error: "Email address required!"
 			})
 		} else {
@@ -90,11 +95,14 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 					params: { email: $scope.user.email }
 				})
 				.success( function ( data ) {
-					mixpanel.track( "Password reset" )
+					mixpanel.track( "User", {
+						action: "Password reset"
+					} )
 					$flash.success = data
 				})
 				.error( function ( error ) {
-					mixpanel.track( "Password reset failed", {
+					mixpanel.track( "User", {
+						action: "Password reset failed",
 						error: error
 					} )
 					$flash.error = error
