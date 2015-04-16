@@ -1,23 +1,21 @@
-	var chai = require( 'chai' ),
-		chaiAsPromised = require( 'chai-as-promised' ),
-		assert = chai.assert,
-		should = chai.should(),
-		// saveImage = require( '../helpers/save-image' ),
-		path = require( 'path' ),
-		getUser = require( '../helpers/get-user' ),
-		userController = require( '../controllers/userController' ),
-		blogController = require( '../controllers/blogController' ),
-		request = require( 'request' ),
-		User = require( '../models/userModel' ),
-		Content = require( '../models/contentModel' ),
-		shortid = require( 'shortid' )
-	//	app = require( '../server' )
+var chai = require( 'chai' ),
+	chaiAsPromised = require( 'chai-as-promised' ),
+	assert = require( 'chai' ).assert,
+	should = require( 'chai' ).should(),
+	saveImage = require( '../helpers/save-image' ),
+	path = require( 'path' ),
+	getUser = require( '../helpers/get-user' ),
+	userController = require( '../controllers/userController' ),
+	blogController = require( '../controllers/blogController' ),
+	request = require( 'request' ),
+	User = require( '../models/userModel' ),
+	Content = require( '../models/contentModel' ),
+	shortid = require( 'shortid' )
+//	app = require( '../server' )
 
-	chai.use( chaiAsPromised )
+chai.use( chaiAsPromised )
 
 var userSuffix = shortid.generate()
-
-beta = {}
 
 newTestUser = {
 	username: 'test-user-' + userSuffix
@@ -25,45 +23,10 @@ newTestUser = {
 
 newTestContent = {
 	medium: {},
-	youtube: {},
-	soundcloud: {}
+	youtube: {}
 }
 
 var PORT = process.env.PORT
-
-describe( 'AdminController', function () {
-
-	describe( 'betaKeys', function () {
-
-		it( 'should create a betakey', function ( done ) {
-
-			request({
-				method: 'POST',
-				url: 'http://localhost:' + PORT + '/api/betakeys',
-				json: true,
-				strictSSL: false,
-				headers: {
-					"Authorization": "Bearer " + process.env.TEST_ADMIN_TOKEN
-				},
-				body: {
-					amount: 1
-				}
-			} , function ( err, reponse, body ) {
-				if ( err ) return done( err )
-
-				beta.key = body[0]
-
-				body.should.be.a( 'array' )
-				body.should.have.length( 1 )
-
-				done()
-
-			})
-		})
-
-	})
-
-})
 
 /*
 Tests the user related functions
@@ -81,9 +44,8 @@ describe( 'UserController', function () {
 				strictSSL: false,
 				body: {
 					"username": newTestUser.username,
-					"email": newTestUser.username + '@slipstreamapp.com',
-					"password": '1q2w3e4r',
-					"betakey": beta.key
+					"email": 'test-user@zombo.com',
+					"password": '1q2w3e4r'
 				} }, function ( err, response, body ) {
 					if( err )
 						return done( err )
@@ -97,16 +59,16 @@ describe( 'UserController', function () {
 			})
 		})
 	})
-})
+})	
 
 /*
 Test the save-image.js middleware, custom made by us
 */
-/*describe( 'SaveImage', function () {
+describe( 'SaveImage', function () {
 	
 	describe( 'saveImage( type, url )', function () {		
 		
-		it( 'should return a hash', function ( done ) {
+		it( 'should return a hash', function( done ) {
 			var type = 'read',
 				imageUrl = "http://i.imgur.com/wd7jzMg.gif"
 			
@@ -119,7 +81,7 @@ Test the save-image.js middleware, custom made by us
 		
 	})
 	   
-})*/
+})
 
 /*
 Test the save-image.js middleware we made for saving pictures.
@@ -192,7 +154,7 @@ describe( 'Add content', function () {
 						if ( err )
 							return done( err )
 						
-						body.should.include.keys( [ "_id", "title", "description" ] )
+						body.should.include.keys( [ "user", "title", "content" ] )
 						
 						done()
 				})
@@ -204,28 +166,27 @@ describe( 'Add content', function () {
 		
 		it( 'should return the article data, including user, title and content fields', function ( done ) {
 			
-			this.timeout( 10000 )
+			this.timeout( 5000 )
 			
-			request({
-				method: 'POST',
-				url: 'http://localhost:' + PORT + '/api/add',
-				json: true,
-				strictSSL: false,
-				body: {
-					"type": "read",
-					"url": "http://medium.com/message/archive-fever-2a330b627274"
-				},
-				headers: {
-					"Authorization": "Bearer " + newTestUser.token
-				} }, function ( err, response, body ) {
-					if ( err ) return done( err )
-				
-					newTestContent.medium.id = body._id
+				request({
+					method: 'POST',
+					url: 'http://localhost:' + PORT + '/api/add',
+					json: true,
+					strictSSL: false,
+					body: {
+						"type": "read",
+						"url": "http://medium.com/message/archive-fever-2a330b627274"
+					},
+					headers: {
+						"Authorization": "Bearer " + newTestUser.token
+					} }, function ( err, response, body ) {
 					
-					body.should.include.keys( [ "_id", "title", "description" ] )
+						newTestContent.medium.id = body._id
+						
+						body.should.include.keys( [ "user", "title", "content" ] )
 
-					done()
-			})
+						done()
+				})
 				
 		})
 	})
@@ -251,7 +212,7 @@ describe( 'Add content', function () {
 				
 					newTestContent.youtube.id = body._id
 
-					body.should.include.keys( [ "_id", "title", "description" ] )
+					body.should.include.keys( 'user' )
 
 					done()
 			})
@@ -279,7 +240,7 @@ describe( 'Add content', function () {
 				
 					newTestContent.youtube.id = body._id
 
-					body.should.include.keys( [ "_id", "title", "description" ] )
+					body.should.include.keys( 'user' )
 
 					done()
 			})
@@ -305,9 +266,9 @@ describe( 'Add content', function () {
 					"Authorization": "Bearer " + newTestUser.token
 				} }, function ( err, response, body ) {
 				
-					newTestContent.soundcloud.id = body._id
+					newTestContent.youtube.id = body._id
 
-					body.should.include.keys( [ "_id", "title", "description" ] )
+					body.should.include.keys( 'user' )
 
 					done()
 			})
@@ -338,8 +299,7 @@ describe( 'Stream content', function () {
 
 					response.statusCode.should.equal( 200 )
 					body.should.be.an( "array" )
-					body.should.include.deep.property( '1.title', 'Obama vetoes Keystone oil pipeline bill' )
-					body.should.include.deep.property( '0.title', 'Archive Fever' )
+					body.should.include.deep.property( '1.title', 'BBC News - Obama vetoes Keystone oil pipeline bill' )
 
 					done()
 			})
@@ -350,7 +310,7 @@ describe( 'Stream content', function () {
 	
 	describe( 'GET /api/stream/listen', function() {
 		
-		it( 'should return list of Listen items', function ( done ) {
+		it( 'should return list of Listen items', function( done ) {
 			
 			request({
 				method: 'GET',
@@ -402,7 +362,7 @@ describe( 'Delete content', function () {
 				} }, function ( err, response, body ) {
 					if ( err ) return done( err )
 
-					response.statusCode.should.equal( 200 )
+					body.should.include.keys( 'content' )
 
 					done()
 			})
@@ -429,7 +389,7 @@ describe( 'Delete content', function () {
 				} }, function ( err, response, body ) {
 					if ( err ) return done( err )
 
-					response.statusCode.should.equal( 200 )
+					body.should.include.keys( 'title' )
 
 					done()
 			})
