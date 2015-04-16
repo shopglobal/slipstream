@@ -222,8 +222,8 @@ a { color: $green;
 			.text-discovery { position: absolute; top: 14px; }
 			img { width: auto; height: 37px; } }
 		.mode-discover { 
-			& > .text-discovery { color: white; text-shadow: 0 0 5px rgba( 255, 255, 255, 1.0); }
-			& > .img-discovery { -webkit-filter: drop-shadow( 0px 0px 5px rgba( 255, 255, 255, 1) ); -webkit-filter: brightness( 2 ); } }
+			& > .img-discovery { -webkit-filter: drop-shadow( 0px 0px 5px rgba( 255, 255, 255, 1) ) brightness( 2 ) !important; }
+			& > .text-discovery { color: white; text-shadow: 0 0 5px rgba( 255, 255, 255, 1.0); } }
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
 		.dropdown-menu { z-index: 1000; }
 		.navbar-center input[type='text'] { width: 255px; } } 
