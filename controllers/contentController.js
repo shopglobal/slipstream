@@ -226,6 +226,8 @@ exports.delete = function ( req, res ) {
 			
 			Content.findOne( { 'users._id': req.query.id } ).exec()
 			.then( function ( result ) {
+				if ( !result ) return reject( new Error( "No item found when trying to dleete." ) )
+				
 				var remove = result.users.id( contentId ).remove()
 				
 				result.save( function ( error, output ) {
