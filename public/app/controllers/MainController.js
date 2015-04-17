@@ -32,7 +32,9 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.success( function ( data, status ) {
 				$window.localStorage.token = data.token
 				mixpanel.identify( data.id )
-				mixpanel.track( "Logged in" )
+				mixpanel.track( "User", {
+					action: "Logged in" 
+				})
 				$state.go( 'app.read' )
 			} )
 			.error( function ( error ) {
