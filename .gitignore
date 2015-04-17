@@ -10,3 +10,5 @@ public/images/blogs/**
 newrelic_agent.log
 
 nodemon.json
+
+nodemon.json
