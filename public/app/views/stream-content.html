@@ -36,8 +36,8 @@
 				<div class="date-added-ago pull-left meta-text">
 					<span ng-bind="item.added | timeAgo" ng-hide=" mode == 'discover' "></span>
 					<span ng-if=" mode == 'discover' ">
-						Saved by <span user-name id=" item.user " ></span> and
-						<span ng-bind="item.saveCount"></span> other<span ng-show="item.saveCount > 1">s</span>
+						Saved by <span user-name id=" item.user " ></span> <span ng-show=" item.saveCount >= 2"> and
+						<span ng-bind="item.saveCount - 1"></span> other<span ng-show="item.saveCount > 2">s</span></span>
 					</span>
 				</div>
 
