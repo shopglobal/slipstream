@@ -4,7 +4,8 @@ var gulp = require( 'gulp' ),
 	usemin = require( 'gulp-usemin' ),
 	minifyCss = require( 'gulp-minify-css' ),
 	minifyHtml = require( 'gulp-minify-html' ),
-	gulpCopy = require( 'gulp-copy' )
+	gulpCopy = require( 'gulp-copy' ),
+	concat = require( 'gulp-concat' )
 
 require('events').EventEmitter.prototype._maxListeners = 100
 
@@ -19,8 +20,7 @@ gulp.task( 'minify', function() {
 		.pipe( usemin({
 			js: [ uglify() ],
 			html: [ minifyHtml({ empty: true }) ],
-			appjs: [ uglify() ],
-			jsdeps: [ uglify() ],
+			appjs: [ 'concat' ],
 			css: [ minifyCss(), 'concat' ]
 		}))
 		.pipe( gulp.dest( './build/' ) )
@@ -37,9 +37,9 @@ gulp.task( 'copyFonts', function() {
 		.pipe( gulp.dest('build/fonts') )
 })
 
-gulp.task( 'copyBS', function() {
-	gulp.src( 'public/vendor/bootstrap/dist/**/*' )
-		.pipe( gulp.dest('build/vendor/bootstrap/dist') )
+gulp.task( 'copyVendor', function() {
+	gulp.src( 'public/vendor/**/*' )
+		.pipe( gulp.dest('build/vendor') )
 })
 
 gulp.task( 'copyImages', function() {
@@ -52,6 +52,6 @@ gulp.task( 'default', [
 	'minify',
 	'minifyViews',
 	'copyFonts',
-	'copyBS',
+	'copyVendor',
 	'copyImages'
 ])
