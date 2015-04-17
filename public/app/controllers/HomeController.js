@@ -3,9 +3,9 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 	$window.scrollTo( 0, 0 )
 
 	$scope.mode = window.localStorage.mode
+	$scope.currentStream = $state.current.name.split(".")[1]
 
 	if ( $scope.mode != 'discover' ) {
-		$scope.currentStream = $state.current.name.split(".")[1]
 		$scope.content = new Content()
 	} else if ( $scope.mode == 'discover' ) {
 		$scope.content = new Discover()
