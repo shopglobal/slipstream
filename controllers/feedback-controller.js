@@ -6,17 +6,11 @@ var builder = require( 'xmlbuilder' ),
 	User = require( '../models/userModel' ),
 	Q = require( 'q' ),
 	path = require( 'path' ),
-	knox = require( 'knox' )	
-	
-var s3Client = knox.createClient( {
-	key: process.env.PLANTER_S3_ACCESS_KEY_ID,
-	secret: process.env.PLANTER_S3_SECRET_ACCESS_KEY,
-	bucket: process.env.PLANTER_BUCKET_NAME
-} )
+	Sftp = require( 'sftp-upload' )
 
 exports.add = function ( req, res ) {
 	
-	var xmlOutput = path.join( __dirname, '../build/feedback.xml' )
+	var xmlOutput = path.join( __dirname, '../logs/feedback/feedback.xml' )
 
 	function makeFeedback( user ) {
 		return Q.Promise( function( resolve, reject, notify ) {
@@ -82,14 +76,24 @@ exports.add = function ( req, res ) {
 		fs.writeFile( xmlOutput, xml, function( err ) {
 			if ( err ) return res.status( 500 ).json( "Could not save feedback." )
 			
-			var uploader = s3Client.putFile( xmlOutput, '/feedback.xml', function ( err, result ) {
-				if ( err ) console.log( err )
-				
-				console.log( uploader.url )
-				
+			var sftp = new Sftp( {
+				host: '162.243.138.210',
+				username: 'root',
+				path: path.join( __dirname, '../logs/feedback' ),
+				remoteDir: '/slipstream/feedback',
+				privateKey: fs.readFileSync( path.join( __dirname, '../digitalocean' ) )
+			} )
+			.on( 'error', function( error ) {
+				console.log( error )
+			})
+			.on( 'uploading', function( pgs ) {
+				console.log( "It's uploading: " + pgs.file )
+			})
+			.on( 'completed', function() {
 				return res.status( 200 ).json( "Feedback sent. Thank you." )
 			})
 			
+			sftp.upload()
 		})
 	})
 	.catch( function ( error ) {

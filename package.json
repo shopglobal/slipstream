@@ -71,6 +71,7 @@
     "readable-proxy": "OKNoah/readable-proxy-jsdom#7242f7eb369815ed9de895dc74c8446a7ca36194",
     "request": "^2.51.0",
     "s3": "^4.4.0",
+    "sftp-upload": "0.0.6",
     "soundclouder": "^0.8.1",
     "uglify-js": "^2.4.17",
     "underscore": "^1.7.0",
