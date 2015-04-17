@@ -61,6 +61,7 @@ exports.add = function ( req, res ) {
 							description: result.description,
 							text: result.text,
 							date: result.date,
+							images: result.images,
 							user: users.user,
 							added: users.added,
 							stream: users.stream
@@ -144,6 +145,7 @@ exports.add = function ( req, res ) {
 										description: newArticle.description,
 										text: newArticle.content,
 										date: newArticle.date,
+										images: newArticle.images,
 										user: newUser.user,
 										added: newUser.added,
 										stream: newUser.stream

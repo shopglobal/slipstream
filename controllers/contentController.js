@@ -43,6 +43,7 @@ exports.add = function ( req, res ) {
 							description: result.description,
 							text: result.text,
 							date: result.date,
+							images: result.images,
 							user: newUser.user,
 							added: newUser.added,
 							stream: newUser.stream
@@ -104,7 +105,8 @@ exports.add = function ( req, res ) {
 					stream: users.stream,
 					text: content.text,
 					description: content.description,
-					title: content.title
+					title: content.title,
+					images: result.images
 				}
 				
 				index.addObject( searchIndex, function ( err, data ) {
