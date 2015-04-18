@@ -106,7 +106,7 @@ exports.add = function ( req, res ) {
 					text: content.text,
 					description: content.description,
 					title: content.title,
-					images: result.images
+					images: content.images
 				}
 				
 				index.addObject( searchIndex, function ( err, data ) {
