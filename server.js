@@ -33,10 +33,10 @@ app
 http
 	.createServer( app ).listen( process.env.PORT )
 
-//app.get('/', function( req, res ) {
-//	res.writeHead( 200, { 'Content-Type': 'text/plain' } )
-//	res.sendFile(indexPath)
-//})
+setInterval(function() {
+    http.get("http://beta.slipstreamapp.com")
+    http.get("http://glacial-sea-2323.herokuapp.com/")	
+}, 300000)
 
 log.info( "Running on port " + process.env.PORT )
 
