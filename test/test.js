@@ -48,13 +48,41 @@ describe( 'AdminController', function () {
 				body: {
 					amount: 1
 				}
-			} , function ( err, reponse, body ) {
+			} , function ( err, response, body ) {
 				if ( err ) return done( err )
 
 				beta.key = body[0]
 
 				body.should.be.a( 'array' )
 				body.should.have.length( 1 )
+
+				done()
+
+			})
+		})
+
+	})
+
+	describe( 'toggleSent', function () {
+
+		it( 'should change sent staus of key to true', function ( done ) {
+
+			request({
+				method: 'POST',
+				url: 'http://localhost:' + PORT + '/api/betakeys/sent',
+				json: true,
+				strictSSL: false,
+				headers: {
+					"Authorization": "Bearer " + process.env.TEST_ADMIN_TOKEN
+				},
+				body: {
+					key: beta.key
+				}
+			} , function ( err, response, body ) {
+				if ( err ) return done( err )
+
+				body.should.be.a( 'string' )
+				response.statusCode.should.equal( 200 )
 
 				done()
 

@@ -73,3 +73,27 @@ exports.show = function ( req, res ) {
 		return res.status( 500 ).json( error.message )
 	})
 }
+
+/*
+Changes the status of a betakey to 'sent' or 'unsent'
+*/
+exports.sent = function ( req, res ) {
+	
+	getUser( req.token )
+	.then( function ( user ) {
+		if ( user.role == "admin" ) {
+			
+			Betakey.findOne( { key: req.body.key } )
+			.then( function ( result ) {
+				result.toggleSent()
+				.then( function ( result ) {
+					return res.status( 200 ).json( "Changed sent status to " + result.sent )
+				}, function ( error ) {
+					return res.status( 500 ).json( "Problem changing sent key status." )
+				})
+			}, function ( error ) {
+				return res.status( 500 ).json( "Problem changing sent key status." )
+			})
+		}
+	})
+}

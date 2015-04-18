@@ -206,6 +206,8 @@ a { color: $green;
 
 .key-used { text-decoration: line-through; color: red; }
 
+.container-existing-keys { height: 250px; overflow-x: scroll; }
+
 // navigation
 
 #header { 

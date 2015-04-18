@@ -54,6 +54,9 @@ router.route( '/betakeys' )
 	.post( userController.checkAuthorization, betakeyController.add )
 	.get( userController.checkAuthorization, betakeyController.show )
 
+router.route( '/betakeys/sent' )
+	.post( userController.checkAuthorization, betakeyController.sent )
+
 router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
 	.delete( userController.checkAuthorization, contentController.deleteTag )

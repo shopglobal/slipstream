@@ -22,4 +22,17 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 		.success( function ( data, status ) {
 			$scope.oldBetaKeys = data
 		})
+
+	$scope.toggleSent = function( key ) {
+		$http
+			.post( '/api/betakeys/sent', {
+				key: key
+			} )
+			.success( function ( result ) {
+				$flash.success = result
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+	}
 }])

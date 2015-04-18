@@ -4,7 +4,7 @@
 		<h1>Admin</h1>
 		<p class="dark-text">Perform admin tasks</p><br />
 
-		<div class="col-md-6">
+		<div class="col-md-3">
 
 			<button class="btn btn-green" ng-click="getBetaKeys( 10 )">10 new beta keys</button>
 
@@ -15,10 +15,11 @@
 			<div class="clearfix"></div>
 		</div>
 
-		<div class="col-md-6">
+		<div class="col-md-9 container-existing-keys">
 
 			<h2>Existing beta keys</h2>
 			<div ng-show="oldBetaKeys" ng-repeat="key in oldBetaKeys">
+				<input type="checkbox" class="input-key-sent" ng-model="key.sent" ng-change="toggleSent( key.key )">
 				<span ng-class="{ 'key-used' : key.used }"ng-bind="key.key"></span>
 				<span ng-show="key.used"> -
 					<span ng-bind="key.user"></span>
