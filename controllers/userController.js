@@ -238,11 +238,13 @@ exports.sendPasswordReset = function ( req, res ) {
 	
 	function emailTemporaryPassword ( user ) {
 		Q.Promise( function ( resolve, reject, notify ) {	
+			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) )
+			
 			var email = {
 				from: 'SlipStream <noahgray@me.com>',
 				to: user.email,
 				subject: 'Your temporary SlipStream password',
-				text: "We've received a request to reset your password. Here is your new temporary password: " + user.temporaryPassword + "<br /><br /> Your username is: " + user.username
+				html: passwordHtml.toString() + user.temporaryPassword + "</code></div><br /><a href='http://beta.slipstreamapp.com'><div class='button-visit'>Take me to slip stream.</div></a></div></html>"
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
