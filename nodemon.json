@@ -5,6 +5,7 @@
 	  "logs/*",
 	  "build/*",
 	  "mockups/*",
-	  "node_modules/*"
+	  "node_modules/*",
+	  "gulpfile.js"
   ]
 }

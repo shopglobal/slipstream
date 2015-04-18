@@ -8,7 +8,9 @@ var User = require( '../models/userModel' ),
 	log = require( '../helpers/logger.js' ),
 	Q = require( 'q' ),
 	Betakey = require( '../models/betakey-model' ),
-	getUser = require( '../helpers/get-user' )
+	getUser = require( '../helpers/get-user' ),
+	fs = require( 'fs' ),
+	path = require( 'path' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
@@ -87,6 +89,19 @@ exports.signUp = function ( req, res ) {
 
 			user.token = jwt.sign(user , secret.secretToken )
 			user.save( function ( err, user ) {
+				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
+				
+				var email = {
+					from: 'SlipStream <welcome@slipstreamapp.com>',
+					to: user.email,
+					subject: 'Welcome to Slipstream, ' + user.username,
+					html: welcomeHtml.toString()
+				}
+
+				mailgun.messages().send( email, function ( err, body ) {
+					if ( err ) console.log( err )
+				})
+				
 				return res.status( 200 ).json( user )
 			} )
 		})		
