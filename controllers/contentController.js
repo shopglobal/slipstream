@@ -162,8 +162,11 @@ exports.stream = function ( req, res ) {
 		stream = req.params.stream,	// the type of content to get
 		skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
 	
-	function getStream ( userid ) {
+
+	function getStream ( user ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+			var userid = mongoose.Types.ObjectId( user )
 		
 			Content.aggregate( [
 				{ $unwind: '$users' },
@@ -188,7 +191,6 @@ exports.stream = function ( req, res ) {
 				{ $skip: skip },
 				{ $limit: show }
 			] )
-//			.skip( page > 0 ? (( page - 1 ) * show ) : 0 ).limit( show )
 			.exec()
 			.then( function( results ) { 
 				
