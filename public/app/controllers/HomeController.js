@@ -90,7 +90,9 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 	// deletes an item. format: ` delete( type(string), id ) `
 
 	$scope.deleteItem = function ( type, id ) {
-		$http.delete( 'api/stream/' + type, { params: { id: id } } )
+		$http.delete( 'api/stream/' + $scope.username + '/' + type, { 
+			params: { id: id } 
+		} )
 		.success( function ( data, status ) {
 			mixpanel.track( "Deleted item", {
 				stream: type,

@@ -1,4 +1,4 @@
-app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', '$timeout', function( $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash, $timeout ) {
+app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', '$timeout', function( $stateParams, $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash, $timeout ) {
 
 	$scope.currentState = $state.current.name
 	$scope.tags = []
@@ -6,7 +6,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
-		type: $state.current.name.split(".")[1]
+		type: $stateParams.stream
 	}
 
 	mixpanel.track( "Add modal opened" )
@@ -67,7 +67,7 @@ app.controller('AddModalController', ['$scope', '$window', '$state', '$urlRouter
 	// deletes article content from the user's databse and stream
 
 	$scope.deleteItem = function () {
-		var endPoint = '/api/stream/' + $scope.contentParams.type
+		var endPoint = '/api/stream/' + $scope.username + '/' + $scope.contentParams.type
 		$http.delete( endPoint, { params: {
 			id: $scope.contentPreview._id
 		}})
