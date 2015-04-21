@@ -31,11 +31,15 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.post( '/api/authenticate', $scope.user )
 			.success( function ( data, status ) {
 				$window.localStorage.token = data.token
+				$window.localStorage.username = data.username
 				mixpanel.identify( data.id )
 				mixpanel.track( "User", {
 					action: "Logged in" 
 				})
-				$state.go( 'app.read' )
+				$state.go( 'app.stream', { 
+					username: data.username, 
+					stream: 'read'
+				} )
 			} )
 			.error( function ( error ) {
 				console.log( error )
@@ -51,6 +55,7 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.post( 'api/signup', $scope.reg )
 			.success( function ( data ) {
 				$window.localStorage.token = data.token
+				$window.localStorage.username = data.username
 				mixpanel.identify( data.id )
 				mixpanel.people.set({
 				    "id": data._id,
@@ -111,5 +116,19 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				})
 		}
 	}
+
+
+	// logs user out by deleting session storage and reloading the app
+
+	$scope.logout = function() {
+			delete $window.localStorage.token
+			delete $window.localStorage.username
+			delete $window.localStorage.mode
+			mixpanel.track( "User", {
+				action: "Sign out"
+			} )
+			$state.go( 'landing.login' )
+	}
+
 
 }])

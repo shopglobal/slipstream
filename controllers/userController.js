@@ -29,14 +29,10 @@ exports.login = function ( req, res ) {
 		}
 
 		user.verifyPassword( req.body.password, function( err, isMatch ) {
-			if (err)
-				return res.status( 500 ).json( err )
-
-			if ( !isMatch )
-				return res.status( 403 ).send( "Your password wasn't authenticated." )
+			if ( err || !isMatch ) return res.status( 403 ).json( "Trouble signing in." )
 
 			else 
-				return res.status( 200 ).json( { token: user.token, id: user._id } )
+				return res.status( 200 ).json( { token: user.token, username: user.username } )
 
 		} )
 		

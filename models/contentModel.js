@@ -10,13 +10,20 @@ var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 This first model is for the subdocuments. These record the instances that a user saves the article. It lacks the article text and is inserted in the main article object within an array.article
 */
 var UsersSchema = new mongoose.Schema({
-	user: String,
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	stream: String,
 	author: String,
 	tags: Array,
 	thumb: Number,
-	added: Number
+	added: Number,
+	private: Boolean
 })
+
+UsersSchema.methods.togglePrivate = function () {
+	this.private = !this.private
+	
+	return this.save()
+}
 
 var ContentSchema = new mongoose.Schema( {
 	title: String,		// title of the item

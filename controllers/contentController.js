@@ -162,13 +162,13 @@ exports.stream = function ( req, res ) {
 		stream = req.params.stream,	// the type of content to get
 		skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
 	
-	function getStream ( user ) {
+	function getStream ( userid ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 		
 			Content.aggregate( [
 				{ $unwind: '$users' },
 				{ $match: { 
-					'users.user': user.id, 
+					'users.user': userid, 
 					'users.stream': stream
 				} },
 				{ $project: { 
@@ -199,7 +199,19 @@ exports.stream = function ( req, res ) {
 		})
 	}
 	
-	getUser( req.token )
+	function findUserid ( username ) {
+		return Q.promise( function ( resolve, reject, notify ) {
+			User.findOne( { username: req.params.username } )
+			.then( function( result ) {
+				resolve( result.id )
+			})
+			.catch( function ( error ) {
+				reject( error )
+			})
+		})		
+	}
+	
+	findUserid( req.params.username )
 	.then( getStream )
 	.then( function ( results ) {
 		return res.json( results )
@@ -369,6 +381,8 @@ exports.following = function ( req, res ) {
 	.then( function ( user ) {
 		
 		var following = []
+		var page = req.query.page
+		var skip = ( page > 0 ? (( page - 1 ) * show ) : 0 )
 		
 		var array = user.following.forEach( function ( each ) {
 			following.push( each.user )
@@ -392,9 +406,9 @@ exports.following = function ( req, res ) {
 				processing: '$processing',
 				tags: '$users.tags'
 			} },
-			{ $sort: { added: -1 } }
-			/*{ $skip: skip },
-			{ $limit: show }*/
+			{ $sort: { added: -1 } },
+			{ $skip: skip },
+			{ $limit: show }
 		] ).exec()
 		.then( function ( results ) {
 			return res.status( 200 ).json( results )
@@ -402,6 +416,20 @@ exports.following = function ( req, res ) {
 			console.log( error )
 
 			return res.status( 500 ).json( error )
+		})
+	})
+}
+
+exports.private = function ( req, res ) {
+	
+	getUser( req.token )
+	.then( function ( user ) {
+		Content.findOne( { 'users.user': user._id, 'users._id': req.body.id } )
+		.then( function ( result ) {
+			result.id( req.body.id ).togglePrivate()
+			.then( function ( result ) {
+				return res.status( 200 ).json( result.private ? "Set to public" : "Set to private" )
+			})
 		})
 	})
 }

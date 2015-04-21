@@ -1,15 +1,20 @@
-app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', function( $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover ) {
+app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', 'Following', function( $stateParams, $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover, Following ) {
 
 	$window.scrollTo( 0, 0 )
 
 	$scope.mode = window.localStorage.mode
-	$scope.currentStream = $state.current.name.split(".")[1]
+	$scope.currentUser = $stateParams.username
+	$scope.currentStream = $stateParams.stream
+	$scope.username = $window.localStorage.username
 
-	if ( $scope.mode != 'discover' ) {
+	if ( $scope.mode == 'mystream' || $scope.mode == 'visiting' ) {
 		$scope.content = new Content()
-	} else if ( $scope.mode == 'discover' ) {
+	} if ( $scope.mode == 'discover' ) {
 		$scope.content = new Discover()
-		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+		$scope.content.loadMore( $scope.currentStream, 3 )
+	} if ( $scope.mode == 'following' ) {
+		$scope.content = new Following()
+		$scope.content.loadMore( $scope.currentStream, 3 )
 	}
 
 	mixpanel.track( "Stream", {
@@ -34,6 +39,10 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 		} )
 	}
 
+	$scope.modeChange = function ( newMode ) {
+		$window.localStorage.mode = newMode
+	}
+
 	$scope.discover = function() {
 		setTimeout( function () {
 			if ( $scope.mode == 'discover' ) {
@@ -46,17 +55,7 @@ app.controller('HomeController', ['$scope', '$state', '$urlRouter', '$http', '$w
 				$state.reload()
 			}
 		}, 50)
-	}
-
-	// logs user out by deleting session storage and reloading the app
-
-	$scope.logout = function() {
-			delete $window.sessionStorage.token
-			mixpanel.track( "User", {
-				action: "Sign out"
-			} )
-			$state.go( 'landing.login' )
-	}
+	} 
 
 	// deletes the currently signed-in account
 

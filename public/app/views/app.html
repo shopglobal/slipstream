@@ -27,15 +27,19 @@
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li button-discover class="container-discovery">
+					<!-- <li button-discover class="container-discovery">
 						<a ng-click=" discover() " class="a-discovery cursor-pointer">
 							<img src="images/binoculars@2x.png" alt="" class="img-discovery">
 							<span class="text-discovery">
 								Discover
 							</span> 
 						</a>
+					</li> -->
+					
+					<li class="container-discovery">
+						<div dropdown-mode></div>
 					</li>
-
+					
 					<li class="add-container">
 						<a href="" ng-click="openAddModal()"><div class="add-button">+</div></a>
 					</li>
@@ -66,19 +70,31 @@
 			
 			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick" ng-hide=" $state.includes('app.profile') || $state.includes('app.admin') " >
 				<div class="btn-group">
-					<button ui-sref="app.read" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'read' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if="$state.includes('app.stream')">
+						<span class="glyphicon glyphicon-book"></span>
+						<span class="text-toggle">Read</span>
+					</button>
+					<button ui-sref="app.discover( { stream: 'read' } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if="$state.includes('app.discover')">
 						<span class="glyphicon glyphicon-book"></span>
 						<span class="text-toggle">Read</span>
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="app.watch" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: 'app.watch'}">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'watch' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: 'app.watch'}" ng-if="$state.includes('app.stream')">
+						<span class="glyphicon glyphicon-play-circle"></span>
+						<span class="text-toggle">Watch</span>
+					</button>
+					<button ui-sref="app.discover( { stream: 'watch' } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: 'app.watch'}" ng-if="$state.includes('app.discover')">
 						<span class="glyphicon glyphicon-play-circle"></span>
 						<span class="text-toggle">Watch</span>
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="app.listen" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'listen' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if="$state.includes('app.stream')">
+						<span class="glyphicon glyphicon-headphones"></span>
+						<span class="text-toggle">Listen</span>
+					</button>
+					<button ui-sref="app.discover( { stream: 'listen' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if="$state.includes('app.discover')">
 						<span class="glyphicon glyphicon-headphones"></span>
 						<span class="text-toggle">Listen</span>
 					</button>

@@ -1,5 +1,6 @@
 var Content = require( '../models/contentModel' ),
-	Q = require( 'q' )
+	Q = require( 'q' ),
+	User = require( '../models/userModel' )
 
 exports.popular = function( req, res) {
 	
@@ -35,7 +36,9 @@ exports.popular = function( req, res) {
 		] )
 		.exec()
 		.then( function ( results ) {
-			resolve( results )
+			User.populate( results, { path: 'user', select: 'username' }, function ( error, results ) {
+				resolve( results )
+			})
 		}, function ( error ) {
 			reject( error )
 		})

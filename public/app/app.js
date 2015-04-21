@@ -48,32 +48,28 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'app/views/app.html',
 			controller: 'HomeController'
 		})
-		.state( 'app.home', {
-			url: '/main',
-			templateUrl: 'app/views/home.html'
-		})
-		.state( 'app.profile', {
-			url: '/profile',
-			templateUrl: 'app/views/profile.html',
-			controller: 'ProfileController'
-		})
-		.state( 'app.admin', {
-			url: '/admin',
-			templateUrl: 'app/views/app-admin.html',
-			controller: 'AdminController'
-		})
-		.state( 'app.read', {
-			url: '/read',
-			templateUrl: 'app/views/stream-content.html'
-		})
-		.state( 'app.watch', {
-			url: '/watch',
-			templateUrl: 'app/views/stream-content.html'
-		})
-		.state( 'app.listen', {
-			url: '/listen',
-			templateUrl: 'app/views/stream-content.html'
-		})
+			.state( 'app.home', {
+				url: '/main',
+				templateUrl: 'app/views/home.html'
+			})
+			.state( 'app.profile', {
+				url: '/profile',
+				templateUrl: 'app/views/profile.html',
+				controller: 'ProfileController'
+			})
+			.state( 'app.admin', {
+				url: '/admin',
+				templateUrl: 'app/views/app-admin.html',
+				controller: 'AdminController'
+			})
+			.state( 'app.stream', {
+				url: '/:username/:stream',
+				templateUrl: 'app/views/stream-content.html'
+			})
+			.state( 'app.discover', {
+				url: '/discover/:stream',
+				templateUrl: 'app/views/stream-content.html'
+			})
 }])
 
 // service to add the token the header of the request
@@ -94,7 +90,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 
 .value( 'THROTTLE_MILLISECONDS', 500 )
 
-.factory( 'Content', [ '$http', function ( $http ) {
+.factory( 'Content', [ '$http', '$window', '$stateParams', function ( $http, $window, $stateParams ) {
 	var Content = function () {
 		this.items = []
 		this.busy = false
@@ -109,7 +105,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		this.busy = true
 
 		$http
-			.get( 'api/stream/' + type, { params: { 
+			.get( 'api/stream/' + $stateParams.username + '/' + type, { params: { 
 				show: show, 
 				page: this.page 
 			} } )
@@ -206,6 +202,40 @@ A service for using our Discover feature
 	return Discover
 }])
 
+.factory( 'Following', [ '$http', 'flash', function( $http, $flash ) {
+
+	var Following = function () {
+		this.items = []
+		this.busy = false
+		this.page = 1
+	}
+
+	Following.prototype.loadMore = function ( stream, show ) {
+		if ( this.busy )
+			return
+
+		this.busy = true
+
+		$http
+			.get( '/api/following/' + stream, { params: { 
+				page: this.page,
+				show: show
+			} } )
+			.success( function ( results ) {
+				console.log( results )
+				for( i = 0; i < results.length; i++) {
+					this.items.push( results[i] )
+				}
+
+				this.page++	
+				this.busy = false
+
+			}.bind(this))
+	}
+
+	return Following
+}])
+
 /**
  * A generic confirmation for risky actions.
  * Usage: Add attributes: ng-really-message="Are you sure"? ng-really-click="takeAction()" function
@@ -273,6 +303,17 @@ app.directive( 'buttonDiscover', [ function () {
 				}
 			})
 		}
+	}
+}])
+
+app.directive( 'dropdownMode', [ function () {
+	return {
+		link: function( scope, element, state, stateParams ) {
+			scope.modeChange = function ( newMode ) {
+				window.localStorage.mode = newMode
+			}
+		},
+		templateUrl: 'app/views/dropdown-mode.html'
 	}
 }])
 

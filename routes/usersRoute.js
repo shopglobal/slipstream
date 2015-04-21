@@ -61,6 +61,9 @@ router.route('/tags')
 	.post( userController.checkAuthorization, contentController.addTags )
 	.delete( userController.checkAuthorization, contentController.deleteTag )
 
+router.route( '/content/private' )
+	.post( userController.checkAuthorization, contentController.private )
+
 router.route( '/discover/:measure/:stream' )
 	.get( userController.checkAuthorization, function ( req, res ) {
 		if ( req.params.measure == 'popular' ) {
@@ -68,7 +71,7 @@ router.route( '/discover/:measure/:stream' )
 		}
 	})
 	
-router.route('/stream/:stream')
+router.route('/stream/:username/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		contentController.stream( req, res )
 	})

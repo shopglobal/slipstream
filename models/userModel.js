@@ -2,7 +2,8 @@
 
 var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	bcrypt = require('bcrypt-nodejs'),
-	Q = require( 'q' )
+	Q = require( 'q' ),
+	textSearch = require( 'mongoose-text-search' )
 
 var Follows = new mongoose.Schema({
 	user: String,
@@ -55,9 +56,9 @@ UserSchema.pre( 'save', function(callback) {
 	})
 })
 
-// 
-// adds verifyPassword method to user schema
-// 
+/* 
+ adds verifyPassword method to user schema
+*/
 UserSchema.methods.verifyPassword = function( password, callback ) {
 	
 	var tempPassword = this.tempPassword
