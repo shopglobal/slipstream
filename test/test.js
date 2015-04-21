@@ -346,13 +346,13 @@ describe( 'Add content', function () {
 
 describe( 'Stream content', function () {
 	
-	describe( 'GET /api/stream/read', function() {
+	describe( 'GET /api/stream/USERNAME/read', function() {
 		
 		it( 'should return list of articles for the read stream', function( done ) {
 			
 			request({
 				method: 'GET',
-				url: 'http://localhost:' + PORT + '/api/stream/read',
+				url: 'http://localhost:' + PORT + '/api/stream/' + newTestUser.username + '/read',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -376,13 +376,13 @@ describe( 'Stream content', function () {
 		
 	})
 	
-	describe( 'GET /api/stream/listen', function() {
+	describe( 'GET /api/stream/USERNAME/listen', function() {
 		
 		it( 'should return list of Listen items', function ( done ) {
 			
 			request({
 				method: 'GET',
-				url: 'http://localhost:' + PORT + '/api/stream/listen',
+				url: 'http://localhost:' + PORT + '/api/stream/' + newTestUser.username + '/listen',
 				json: true,
 				strictSSL: false,
 				qs: {
@@ -412,13 +412,13 @@ Tests deleting content
 */
 describe( 'Delete content', function () {
 		
-	describe( 'DELETE /api/stream/read', function() {
+	describe( 'DELETE /api/stream/USERNAME/read', function() {
 		
 		it( 'should delete the Medium stream item from earlier test', function ( done ) {
 			
 			request({
 				method: 'DELETE',
-				url: 'http://localhost:' + PORT + '/api/stream/read',
+				url: 'http://localhost:' + PORT + '/api/stream/' + newTestUser.username + '/read',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,
@@ -439,13 +439,13 @@ describe( 'Delete content', function () {
 			
 	})
 	
-	describe( 'DELETE /api/stream/watch', function() {
+	describe( 'DELETE /api/stream/USERNAME/watch', function() {
 		
 		it( 'should delete the Youtube stream item from earlier test', function ( done ) {
 			
 			request({
 				method: 'DELETE',
-				url: 'http://localhost:' + PORT + '/api/stream/watch',
+				url: 'http://localhost:' + PORT + '/api/stream/' + newTestUser.username + '/watch',
 				strictSSL: false,
 				json: true,
 				useQuerystring: true,
@@ -461,8 +461,6 @@ describe( 'Delete content', function () {
 
 					done()
 			})
-			
 		})
-			
 	})
 })
