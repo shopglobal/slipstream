@@ -6,7 +6,7 @@ var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	textSearch = require( 'mongoose-text-search' )
 
 var Follows = new mongoose.Schema({
-	user: String,
+	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 	added: Number
 })
 

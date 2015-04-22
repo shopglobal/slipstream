@@ -384,7 +384,8 @@ exports.following = function ( req, res ) {
 	.then( function ( user ) {
 		
 		var following = []
-		var page = req.query.page
+		var page = parseInt( req.query.page )
+		var show = parseInt( req.query.show )
 		var skip = ( page > 0 ? (( page - 1 ) * show ) : 0 )
 		
 		var array = user.following.forEach( function ( each ) {
