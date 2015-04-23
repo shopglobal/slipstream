@@ -10,7 +10,8 @@ var User = require( '../models/userModel' ),
 	Betakey = require( '../models/betakey-model' ),
 	getUser = require( '../helpers/get-user' ),
 	fs = require( 'fs' ),
-	path = require( 'path' )
+	path = require( 'path' ),
+	mongoose = require( 'mongoose' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
@@ -146,11 +147,14 @@ exports.follow = function( req, res ) {
 	
 	getUser( req.token )
 	.then( function ( user ) {
-		user.follow( req.body.id )
+		User.findOne( { username: req.body.username } )
 		.then( function ( result ) {
-			if ( !result ) return res.status( 500 ).json( "User could not be followed." )
-			
-			return res.status( 200 ).json( "User followed." )
+			user.follow( result.id )
+			.then( function ( result ) {
+				if ( !result ) return res.status( 500 ).json( "User could not be followed." )
+
+				return res.status( 200 ).json( "User followed." )
+			})
 		})
 	})
 }
@@ -160,12 +164,19 @@ Unfollow user.
 */
 exports.unFollow = function ( req, res ) {
 	
-	User.findOne( { token: req.token }, function ( error, user ) {
-		user.unfollow( req.body.id )
-		.onResolve( function ( err, result ) {
-			if ( err || !result ) return res.status( 500 ).json( "User could not be unfollowed." )
-			
-			return res.status( 200 ).json( "User unfollowed." )
+	User.findOne( { token: req.token } )
+	.populate( 'following.user' )
+	.then( function ( user ) {
+
+		var unfollow = user.following.filter( function ( each ) {
+			return each.user.username === req.body.username
+		})
+
+		user.unfollow( mongoose.Types.ObjectId( unfollow[0]._id  ) )
+		.then( function ( result ) {
+			if ( !result || result.length == 0 ) return res.status( 500 ).json( "User could not be unfollowed." )
+
+			return res.status( 200 ).json( "User unfollowed" )
 		})
 	})
 }
@@ -357,4 +368,27 @@ exports.changePassword = function ( req, res ) {
 		log.error( error )
 		return res.status( 500 ).json( error.message )
 	})
+}
+
+exports.isfollowing = function ( req, res ) {
+	
+	User.findOne( { token: req.token } )
+	.populate( 'following.user' )
+	.then( function ( result ) {
+		var user = result.following.filter( function ( each ) {
+			return each.user.username === req.query.username
+		})
+		
+		if ( user.length > 0 ) {
+			return res.status( 200 ).json( { isfollowing: true } )
+		} else if ( !user || user.length == 0 ) {
+			return res.status( 200 ).json( { isfollowing: false } )
+		}
+		
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		res.status( 500 ).json( error.message )
+	})
+	
 }

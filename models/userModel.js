@@ -86,27 +86,21 @@ UserSchema.methods.validPassword = function( password ) {
 Follow a user.
 */
 UserSchema.methods.follow = function( id ) {
-	var user = this
-	
-	return Q.Promise( function ( resolve, reject, notify ) {
-		var follow = user.following.push( { 
-			user: id,
-			added: ( new Date() / 1 ).toFixed()
-		})
-		
-		user.save()
-		
-		resolve( follow )
+	var follow = this.following.push( { 
+		user: id,
+		added: ( new Date() / 1 ).toFixed()
 	})
+		
+	return this.save()
 }
 
 /*
 Unfollow a user.
 */
-UserSchema.method( 'unfollow', function unfollow ( id ) {
-	this.following.remove( id )
+UserSchema.methods.unfollow = function( id ) {
+	this.following.pull( id )
 
 	return this.save()
-})
+}
 
 module.exports = mongoose.model( 'User', UserSchema )

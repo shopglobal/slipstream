@@ -33,6 +33,9 @@ router.route( '/user/follow' )
 router.route( '/user/unfollow' )
 	.post( userController.checkAuthorization, userController.unFollow )
 
+router.route( '/user/isfollowing' )
+	.get( userController.checkAuthorization, userController.isfollowing )
+
 router.route( '/user/name' )
 	.get( userController.checkAuthorization, userController.getName )
 
