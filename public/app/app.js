@@ -279,30 +279,49 @@ app.directive( 'toggleButtons', [ function () {
 	}
 }])
 
-app.directive( 'buttonDiscover', [ function () {
+app.directive( 'buttonFollow', [ '$http', function ( $http ) {
 	return {
 		link: function( scope, element ) {
-			var discoverButton = element.find( '.a-discovery' )
+			var followButton = element.find( '.button-follow' )
 
-			if ( window.localStorage.mode == 'discover' ) {
-				discoverButton[0].setAttribute( 'class', 'mode-discover' )
-			} else if ( window.localStorage.mode != 'discover' ) {
-				discoverButton[0].setAttribute( 'class', '' )
-			}
+			console.log( followButton )
 
-			console.log( discoverButton )
+			$http
+				.get( '/api/user/isfollowing', { params: 
+					{ username: scope.currentUser }
+				} )
+				.success( function ( data ) {
+					scope.isfollowing = data.isfollowing
 
-			discoverButton[0].addEventListener( 'click', function () {
+					if ( data.isfollowing ) {
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid cursor-pointer' )
+					} else if ( !data.isfollowing ) {
+						followButton[0].setAttribute( 'class', 'btn btn-white cursor-pointer' )
+					}
+				})
+				.error( function ( error ) {
+					console.log( error )
+				})
 
-				if ( window.localStorage.mode != 'discover' ) {
-					window.localStorage.mode = 'discover'
-					discoverButton[0].setAttribute( 'class', 'mode-discover' )
-				} else if ( window.localStorage.mode == 'discover' ) {
-					window.localStorage.mode = null
-					discoverButton[0].setAttribute( 'class', '' )
+			followButton[0].addEventListener( 'click', function () {
+				if ( scope.isfollowing ) {
+					$http({ method: 'POST', url: '/api/user/unfollow', data: { username: scope.currentUser }
+					})
+					.success( function ( result ) {
+						followButton[0].setAttribute( 'class', 'btn btn-white cursor-pointer' )
+					})
+				} else if ( !scope.isfollowing ) {
+					$http({ method: 'POST', url: '/api/user/follow', data: { username: scope.currentUser }
+					})
+					.success( function ( result ) {
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid cursor-pointer' )
+					})
 				}
+
+				scope.isfollowing = !scope.isfollowing
 			})
-		}
+		},
+		templateUrl: 'app/views/button-follow.html'
 	}
 }])
 

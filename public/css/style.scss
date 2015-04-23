@@ -112,6 +112,11 @@ a { color: $green;
 	&:active { color: white; }
 	&:hover { background: $green; color: white; } }
 
+.btn-white-solid { background: white; color: $green;
+	span { color: $green; }
+	&:active { color: white; }
+	&:hover { background: white; color: $green; } }
+
 .btn-group-thick { 
 	&:nth-child(2) { border-width: 3px; border-color: red; }
 	.btn { border-width: 3px 0 3px 3px; }
@@ -201,6 +206,8 @@ a { color: $green;
 .icon-logo { font-family: 'BrandIcons'; }
 
 .icon-twitter:before { content: "\F303"; }
+
+.containter-navbar-btn-left { padding-left: 100px;  }
 
 // admin
 
