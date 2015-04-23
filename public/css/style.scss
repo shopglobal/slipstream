@@ -113,7 +113,7 @@ a { color: $green;
 	&:hover { background: $green; color: white; } }
 
 .btn-white-solid { background: white; color: $green;
-	span { color: $green; }
+	span { color: $green;}
 	&:active { color: white; }
 	&:hover { background: white; color: $green; } }
 
@@ -380,7 +380,7 @@ tags-input .host:active { outline: none; }
 tags-input { font: 17px "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 300;
 	.tags { padding: 1px; overflow: hidden; word-wrap: break-word; cursor: text; background-color: transparent; border: none;
 		.tag-item { margin: 2px; padding: 2px 10px; display: inline-block; float: left; line-height: initial; border-radius: 3px; }
-		.input { border: 0; outline: none; margin: 2px; padding: 0; padding-left: 5px; float: left; height: 26px; } }
+		.input { border: 0; outline: none; margin: 2px; padding: 0; padding-left: 5px; float: left; height: 26px; background: transparent; } }
 	.tags.focused { outline: none;	-webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; } }
 
 tags-input .tags .tag-list { margin: 0; padding: 0; list-style-type: none; }
