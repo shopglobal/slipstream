@@ -172,4 +172,28 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 			}
 		})
 	}
+
+	$scope.addContent = function ( url ) {
+		$http
+			.post( '/api/add', {
+				url: url,
+				type: $scope.currentStream
+			} )
+			.success( function ( data, status ) {
+				console.log( data )
+				$flash.success = "Content added to your stream."
+				mixpanel.track( "Added content", {
+					action: "Re-stream",
+					stream: $scope.currentStream,
+					title: data.title,
+					url: url
+				})
+				return
+			})
+			.error( function ( error, status ) {
+				$flash.error = "Problem adding content."
+				return
+			})
+	}
+
 }])

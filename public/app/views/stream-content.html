@@ -5,11 +5,15 @@
 		<div infinite-scroll="content.loadMore( currentStream, 3)" infinite-scroll-immediate-check="true">
 
 			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
-				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title"></h2>
+				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title" class="title-stream-item"></h2>
 
-				<a ng-click="openReaderModal( item )" class="cursor-pointer" ng-show=" item.stream == 'read' ">
-					<h2 data-ng-bind="item.title"></h2>
+				<a ng-click="openReaderModal( item )" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' ">
+					<h2 data-ng-bind="item.title" class="title-stream-item"></h2>
 				</a>
+				
+				<div class="add-container pull-right button-stream-item-top" ng-hide="  mode == 'mystream' ">
+					<a href="" ng-click="addContent( item.url )"><div class="add-button">+</div></a>
+				</div>
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 
