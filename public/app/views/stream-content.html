@@ -37,7 +37,7 @@
 					<span ng-bind="item.added | timeAgo" ng-hide=" mode == 'discover' "></span>
 					<span ng-if=" mode == 'discover' ">
 						Saved by 
-						<span ng-click="modeChange( 'visiting' )" ui-sref="app.stream({ username: item.user.username, stream: currentStream } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer"></span>
+						<span ui-sref="app.stream({ username: item.user.username, stream: currentStream, mode: 'stream' } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer"></span>
 						<span ng-show=" item.saveCount >= 2"> and
 							<span ng-bind="item.saveCount - 1"></span> other<span ng-show="item.saveCount > 2">s</span>
 						</span>

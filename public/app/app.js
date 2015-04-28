@@ -62,12 +62,12 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/app-admin.html',
 				controller: 'AdminController'
 			})
-			.state( 'app.stream', {
-				url: '/:username/:stream',
+			.state( 'app.discover', {
+				url: '/:mode/:stream',
 				templateUrl: 'app/views/stream-content.html'
 			})
-			.state( 'app.discover', {
-				url: '/discover/:stream',
+			.state( 'app.stream', {
+				url: '/:mode/:username/:stream',
 				templateUrl: 'app/views/stream-content.html'
 			})
 }])

@@ -76,31 +76,31 @@
 			
 			<div class="btn-group btn-group-justified content-toggle center-block btn-group-thick" ng-hide=" $state.includes('app.profile') || $state.includes('app.admin') " >
 				<div class="btn-group">
-					<button ui-sref="app.stream( { username: currentUser, stream: 'read' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if="$state.includes('app.stream')">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'read', mode: 'stream' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if=" mode == 'mystream' || mode == 'visiting' ">
 						<span class="glyphicon glyphicon-book"></span>
 						<span class="text-toggle">Read</span>
 					</button>
-					<button ui-sref="app.discover( { stream: 'read' } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if="$state.includes('app.discover')">
+					<button ui-sref="app.discover( { stream: 'read', mode: mode } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{ reload: true }" ng-if=" mode == 'discover' || mode == 'following' ">
 						<span class="glyphicon glyphicon-book"></span>
 						<span class="text-toggle">Read</span>
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="app.stream( { username: currentUser, stream: 'watch' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true }" ng-if="$state.includes('app.stream')">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'watch', mode: 'stream' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true }" ng-if=" mode == 'mystream' || mode == 'visiting' ">
 						<span class="glyphicon glyphicon-play-circle"></span>
 						<span class="text-toggle">Watch</span>
 					</button>
-					<button ui-sref="app.discover( { stream: 'watch' } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true }" ng-if="$state.includes('app.discover')">
+					<button ui-sref="app.discover( { stream: 'watch', mode: mode } )" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true }" ng-if=" mode == 'discover' || mode == 'following' ">
 						<span class="glyphicon glyphicon-play-circle"></span>
 						<span class="text-toggle">Watch</span>
 					</button>
 				</div>
 				<div class="btn-group">
-					<button ui-sref="app.stream( { username: currentUser, stream: 'listen' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if="$state.includes('app.stream')">
+					<button ui-sref="app.stream( { username: currentUser, stream: 'listen', mode: 'stream' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if=" mode == 'mystream' || mode == 'visiting' ">
 						<span class="glyphicon glyphicon-headphones"></span>
 						<span class="text-toggle">Listen</span>
 					</button>
-					<button ui-sref="app.discover( { stream: 'listen' })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if="$state.includes('app.discover')">
+					<button ui-sref="app.discover( { stream: 'listen', mode: mode })" class="btn btn-green" ui-sref-active="btn-green-solid" ui-sref-opts="{reload: true}" ng-if=" mode == 'discover' || mode == 'following' ">
 						<span class="glyphicon glyphicon-headphones"></span>
 						<span class="text-toggle">Listen</span>
 					</button>

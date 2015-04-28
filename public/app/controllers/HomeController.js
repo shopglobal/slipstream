@@ -2,10 +2,21 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 
 	$window.scrollTo( 0, 0 )
 
-	$scope.mode = window.localStorage.mode
+	$scope.mode = $stateParams.mode
 	$scope.currentUser = $stateParams.username
 	$scope.currentStream = $stateParams.stream
 	$scope.username = $window.localStorage.username
+
+	if ( $scope.mode == 'stream' ) {
+		if ( $scope.currentUser == $scope.username ) {
+			$scope.mode = 'mystream'
+		} else if ( $scope.currentUser != $scope.username ) {
+			$scope.mode = 'visiting'
+		}
+	}
+
+	console.log( $state )
+	console.log( $stateParams )
 
 	if ( $scope.mode == 'mystream' || $scope.mode == 'visiting' ) {
 		$scope.content = new Content()
