@@ -415,7 +415,10 @@ exports.following = function ( req, res ) {
 			{ $limit: show }
 		] ).exec()
 		.then( function ( results ) {
-			return res.status( 200 ).json( results )
+			User.populate( results, { path: 'user', select: 'username' } )
+			.then( function ( results ) {
+				return res.status( 200 ).json( results )	
+			})			
 		}, function ( error ) {
 			console.log( error )
 
