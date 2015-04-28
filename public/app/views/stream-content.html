@@ -36,7 +36,7 @@
 				<div class="date-added-ago pull-left meta-text">
 					<span ng-if=" mode == 'discover' || mode == 'following' ">
 						Saved by 
-						<span ui-sref="app.stream({ username: item.user.username, stream: currentStream, mode: 'stream' } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer"></span>
+						<a ui-sref="app.stream({ username: item.user.username, stream: currentStream, mode: 'stream' } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer a-underlined"></a>
 						<span ng-show=" item.saveCount >= 2 && mode == 'discover' "> and
 							<span ng-bind="item.saveCount - 1"></span> other<span ng-show="item.saveCount > 2">s</span>
 						</span>

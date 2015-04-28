@@ -164,6 +164,8 @@ a { color: $green;
 
 // new classes
 
+.a-underlined { text-decoration: underline; }
+
 .no-border { border: none; background: none; box-shadow: none !important;
 	&:hover, &:active { border: none; background: none; box-shadow: none; } }
 
