@@ -69,13 +69,13 @@ exports.add = function ( req, res ) {
 							if ( err ) console.log( err )
 						}, users._id )
 						
-						return resolve({
+						return resolve([{
 							'_id': users._id,
 							title: result.title,
 							description: result.description,
 							images: result.images,
 							alreadySaved: true
-						})
+						}, null ])
 					})
 				} else {
 					var imageResolver = new ImageResolver()
@@ -145,7 +145,6 @@ exports.add = function ( req, res ) {
 										description: newArticle.description,
 										text: newArticle.content,
 										date: newArticle.date,
-										images: newArticle.images,
 										user: newUser.user,
 										added: newUser.added,
 										stream: newUser.stream
@@ -157,7 +156,7 @@ exports.add = function ( req, res ) {
 
 									article.close()
 
-									resolve( newArticle )					
+									resolve( [ newArticle, newUser ] )
 								})
 							})
 							.catch( function ( error ) {
@@ -250,7 +249,7 @@ exports.add = function ( req, res ) {
 	
 	getUser( req.token )
 	.then( getArticle )
-	.then( function ( article ) {
+	.spread( function ( article, user ) {
 		if( article.alreadySaved ) {
 			return res.status( 200 ).json( article )
 		} else {
@@ -258,6 +257,15 @@ exports.add = function ( req, res ) {
 				replaceImages( article )
 				.then( saveArticle )
 				.then( function ( article ) {
+					
+					index.partialUpdateObject({
+						objectID: user._id,
+						images: article.images,
+						text: article.text
+					}, function ( error, content ) {
+						if ( error ) console.log( error )
+					})
+					
 					log.info( { title: article.title, url: article.url }, "Article saved" )
 					return
 				})
