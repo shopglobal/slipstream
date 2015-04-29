@@ -2,8 +2,7 @@
 
 var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
 	bcrypt = require('bcrypt-nodejs'),
-	Q = require( 'q' ),
-	textSearch = require( 'mongoose-text-search' )
+	Q = require( 'q' )
 
 var Follows = new mongoose.Schema({
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -32,6 +31,8 @@ var UserSchema = new mongoose.Schema({
 	permissions: Array,
 	following: [ Follows ]
 })
+
+UserSchema.index( { username: 'text' } )
 
 // 
 // hashes the password so it's not plain text

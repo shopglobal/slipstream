@@ -39,6 +39,9 @@ router.route( '/user/isfollowing' )
 router.route( '/user/name' )
 	.get( userController.checkAuthorization, userController.getName )
 
+router.route( '/user/search' )
+	.get( userController.checkAuthorization, userController.search )
+
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {

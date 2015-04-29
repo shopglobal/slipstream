@@ -392,3 +392,21 @@ exports.isfollowing = function ( req, res ) {
 	})
 	
 }
+
+exports.search = function ( req, res ) {
+
+	User.aggregate([ 
+		{ $match: 
+			{ $text: { $search: req.query.search } }
+		},
+		{ $project: {
+			username: '$username'
+		} }
+	]).exec()
+	.then( function ( result ) {
+		return res.status( 200 ).json( result )
+	}, function ( error ) {
+		console.error( error )
+		return res.status( 500 ).json( "Couldn't search for users." )
+	})
+}
