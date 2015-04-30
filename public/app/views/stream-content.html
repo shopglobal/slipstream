@@ -2,7 +2,7 @@
 
 	<div class="content-list">
 
-		<div infinite-scroll="content.loadMore( currentStream, 3)" infinite-scroll-immediate-check="true">
+		<div infinite-scroll="content.loadMore(3)" infinite-scroll-immediate-check="true">
 
 			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
 				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title" class="title-stream-item"></h2>
@@ -76,5 +76,18 @@
 
 		</div>
 
+		<div ng-show=" userlist.length > 0 ">
+			<div class="panel panel-item panel-user" ng-repeat="user in userlist">
+				<div class="col-xs-6">
+					<a ui-sref="app.stream({ username: user.username })" ui-sref-opts="{ reload: true }"><h3 ng-bind="user.username"></h3></a>
+				</div>
+				<div class="col-xs-6">
+					<button-follow username="{{ user.username }}"></button-follow>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+
 	</div>
+
 </div>

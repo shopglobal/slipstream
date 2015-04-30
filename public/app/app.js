@@ -62,6 +62,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/app-admin.html',
 				controller: 'AdminController'
 			})
+			.state( 'app.users', {
+				url: '/users',
+				templateUrl: 'app/views/app-users.html',
+				controller: 'UserSearchController'
+			})
 			.state( 'app.discover', {
 				url: '/:mode/:stream',
 				templateUrl: 'app/views/stream-content.html'
@@ -98,25 +103,25 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 		THROTTLE_MILLISECONDS = 1000
 	}
 
-	Content.prototype.loadMore = function ( type, show ) {
+	Content.prototype.loadMore = function ( show ) {
 		if ( this.busy )
 			return
 
 		this.busy = true
 
 		$http
-			.get( 'api/stream/' + $stateParams.username + '/' + type, { params: { 
-				show: show, 
-				page: this.page 
+			.get( 'api/stream/' + $stateParams.username + '/' + $stateParams.stream, { params: { 
+					show: show, 
+					page: this.page 
 			} } )
-				.success( function ( data ) {
-					console.log( data )
-					for( i = 0; i < data.length; i++) {
-						this.items.push( data[i] )
-					}
-				
-					this.page++
-					this.busy = false
+			.success( function ( data ) {
+				console.log( data )
+				for( i = 0; i < data.length; i++) {
+					this.items.push( data[i] )
+				}
+			
+				this.page++
+				this.busy = false
 			}.bind(this))
 	}
 
@@ -126,17 +131,17 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 /*
 A service for searching using Algolia, but through our back-end
 */
-.factory( 'Search', [ '$http', 'flash', function( $http, $flash ) {
+.factory( 'Search', [ '$http', 'flash', '$stateParams', function ( $http, $flash, $stateParams ) {
 
 	var Search = function () {
 		this.items = []
 		this.busy = false
-		this.page = 1
+		this.page = 0
 		this.query = ''
 		THROTTLE_MILLISECONDS = 1000
 	}
 
-	Search.prototype.loadMore = function ( stream, show ) {
+	Search.prototype.loadMore = function ( show ) {
 		if ( this.busy )
 			return
 
@@ -147,7 +152,7 @@ A service for searching using Algolia, but through our back-end
 				terms: this.query,
 				page: this.page,
 				show: show,
-				stream: stream
+				stream: $stateParams.stream
 			} } )
 			.success( function ( results ) {
 				console.log( results )
@@ -168,7 +173,7 @@ A service for searching using Algolia, but through our back-end
 /*
 A service for using our Discover feature
 */
-.factory( 'Discover', [ '$http', 'flash', function( $http, $flash ) {
+.factory( 'Discover', [ '$http', 'flash', '$stateParams', function( $http, $flash, $stateParams ) {
 
 	var Discover = function () {
 		this.items = []
@@ -176,14 +181,14 @@ A service for using our Discover feature
 		this.page = 1
 	}
 
-	Discover.prototype.loadMore = function ( stream, show ) {
+	Discover.prototype.loadMore = function ( show ) {
 		if ( this.busy )
 			return
 
 		this.busy = true
 
 		$http
-			.get( '/api/discover/popular/' + stream, { params: { 
+			.get( '/api/discover/popular/' + $stateParams.stream, { params: { 
 				page: this.page,
 				show: show
 			} } )
@@ -202,7 +207,7 @@ A service for using our Discover feature
 	return Discover
 }])
 
-.factory( 'Following', [ '$http', 'flash', function( $http, $flash ) {
+.factory( 'Following', [ '$http', 'flash', '$stateParams', function( $http, $flash, $stateParams ) {
 
 	var Following = function () {
 		this.items = []
@@ -210,14 +215,14 @@ A service for using our Discover feature
 		this.page = 1
 	}
 
-	Following.prototype.loadMore = function ( stream, show ) {
+	Following.prototype.loadMore = function ( show ) {
 		if ( this.busy )
 			return
 
 		this.busy = true
 
 		$http
-			.get( '/api/following/' + stream, { params: { 
+			.get( '/api/following/' + $stateParams.stream, { params: { 
 				page: this.page,
 				show: show
 			} } )
@@ -279,24 +284,30 @@ app.directive( 'toggleButtons', [ function () {
 	}
 }])
 
-app.directive( 'buttonFollow', [ '$http', function ( $http ) {
+app.directive( 'buttonFollow', [ '$http', '$stateParams', function ( $http, $stateParams ) {
 	return {
+		scope: {
+			'username': '@'
+		},
 		link: function( scope, element ) {
 			var followButton = element.find( '.button-follow' )
 
 			console.log( followButton )
 
+			/*If username is not set in the directive, get it from the scope.*/
+			var username = ( ( !scope.username && $stateParams.username )? $stateParams.username : scope.username )
+
 			$http
 				.get( '/api/user/isfollowing', { params: 
-					{ username: scope.currentUser }
+					{ username: username }
 				} )
 				.success( function ( data ) {
 					scope.isfollowing = data.isfollowing
 
 					if ( data.isfollowing ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid btn-active cursor-pointer' )
 					} else if ( !data.isfollowing ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-inactive cursor-pointer' )
 					}
 				})
 				.error( function ( error ) {
@@ -305,16 +316,16 @@ app.directive( 'buttonFollow', [ '$http', function ( $http ) {
 
 			followButton[0].addEventListener( 'click', function () {
 				if ( scope.isfollowing ) {
-					$http({ method: 'POST', url: '/api/user/unfollow', data: { username: scope.currentUser }
+					$http({ method: 'POST', url: '/api/user/unfollow', data: { username: username }
 					})
 					.success( function ( result ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-inactive cursor-pointer' )
 					})
 				} else if ( !scope.isfollowing ) {
-					$http({ method: 'POST', url: '/api/user/follow', data: { username: scope.currentUser }
+					$http({ method: 'POST', url: '/api/user/follow', data: { username: username }
 					})
 					.success( function ( result ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-white btn-active cursor-pointer' )
 					})
 				}
 

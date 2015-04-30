@@ -22,10 +22,10 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 		$scope.content = new Content()
 	} if ( $scope.mode == 'discover' ) {
 		$scope.content = new Discover()
-		$scope.content.loadMore( $scope.currentStream, 3 )
+		$scope.content.loadMore( 3 )
 	} if ( $scope.mode == 'following' ) {
 		$scope.content = new Following()
-		$scope.content.loadMore( $scope.currentStream, 3 )
+		$scope.content.loadMore( 3 )
 	}
 
 	mixpanel.track( "Stream", {
@@ -37,17 +37,37 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 
 	$scope.doSearch = function() {
 		if ( $scope.search.query.length < 1 ) {
+			$scope.userlist = null
 			$scope.content = new Content()
-			$scope.content.loadMore( $state.current.name.split(".")[1], 3)
+			$scope.content.loadMore( 3 )
+			return
+		}
+
+		if ( $scope.search.query.indexOf( '@' ) == 0 ) {
+			if ( $scope.content ) $scope.content = null
+			$scope.searchUsers()
 			return
 		}
 
 		$scope.content = new Search()
 		$scope.content.query = $scope.search.query
-		$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+		$scope.content.loadMore( 3 )
 		mixpanel.track( "Searched", { 
 			query: $scope.search.query
 		} )
+	}
+
+	$scope.searchUsers = function () {
+		$http
+			.get( '/api/user/search', { params: { 
+				search: $scope.search.query
+			} } )
+			.success( function ( data ) {
+				$scope.userlist = data
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
 	}
 
 	$scope.modeChange = function ( newMode ) {
@@ -58,11 +78,11 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 		setTimeout( function () {
 			if ( $scope.mode == 'discover' ) {
 				$scope.content = new Discover()
-				$scope.content.loadMore( $state.current.name.split(".")[1], 3 )
+				$scope.content.loadMore( 3 )
 				$state.reload()
 			} else {
 				$scope.content = new Content()
-				$scope.content.loadMore( $state.current.name.split(".")[1], 3)
+				$scope.content.loadMore( 3 )
 				$state.reload()
 			}
 		}, 50)
@@ -110,7 +130,7 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 				content_id: id
 			})
 			console.log( data )
-			$scope.content.loadMore( $state.current.name.split(".")[1], 2 )
+			$scope.content.loadMore( 2 )
 		})
 		.error( function ( error ) {
 			console.log( error )
