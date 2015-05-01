@@ -1,4 +1,5 @@
 var User = require( '../models/userModel' ),
+	Content = require( '../models/contentModel' ),
 	secret = require('../config/secretConfig'),
 	jwt = require('jsonwebtoken'),
 	tokenManager = require('../config/tokenManager'),
@@ -80,9 +81,26 @@ exports.signUp = function ( req, res ) {
 	
 	betakeyCheck()
 	.then( function ( betakey ) {
-		user.save(function( err, user ) {
-			if (err)
-				return res.status( 500 ).json( err )
+		user.save()
+		.then( function( user ) {
+			
+			/*
+			Adds the welcome post to the user's read stream.
+			*/
+			var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
+			Content.findOne( { _id: welcomePostId } ).exec()
+			.then( function ( result ) {
+				var newUser = result.users.create({
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: 'read',
+					private: true
+				})
+				
+				result.users.push( newUser )
+					
+				result.save()
+			})
 
 			user.token = jwt.sign(user , secret.secretToken )
 			user.save( function ( err, user ) {
@@ -101,7 +119,7 @@ exports.signUp = function ( req, res ) {
 				
 				return res.status( 200 ).json( user )
 			} )
-		})		
+		})
 	})
 	.catch( function ( error ) {
 		console.error( error )
