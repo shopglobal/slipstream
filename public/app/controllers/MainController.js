@@ -38,7 +38,8 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				})
 				$state.go( 'app.stream', { 
 					username: data.username, 
-					stream: 'read'
+					stream: 'read',
+					mode: 'stream'
 				} )
 			} )
 			.error( function ( error ) {
@@ -67,7 +68,7 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 				mixpanel.track( "User", {
 					action: "Registered"
 				} )
-				$state.go( 'app.read' )
+				$state.go( 'app.stream', { username: data.username, stream: 'read', mode: 'stream' } )
 			})
 			.error( function ( error ) {
 				$flash.error = error
