@@ -1,4 +1,6 @@
 <div class="container-fluid" id="addModal">
+	<span class="modal-cover" ng-show="showSpinner">
+	</span>
 		
 		<h2 class="pull-left">Add to Stream</h2>
 
@@ -17,15 +19,15 @@
 			<div class="add-form-toggle col-md-4">
 				<form name="" class="form-control pull-right add-form-toggle-buttons" toggle-buttons>
 					<div class="btn-group pull-right">
-						<label for="read" type="button" class="type-toggle btn btn-green">
+						<label for="read" type="button" class="type-toggle btn" ng-class="{ 'btn-grey': showSpinner, 'btn-green': !showSpinner }">
 							<input type="radio" id="read" name="type" value="read" ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-book"></span>
 						</label>
-						<label for="watch" type="button" class="type-toggle btn btn-green" >
+						<label for="watch" type="button" class="type-toggle btn" ng-class="{ 'btn-grey': showSpinner, 'btn-green': !showSpinner }">
 							<input type="radio" id="watch" name="type" value="watch"  ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-play-circle"></span>
 						</label>
-						<label for="listen" type="button" class="type-toggle btn btn-green" >
+						<label for="listen" type="button" class="type-toggle btn" ng-class="{ 'btn-grey': showSpinner, 'btn-green': !showSpinner }">
 							<input type="radio" id="listen" name="type" value="listen" ng-model="contentParams.type" class="input-add-checkbox" ng-change="switchStream()"/>
 							<span class="glyphicon glyphicon-headphones"></span>
 						</label>

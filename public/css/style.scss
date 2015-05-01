@@ -114,6 +114,11 @@ a { color: $green;
 		&:hover, &:active { color: $green; background: transparent; } } }
 
 .btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
+	&:hover { background: $grey; border-color: $grey; color: white; box-shadow: none; text-decoration: none; } 
+	&.no-border { 
+		&:hover, &:active { color: $grey; background: transparent; } } }
+
+.btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
 	&:hover { background: $grey; border-color: $grey; color: $grey; box-shadow: none; text-decoration: none; } 
 	&.no-border { 
 		&:hover, &:active { color: $grey; } } }
@@ -308,6 +313,8 @@ footer { bottom: 0; position: absolute; height: 25px; }
 
 // modals
 
+.modal-cover { position: absolute; top: -15px; left: 0px; height: 100%; width: 100%; z-index: 5000; }
+
 .add-modal { background-color: rgba( 41, 41, 59, 0.70);
 	.done-button { margin: 0; padding: 0; position: absolute; right: 0; bottom: 0; }
 	.modal-dialog { width: 625px; }
@@ -319,9 +326,14 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		.add-form-text { padding: 0 } 
 		.add-form-toggle { padding: 0; margin: 0;
 			.add-form-toggle-buttons { min-width: 100px; border: none; box-shadow: none; padding: 0; margin: 7px 0; background: transparent; } } }
-	.type-toggle { border: 2px solid $green; font-size: 18px; padding: 2px 20px 3px 20px;
+	.type-toggle.btn-green { border: 2px solid $green; font-size: 18px; padding: 2px 20px 3px 20px;
 		& > input { visibility: hidden; position: absolute; }
 		& > input + span { color: $green; }
+		& > input:checked + span { color: $highlight; }
+		& > input:checked:hover + span { color: $highlight; } }
+	.type-toggle.btn-grey { border: 2px solid $grey; font-size: 18px; padding: 2px 20px 3px 20px;
+		& > input { visibility: hidden; position: absolute; }
+		& > input + span { color: $grey; }
 		& > input:checked + span { color: $highlight; }
 		& > input:checked:hover + span { color: $highlight; } }
 	.article-preview { padding-top: 20px;
