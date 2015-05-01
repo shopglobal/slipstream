@@ -269,7 +269,7 @@ exports.sendPasswordReset = function ( req, res ) {
 				from: 'SlipStream <noahgray@me.com>',
 				to: user.email,
 				subject: 'Your temporary SlipStream password',
-				html: passwordHtml.toString() + user.temporaryPassword + "</code></div><br /><a href='http://beta.slipstreamapp.com'><div class='button-visit'>Take me to slip stream.</div></a></div></html>"
+				html: passwordHtml.toString() + user.temporaryPassword + "</code></div><br /><a href='http://beta.slipstreamapp.com'><div class='button-visit'>Take me to SlipStream.</div></a></div></html>"
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
