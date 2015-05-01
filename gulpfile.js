@@ -43,7 +43,7 @@ gulp.task( 'copyVendor', function() {
 })
 
 gulp.task( 'copyImages', function() {
-	gulp.src( 'public/images/*' )
+	gulp.src( 'public/images/**/*' )
 		.pipe( gulp.dest('build/images') )
 })
 
