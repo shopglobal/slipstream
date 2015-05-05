@@ -74,7 +74,10 @@ exports.add = function ( req, res ) {
 	.then( createXml )
 	.then( function( xml ) {
 		fs.writeFile( xmlOutput, xml, function( err ) {
-			if ( err ) return res.status( 500 ).json( "Could not save feedback." )
+			if ( err ) {
+				console.log( err )
+				return res.status( 500 ).json( "Could not save feedback." )
+			}
 			
 			var sftp = new Sftp( {
 				host: '162.243.138.210',
