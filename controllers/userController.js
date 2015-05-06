@@ -79,52 +79,65 @@ exports.signUp = function ( req, res ) {
 		})
 	}
 	
-	betakeyCheck()
-	.then( function ( betakey ) {
-		user.save()
-		.then( function( user ) {
-			
-			/*
-			Adds the welcome post to the user's read stream.
-			*/
-			var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
-			Content.findOne( { _id: welcomePostId } ).exec()
-			.then( function ( result ) {
-				var newUser = result.users.create({
-					user: user._id,
-					added: ( new Date() / 1).toFixed(),
-					stream: 'read',
-					private: true
+	/*
+	Check if the username or email has already been used before. 
+	*/
+	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
+	.then( function ( result ) {
+		if ( !result ) {
+			betakeyCheck()
+			.then( function ( betakey ) {
+				user.save()
+				.then( function( user ) {
+
+					/*
+					Adds the welcome post to the user's read stream.
+					*/
+					var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
+					Content.findOne( { _id: welcomePostId } ).exec()
+					.then( function ( result ) {
+						var newUser = result.users.create({
+							user: user._id,
+							added: ( new Date() / 1).toFixed(),
+							stream: 'read',
+							private: true
+						})
+
+						result.users.push( newUser )
+
+						result.save()
+					})
+
+					user.token = jwt.sign(user , secret.secretToken )
+					user.save( function ( err, user ) {
+						var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
+
+						var email = {
+							from: 'SlipStream <welcome@slipstreamapp.com>',
+							to: user.email,
+							subject: 'Welcome to Slipstream, ' + user.username,
+							html: welcomeHtml.toString()
+						}
+
+						mailgun.messages().send( email, function ( err, body ) {
+							if ( err ) console.log( err )
+						})
+
+						return res.status( 200 ).json( user )
+					} )
 				})
-				
-				result.users.push( newUser )
-					
-				result.save()
 			})
-
-			user.token = jwt.sign(user , secret.secretToken )
-			user.save( function ( err, user ) {
-				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
-				
-				var email = {
-					from: 'SlipStream <welcome@slipstreamapp.com>',
-					to: user.email,
-					subject: 'Welcome to Slipstream, ' + user.username,
-					html: welcomeHtml.toString()
-				}
-
-				mailgun.messages().send( email, function ( err, body ) {
-					if ( err ) console.log( err )
-				})
-				
-				return res.status( 200 ).json( user )
-			} )
-		})
-	})
+		} else if ( result ) {
+			console.log( "User signed up with that info:" + user.username + " or " + user.email )
+			
+			if ( result.username === user.username ) return res.status( 500 ).json( "That username is already taken." )
+			else return res.status( 500 ).json( "That email has already been used." )
+		}
+	})	
 	.catch( function ( error ) {
 		console.error( error )
 		
-		res.status( 500 ).json( error.message )
+		return res.status( 500 ).json( error.message )
 	})
 }
 
