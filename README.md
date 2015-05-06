@@ -31,7 +31,23 @@ There is a post that needs to be in the database before you accept user registra
 
 # Set environment variables
 
-There are many environment variables. They need to be set in a .env file locally, and then on the Heroku environments or CodeShip, etc. This includes `WELCOME_POST`, which is the ID of the welcome post created in the step above.
+There are many environment variables. They need to be set in a .env file locally, and then on the Heroku environments or CodeShip, etc. This includes `WELCOME_POST`, which is the ID of the welcome post created in the step above. Here is a partial list of variables.
+
+	WEB // the command to start the server, eg. `nodemon --exec node-theseus server.js`
+	MONGOLAB_URI // mongodb URL, including username, password and port
+	PORT
+	PLANTER_BUCKET_NAME // an S3 butcket for storing uploads
+	PLANTER_S3_ACCESS_KEY_ID
+	PLANTER_S3_SECRET_ACCESS_KEY
+	IFRAMELY_URL
+	IFRAMELY_PORT
+	ALGOLIASEARCH_API_KEY
+	ALGOLIASEARCH_API_KEY_SEARCH
+	ALGOLIASEARCH_APPLICATION_ID
+	PUBLIC_FOLDER // either build or public depending on environment
+	NEW_RELIC_LICENSE_KEY
+	TEST_ADMIN_TOKEN // the token of a user with admin role, used for tests
+	WELCOME_POST
 
 # Create account with admin role
 
