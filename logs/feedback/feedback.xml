@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<external_stories type="array">
+	<external_story>
+		<external_id>55494bfada00955e14d4e617</external_id>
+		<name>This is my feedback on master.</name>
+		<description>This is my feedback on master.</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/4/2 16:2:18 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>553161b618d4f6b726c1f807</external_id>
+		<name>test feeback</name>
+		<description>test feeback</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/3/5 12:40:38 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>5531627725ec7b8d2d6c3cc5</external_id>
+		<name>test feedback 2</name>
+		<description>test feedback 2</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/3/5 12:43:51 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>553164c325ec7b8d2d6c3cc6</external_id>
+		<name>sup</name>
+		<description>sup</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/3/5 12:53:39 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>553164e4c9a9f2e133532d99</external_id>
+		<name>estettst</name>
+		<description>estettst</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/3/5 12:54:12 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>55316568c9a9f2e133532d9a</external_id>
+		<name>test</name>
+		<description>test</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/3/5 12:56:24 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+	<external_story>
+		<external_id>55494a22de006bf110109e17</external_id>
+		<name>This is my feedback.</name>
+		<description>This is my feedback.</description>
+		<requested_by>noahgray@me.com</requested_by>
+		<created_at type="datetime">2015/4/2 15:54:26 UTC</created_at>
+		<story_type>feature</story_type>
+		<estimate type="integer">1</estimate>
+	</external_story>
+</external_stories>
