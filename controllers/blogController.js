@@ -152,8 +152,6 @@ exports.add = function ( req, res ) {
 										if ( err ) console.log( err )
 									}, newUser._id )
 
-									res.status( 200 ).json( newArticle )
-
 									article.close()
 
 									resolve( [ newArticle, newUser ] )
@@ -250,10 +248,23 @@ exports.add = function ( req, res ) {
 	getUser( req.token )
 	.then( getArticle )
 	.spread( function ( article, user ) {
-		if( article.alreadySaved ) {
-			return res.status( 200 ).json( article )
+		if( article.alreadySaved ) {	
+			return res.status( 200 ).json( {
+				title: article.title,
+				url: article.url,
+				_id: user._id,
+				description: article.description,
+				images: article.images
+			})
 		} else {
 			article.save( function ( err, article ) {
+				res.status( 200 ).json( {
+					title: article.title,
+					url: article.url,
+					_id: user._id,
+					description: article.description,
+					images: article.images
+				})
 				replaceImages( article )
 				.then( saveArticle )
 				.then( function ( article ) {
