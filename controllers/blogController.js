@@ -75,7 +75,7 @@ exports.add = function ( req, res ) {
 							description: result.description,
 							images: result.images,
 							alreadySaved: true
-						}, null ])
+						}, users ])
 					})
 				} else {
 					var imageResolver = new ImageResolver()
