@@ -19,11 +19,27 @@ It also uses *MongoDB* which requires *Homebrew* to install on Mac. See http://b
 
 # Run
 
-To run the server, simple do,
+Before running the app, environmental variables must be set. Read about them below first. To run the server, simple do,
 
-	node server.js
+	foreman start web
 
-Now visit http://localhost:4000/ in your browser and you should see the main landing page.
+Now visit http://localhost:4000/ (port depends on `PORT` environmental variable) in your browser and you should see the main landing page.
+
+# Create welcome post
+
+There is a post that needs to be in the database before you accept user registration. Look in `./welcome_post.json` to find the command to run to create this post. Note the `_id` it is given for the next step.
+
+# Set environment variables
+
+There are many environment variables. They need to be set in a .env file locally, and then on the Heroku environments or CodeShip, etc. This includes `WELCOME_POST`, which is the ID of the welcome post created in the step above.
+
+# Create account with admin role
+
+Using a similar command to the one in the .json file, go to the user collection and `insert` a new user. Give the user the `role: 'admin'` field. You can leave the password blank. Then perform a password reset. Go back to the database and find the `temporary_password` field, and copy that to the `password` field. This is necessary because of the encryption of the passwords.
+
+# Administration and beta keys
+
+To do administration, log in with a user with the `role: 'admin'` field and got to `/#/app/admin`. From here, you can create beta keys, for exampled.
 
 #API and Documentation
 
