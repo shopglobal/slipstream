@@ -11,7 +11,9 @@
 
 	if ( window.location.hostname.indexOf("beta") > -1 ) {
 		mixpanel.init( "cc1693118118080303b6ef14d2b65c74" )
-	} else {
+	} else if ( window.location.hostname.indexOf("staging") > -1 ) {
+		mixpanel.init( "4836ba45fa01b7b729dd8c20bb4b53b3" )
+	} else if ( window.location.hostname.indexOf("experimental") > -1 ) {
 		mixpanel.init( "fb14ea6067cae81fca2065decd9b3629" )
 	}
 </script>
