@@ -5,8 +5,16 @@
 			
 		<h1>Curate and discover the web like never before.</h1>
 
-		<button class="btn btn-white btn-lg btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
-		<a ui-sref="landing.register">Have a beta key?</a>
+		<button class="btn btn-white btn-lg btn-landing-register" ng-click="showSignup = true" ng-hide="showSignup">Sign Up</button><br /><br />
+		<form class="form-inline" ng-show="showSignup">
+			<div class="form-group">
+				<input type="text" class="input-white form-control" ng-model="user.email">
+			</div>
+			<div class="form-group">
+				<button class="btn btn-white form-control" ng-click="waitlist()">Sign Up</button>
+			</div>
+		</form>
+		<a ui-sref="landing.register" ng-hide="showSignup">Have a beta key?</a>
 	</div>
 </div>
 

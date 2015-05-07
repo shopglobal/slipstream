@@ -152,12 +152,25 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 					console.log( error )
 				})
 			}
-			// resolve: {
-			// 	article: function() {
-			// 		return article
-			// 	}
-			// }
 		})
+	}
+
+	$scope.waitlist = function () {
+		$http
+			.post( '/api/user/waitlist', {
+				email: $scope.user.email
+			})
+			.success( function ( data ) {
+				mixpanel.identify( data.id )
+				mixpanel.track( "Landing", {
+					action: "Waitlisted" 
+				})
+
+				$flash.success = data
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
 	}
 
 }])
