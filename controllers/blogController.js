@@ -178,7 +178,17 @@ exports.add = function ( req, res ) {
 	*/
 	function replaceImages ( article ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
+			
+		/*
+		Try detect if the article has no images, quit if it does not.
+		*/
+		if ( article.content.indexOf( 'img' ) <= -1 ) {
+			return resolve( article )
+		}
 		
+		/*
+		Load a fake browser environtment to find image elements and replace them.
+		*/
 		jsdom.env( article.content, {
 			features: {
 				ProcessExternalResources: false
