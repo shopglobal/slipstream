@@ -1,4 +1,4 @@
-app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', function( $scope, $window, $state, $urlRouter, $http, Content, $flash ) {
+app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
 	$scope.appName = "SlipStream"
 
@@ -131,5 +131,33 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			$state.go( 'landing.login' )
 	}
 
+	$scope.openManifesto = function () {
+		mixpanel.track( "Landing", {
+			action: "Opened Manifesto"
+		})
+
+		var modalInstance = $modal.open( {
+			templateUrl: "app/views/reader-modal.html",
+			windowClass: 'reader-modal',
+			controller: function ( $scope ) {
+				$scope.closeModal = function() {
+					modalInstance.close()
+				}
+
+				$http.get( '/manifesto.json' )
+				.success( function ( data ) {
+					$scope.article = data
+				})
+				.error( function ( error ) {
+					console.log( error )
+				})
+			}
+			// resolve: {
+			// 	article: function() {
+			// 		return article
+			// 	}
+			// }
+		})
+	}
 
 }])

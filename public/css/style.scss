@@ -61,6 +61,9 @@ body.app { background-color: #F2F1F1; font-family: $body-font; }
 
 body.landing { background-color: white; font-family: $body-font; }
 
+body.splash { background-image: url('../images/splash-background.jpeg'); font-family: $body-font; background-size: cover; background-attachment: fixed; 
+	footer { display: none; } }
+
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
 .login-panel { margin: 0 auto; float: none; color: white; }
@@ -68,6 +71,10 @@ body.landing { background-color: white; font-family: $body-font; }
 .registration-panel { color: white; float: none;  }
 
 .landing-container { width: 700px; }
+
+.container.splash-row-1 { background: transparent; }
+
+.container.splash-row-1 { background: transparent; }
 
 // #viewport { height: 400px; }
 
@@ -211,8 +218,6 @@ a { color: $green;
 	li:first-child { list-style-type: none; }
 	li:nth-child(2):before { content:'\2022'; margin: 3px; margin-right: 7px; } } }
 
-.landing-jumbotron { margin-top: 15%; }
-
 .container-stream { margin-top: 135px; }
 
 .panel-profile { position: relative; }
@@ -279,7 +284,7 @@ a { color: $green;
 
 .navbar-white { background-color: transparent;  
 	ul li {
-		&:hover { background: white; }
+		&:hover > a { background: white; }
 		&:hover > a {  color: $green; background: transparent; } } }
 
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none;
@@ -359,6 +364,21 @@ footer { bottom: 0; position: absolute; height: 25px; }
 			.dropdown-menu {
 				li .glyphicon {  } } } } }
 
+// landing
+
+.jumbotron.splash-row-2 { position: absolute; left: 0; border-radius: 0; background-color: white; padding-left: 0 !important; padding-right: 0 !important;
+	h1 { color: $green; font-size: 45px; }
+	div { margin-bottom: 45px; padding-top: 45px; }
+	.container-relative { position: relative; width: 100%; display: inline-block; }
+	.splash-manifesto-container { position: absolute; display: block; left: 0; width: 100%; background-color: #433F5A; display: block; }
+	.manifesto-definition { color: white; font-family: FanwoodText; }
+	.footer { color: white; }
+}
+
+.landing-jumbotron { margin-top: 15%; background: transparent; 
+	h1, a { color: white; }
+}
+
 // content
 
 .share-links { position: absolute; bottom: 0; right: 15px; display: block; 
@@ -384,8 +404,6 @@ footer { bottom: 0; position: absolute; height: 25px; }
 .container-padded { padding-top: 15px; padding-bottom: 15px; }
 
 // articles
-
-.clearfix { height: 0; clear: both; }
 
 // video
 

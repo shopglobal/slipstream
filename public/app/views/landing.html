@@ -14,14 +14,14 @@
 					</spen>
 				</button>
 				<a ui-sref="landing" class="navbar-brand">
-					<img src="images/ss_logo_green.png" alt="" id="logo">
+					<img src="images/ss_logo_green.png" alt="" id="logo" ng-hide=" $state.includes( 'landing.splash' ) ">
 				</a>
 			</div>
 			<div class="collpase navbar-collapse">
 				<ul class="nav navbar-nav navbar-right">
 					<li ng-hide=" $state.includes( 'landing.login' )  ">
 						<a ui-sref="landing.login">	
-							<button class="btn btn-green">
+							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }">
 								Login
 							</button>
 						</a>
