@@ -44,6 +44,7 @@ router.route( '/user/search' )
 
 router.route( '/user/waitlist' )
 	.post( userController.waitlist )
+	.get( userController.checkAuthorization, userController.getwaitlist )
 
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {

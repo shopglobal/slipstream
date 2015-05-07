@@ -30,6 +30,18 @@
 			<div class="clearfix"></div>
 		</div>
 
+		<div class="col-md-9 col-md-offset-3 container-existing-keys">
+
+			<h2>Waitlist</h2>
+			<div ng-show="waitlist" ng-repeat="user in waitlist">
+				<!-- <input type="checkbox" class="input-key-sent" ng-model="key.sent" ng-change="toggleSent( key.key )"> -->
+				<span ng-bind="user.email"></span> - 
+				<span ng-bind="user.joined | timeAgo"></span>
+			</div>
+
+			<div class="clearfix"></div>
+		</div>
+
 		
 	</div>
 </div>

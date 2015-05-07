@@ -462,3 +462,21 @@ exports.waitlist = function ( req, res ) {
 		return res.status( 500 ).json( "Sorry, maybe that email was used before?" )
 	})
 }
+
+exports.getwaitlist = function ( req, res ) {
+	
+	User.findOne( { token: req.token, role: 'admin' } )
+	.then( function ( user ) {
+		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
+		
+		User.find( { waiting: true, username: { $exists: false } } )
+		.then( function ( results ) {
+			return res.status( 200 ).json( results )
+		})
+		.catch( function ( error ) {
+			console.log( error )
+			
+			return res.status( 500 ).json( error.message )
+		})
+	})
+}

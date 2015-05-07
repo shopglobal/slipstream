@@ -35,4 +35,14 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 				$flash.error = error
 			})
 	}
+
+	$http
+		.get( '/api/user/waitlist' )
+		.success( function ( data ) {
+			$scope.waitlist = data
+		})
+		.error( function ( error ) {
+			$flash.error = error
+			console.log( error )
+		})
 }])
