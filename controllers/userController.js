@@ -84,7 +84,7 @@ exports.signUp = function ( req, res ) {
 	*/
 	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
 	.then( function ( result ) {
-		if ( !result ) {
+		if ( !result || typeof result.username == undefined ) {
 			betakeyCheck()
 			.then( function ( betakey ) {
 				user.save()
@@ -439,5 +439,26 @@ exports.search = function ( req, res ) {
 	}, function ( error ) {
 		console.error( error )
 		return res.status( 500 ).json( "Couldn't search for users." )
+	})
+}
+
+/*
+Adds a user the the waiting list for beta invites.
+*/
+exports.waitlist = function ( req, res ) {
+	var user = new User ({
+		email: req.body.email,
+		joined: ( new Date() / 1),
+		waiting: true
+	})
+	
+	user.save()
+	.then( function ( result ) {
+		if ( result )
+			return res.status( 200 ).json( "We'll get in touch soon. Thanks." )
+	}, function ( error ) {
+		console.log( error )
+		
+		return res.status( 500 ).json( "Sorry, maybe that email was used before?" )
 	})
 }

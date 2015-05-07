@@ -42,6 +42,9 @@ router.route( '/user/name' )
 router.route( '/user/search' )
 	.get( userController.checkAuthorization, userController.search )
 
+router.route( '/user/waitlist' )
+	.post( userController.waitlist )
+
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {
