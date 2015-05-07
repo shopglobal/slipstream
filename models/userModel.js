@@ -10,7 +10,11 @@ var Follows = new mongoose.Schema({
 })
 
 var UserSchema = new mongoose.Schema({
-	username: String,
+	username: {
+		type: String,
+		sparse: true,
+		unique: true
+	},
 	password: String,
 	tempPassword: String,
 	email: {
@@ -26,7 +30,7 @@ var UserSchema = new mongoose.Schema({
 	following: [ Follows ]
 })
 
-UserSchema.index( { username: 'text' } )
+UserSchema.index( { username: 'text', sparse: true } )
 
 // 
 // hashes the password so it's not plain text
