@@ -42,6 +42,10 @@ router.route( '/user/name' )
 router.route( '/user/search' )
 	.get( userController.checkAuthorization, userController.search )
 
+router.route( '/user/waitlist' )
+	.post( userController.waitlist )
+	.get( userController.checkAuthorization, userController.getwaitlist )
+
 router.route( '/user/sendbetakey' )
 	.post( userController.checkAuthorization, userController.sendBetakey )
 

@@ -36,6 +36,18 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 			})
 	}
 
+	$scope.sendBetakey = function ( user ) {
+		$http.post( '/api/user/sendbetakey', { email: user.email } )
+		.success( function ( data ) {
+			$flash.success = data
+			user.hide = true
+		})
+		.error( function ( error ) {
+			$flash.error = error
+			console.log( error )
+		})
+	}
+
 	$http
 		.get( '/api/user/waitlist' )
 		.success( function ( data ) {
