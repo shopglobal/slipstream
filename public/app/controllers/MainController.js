@@ -144,7 +144,7 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 					modalInstance.close()
 				}
 
-				$http.get( '/manifesto.json' )
+				$http.get( '/app/views/manifesto.json' )
 				.success( function ( data ) {
 					$scope.article = data
 				})
