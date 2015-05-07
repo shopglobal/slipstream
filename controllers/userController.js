@@ -12,7 +12,8 @@ var User = require( '../models/userModel' ),
 	getUser = require( '../helpers/get-user' ),
 	fs = require( 'fs' ),
 	path = require( 'path' ),
-	mongoose = require( 'mongoose' )
+	mongoose = require( 'mongoose' ),
+	randomKey = require( 'random-key' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
 	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
@@ -478,5 +479,64 @@ exports.getwaitlist = function ( req, res ) {
 			
 			return res.status( 500 ).json( error.message )
 		})
+	})
+}
+
+/*
+Inputs: An email address.
+
+Outputs: Generates and sends a betakey to user, and updates their status on the waitlist if they were on the beta waitlist.
+*/
+exports.sendBetakey = function ( req, res ) {
+	
+	function makeKey ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+
+				var betakey = new Betakey( {
+					key: randomKey.generateBase30( 12 ),
+					added: ( new Date() / 1 ).toFixed(),
+					creator: user.email
+				} )
+
+				betakey.save( function ( err, result ) {				
+					if ( err ) reject( err )
+					
+					resolve( result )
+				})
+		})
+	}
+	
+	User.findOne( { token: req.token, role: 'admin' } )
+	.then( function ( user ) {
+		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
+		
+		makeKey( user )
+		.then( function ( betakey ) {
+			var email = {
+				from: 'SlipStream <welcome@slipstreamapp.com>',
+				to: req.body.email,
+				subject: 'Your SlipStream beta key',
+				html: "Here's your beta key to SlipStream: " + betakey.key
+			}
+			
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) { 
+					console.log( err )
+					return res.status( 500 ).json( "Could not mail betakey to user." )
+				}
+				
+				User.findOneAndUpdate( { email: req.body.email }, { waiting: false } )
+				.then( function ( result ) {
+					if ( !result ) return res.status( 200 ).json( "Invite sent to new email address." )
+					
+					return res.status( 200 ).json( "Invite sent to user on waitlist." )
+				})
+			})
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		
+		return res.status( 500 ).json( error.message )
 	})
 }
