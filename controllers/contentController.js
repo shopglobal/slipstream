@@ -155,6 +155,13 @@ exports.add = function ( req, res ) {
 	})
 }
 
+/*
+INPUT: User token at req.token and username of stream being viewed at req.params.username
+
+OUTPUT: The stream of the user being viewed.
+
+Tries to determine if the stream is the logged-in user's stream, and includes or excluded private posts based on that.
+*/
 exports.stream = function ( req, res ) {
 
 	var show = parseInt( req.query.show ),	// the number of items to show per page
@@ -185,7 +192,8 @@ exports.stream = function ( req, res ) {
 					stream: '$users.stream',
 					text: '$text',
 					processing: '$processing',
-					tags: '$users.tags'
+					tags: '$users.tags',
+					private: '$users.private'
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },
@@ -214,9 +222,46 @@ exports.stream = function ( req, res ) {
 	}
 	
 	findUserid( req.params.username )
-	.then( getStream )
-	.then( function ( results ) {
-		return res.json( results )
+	.then( function ( user ) {
+		User.findOne( { token: req.token } )
+		.then( function ( result ) {
+			if ( user == result._id ) {
+				getStream( user )
+				.then( function ( results ) {
+					return res.status( 200 ).json( results )
+				})
+			} else {
+				var userid = mongoose.Types.ObjectId( user )
+				Content.aggregate( [
+					{ $unwind: '$users' },
+					{ $match: { 
+						'users.user': userid, 
+						'users.stream': stream,
+						$or: [ { 'users.private': false }, { 'users.private': { $exists: false } } ]
+					} },
+					{ $project: { 
+						_id: '$users._id',
+						title: '$title', 
+						url: '$url', 
+						images: '$images',
+						description: '$description',
+						added: '$users.added',
+						user: '$users.user',
+						stream: '$users.stream',
+						text: '$text',
+						processing: '$processing',
+						tags: '$users.tags',
+						private: '$users.private'
+					} },
+					{ $sort: { added: -1 } },
+					{ $skip: skip },
+					{ $limit: show }
+				] ).exec()
+				.then( function ( results ) {
+					return res.status( 200 ).json( results )
+				})
+			}
+		})
 	})
 	.catch( function ( error ) {
 		log.error( error )
@@ -396,7 +441,9 @@ exports.following = function ( req, res ) {
 			{ $unwind: '$users' },
 			{ $match: { 
 				'users.user': { $in: following }, 
-				'users.stream': req.params.stream } },
+				'users.stream': req.params.stream,
+			 	$or: [ { 'users.private': false }, { 'users.private': { '$exists': false } } ]
+			} },
 			{ $project: { 
 				_id: '$users._id',
 				title: '$title', 
@@ -432,11 +479,22 @@ exports.private = function ( req, res ) {
 	getUser( req.token )
 	.then( function ( user ) {
 		Content.findOne( { 'users.user': user._id, 'users._id': req.body.id } )
-		.then( function ( result ) {
-			result.id( req.body.id ).togglePrivate()
+		.then( function ( parent ) {
+			parent.users.id( req.body.id ).private = !parent.users.id( req.body.id ).private
+			
+			parent.save()
 			.then( function ( result ) {
-				return res.status( 200 ).json( result.private ? "Set to public" : "Set to private" )
+				result.users.id( req.body.id )
+				return res.status( 200 ).json( "Post privacy changed." )
 			})
 		})
+		.catch( function ( error ) {
+			console.log( error )
+			return res.status( 500 ).json( error.message )
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
 	})
 }

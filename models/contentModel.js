@@ -1,9 +1,10 @@
 'use strict'
 
-var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+var mongoose = require( 'mongoose' ),
 	Algolia = require( 'algolia-search' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents')
+	index = algolia.initIndex('Contents'),
+	Q = require( 'q' )
 
 /*
 This first model is for the subdocuments. These record the instances that a user saves the article. It lacks the article text and is inserted in the main article object within an array.article
@@ -19,9 +20,11 @@ var UsersSchema = new mongoose.Schema({
 })
 
 UsersSchema.methods.togglePrivate = function () {
-	this.private = !this.private
-	
-	return this.save()
+	return Q.Promise( function ( resolve, reject, notify ) {
+		this.private = !this.private
+
+		resolve( this )
+	})
 }
 
 var ContentSchema = new mongoose.Schema( {
