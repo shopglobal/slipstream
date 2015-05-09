@@ -216,4 +216,15 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 			})
 	}
 
+	$scope.togglePrivate = function ( item ) {
+		$http.post( '/api/content/private', { id: item._id } )
+		.success( function ( result ) {
+			$flash.success = result
+			item.private = !item.private
+		})
+		.error( function ( result ) {
+			$flash.error = result
+		})
+	}
+
 }])

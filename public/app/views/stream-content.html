@@ -46,6 +46,7 @@
 						</span>
 					</span>
 					<span ng-bind="item.added | timeAgo"></span>
+					<span ng-show="item.private" class="glyphicon glyphicon-lock"></span>
 				</div>
 
 				<div class="share-links">
@@ -65,6 +66,12 @@
 					    </li>
 					    <li role="presentation">
 					    	<a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Open original</a>
+					    </li>
+					    <li role="presentation" ng-show=" mode == 'mystream' && !item.private ">
+					    	<a ng-click="togglePrivate( item )"></span><span class="glyphicon glyphicon-lock"></span> Make private</a>
+					    </li>
+					    <li role="presentation" ng-show=" mode == 'mystream' && item.private ">
+					    	<a ng-click="togglePrivate( item )"></span><span class="glyphicon glyphicon-eye-open"></span> Make public</a>
 					    </li>
 					  </ul>
 					</span>
