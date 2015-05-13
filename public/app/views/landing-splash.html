@@ -3,17 +3,17 @@
 
 		<img src="images/ss_logo_white_splash@2x.png" alt="SlipStream logo" height="84px" width="auto">
 			
-		<h1>Curate and discover the web like never before.</h1>
+		<h1 class="splash-hero-text">Curate and discover the web like never before.</h1>
 
 		<script type="text/ng-template" id="splash-cta-signup.html">
-			<div class="col-md-3 no-padding" ng-hide="showSignup">
-				<button class="btn btn-white btn-xlg btn-landing-register btn-block" ng-click="showSignup = true">Sign Up</button><br /><br />
-			</div>
-			<form class="form-inline" ng-show="showSignup">
-				<div class="form-group">
+			<span ng-hide="showSignup">
+				<button class="btn btn-white btn-xlg btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
+			</span>
+			<form class="form-inline form-waitlist" ng-show="showSignup">
+				<span class="form-group">
 					<input type="text" class="input-white form-control input-font-lg" ng-model="user.email" placeholder="Email">
 					<button class="btn btn-white btn-lg" ng-click="waitlist()">Sign Up</button>
-				</div>
+				</span>
 			</form>
 		</script>
 
@@ -26,22 +26,30 @@
 <div class="clearfix"></div>
 
 <div class="jumbotron splash-row-2">
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-10 col-md-offset-1 splash-section">
 		<h1 class="text-center">The most delightful way to save your favorite content, enjoy it again, and discover more.</h1><br /><br />
 		<img src="images/splash-streams.png" alt="" class="center-block">
 	</div>
-	<div class="col-md-10 col-md-offset-1">
+	<div class="col-md-12 text-center clearfix splash-section">
+		
+		<h1 class="splash-cta-left">It's free and easy</h1>
+
+		<span class="cta-green">
+			<ng-include src="'splash-cta-signup.html'"></ng-include>
+		</span>
+	</div>
+	<div class="col-md-10 col-md-offset-1 splash-section">
 		<h1 class="text-center">Discovery with high standards.</h1><br /><br />
 		<h2>As you save, Slipstream learns what you like, and serves up a discovery experience based on your tastes. Best of all, content has only been curated by real people just like you (no aggregators here).</h2><br /><br />
 		<img src="images/splash-discovery.png" alt="" class="center-block">
 	</div>
 	<div class="clearfix"></div>
 	<div class="container-relative">
-		<div class="splash-manifesto-container">
+		<div class="splash-manifesto-container splash-section">
 			<div class="col-md-10 col-md-offset-1">
 				<button class="btn btn-green btn-xlg center-block" ng-click="openManifesto()">WE HAVE A MANIFESTO</button>
-				<div class="text-center manifesto-definition ">Noun | man . i . fes . to | \,ma-ne-’fes-(,)to\:<br /> a written statement that describes the policies, goals,<br /> and opinions of a person or group</div>
-				<div class="center-block text-center icon-logo text-white">
+				<div class="text-center manifesto-definition splash-section">Noun | man . i . fes . to | \,ma-ne-’fes-(,)to\:<br /> a written statement that describes the policies, goals,<br /> and opinions of a person or group</div>
+				<div class="center-block text-center icon-logo text-white splash-section">
 					<a href="https://twitter.com/getslipstream"><p class="icon-twitter"></p></a>
 				</div>
 				<div class="text-center center-block footer" style=" clear: both; ">© 2015 Slipstream, All rights reserved</div>
