@@ -186,6 +186,8 @@ a { color: $green;
 
 // new classes
 
+.text-white { color: white; }
+
 .button-follow { border: solid 2px $green; box-shadow: none; text-decoration: none;
 	&:hover { box-shadow: none; text-decoration: none; } }
 
