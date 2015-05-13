@@ -230,7 +230,9 @@ a { color: $green;
 
 .navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
 
-.icon-logo { font-family: 'BrandIcons'; }
+.icon-logo { font-family: 'BrandIcons'; display: inline-block; }
+
+.dropdown-menu-right li a .icon-logo { display: inline-block; }
 
 .icon-twitter:before { content: "\F303"; }
 
