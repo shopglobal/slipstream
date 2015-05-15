@@ -345,6 +345,8 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		& > input + span { color: $grey; }
 		& > input:checked + span { color: $highlight; }
 		& > input:checked:hover + span { color: $highlight; } }
+	.toggle-private { 
+		& > input { display: none; } }
 	.article-preview { padding-top: 20px;
 		.preview-text { padding: 0; margin: 0; 
 			h4 { margin: 0; padding: 0; } }

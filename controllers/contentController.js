@@ -31,7 +31,8 @@ exports.add = function ( req, res ) {
 					var newUser = result.users.create({
 						user: user._id,
 						added: ( new Date() / 1).toFixed(),
-						stream: req.body.type
+						stream: req.body.type,
+						private: true
 					})
 					
 					result.users.push( newUser )
@@ -94,7 +95,8 @@ exports.add = function ( req, res ) {
 				var users = content.users.create({
 					user: user._id,
 					added: ( new Date() / 1).toFixed(),
-					stream: req.body.type
+					stream: req.body.type,
+					private: true
 				})
 				
 				content.users.push( users )

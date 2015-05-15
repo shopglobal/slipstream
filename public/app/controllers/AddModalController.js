@@ -6,7 +6,8 @@ app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$st
 	$scope.showSpinner = false
 	$scope.contentParams = {
 		url: '',
-		type: $stateParams.stream
+		type: $stateParams.stream,
+		private: false
 	}
 
 	mixpanel.track( "Add modal opened" )
@@ -105,30 +106,41 @@ app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$st
 				title: $scope.contentPreview.title
 			} )
 			$state.reload()
-		} else {
-			$http
-				.post( '/api/tags', { 
-					id: $scope.contentPreview._id,
+		} 
+		if ( $scope.tags.length != 0 ) {
+			$http.post( '/api/tags', { 
+				id: $scope.contentPreview._id,
+				tags: $scope.tags
+			})
+			.success( function ( result ) {
+				$modalInstance.close()
+				mixpanel.track( "Adding", {
+					action: "Done",
+					url: $scope.contentParams.url,
+					title: $scope.contentPreview.title
+				})
+				mixpanel.track( "Tagging", {
+					action: "Added",
+					title: $scope.contentPreview.title,
+					url: $scope.contentParams.url,
 					tags: $scope.tags
 				})
-				.success( function ( result ) {
-					$modalInstance.close()
-					mixpanel.track( "Adding", {
-						action: "Done",
-						url: $scope.contentParams.url,
-						title: $scope.contentPreview.title
-					})
-					mixpanel.track( "Tagging", {
-						action: "Added",
-						title: $scope.contentPreview.title,
-						url: $scope.contentParams.url,
-						tags: $scope.tags
-					})
-					$state.reload()
-				})
-				.error( function ( error ) {
-					$flash.error = error
-				})
+				$state.reload()
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+		}
+		if ( !$scope.contentParams.private ) {
+			$http.post( '/api/content/private', {
+				id: $scope.contentPreview._id
+			} )
+			.success( function ( data ) {
+				return
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
 		}
 	}
 

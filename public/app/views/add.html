@@ -52,17 +52,21 @@
 
 	 </div>
 
-	 <div class="clear-fix col-md-12 add-row-bottom">
-
+	 <div class="clear-fix col-md-12 add-row-bottom" ng-show="showPreview">
 
 		<tags-input ng-model="tags" class="input-line input-green no-padding col-md-8" ng-show="showPreview"></tags-input>
+
+		<label class="btn no-border toggle-private" ng-class="{ 'btn-grey': !contentParams.private, 'btn-green': contentParams.private }">
+			<input type="checkbox" ng-model="contentParams.private" class="input-add-checkbox">
+			<span class="glyphicon glyphicon-lock"></span>
+		</label>
 
 		<!-- <div class="container-fluid col-md-6">
 			 <button class="col-md-6 btn btn-green-solid btn-block" ng-click="deleteItem(); showPreview=false" ng-show="showPreview">Cancel (Delete)</button>
 		</div> -->
 
 		<div class="container-fluid col-md-3 pull-right done-button">
-			<button class="btn btn-green btn-block pull-right" ng-click="done(); showPreview=false" ng-show="showPreview">Done</button>
+			<button class="btn btn-green btn-block pull-right" ng-click="done(); showPreview=false">Done</button>
 		</div>
 
 	 </div>
