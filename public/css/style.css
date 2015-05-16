@@ -365,7 +365,7 @@ a {
   top: 0; }
 
 /* line 173, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
-.fade {
+.fixed {
   position: fixed; }
 
 /* line 175, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
@@ -1298,5 +1298,47 @@ tags-input .autocomplete .suggestion-item em {
   cursor: pointer;
   vertical-align: middle;
   display: inline-block; }
+
+/* Flash alerts */
+/* Remove colors and add transition property */
+/* line 529, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.alert-flash {
+  position: fixed;
+  width: 20%;
+  left: 50%;
+  margin-left: -10%;
+  z-index: 7000;
+  top: 0;
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  /* change transition property to all */
+  -webkit-transition-property: all;
+  transition-property: all; }
+
+/* line 545, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.alert-flash h4 {
+  margin: 0; }
+
+/* line 549, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.alert-flash .close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 20px; }
+
+/* add warning colors to warn class */
+/* line 557, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.alert-warn {
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5; }
+
+/* line 563, /Users/noah/Documents/dev/slipstream/public/css/style.scss */
+.alert-warn, .alert-warn h4 {
+  color: #c09853; }
 
 /*# sourceMappingURL=style.css.map */
