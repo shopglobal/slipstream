@@ -13,6 +13,50 @@ var Content = require( '../models/contentModel' ),
 	index = algolia.initIndex( 'Contents' ),
 	urlExpand = require( 'url-expand' )
 
+function findUserid ( username ) {
+	return Q.promise( function ( resolve, reject, notify ) {
+		User.findOne( { username: username } )
+		.then( function( result ) {
+			if ( !result ) return reject( new Error( { message: "No user found" } ) )
+			
+			resolve( result.id )
+		})
+		.catch( function ( error ) {
+			reject( error )
+		})
+	})		
+}
+
+function projectContent ( id ) {
+	return Q.Promise( function ( resolve, reject, notify ) {
+		var objectid = mongoose.Types.ObjectId( id )
+		
+		Content.aggregate( [
+			{ $unwind: '$users' },
+			{ $match: { 'users._id': objectid } }, 
+			{ $project: { 
+				_id: '$users._id',
+				title: '$title', 
+				url: '$url', 
+				images: '$images',
+				description: '$description',
+				added: '$users.added',
+				user: '$users.user',
+				stream: '$users.stream',
+				text: '$text',
+				processing: '$processing',
+				tags: '$users.tags',
+				private: '$users.private'
+			} }
+		] ).exec()
+		.then( function ( result ) {
+			resolve( result )
+		}, function ( error ) {
+			reject( error )
+		})
+	})
+}
+
 // adds content to users stream.
 
 exports.add = function ( req, res ) {
@@ -211,18 +255,6 @@ exports.stream = function ( req, res ) {
 		})
 	}
 	
-	function findUserid ( username ) {
-		return Q.promise( function ( resolve, reject, notify ) {
-			User.findOne( { username: req.params.username } )
-			.then( function( result ) {
-				resolve( result.id )
-			})
-			.catch( function ( error ) {
-				reject( error )
-			})
-		})		
-	}
-	
 	findUserid( req.params.username )
 	.then( function ( user ) {
 		User.findOne( { token: req.token } )
@@ -268,6 +300,46 @@ exports.stream = function ( req, res ) {
 	.catch( function ( error ) {
 		log.error( error )
 		return res.status( 500 ).send( { error: error.message } )
+	})
+}
+
+/*
+Gets a single post. Used to dynamically get content a user just added to their stream, or get an item's content after it's been updated.
+*/
+exports.single = function ( req, res ) {
+	findUserid( req.params.username )
+	.then( function ( userid ) {
+		User.findOne( { token: req.token } )
+		.then( function ( result ) {
+			if ( result._id != userid ) {
+				projectContent( req.params.id )
+				.then( function ( result ) {
+					if ( result.private == true ) return res.status( 500 ).json( "Can't find that content." )
+										
+					return res.status( 200 ).json( result )
+				})
+			} else {
+				projectContent( req.params.id )
+				.then( function ( result ) {
+					return res.status( 200 ).json( result )
+				})
+				.catch( function ( error ) {
+					console.log( error )
+					
+					return res.status( 500 ).json( error.message )
+				})
+			}
+		})
+		.catch( function ( error ) {
+			console.log( error )
+			
+			return res.status( 200 ).json( error.message )
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error ) 
+		
+		return res.status( 500 ).json( error.message )
 	})
 }
 	

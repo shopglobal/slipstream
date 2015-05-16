@@ -1,4 +1,4 @@
-app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', 'Following', function( $stateParams, $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover, Following ) {
+app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', 'Following', function( $rootScope, $stateParams, $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover, Following ) {
 
 	$window.scrollTo( 0, 0 )
 
@@ -19,13 +19,13 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 	console.log( $stateParams )
 
 	if ( $scope.mode == 'mystream' || $scope.mode == 'visiting' ) {
-		$scope.content = new Content()
+		$rootScope.content = new Content()
 	} if ( $scope.mode == 'discover' ) {
-		$scope.content = new Discover()
-		$scope.content.loadMore( 3 )
+		$rootScope.content = new Discover()
+		$rootScope.content.loadMore( 3 )
 	} if ( $scope.mode == 'following' ) {
-		$scope.content = new Following()
-		$scope.content.loadMore( 3 )
+		$rootScope.content = new Following()
+		$rootScope.content.loadMore( 3 )
 	}
 
 	mixpanel.track( "Stream", {
@@ -38,20 +38,20 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 	$scope.doSearch = function() {
 		if ( $scope.search.query.length < 1 ) {
 			$scope.userlist = null
-			$scope.content = new Content()
-			$scope.content.loadMore( 3 )
+			$rootScope.content = new Content()
+			$rootScope.content.loadMore( 3 )
 			return
 		}
 
 		if ( $scope.search.query.indexOf( '@' ) == 0 ) {
-			if ( $scope.content ) $scope.content = null
+			if ( $rootScope.content ) $rootScope.content = null
 			$scope.searchUsers()
 			return
 		}
 
-		$scope.content = new Search()
-		$scope.content.query = $scope.search.query
-		$scope.content.loadMore( 3 )
+		$rootScope.content = new Search()
+		$rootScope.content.query = $scope.search.query
+		$rootScope.content.loadMore( 3 )
 		mixpanel.track( "Searched", { 
 			query: $scope.search.query
 		} )
@@ -77,12 +77,12 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 	$scope.discover = function() {
 		setTimeout( function () {
 			if ( $scope.mode == 'discover' ) {
-				$scope.content = new Discover()
-				$scope.content.loadMore( 3 )
+				$rootScope.content = new Discover()
+				$rootScope.content.loadMore( 3 )
 				$state.reload()
 			} else {
-				$scope.content = new Content()
-				$scope.content.loadMore( 3 )
+				$rootScope.content = new Content()
+				$rootScope.content.loadMore( 3 )
 				$state.reload()
 			}
 		}, 50)
@@ -130,7 +130,7 @@ app.controller('HomeController', [ '$stateParams', '$scope', '$state', '$urlRout
 				content_id: id
 			})
 			console.log( data )
-			$scope.content.loadMore( 2 )
+			$rootScope.content.loadMore( 2 )
 		})
 		.error( function ( error ) {
 			console.log( error )

@@ -92,6 +92,9 @@ router.route('/stream/:username/:stream')
 		contentController.delete( req, res )
 	})
 
+router.route( '/single/:username/:id')
+	.get( userController.checkAuthorization, contentController.single )
+
 router.route( '/following/:stream' )
 	.get( userController.checkAuthorization, contentController.following )
 	

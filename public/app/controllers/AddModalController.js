@@ -1,4 +1,4 @@
-app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', '$timeout', function( $stateParams, $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash, $timeout ) {
+app.controller('AddModalController', [ '$rootScope', '$stateParams', '$scope', '$window', '$state', '$urlRouter', '$http', '$modalInstance', 'flash', '$timeout', function( $rootScope, $stateParams, $scope, $window, $state, $urlRouter, $http, $modalInstance, $flash, $timeout ) {
 
 	$scope.currentState = $state.current.name
 	$scope.tags = []
@@ -98,6 +98,17 @@ app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$st
 	// the state without deleting the article
 
 	$scope.done = function( id ) {
+		if ( !$scope.contentParams.private ) {
+			$http.post( '/api/content/private', {
+				id: $scope.contentPreview._id
+			} )
+			.success( function ( data ) {
+				return
+			})
+			.error( function ( error ) {
+				$flash.error = error
+			})
+		}
 		if( $scope.tags.length === 0 ) {
 			$modalInstance.close()
 			mixpanel.track( "Adding", {
@@ -105,7 +116,7 @@ app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$st
 				url: $scope.contentParams.url,
 				title: $scope.contentPreview.title
 			} )
-			$state.reload()
+			insertToStream( $scope.contentPreview._id )
 		} 
 		if ( $scope.tags.length != 0 ) {
 			$http.post( '/api/tags', { 
@@ -125,23 +136,24 @@ app.controller('AddModalController', [ '$stateParams', '$scope', '$window', '$st
 					url: $scope.contentParams.url,
 					tags: $scope.tags
 				})
-				$state.reload()
+				insertToStream( $scope.contentPreview._id )
 			})
 			.error( function ( error ) {
 				$flash.error = error
 			})
 		}
-		if ( !$scope.contentParams.private ) {
-			$http.post( '/api/content/private', {
-				id: $scope.contentPreview._id
-			} )
-			.success( function ( data ) {
-				return
-			})
-			.error( function ( error ) {
-				$flash.error = error
-			})
-		}
+	}
+
+	function insertToStream( id ) {
+		$http.get( '/api/single/' + $window.localStorage.username + '/' + $scope.contentPreview._id )
+		.success( function ( data ) {
+			$rootScope.content.items.unshift( data[0] )
+		})
+		.error( function ( error ) {
+			console.log( error )
+
+			$flash.error = error 
+		})
 	}
 
 }])
