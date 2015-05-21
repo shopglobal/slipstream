@@ -8,7 +8,7 @@ var Content = require( '../models/contentModel' ),
 	log = require( '../helpers/logger.js' ),
 	bodyParser = require( 'body-parser' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
-	Algolia = require( 'algolia-search' ),
+	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex( 'Contents' ),
 	urlExpand = require( 'url-expand' )
@@ -517,11 +517,13 @@ exports.search = function ( req, res ) {
 	getUser( req.token )
 	.then( function ( user ) {
 	
-		index.search( req.query.terms, function( error, result ) {
-			if ( error ) return res.status( 500 ).json( result )
-
+		index.search( req.query.terms, { facetFilters: [ 'user:' + user.id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
+		.then( function( result ) {
 			return res.status( 200 ).json( result.hits )
-		}, { facetFilters: [ 'user:' + user.id, 'stream:' + req.query.stream ], page: req.query.page, hitsPerPage: req.query.show } )
+		})
+		.catch( function ( error ) {
+			return res.status( 500 ).json( error )			
+		})
 	
 	})
 	.catch( function ( error ) {

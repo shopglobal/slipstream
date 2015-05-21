@@ -18,7 +18,7 @@
   "author": "Noah Gray, SlipStream",
   "license": "none, copyright",
   "dependencies": {
-    "algolia-search": "^1.7.7",
+    "algoliasearch": "^3.3.2",
     "amazon-s3-url-signer": "0.0.7",
     "article": "^1.1.0",
     "article-title": "^1.0.1",

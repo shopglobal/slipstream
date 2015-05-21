@@ -1,7 +1,7 @@
 'use strict'
 
 var mongoose = require( 'mongoose' ),
-	Algolia = require( 'algolia-search' ),
+	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex('Contents'),
 	Q = require( 'q' )
