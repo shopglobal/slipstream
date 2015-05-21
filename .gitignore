@@ -16,3 +16,7 @@ nodemon.json
 nodemon.json
 
 *.orig
+
+public/css/style.css
+
+public/css/style.css.map

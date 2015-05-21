@@ -136,7 +136,7 @@ A service for searching using Algolia, but through our back-end
 	var Search = function () {
 		this.items = []
 		this.busy = false
-		this.page = 0
+		this.page = 1
 		this.query = ''
 		THROTTLE_MILLISECONDS = 1000
 	}
