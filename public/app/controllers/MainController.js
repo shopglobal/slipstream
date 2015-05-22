@@ -1,6 +1,8 @@
-app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
+app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
 	$scope.appName = "SlipStream"
+
+	$rootScope.role = $window.localStorage.role
 
 	$scope.$state = $state
 
@@ -32,6 +34,9 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			.success( function ( data, status ) {
 				$window.localStorage.token = data.token
 				$window.localStorage.username = data.username
+				if ( data.role == 'admin' ) {
+					$window.localStorage.role = 'admin'
+				}
 				mixpanel.identify( data.id )
 				mixpanel.track( "User", {
 					action: "Logged in" 
@@ -125,6 +130,7 @@ app.controller('MainController', ['$scope', '$window', '$state', '$urlRouter', '
 			delete $window.localStorage.token
 			delete $window.localStorage.username
 			delete $window.localStorage.mode
+			delete $window.localStorage.role
 			mixpanel.track( "User", {
 				action: "Sign out"
 			} )

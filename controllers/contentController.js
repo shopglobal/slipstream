@@ -202,6 +202,40 @@ exports.add = function ( req, res ) {
 }
 
 /*
+Allows admins to edit posts. 
+
+INPUT: Edited text and valid user token.
+*/
+exports.edit = function ( req, res ) {
+	
+	User.findOne( { token: req.token } )
+	.then( function ( user ) {
+		if( user.role != 'admin' ) return res.status( 403 ).json( "Can't do that." )
+		
+		var contentid = mongoose.Types.ObjectId( req.body.id )
+		
+		Content.findOne( { 'users._id': req.body.id } )
+		.then( function ( parent ) {
+			if ( !parent ) return res.status( 500 ).json( "Couldn't find that article to edit." )
+			
+			parent.text = req.body.text
+			
+			parent.save()
+			.then( function ( result ) {
+				return res.status( 200 ).json( "The post was saved." )
+			}, function ( error ) {
+				console.log( error )
+				return res.status( 500 ).json( error.message )
+			})
+		})
+		.catch( function ( error ) {
+			console.log( error )
+			return res.status( 500 ).json( error.message )
+		})
+	})
+}
+
+/*
 INPUT: User token at req.token and username of stream being viewed at req.params.username
 
 OUTPUT: The stream of the user being viewed.

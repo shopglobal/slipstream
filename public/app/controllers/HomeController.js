@@ -178,7 +178,7 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 
 		mixpanel.track( "Reader", {
 			action: "Opened",
-			article: article
+			article: article.title
 		})
 
 		var modalInstance = $modal.open( {

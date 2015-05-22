@@ -13,8 +13,15 @@
 		</h4>
 	</div>
 
-	<div ng-bind-html="article.text"></div>
+	<div ng-bind-html="article.text" ng-hide="adminEdit"></div>
 
+	<div ng-show="adminEdit == true">
+		<textarea ng-wig="article.text"></textarea><br />
+		<button class="btn btn-green" ng-click="saveAdminEdit()">Submit changes</button>
+	</div>
+
+
+	
 </div>
 
 <div class="share-links share-links-stacked">
@@ -24,5 +31,20 @@
 	</button>
 
 	<ng-include src="'app/views/menu-share.html'" scope="" onload=""></ng-include>
+
+	<span class="dropdown admin-reader-menu" ng-if=" role == 'admin' ">
+	  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
+	    <span class="glyphicon glyphicon-option-horizontal glyphicon-green"></span>
+	    <span class="sr-only">
+			Toggle Item Options Menu
+		</span>
+	  </button>
+	  
+	  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
+	    <li role="presentation">
+	    	<a role="menuitem" tabindex="-1" ng-click="adminMode()"><span class="glyphicon glyphicon-text-background cursor-pointer"></span>  Edit post</a>
+	    </li>
+	  </ul>
+	</span>
 	
 </div>

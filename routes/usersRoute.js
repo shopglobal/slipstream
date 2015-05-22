@@ -77,6 +77,9 @@ router.route('/tags')
 router.route( '/content/private' )
 	.post( userController.checkAuthorization, contentController.private )
 
+router.route( '/content/edit' )
+	.post( userController.checkAuthorization, contentController.edit )
+
 router.route( '/discover/:measure/:stream' )
 	.get( userController.checkAuthorization, function ( req, res ) {
 		if ( req.params.measure == 'popular' ) {
