@@ -1,4 +1,4 @@
-app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', function( $scope, $modalInstance, article, $sce, $http, $flash ){
+app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', function( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams ){
 	
 	var modalDialog = document.getElementsByClassName( 'modal-dialog' )
 
@@ -11,6 +11,18 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	// }, 500)
 
 	$scope.article = article
+
+	/*
+	check if the article is currently processing. If it is, check again. This will make the app check each time an add modal is openened instead of only after refreshign the whole app.
+	*/
+	if ( article.processing ) {
+		$http.get( '/api/single/' + $stateParams.username + '/' + article._id )
+		.then( function ( response, error ) {
+			if ( error ) return
+
+			if ( !response.data.processing ) $scope.article = response.data[0]
+		})
+	}
 
 	$sce.trustAsHtml( article.content )
 
