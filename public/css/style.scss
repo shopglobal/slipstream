@@ -357,10 +357,13 @@ footer { bottom: 0; position: absolute; height: 25px; }
 
 // reader modal
 
-.reader-modal { background: rgba( 255, 255, 255, 0.99 ); font-family: $content-font;
+.reader-modal { background: rgba( 255, 255, 255, 0.99 ); 
 	.modal-logo { position: fixed; top: -25px; left: -275px; width: 200px; }
-	.modal-dialog { float: none; width: 50%; max-width: 700px; }
-	.reader-container { margin-top: 15px; padding-top: 40px; }
+	.modal-dialog { float: none; width: 50%; max-width: 700px; } }
+
+.reader-container { margin-top: 15px; padding-top: 40px; font-family: $content-font;
+	&.reader-single {  }
+	.modal-logo { position: fixed; width: 200px; }
 	#item-options { margin: 10px 0; padding: 0; }
 	p { font-size: 16px; margin: 17px 0; }
 	img { clear: both; max-width: 100%; height: auto; margin: 0 auto; display: block; }
@@ -370,7 +373,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		.menu-share { margin-left: 8px;
 			.glyphicon { color: $green; }
 			.dropdown-menu {
-				li .glyphicon {  } } } } }
+				li .glyphicon {  } } } } } 
 
 // landing
 

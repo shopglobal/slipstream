@@ -28,22 +28,22 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			templateUrl: 'app/views/landing.html',
 			controller: 'MainController'
 		})
-		.state( 'landing.splash', {
-			url: '/splash',
-			templateUrl: 'app/views/landing-splash.html'
-		})
-		.state( 'landing.login', {
-			url: '/login',
-			templateUrl: 'app/views/login.html'
-		})
-		.state( 'landing.register', {
-			url: '/register',
-			templateUrl: 'app/views/register.html'
-		})
-		.state( 'landing.reset', {
-			url: '/reset',
-			templateUrl: 'app/views/landing-reset.html'
-		})
+			.state( 'landing.splash', {
+				url: '/splash',
+				templateUrl: 'app/views/landing-splash.html'
+			})
+			.state( 'landing.login', {
+				url: '/login',
+				templateUrl: 'app/views/login.html'
+			})
+			.state( 'landing.register', {
+				url: '/register',
+				templateUrl: 'app/views/register.html'
+			})
+			.state( 'landing.reset', {
+				url: '/reset',
+				templateUrl: 'app/views/landing-reset.html'
+			})
 		.state( 'app', {
 			url: '/app',
 			templateUrl: 'app/views/app.html',
@@ -76,6 +76,11 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				url: '/:mode/:username/:stream',
 				templateUrl: 'app/views/stream-content.html'
 			})
+		.state( 'single', {
+			url: '/:username/:stream/:slug',
+			templateUrl: 'app/views/reader-modal.html',
+			controller: 'ItemController'
+		})
 }])
 
 // service to add the token the header of the request

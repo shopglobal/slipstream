@@ -12,26 +12,24 @@ var fs = require('fs'),
 	saveImage = require( '../helpers/save-image' ),
 	getUser = require( '../helpers/get-user' ),
 	read = require( 'node-readability' ),
-	log = require( '../helpers/logger.js' ),
 	jsdom = require( 'jsdom' ),
 	crypto = require( 'crypto' ),
 	ImageResolver = require( 'image-resolver' ),
-	articleTitle = require( 'article-title' ),
-	s3sig = require( 'amazon-s3-url-signer' ),
 	htmlStripper = require( 'htmlstrip-native' ),
 	needle = require( 'needle' ),
 	readability = require( 'node-readability' ),
 	urlExpand = require( 'url-expand' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex( 'Contents' )
+	index = algolia.initIndex( 'Contents' ),
+	slug = require( 'slug' )
 //	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
 
 exports.add = function ( req, res ) {
 	
-	function getArticle ( user ) {
+	function getArticle () {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
 			/*
@@ -41,44 +39,8 @@ exports.add = function ( req, res ) {
 	
 			Content.findOne( { url: url } ).exec()
 			.then( function ( result ) {
-				if ( result ) {
-					var users = result.users.create({
-						user: user._id,
-						added: ( new Date() / 1).toFixed(),
-						stream: 'read',
-						private: true
-					})
-					
-					var push = result.users.push( users )
-					
-					result.save( function( error, result ) {
-						
-						/*
-						Save the item to Algolia
-						*/
-						index.addObject( { 
-							title: result.title,
-							url: result.url,
-							description: result.description,
-							text: result.text,
-							date: result.date,
-							images: result.images,
-							user: users.user,
-							added: users.added,
-							stream: users.stream
-						}, function ( err, data ) {
-							if ( err ) console.log( err )
-						}, users._id )
-						
-						return resolve([{
-							'_id': users._id,
-							title: result.title,
-							description: result.description,
-							images: result.images,
-							alreadySaved: true
-						}, users ])
-					})
-				} else {
+				if ( result ) return resolve( result )	
+				else {
 					var imageResolver = new ImageResolver()
 
 					imageResolver.register(new ImageResolver.FileExtension())
@@ -92,15 +54,6 @@ exports.add = function ( req, res ) {
 						url: req.body.url,
 						private: true
 					})
-					
-					var newUser = newArticle.users.create( {
-						stream: 'read',
-						user: user._id,
-						added: ( new Date() / 1 ).toFixed(),
-						private: true
-					} )
-					
-					newArticle.users.push( newUser )
 
 					imageResolver.resolve( req.body.url, function ( result ) {
 						if ( result ) {
@@ -116,7 +69,7 @@ exports.add = function ( req, res ) {
 
 						needle.get( req.body.url, {
 							compressed: true,
-							follow_max: 5
+							follow_max: 3
 						}, function( error, response ) {
 							if ( error ) return reject( error )
 
@@ -135,29 +88,15 @@ exports.add = function ( req, res ) {
 								var a = _.extend( newArticle, {
 									title: article.title,
 									description: description,
-									content: article.content } )
+									content: article.content,
+									slug: slug( article.title, { lower: true } )
+								} )
 
 								var b = new Content( newArticle )
 
-								/*
-								Save to Alglia search.
-								*/
-								index.addObject( { 
-									title: newArticle.title,
-									url: newArticle.url,
-									description: newArticle.description,
-									text: newArticle.content,
-									date: newArticle.date,
-									user: newUser.user,
-									added: newUser.added,
-									stream: newUser.stream
-								}, function ( err, data ) {
-									if ( err ) console.log( err )
-								}, newUser._id )
-
 								article.close()
 
-								resolve( [ newArticle, newUser ] )
+								resolve( newArticle )
 							})
 						})
 						
@@ -256,48 +195,80 @@ exports.add = function ( req, res ) {
 	}
 	
 	getUser( req.token )
-	.then( getArticle )
-	.spread( function ( article, user ) {
-		if( article.alreadySaved ) {	
-			return res.status( 200 ).json( {
+	.then( function ( user ) {
+		getArticle()
+		.then( function ( article ) {
+			var users = article.users.create({
+				user: user._id,
+				added: ( new Date() / 1).toFixed(),
+				stream: 'read',
+				private: true
+			})
+
+			var push = article.users.push( users )
+			
+			/*
+			Save the item to Algolia
+			*/
+			index.addObject( { 
 				title: article.title,
 				url: article.url,
-				_id: user._id,
 				description: article.description,
-				images: article.images
-			})
-		} else {
-			article.save( function ( err, article ) {
-				res.status( 200 ).json( {
+				text: article.text,
+				date: article.date,
+				images: article.images,
+				user: users.user,
+				added: users.added,
+				stream: users.stream
+			}, function ( err, data ) {
+				if ( err ) console.log( err )
+			}, users._id )
+
+			if( article.alreadySaved ) {	
+				return res.status( 200 ).json( {
 					title: article.title,
 					url: article.url,
-					_id: user._id,
+					_id: users._id,
 					description: article.description,
 					images: article.images
 				})
-				replaceImages( article )
-				.then( saveArticle )
-				.then( function ( article ) {
-					
-					index.partialUpdateObject({
-						objectID: user._id,
-						images: article.images,
-						text: article.text
-					}, function ( error, content ) {
-						if ( error ) console.log( error )
+			} else {
+				article.save( function ( err, article ) {
+					res.status( 200 ).json( {
+						title: article.title,
+						url: article.url,
+						_id: users._id,
+						description: article.description,
+						images: article.images
 					})
-					
-					log.info( { title: article.title, url: article.url }, "Article saved" )
-					return
+					replaceImages( article )
+					.then( saveArticle )
+					.then( function ( article ) {
+
+						index.partialUpdateObject({
+							objectID: users._id,
+							images: article.images,
+							text: article.text
+						}, function ( error, content ) {
+							if ( error ) console.log( error )
+						})
+
+						console.info( { title: article.title, url: article.url }, "Article saved" )
+						return
+					})
+					.catch( function ( error ) {
+						console.log( error )
+					})
 				})
-				.catch( function ( error ) {
-					console.log( error )
-				})
-			})
-		}
-	})
+			}
+		})
+		.catch( function ( error ) {
+			console.error( error )
+			return res.status( 500 ).json( error.message )
+		})
+	})	
 	.catch( function ( error ) {
-		log.error( error )
+		console.error( error )
 		return res.status( 500 ).json( error.message )
 	})
 	

@@ -16,7 +16,9 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	check if the article is currently processing. If it is, check again. This will make the app check each time an add modal is openened instead of only after refreshign the whole app.
 	*/
 	if ( article.processing ) {
-		$http.get( '/api/single/' + $stateParams.username + '/' + article._id )
+		$http.get( '/api/single/' + $stateParams.username, { params: {
+			id: article._id 
+		} }  )
 		.then( function ( response, error ) {
 			if ( error ) return
 

@@ -145,7 +145,9 @@ app.controller('AddModalController', [ '$rootScope', '$stateParams', '$scope', '
 	}
 
 	function insertToStream( id ) {
-		$http.get( '/api/single/' + $window.localStorage.username + '/' + $scope.contentPreview._id )
+		$http.get( '/api/single/' + $window.localStorage.username, { params: {
+			id: $scope.contentPreview._id  
+		}} )
 		.success( function ( data ) {
 			$rootScope.content.items.unshift( data[0] )
 		})

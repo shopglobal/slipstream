@@ -29,6 +29,7 @@ UsersSchema.methods.togglePrivate = function () {
 
 var ContentSchema = new mongoose.Schema( {
 	title: String,		// title of the item
+	slug: String,
 	url: String,		// direc link the non-embed browser version of
 	service: String,	// such as youtube
 	author: String,		// who made it on the parent site (eg youtube)

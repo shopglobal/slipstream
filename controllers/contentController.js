@@ -11,7 +11,8 @@ var Content = require( '../models/contentModel' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex( 'Contents' ),
-	urlExpand = require( 'url-expand' )
+	urlExpand = require( 'url-expand' ),
+	slug = require( 'slug' )
 
 function findUserid ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
@@ -27,16 +28,23 @@ function findUserid ( username ) {
 	})		
 }
 
-function projectContent ( id ) {
+function projectContent ( options ) {
 	return Q.Promise( function ( resolve, reject, notify ) {
-		var objectid = mongoose.Types.ObjectId( id )
+		
+		if ( options.id ) {
+			var objectid = mongoose.Types.ObjectId( options.id )
+			var match = { $match: { 'users._id': objectid } }
+		} else if ( options.slug ) {
+			var match = { $match: { slug: options.slug } }
+		}
 		
 		Content.aggregate( [
 			{ $unwind: '$users' },
-			{ $match: { 'users._id': objectid } }, 
+			match, 
 			{ $project: { 
 				_id: '$users._id',
-				title: '$title', 
+				title: '$title',
+				slug: '$slug',
 				url: '$url', 
 				images: '$images',
 				description: '$description',
@@ -131,7 +139,8 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
 			var content = new Content( _.extend({
-				url: contentInfo.url
+				url: contentInfo.url,
+				slug: slug( article.title, { lower: true } )
 			}, contentInfo.meta ))
 			
 			getUser( req.token )
@@ -341,19 +350,29 @@ exports.stream = function ( req, res ) {
 Gets a single post. Used to dynamically get content a user just added to their stream, or get an item's content after it's been updated.
 */
 exports.single = function ( req, res ) {
+	
 	findUserid( req.params.username )
 	.then( function ( userid ) {
 		User.findOne( { token: req.token } )
 		.then( function ( result ) {
-			if ( result._id != userid ) {
-				projectContent( req.params.id )
+			/*Tries to determine if ID is slug or objectID*/
+			if ( req.query.id ) {
+				var options = { id: req.query.id }
+				console.log( options )
+			} else if ( req.query.slug ) {
+				var options = { slug: req.query.slug }
+				console.log( options )
+			}
+			
+			if ( result._id != userid || !result ) {
+				projectContent( options )
 				.then( function ( result ) {
 					if ( result.private == true ) return res.status( 500 ).json( "Can't find that content." )
 										
 					return res.status( 200 ).json( result )
 				})
 			} else {
-				projectContent( req.params.id )
+				projectContent( options )
 				.then( function ( result ) {
 					return res.status( 200 ).json( result )
 				})
