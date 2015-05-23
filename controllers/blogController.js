@@ -103,68 +103,65 @@ exports.add = function ( req, res ) {
 					newArticle.users.push( newUser )
 
 					imageResolver.resolve( req.body.url, function ( result ) {
-						if ( !result ) return resolve( article )
-
-						saveImage( req.body.type, result.image )
-						.spread( function ( hash, orig, thumb ) {
-							newArticle.images.push({
-								orig: orig,
-								hash: hash,
-								thumb: thumb
-							})
-						})
-						.then( function () {
-							needle.get( req.body.url, {
-								compressed: true,
-								follow_max: 5
-							}, function( error, response ) {
-								if ( error ) return reject( error )
-								
-								readability( response.body, function ( error, article, meta ) {
-									if ( error ) {
-										article.close()
-
-										return reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
-									}
-
-									var description = htmlStripper.html_strip( article.content, {
-										include_script : false,
-										include_style : false,
-										compact_whitespace : true } ).substring( 0, 400 )
-
-									var a = _.extend( newArticle, {
-										title: article.title,
-										description: description,
-										content: article.content } )
-
-									var b = new Content( newArticle )
-									
-									/*
-									Save to Alglia search.
-									*/
-									index.addObject( { 
-										title: newArticle.title,
-										url: newArticle.url,
-										description: newArticle.description,
-										text: newArticle.content,
-										date: newArticle.date,
-										user: newUser.user,
-										added: newUser.added,
-										stream: newUser.stream
-									}, function ( err, data ) {
-										if ( err ) console.log( err )
-									}, newUser._id )
-
-									article.close()
-
-									resolve( [ newArticle, newUser ] )
+						if ( result ) {
+							saveImage( req.body.type, result.image )
+							.spread( function ( hash, orig, thumb ) {
+								newArticle.images.push({
+									orig: orig,
+									hash: hash,
+									thumb: thumb
 								})
 							})
-							.catch( function ( error ) {
-								reject( new Error( error ) )
+						}
+
+						needle.get( req.body.url, {
+							compressed: true,
+							follow_max: 5
+						}, function( error, response ) {
+							if ( error ) return reject( error )
+
+							readability( response.body, function ( error, article, meta ) {
+								if ( error ) {
+									article.close()
+
+									return reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
+								}
+
+								var description = htmlStripper.html_strip( article.content, {
+									include_script : false,
+									include_style : false,
+									compact_whitespace : true } ).substring( 0, 400 )
+
+								var a = _.extend( newArticle, {
+									title: article.title,
+									description: description,
+									content: article.content } )
+
+								var b = new Content( newArticle )
+
+								/*
+								Save to Alglia search.
+								*/
+								index.addObject( { 
+									title: newArticle.title,
+									url: newArticle.url,
+									description: newArticle.description,
+									text: newArticle.content,
+									date: newArticle.date,
+									user: newUser.user,
+									added: newUser.added,
+									stream: newUser.stream
+								}, function ( err, data ) {
+									if ( err ) console.log( err )
+								}, newUser._id )
+
+								article.close()
+
+								resolve( [ newArticle, newUser ] )
 							})
 						})
-					})		
+						
+					})	
 				}	
 			})
 			
@@ -206,9 +203,9 @@ exports.add = function ( req, res ) {
 					saveImage( req.body.type, each.src )
 					.spread( function ( imageHash, imageOriginalPath, imageThumbPath ) {
 						article.images.push({
-							image: imageOriginalPath,
-							imageHash: imageHash,
-							imageThumb: imageThumbPath
+							orig: imageOriginalPath,
+							hash: imageHash,
+							thumb: imageThumbPath
 						})
 
 						each.src = imageOriginalPath
