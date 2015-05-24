@@ -62,6 +62,14 @@ body.app { background-color: #F2F1F1; font-family: $body-font; }
 body.landing { background-color: white; font-family: $body-font; }
 
 body.splash { background-image: url('../images/splash-background.jpeg'); font-family: $body-font; background-size: cover; background-attachment: fixed; 
+	// Jason's great CSS
+	.jumbotron h1 { font-size: 50px }
+	h1 { font-weight: 100 }
+	.splash-hero p { margin-bottom: 60px }
+	.landing-jumbotron { padding: 20px }
+	.btn-xlg { padding: 16 50; font-size: 23; font-weight: 400; }
+	.hero-image-streams { padding-bottom: 60 }
+	.btn-manifesto { font-size: 18; font-weight: 400; margin-top: 70 }
 	footer { display: none; } }
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
@@ -230,7 +238,7 @@ a { color: $green;
 
 .navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
 
-.icon-logo { font-family: 'BrandIcons'; display: inline-block; }
+.icon-logo { font-family: 'BrandIcons'; }
 
 .dropdown-menu > li > a, .dropdown-menu > li > a > .glyphicon { display: inline-block; }
 
