@@ -65,6 +65,8 @@ There are two parts of the application, front-end and back-end. The back-end is 
 
 Node.js serves both the JSON API and the static web files. The app to launch both is `server.js`. The endpoint for the API is `/api` and the endpoint for the static web app is just `/`. Here are the other API details. They are subjec to change so please contact me if there's any inconsistencies.
 
+For a list of all API endpoints, see the file `routes/userRoute.js`.
+
 ### /api/authenticate
 
 This accepts a `username` and a `password` in the body through `POST` and returns an authentication token if they are correct.
@@ -85,11 +87,17 @@ With a `POST` request, this adds a piece of content by scraping it from the web.
 
 This endpoint will accept a token in the header, and returns all a user's articles, orderd by latest to earliest by default.
 
+### /api/single/USERNAME[&id=ID][&slug=slug]
+
+A `GET` request to this endpoint will get a single post, if it is not private. You can use the exact post slug (short, hyphonated name) or the post ID for that user. It's important to remember the post ID and the post ID _for that user_ are different. In the code, this would be the `content.users._id` field. 
+
 # TODOs
 
 See our Pivotal Tracker.
 
 # Version names
+
+[Update about version names: We are doing basically continuous deployment and haven't really been following this.]
 
 Here are the planned version names. They are the names of muted colours going couter-clockwise around the colour circle, starting near our mock-up colour, green, with moss. List:
 
