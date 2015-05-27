@@ -575,6 +575,10 @@ tags-input .autocomplete .suggestion-item em {
 		.wide { height: initial !important; } }
 		.splash-section { 
 			h2 { font-size: 18px; } }
+		
+	div.splash-manifesto-container { 
+		.splash-section { 
+			.badge-mixpanel { margin: 0 auto; text-align: center; float: initial !important; } } }
 
 	.alert-flash { width: 70%; left: 50%; margin-left: -35%; }
 
