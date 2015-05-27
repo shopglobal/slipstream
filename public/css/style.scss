@@ -57,21 +57,11 @@ $dark-text: #5B5A5A;
 
 // containers and wrappers
 
+.wide { width:100%; height: 750px; background-image: url('../images/splash-background.jpeg'); background-size:cover; }
+
 body.app { background-color: #F2F1F1; font-family: $body-font; }
 
 body.landing { background-color: white; font-family: $body-font; }
-
-body.splash { background-image: url('../images/splash-background.jpeg'); font-family: $body-font; background-size: cover; background-attachment: fixed; 
-	// Jason's great CSS
-	.jumbotron h1 { font-size: 50px }
-	h1 { font-weight: 100 }
-	.splash-hero p { margin-bottom: 60px }
-	.landing-jumbotron { padding: 20px }
-	.btn-xlg { padding: 16 50; font-size: 23; font-weight: 400; }
-	.hero-image-streams { padding-bottom: 60; }
-	.hero-image-discover { padding-bottom: 60; }
-	.btn-manifesto { font-size: 18; font-weight: 400; margin-top: 70; padding: 30px 60px; }
-	footer { display: none; } }
 
 .login-wrapper { width: 100%; height: 100%; background: $green; padding-top: 250px; }
 
@@ -207,7 +197,7 @@ a { color: $green;
 
 .text-green { color: $green; }
 
-.dark-text { color: $dark-text; }
+.dark-text { color: $dark-text !important; }
 
 .glyphicon-green { color: $green; 
 	&:hover { color: $green; } }
@@ -327,8 +317,6 @@ a { color: $green;
 
 .wrapper { min-height: 100%; position: relative; }
 
-#viewport { padding-bottom: 40px; }
-
 footer { bottom: 0; position: absolute; height: 25px; }
 
 // modals
@@ -379,29 +367,46 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		.menu-share { margin-left: 8px;
 			.glyphicon { color: $green; }
 			.dropdown-menu {
-				li .glyphicon {  } } } } }
+				li .glyphicon {  } } } } 
+	@media only screen and (max-width : 480px) {
+		.modal-dialog { width: 100% !important; } 
+		.share-links { position: asbolute; top: 0; right: 0; z-index: 100; } } }
 
-// landing
+/* landing */
 
 .btn-landing-register { }
 
-.jumbotron.splash-row-2 { position: absolute; left: 0; border-radius: 0; background-color: white; padding-left: 0 !important; padding-right: 0 !important;
+body.splash { font-family: $body-font; background-size: cover; background-attachment: fixed;
+	.splash-section { padding-bottom: 45px; padding-top: 45px; }
+	h1 { font-weight: 100 }
+	.jumbotron.landing-jumbotron { padding: 25% 20px 20px 20px; background: transparent; 
+		h1 { font-size: 50px; }
+		h1.splash-hero-text { margin-bottom: 30px; margin-top: 15px; }
+		h1, a, input::-webkit-input-placeholder { color: white; } }
+	.splash-manifesto-container { background-color: #433F5A;
+		.manifesto-definition { color: white; font-family: FanwoodText; padding: 45px 0; }
+		.footer { color: white; } }
+	// Jason's great CSS
+	.splash-hero p { margin-bottom: 60px }
+	.btn-xlg { padding: 16 50; font-size: 23; font-weight: 400; }
+	.hero-image-streams { padding-bottom: 60; max-width: 100%; height: auto; }
+	.hero-image-discover { padding-bottom: 60; max-width: 100%; height: auto; }
+	.btn-manifesto { font-size: 18; font-weight: 400; margin-top: 70; padding: 30px 50px; }
+	footer { display: none; } }
+	
+	/* Mobile */
+
+	@media only screen and (max-width : 480px) {
+		.splash-cta-left { padding: 0px; }
+	}
+
+.splash-row-2 { background-color: white;
 	h1 { color: $green; font-size: 45px; }
 	h1.splash-cta-left { display: inline; color: $dark-text; vertical-align: middle; padding-right: 30px; }
 	form.form-waitlist { display: inline; }
 	.cta-green { 
 		* { border-color: $green; color: $green; } }
-	.splash-section { margin-bottom: 45px; padding-top: 45px; }
-	.container-relative { position: relative; width: 100%; display: inline-block; }
-	.splash-manifesto-container { position: absolute; display: block; left: 0; width: 100%; background-color: #433F5A; display: block; }
-	.manifesto-definition { color: white; font-family: FanwoodText; }
-	.footer { color: white; }
-}
-
-.landing-jumbotron { margin-top: 15%; background: transparent; 
-	h1.splash-hero-text { margin-bottom: 30px; margin-top: 15px; }
-	h1, a, input::-webkit-input-placeholder { color: white; }
-}
+	 }
 
 // content
 
@@ -558,7 +563,7 @@ tags-input .autocomplete .suggestion-item em {
 }
 
 .alert-flash .close {
-    position: relative;
+    position: fixed;
     top: -2px;
     right: -21px;
     line-height: 20px;
