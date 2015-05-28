@@ -161,7 +161,7 @@ a { color: $green;
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
- .input-font-lg { padding: 10px 16px; font-size: 18px; line-height: 24px; vertical-align: middle; height: initial; }
+.input-font-lg { font-size: 19px; padding: 30px 15px; }
 
 .form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
@@ -227,13 +227,15 @@ a { color: $green;
 
 .navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
 
+/* Brand icons, for logos. */
+
 .icon-logo { font-family: 'BrandIcons'; }
 
-.dropdown-menu > li > a, .dropdown-menu > li > a > .glyphicon { display: inline-block; }
-
-.dropdown-menu-right li a .icon-logo { display: inline-block; }
-
 .icon-twitter:before { content: "\F303"; }
+
+/* Fixes some icons being stacked in drop-downs. */
+
+.dropdown-menu > li > a > .glyphicon, .dropdown-menu-right li a .icon-logo { display: inline-block; }
 
 .containter-navbar-btn-left { padding-left: 100px;  }
 
@@ -352,10 +354,10 @@ footer { bottom: 0; position: absolute; height: 25px; }
 
 // reader modal
 
-.reader-modal, .reader-container { background: rgba( 255, 255, 255, 0.99 ); font-family: $content-font; 
+.reader-modal { background: rgba( 255, 255, 255, 0.99 ); font-family: $content-font; 
 	.modal-logo { position: fixed; top: -25px; left: -275px; width: 200px; }
 	.modal-dialog { float: none; width: 50%; max-width: 700px; }
-	.reader-container { margin-top: 15px; padding-top: 40px; }
+	.reader-container { padding-top: 37px; }
 	#item-options { margin: 10px 0; padding: 0; }
 	p { font-size: 16px; margin: 17px 0; }
 	img { clear: both; max-width: 100%; height: auto; margin: 0 auto; display: block; }
@@ -365,10 +367,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		.menu-share { margin-left: 8px;
 			.glyphicon { color: $green; }
 			.dropdown-menu {
-				li .glyphicon {  } } } } 
-	@media only screen and (max-width : 480px) {
-		.modal-dialog { width: 100% !important; } 
-		.share-links { position: asbolute; top: 0; right: 0; z-index: 100; } } }
+				li .glyphicon {  } } } } }
 
 /* landing */
 
@@ -581,6 +580,9 @@ tags-input .autocomplete .suggestion-item em {
 			.badge-mixpanel { margin: 0 auto; text-align: center; float: initial !important; } } }
 
 	.alert-flash { width: 70%; left: 50%; margin-left: -35%; }
+
+	.modal-dialog { width: 100% !important; } 
+		.share-links { position: asbolute; top: 0; right: 0; z-index: 100; }
 
 }
 
