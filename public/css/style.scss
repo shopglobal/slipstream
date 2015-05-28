@@ -161,7 +161,7 @@ a { color: $green;
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
- .input-font-lg { padding: 10px 16px; font-size: 18px; line-height: 24px; vertical-align: middle; height: initial; }
+.input-font-lg { font-size: 19px; padding: 30px 15px; }
 
 .form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
@@ -367,10 +367,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 		.menu-share { margin-left: 8px;
 			.glyphicon { color: $green; }
 			.dropdown-menu {
-				li .glyphicon {  } } } } 
-	@media only screen and (max-width : 480px) {
-		.modal-dialog { width: 100% !important; } 
-		.share-links { position: asbolute; top: 0; right: 0; z-index: 100; } } }
+				li .glyphicon {  } } } } }
 
 /* landing */
 
@@ -583,6 +580,9 @@ tags-input .autocomplete .suggestion-item em {
 			.badge-mixpanel { margin: 0 auto; text-align: center; float: initial !important; } } }
 
 	.alert-flash { width: 70%; left: 50%; margin-left: -35%; }
+
+	.modal-dialog { width: 100% !important; } 
+		.share-links { position: asbolute; top: 0; right: 0; z-index: 100; }
 
 }
 
