@@ -227,13 +227,15 @@ a { color: $green;
 
 .navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
 
+/* Brand icons, for logos. */
+
 .icon-logo { font-family: 'BrandIcons'; }
 
-.dropdown-menu > li > a, .dropdown-menu > li > a > .glyphicon { display: inline-block; }
-
-.dropdown-menu-right li a .icon-logo { display: inline-block; }
-
 .icon-twitter:before { content: "\F303"; }
+
+/* Fixes some icons being stacked in drop-downs. */
+
+.dropdown-menu > li > a > .glyphicon, .dropdown-menu-right li a .icon-logo { display: inline-block; }
 
 .containter-navbar-btn-left { padding-left: 100px;  }
 
