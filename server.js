@@ -1,5 +1,4 @@
 var http = require('http'),
-	https = require( 'https' ),
 	fs = require('fs'),
 	mongoose = require('mongoose'),
 	express = require('express'),
@@ -7,15 +6,9 @@ var http = require('http'),
 	bodyParser = require('body-parser'),
 	secret = require('./config/secretConfig'),
 	jwt = require('jsonwebtoken'),
-	morgan = require('morgan'),
-	log = require( './helpers/logger.js' )
+	morgan = require('morgan')
 
-var indexPath = path.join(__dirname, process.env.PUBLIC_FOLDER)
-
-//var options = {
-//	key: fs.readFileSync( 'ssl.key'),
-//	cert: fs.readFileSync( 'ssl.crt' )
-//}
+var indexPath = path.join( __dirname, process.env.PUBLIC_FOLDER )
 
 mongoose.connect( process.env.MONGOLAB_URI )
 
@@ -27,13 +20,21 @@ app
 	.use( bodyParser.json( { limit: '50mb' } ) )
 	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
+	.on( 'error', function( error ){
+	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
+	   console.log( error.stack )
+	})
 
 http
 	.createServer( app ).listen( process.env.PORT )
+	.on( 'error', function( error ){
+	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
+	   console.log( error.stack )
+	})
 
 setInterval(function() {
     http.get("http://beta.slipstreamapp.com")
     http.get("http://glacial-sea-2323.herokuapp.com/")	
 }, 300000)
 
-log.info( "Running on port " + process.env.PORT )
+console.log( "Running on port " + process.env.PORT )
