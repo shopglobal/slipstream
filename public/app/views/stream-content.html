@@ -62,16 +62,23 @@
 					  
 					  <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
 					    <li role="presentation" ng-hide=" mode != 'mystream' ">
-					    	<a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true"><span class="glyphicon glyphicon-trash"></span>  Delete post</a>
+					    	<a role="menuitem" tabindex="-1" ng-click="deleteItem( currentStream, item._id ); hideItem=true" class="cursor-pointer"><span class="glyphicon glyphicon-trash"></span>  Delete post</a>
 					    </li>
 					    <li role="presentation">
-					    	<a href="{{ item.url }}" target="_blank"><span class="glyphicon glyphicon-link"></span> Open original</a>
+					    	<a href="{{ item.url }}" target="_blank" class="cursor-pointer"><span class="glyphicon glyphicon-link"></span> Open original</a>
 					    </li>
 					    <li role="presentation" ng-show=" mode == 'mystream' && !item.private ">
-					    	<a ng-click="togglePrivate( item )"></span><span class="glyphicon glyphicon-lock"></span> Make private</a>
+					    	<a ng-click="togglePrivate( item )" class="cursor-pointer"></span><span class="glyphicon glyphicon-lock"></span> Make private</a>
 					    </li>
 					    <li role="presentation" ng-show=" mode == 'mystream' && item.private ">
-					    	<a ng-click="togglePrivate( item )"></span><span class="glyphicon glyphicon-eye-open"></span> Make public</a>
+					    	<a ng-click="togglePrivate( item )" class="cursor-pointer"></span><span class="glyphicon glyphicon-eye-open"></span> Make public</a>
+					    </li>
+					    <!-- Admin options -->
+					    <li role="presentation" ng-show=" role == 'admin' ">
+					    	<a ng-click="flag( { item: item, flag: 'hidden' } )" class="cursor-pointer"><span class="glyphicon glyphicon-ban-circle"></span> Flag hidden</a>
+					    </li>
+					    <li role="presentation" ng-show=" role == 'admin' ">
+					    	<a ng-click="flag( { item: item, flag: 'adult' } )" class="cursor-pointer"><span class="glyphicon glyphicon-flag"></span> Flag adult</a>
 					    </li>
 					  </ul>
 					</span>

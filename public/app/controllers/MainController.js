@@ -123,7 +123,6 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 		}
 	}
 
-
 	// logs user out by deleting session storage and reloading the app
 
 	$scope.logout = function() {
