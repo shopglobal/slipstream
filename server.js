@@ -34,8 +34,14 @@ http
 	.createServer( app ).listen( process.env.PORT )
 
 setInterval(function() {
-    http.get("http://beta.slipstreamapp.com")
-    http.get("http://glacial-sea-2323.herokuapp.com/")	
+    http.get("https://slipstreamapp.com" )
+		.on( 'error', function ( error ) {
+			console.log( error.stack )
+		})
+    http.get("http://glacial-sea-2323.herokuapp.com/")
+		.on( 'error', function ( error ) {
+			console.log( error.stack )
+		})
 }, 300000)
 
 log.info( "Running on port " + process.env.PORT )
