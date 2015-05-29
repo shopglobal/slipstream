@@ -627,3 +627,40 @@ exports.private = function ( req, res ) {
 		return res.status( 500 ).json( error.message )
 	})
 }
+
+exports.flag = function ( req, res ) {
+	User.findOne( { token: req.token, role: 'admin' } )
+	.then( function ( user ) {
+		if ( !user ) return reject( new Error( { message: "Permissions don't appear to allow that." } ) )
+		
+		Content.findOne( { $or: [ { 'users._id': req.body.id }, { _id: req.body.id } ] } )
+		.then( function ( parent ) {
+			if ( !parent ) return res.status( 500 ).json( "Couldn't find that item" )
+			
+			if ( req.body.flag == 'adult' ) {
+				parent.flagAdult()
+				.then( function( result ) {
+					return res.status( 200 ).json( "That post was flagged." )
+				}, function ( error ) {
+					console.log( error )
+					return res.status( 500 ).json( error.message )
+				})	
+			} else if ( req.body.flag == 'hidden' ) {
+				parent.flagHidden()
+				.then( function( result ) {
+					return res.status( 200 ).json( "That post was flagged." )
+				}, function ( error ) {
+					console.log( error )
+					return res.status( 500 ).json( error.message )
+				})	
+			}
+			
+		}, function ( error ) {
+			console.log( error )
+			return res.status( 500 ).json( error.message )
+		})
+	}, function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}

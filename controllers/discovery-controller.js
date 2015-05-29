@@ -18,6 +18,8 @@ exports.popular = function( req, res) {
 			{ $unwind: '$users' },
 			{ $match: { 'users.stream': stream } },
 			{ $match: { $or: [ { 'users.private': false }, { 'users.private': { $exists: false } } ] } },
+			{ $match: { $or: [ { 'flags.hidden': false }, { 'flags.hidden': { $exists: false } } ] } },
+			{ $match: { $or: [ { 'flags.adult': false }, { 'flags.adult': { $exists: false } } ] } },
 			{ $sort: { 'users.added': 1 } },
 			{ $group: { 
 				_id: '$_id',

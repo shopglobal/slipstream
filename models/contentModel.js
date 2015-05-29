@@ -44,7 +44,17 @@ var ContentSchema = new mongoose.Schema( {
 	dislikes: Number, 	// number of dislikes on parent site
 	shares: Number,		// number of times share on social media/email
 	processing: Boolean, // whether the item is still being loaded in the background
-	users: [ UsersSchema ]	// includes users sub-document
+	users: [ UsersSchema ],	// includes users sub-document
+	flags: {
+		adult: {
+			type: Boolean,
+			default: false
+		},
+		hidden: {
+			type: Boolean,
+			default: false
+		}
+	}
 })
 
 /*
@@ -55,6 +65,18 @@ The code below saves, deletes or updates items in our third-party search index. 
 
 	})
 })*/
+
+ContentSchema.methods.flagAdult = function () {
+	this.flags.adult = true
+	
+	return this.save()
+}
+
+ContentSchema.methods.flagHidden = function () {
+	this.flags.hidden = true
+	
+	return this.save()
+}
 
 ContentSchema.post( 'remove', function( item ) {
 	index.deleteObject( item._id )

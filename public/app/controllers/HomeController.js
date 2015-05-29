@@ -227,4 +227,15 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
+	$scope.flag = function ( object ) {
+		$http.post( '/api/content/flag', { 
+			flag: object.flag,
+			id: object.item._id
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
+	}
 }])

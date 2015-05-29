@@ -80,6 +80,9 @@ router.route( '/content/private' )
 router.route( '/content/edit' )
 	.post( userController.checkAuthorization, contentController.edit )
 
+router.route( '/content/flag' )
+	.post( userController.checkAuthorization, contentController.flag )
+
 router.route( '/discover/:measure/:stream' )
 	.get( userController.checkAuthorization, function ( req, res ) {
 		if ( req.params.measure == 'popular' ) {
