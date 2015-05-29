@@ -34,7 +34,7 @@ http
 	.createServer( app ).listen( process.env.PORT )
 
 setInterval(function() {
-    http.get("https://slipstreamapp.com" )
+    http.get("http://slipstreamapp.com" )
 		.on( 'error', function ( error ) {
 			console.log( error.stack )
 		})
