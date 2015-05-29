@@ -33,8 +33,8 @@ http
 	})
 
 setInterval(function() {
-    http.get("http://beta.slipstreamapp.com")
+    http.get("http://slipstreamapp.com")
     http.get("http://glacial-sea-2323.herokuapp.com/")	
-}, 300000)
+}, 3000)
 
 console.log( "Running on port " + process.env.PORT )
