@@ -12,9 +12,12 @@
 			mixpanel.init( "4836ba45fa01b7b729dd8c20bb4b53b3" )
 		} else if ( window.location.hostname.indexOf("experimental") > -1 ) {
 			mixpanel.init( "fb14ea6067cae81fca2065decd9b3629" )
+		} else if ( window.location.hostname.indexOf(".com") > -1 ) {
+			mixpanel.init( "cc1693118118080303b6ef14d2b65c74" ) // live
 		} else {
-			mixpanel.init( "cc1693118118080303b6ef14d2b65c74" )
+			mixpanel.init( "fb14ea6067cae81fca2065decd9b3629" )
 		}
+
 	</script>
 <!-- end Mixpanel -->
 </head>
