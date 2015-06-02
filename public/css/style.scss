@@ -1,3 +1,5 @@
+@import "bourbon/bourbon";
+
 @font-face {
 	font-family: 'FanwoodText';
 	src: url('../fonts/FanwoodText-Regular.ttf');
@@ -37,6 +39,7 @@
 
 $green: #5CD298;
 $green-grey: #212321;
+$light-green: #90e5c6;
 $red: #E44A39;
 $orange: #FF7E32;
 $grey: #C5C5C5;
@@ -119,6 +122,11 @@ a { color: $green;
 	&.no-border { 
 		&:hover, &:active { color: $green; background: transparent; } } }
 
+.btn-light-green { background: transparent; border: solid 2px $light-green; color: $light-green; box-shadow: none; text-decoration: none;
+	&:hover { background: $light-green; border-color: $light-green; color: $light-green; box-shadow: none; text-decoration: none; } 
+	&.no-border { 
+		&:hover, &:active { color: $light-green; background: transparent; } } }
+
 .btn-grey { background: transparent; border: solid 2px $grey; color: $grey; box-shadow: none; text-decoration: none;
 	&:hover { background: $grey; border-color: $grey; color: white; box-shadow: none; text-decoration: none; } 
 	&.no-border { 
@@ -165,6 +173,11 @@ a { color: $green;
 
 .form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
+.icon-lg { vertical-align: middle; 
+	&:before { font-size: 30px; } }
+
+.icon-lg + span { vertical-align: middle !important;  }
+
 .dropdown-menu { box-shadow: none; }
 
 .fixed { position: fixed; }
@@ -174,8 +187,6 @@ a { color: $green;
 .feedback-btn { box-shadow: none !important; }
 
 .dropdown-menu { 
-	&:after { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid white; top: -5px; right: 10px; content: ''; position: absolute;}
-	&:before { width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 7px solid $list-border; top: -7px; right: 8px; content: ''; position: absolute; }
 	li { border-bottom: 1px solid $list-border ;
 		&:last-child { border-bottom: none; }
 		a { text-align: left; color: $dark-text;
@@ -185,12 +196,14 @@ a { color: $green;
 
 .text-white { color: white !important; }
 
+.img-white { @include filter( brightness( 2 ) ); }
+
 .button-follow { border: solid 2px $green; box-shadow: none; text-decoration: none;
 	&:hover { box-shadow: none; text-decoration: none; } }
 
 .a-underlined { text-decoration: underline; }
 
-.no-border { border: none; background: none; box-shadow: none !important;
+.no-border { border: none !important; background: none; box-shadow: none !important;
 	&:hover, &:active { border: none; background: none; box-shadow: none; } }
 
 .text-green { color: $green; }
@@ -225,7 +238,11 @@ a { color: $green;
 
 .input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; }
 
-.navbar-center { position: absolute; left: 50%; margin-left: -142.5px; margin-top: 3px; }
+.navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
+
+a.navbar-height-fix { padding: 11 15 0 15 !important; }
+
+
 
 /* Brand icons, for logos. */
 
@@ -260,24 +277,36 @@ a { color: $green;
 // navigation
 
 #header { 
+	.first-initial { color: white; background: #D4D4D5; border-radius: 50%; width: 30px; height: 30px; display: inline-block; line-height: 25px; vertical-align: middle; }
 	.navbar-brand { padding-top: 10px;
-		#logo { height: 30px; } }
-	.narvbar-search { background-color: #6BECC9; height: 28px; border: none; color: $dark-text; font-weight: 300; 
-		&::-webkit-input-placeholder { color: #D9FEF3; font-weight: 700; text-align: center; font-size: 17px; line-height: 20px;
-			&:before { content: "\e003"; font-family: 'Glyphicons Halflings'; font-size: 14px; padding-right: 3px; } } 
-		&:focus { background-color: white; transition: background-color 400ms linear; background-image: url("../images/magglass@2x.png"); background-repeat: no-repeat; background-size: 14px auto; background-position: 7px; padding-left: 25px;
-			&::-webkit-input-placeholder { color: $grey; transition: color 400ms linear; margin-left: 0; transition: margin-left 400ms linear; text-align: left;
-				&:before { content: ""; } } } }
-	.container-discovery { margin-right: 100px; position: relative;
+		#logo { height: 30px; opacity: 0.5; } }
+
+	/* Search stuff */
+
+	.navbar-container-search { padding-top: 6px; 
+		& > input#button-search { visibility: hidden; position: absolute; }
+		#button-search + label + input.navbar-search { width: 0px; visibility: hidden; display: inline-block; @include transition ( width 100ms ease-in-out ); }
+		#button-search + label > .mag-glass { opacity: 0.5; @include transition ( width 100ms ease-in-out ); }
+		#button-search:checked + label + input.navbar-search { visibility: visible; width: 244px; @include transition ( width 100ms ease-in-out ); }
+		#button-search:checked + label > .mag-glass { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } }
+
+	/* Mode dropdown */
+
+	.navbar-container-dropdown { width: 244px;
 		a { padding: 5px 0 0 0; height: 28px; color: #80E1B9; font-weight: 500; font-size: 19px; }
-			.text-discovery { display: inline-block; vertical-align: middle; }
-			img { width: auto; height: 37px; vertical-align: middle; } }
-		.mode-discover { 
-			& > .img-discovery { -webkit-filter: drop-shadow( 0px 0px 5px rgba( 255, 255, 255, 1) ) brightness( 2 ) !important; }
-			& > .text-discovery { color: white; text-shadow: 0 0 5px rgba( 255, 255, 255, 1.0); } }
+		button .glyphicon-chevron-down { padding-top: 5px; }
+		.btn-light-green { text-align: left; font-weight: 100; color: $light-green; }
+		.img-binoculars { height: 30px; width: auto; margin-left: -12.5px; }
+		.dropdown-menu { overflow: hidden; }
+		.dropdown-toggle { color: white; 
+			.img-binoculars { @include filter( brightness( 3 ) ); } }
+		.dropdown-menu li, .dropdown-toggle span { border: none; cursor: pointer; font-size: 20px; }
+		.dropdown-menu li { padding: 10px; }
+		.dropdown-menu { width: 244px; background: $green; color: $light-green; border: none; 
+			li a:hover { background: transparent; } } }
+
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
-		.dropdown-menu { z-index: 1000; }
-		.navbar-center input[type='text'] { width: 255px; } } 
+		.dropdown-menu { z-index: 1000; } } 
 	#nav-row-2 { padding-top: 5px; box-sizing: border-box; background: transparent; border: none; z-index: 900; margin-top: 60px; } }
 
 .content-toggle { width: 756px; background: white; border-radius: 10px; box-shadow: 0px 5px 5px 2px rgba( 255, 255, 255, 0.3); opacity: 0.98;
@@ -293,13 +322,15 @@ a { color: $green;
 		&:hover > a {  color: $green; background: transparent; } } }
 
 .navbar-green { background-color: transparent; background-image: none; border-radius: 0; border: none;
+	.btn-xs { margin-top: 6px; }
 	.btn-inactive { background: $green; color: white;
 		&:active { color: white; }
 		&:hover { background: $green; color: white; } }
 	.btn-active { background: white; color: $green;
 		span { color: $green;}
 		&:active { color: white; }
-		&:hover { background: white; color: $green; } }
+		&:hover { background: white; border: red 1px dashed;
+			& > span {  color: red; } } }
 	.add-container { 
 		&:hover > a, &:hover > a:visited, a:visited { color: white; } 
 		a { padding: 7px; }
@@ -571,6 +602,8 @@ tags-input .autocomplete .suggestion-item em {
 
 @media only screen and (max-width : 768px) {
 	
+	.navbar-container-dropdown { width: 220px !important; display: inline-block; float: left; }
+
 	body.splash { 
 		.wide { height: initial !important; } }
 		.splash-section { 

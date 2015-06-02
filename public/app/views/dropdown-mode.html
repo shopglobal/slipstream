@@ -1,12 +1,75 @@
-<div class='dropdown container-navbar'>
-	<button class='btn btn-white dropdown-toggle' id='modetoggle' data-toggle="dropdown" aria-expanded="true">
-		<span ng-if=" mode == 'mystream' || mode == 'visiting' ">{{ currentUser }}'s Stream</span>
-	 	<span ng-if=" mode == 'discover' ">Discover</span>
-	 	<span ng-if=" mode == 'following' ">Following</span> <span class='caret'></span>
+<div class='dropdown  navbar-container-dropdown'>
+	
+	<!-- The main button, which can contain 3 different things depending upon conditions. See templates at bottom. -->
+
+	<button class='btn btn-light-green dropdown-toggle no-border btn-block' id='modetoggle' data-toggle="dropdown" aria-expanded="true">
+
+		<span ng-if=" mode == 'discover' ">
+			<ng-include src="'dropdown-discover.html'"></ng-include>
+		</span>
+
+		<span ng-if=" mode == 'following' ">
+			<ng-include src="'dropdown-following.html'"></ng-include>
+		</span>
+
+		<span ng-if=" mode == 'mystream' || mode == 'visiting' ">
+				<div class="col-xs-2 text-center col-xs-offset-1">
+					<div class="first-initial icon-lg text-center center-block">{{ currentUser[0] }}</div>
+				</div>
+
+			<span class="col-xs-offset-1"> {{ currentUser }}</span>
+		</span>
+
+		<span class="glyphicon glyphicon-chevron-down pull-right"></span>
 	</button>
-	<ul class='dropdown-menu' role='menu' aria-labelledby='modetoggle'>
-		<li role='presentation'><a ng-click=" $state.go( 'app.stream', { username: username, mode: 'stream', stream: currentStream }, { reload: true } ) ">My Stream</a></li>
-		<li role='presentation'><a ng-click=" modeChange( 'discover' ); $state.go( 'app.discover', { stream: currentStream, mode: 'discover' }, { reload: true } ) ">Discover</a></li>
-		<li role='presentation'><a ui-sref="app.discover({ mode: 'following', stream: currentStream }) " ui-sref-opts="{ reload: true }">Following</a></li>
+
+	<!-- The items show when the dropdown is clicked. See the templates below. -->
+
+	<ul class='dropdown-menu text-center' role='menu' aria-labelledby='modetoggle'>
+
+		<li role='presentation' ng-hide="mode == 'discover' ">
+			<a ng-click=" modeChange( 'discover' ); $state.go( 'app.discover', { stream: currentStream, mode: 'discover' }, { reload: true } ) ">
+				<ng-include src="'dropdown-discover.html'"></ng-include>
+			</a>
+		</li>
+
+		<li role='presentation' ng-hide="mode == 'following' ">
+			<a ui-sref="app.discover({ mode: 'following', stream: currentStream }) " ui-sref-opts="{ reload: true }">
+				<ng-include src="'dropdown-following.html'"></ng-include>
+			</a>
+		</li>
+
+		<li role='presentation' ng-hide="mode == 'mystream' ">
+			<a ng-click=" $state.go( 'app.stream', { username: username, mode: 'stream', stream: currentStream }, { reload: true } ) ">
+				<ng-include src="'dropdown-my-stream.html'"></ng-include>
+			</a>
+		</li>
 	</ul>
 </div>
+
+<!-- Templates for the drop-down items, so they can be reused as the main button. -->
+
+<script type="text/ng-template" id="dropdown-my-stream.html">
+	<div class="col-xs-2 text-center col-xs-offset-1">
+		<div class="first-initial icon-lg text-center center-block">{{ username[0] }}</div>
+	</div>
+
+	<span class="col-xs-offset-1"> My Stream</span>
+</script>
+
+<script type="text/ng-template" id="dropdown-following.html">
+	<div class="col-xs-2 text-center col-xs-offset-1">	
+		<div class="glyphicon glyphicon-star-empty icon-lg"></div>
+	</div>
+
+	<span class="col-xs-offset-1">Following</span>
+</script>
+
+<script type="text/ng-template" id="dropdown-discover.html">
+	<div class="col-xs-2 text-center col-xs-offset-1">
+	<img src="images/binoculars@2x.png" alt="" class="icon-lg img-binoculars">
+	</div>
+
+	<span class="col-xs-offset-1"> Discover</span>
+</script>
+
