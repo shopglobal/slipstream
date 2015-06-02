@@ -311,9 +311,9 @@ app.directive( 'buttonFollow', [ '$http', '$stateParams', function ( $http, $sta
 					scope.isfollowing = data.isfollowing
 
 					if ( data.isfollowing ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-white-solid btn-active cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-xs btn-white btn-white-solid btn-active cursor-pointer' )
 					} else if ( !data.isfollowing ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-inactive cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-xs btn-white btn-inactive cursor-pointer' )
 					}
 				})
 				.error( function ( error ) {
@@ -325,13 +325,13 @@ app.directive( 'buttonFollow', [ '$http', '$stateParams', function ( $http, $sta
 					$http({ method: 'POST', url: '/api/user/unfollow', data: { username: username }
 					})
 					.success( function ( result ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-inactive cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-xs btn-white btn-inactive cursor-pointer' )
 					})
 				} else if ( !scope.isfollowing ) {
 					$http({ method: 'POST', url: '/api/user/follow', data: { username: username }
 					})
 					.success( function ( result ) {
-						followButton[0].setAttribute( 'class', 'btn btn-white btn-active cursor-pointer' )
+						followButton[0].setAttribute( 'class', 'btn btn-xs btn-white btn-active cursor-pointer' )
 					})
 				}
 
