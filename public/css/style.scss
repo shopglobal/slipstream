@@ -43,6 +43,7 @@ $light-green: #90e5c6;
 $red: #E44A39;
 $orange: #FF7E32;
 $grey: #C5C5C5;
+$sidebar-background: #414159;
 
 $highlight: white;
 $darkbase: $green;
@@ -276,16 +277,18 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 
 // navigation
 
-#header { 
+.navbar-header { display: inline !important; } 
+
+#header { white-space: nowrap;
 	.first-initial { color: white; background: #D4D4D5; border-radius: 50%; width: 30px; height: 30px; display: inline-block; line-height: 25px; vertical-align: middle; }
 	.navbar-brand { padding-top: 10px;
-		#logo { height: 30px; opacity: 0.5; } }
+		#logo { height: 30px; opacity: 0.5; @include filter( brightness(3) ); } }
 
 	/* Search stuff */
 
-	.navbar-container-search { padding-top: 6px; 
+	.navbar-container-search { padding-top: 10px; 
 		& > input#button-search { visibility: hidden; position: absolute; }
-		#button-search + label + input.navbar-search { width: 0px; visibility: hidden; display: inline-block; @include transition ( width 100ms ease-in-out ); }
+		#button-search + label + input.navbar-search { width: 0px; visibility: hidden; display: none; @include transition ( width 100ms ease-in-out ); }
 		#button-search + label > .mag-glass { opacity: 0.5; @include transition ( width 100ms ease-in-out ); }
 		#button-search:checked + label + input.navbar-search { visibility: visible; width: 244px; @include transition ( width 100ms ease-in-out ); }
 		#button-search:checked + label > .mag-glass { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } }
@@ -304,6 +307,26 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 		.dropdown-menu li { padding: 10px; }
 		.dropdown-menu { width: 244px; background: $green; color: $light-green; border: none; 
 			li a:hover { background: transparent; } } }
+
+	/* Sidebar */
+
+	#sidebar-wrapper { position: fixed; top: 0; bottom: 0; left: 0; z-index: 1000; width: 225px; background-color: $sidebar-background; @include transition ( all 200ms ease-in-out ); opacity: 0.975; visibility: visible; white-space: nowrap;
+		#logo { @include filter( brightness(3) ); opacity: 1; display: inline-block; }
+		.footer { position: absolute; bottom: 15px; opacity: 0.5; font-size: 20px; display: inline-block;
+			a { display: block; text-decoration: none; color: white; } 
+			.glyphicon { padding: 2.5px; } }
+		&.sidebar-hidden { width: 0px; @include transition ( all 200ms ease-in-out ); opacity: 0; visibility: hidden; }
+		.btn-x img { @include filter( brightness(3) ); }
+		.sidebar-nav { position: absolute; top: 0; width: 100%; margin: 0; padding: 0; list-style: none; }
+		.sidebar-nav li { font-size: 20px; vertical-align: middle;
+			&:hover { background: transparent; }
+			div { display: inline-block; } 
+			.glyphicon { padding: 2.5px; } }
+		.sidebar-nav li a { display: block; text-decoration: none; color: white; }
+		.sidebar-nav li a:hover { text-decoration: none; color: white; }
+		.sidebar-nav li a:active, .sidebar-nav li a:focus { text-decoration: none; }
+		.sidebar-nav > .sidebar-brand { height: 65px; font-size: 18px; }
+		.sidebar-nav > .sidebar-brand a:hover { color: #fff; background: none; } }
 
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
 		.dropdown-menu { z-index: 1000; } } 
@@ -396,9 +419,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 	.share-links { position: fixed; top: -15px; right: -150; z-index: 100;
 		.btn-x { margin-bottom: 40px; }
 		.menu-share { margin-left: 8px;
-			.glyphicon { color: $green; }
-			.dropdown-menu {
-				li .glyphicon {  } } } } }
+			.glyphicon { color: $green; } } } }
 
 /* landing */
 
@@ -602,7 +623,9 @@ tags-input .autocomplete .suggestion-item em {
 
 @media only screen and (max-width : 768px) {
 	
-	.navbar-container-dropdown { width: 220px !important; display: inline-block; float: left; }
+	.navbar-container-dropdown { width: 200px !important; display: inline-block; }
+
+	.navbar-brand { padding: 15 0 ; }
 
 	body.splash { 
 		.wide { height: initial !important; } }
@@ -633,3 +656,31 @@ tags-input .autocomplete .suggestion-item em {
 	.alert-flash { width: 20%; left: 50%; margin-left: -10%; }
 
 }
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+} 
