@@ -6,7 +6,12 @@ var gulp = require( 'gulp' ),
 	minifyHtml = require( 'gulp-minify-html' ),
 	gulpCopy = require( 'gulp-copy' ),
 	concat = require( 'gulp-concat' ),
-	sass = require( 'gulp-sass' )
+	sass = require( 'gulp-sass' ),
+	gutil = require( 'gulp-util' ),
+	source = require( 'vinyl-source-stream' ),
+	browserify = require( 'browserify' ),
+	watchify = require( 'watchify' ),
+	reactify = require( 'reactify' )
 
 require('events').EventEmitter.prototype._maxListeners = 100
 
@@ -51,6 +56,43 @@ gulp.task( 'sass', function() {
 	gulp.src( './public/css/*.scss')
 		.pipe( sass().on( 'error', sass.logError ) )
 		.pipe( gulp.dest( './build/css') )
+})
+
+gulp.task( 'watch-react', function () {
+	var bundler = watchify( browserify( {
+		entries: [ './src/app.jsx' ],
+		transform: [ reactify ],
+		extensions: [ '.jsx' ],
+		debug: true,
+		cache: {},
+		packageCache: {},
+		fullPaths: true
+	}))
+
+	function build( file ) {
+		if ( file ) gutil.log( 'Recompiling... ' + file )
+
+		return bundler
+			.bundle()
+			.on( 'error', gutil.log.bind( gutil, 'Browserify Error' ) )
+			.pipe( source( 'main.js') )
+			.pipe( gulp.dest( './public/js/' ) )
+	}
+
+	build()
+	bundler.on( 'update', build )
+})
+
+gulp.task( 'build-react', function () {
+	function build( file ) {
+		if ( file ) gutil.log( 'Recompiling... ' + file )
+
+		return bundler
+			.bundle()
+			.on( 'error', gutil.log.bind( gutil, 'Browserify Error' ) )
+			.pipe( source( 'main.js') )
+			.pipe( gulp.dest( './public/js/' ) )
+	}	
 })
 
 gulp.task( 'default', [

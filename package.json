@@ -26,6 +26,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.10.1",
     "bower": "^1.3.12",
+    "browserify": "^10.2.3",
     "bunyan": "^1.3.4",
     "cheerio": "^0.18.0",
     "cloudinary": "^1.1.2",
@@ -47,6 +48,7 @@
     "gulp-uglify": "^1.1.0",
     "gulp-uglifyjs": "^0.6.1",
     "gulp-usemin": "^0.3.11",
+    "gulp-util": "^3.0.5",
     "htmlstrip-native": "^0.1.1",
     "image-resolver": "^0.5.4",
     "install": "^0.1.8",
@@ -67,6 +69,8 @@
     "pause-stream": "0.0.11",
     "q": "^1.1.2",
     "random-key": "^0.3.2",
+    "react": "^0.13.3",
+    "reactify": "^1.1.1",
     "read-chunk": "^1.0.1",
     "readable-proxy": "OKNoah/readable-proxy-jsdom#7242f7eb369815ed9de895dc74c8446a7ca36194",
     "request": "^2.51.0",
@@ -77,6 +81,8 @@
     "uglify-js": "^2.4.17",
     "underscore": "^1.7.0",
     "url-expand": "^0.1.5",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1",
     "xmlbuilder": "^2.6.2"
   },
   "devDependencies": {
