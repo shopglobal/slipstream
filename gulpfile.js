@@ -52,6 +52,11 @@ gulp.task( 'copyImages', function() {
 		.pipe( gulp.dest('build/images') )
 })
 
+gulp.task( 'copyJs', function() {
+	gulp.src( 'public/js/**/*' )
+		.pipe( gulp.dest('build/js') )
+})
+
 gulp.task( 'sass', function() {
 	gulp.src( './public/css/*.scss')
 		.pipe( sass().on( 'error', sass.logError ) )
@@ -101,5 +106,6 @@ gulp.task( 'default', [
 	'copyFonts',
 	'copyVendor',
 	'copyImages',
+	'copyJs',
 	'sass'
 ])
