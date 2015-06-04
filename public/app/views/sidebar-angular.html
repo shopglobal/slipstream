@@ -1,0 +1,36 @@
+<div id="sidebar-wrapper" class='container' >
+	<ul class="sidebar-nav">
+		<li class="sidebar-brand">
+			<div class="navbar-header" ng-click="{ handleClick }" >
+				<a class="navbar-brand hidden-sx cursor-pointer">
+					<img src="{ buttonImage }" alt="" id="logo" />
+				</a>
+			</div>
+			<div class="pull-right">
+				<button class="btn btn-white btn-x no-border" ng-click="{ handleButtonClick }" >
+					<img src="images/x@2x.png" alt="Close sidebar"/>
+				</button>
+			</div>
+		</li>
+		<li ng-repeat="option in menuOptions">
+			<a href="{ option.url }" >
+				<div class="col-xs-1 text-center icon-lg">
+					<div class="{ option.icon }"></div>
+				</div>
+				<span class="col-xs-offset-2">
+					{ option.title }
+				</span>	
+			</a>
+		</li>
+	</ul>
+	<div class="footer">
+		<a ng-click=" logout() " >
+			<div class="col-xs-1 text-center icon-lg">
+				<div class="{ menuOptionBottom.icon }" ></div>
+			</div>
+			<span class="col-xs-offset-2">
+				{ menuOptionBottom.title }
+			</span>	
+		</a>
+	</div>
+</div>

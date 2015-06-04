@@ -238,4 +238,14 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 			$flash.success = response.data
 		})
 	}
+
+	$scope.buttonImage = "images/ss_logo.png"
+
+	$scope.buttonImageMini = "images/ss_green.png"
+	
+	$scope.menuOptionBottom = { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" }
+
+	$scope.menuOptions = [ 
+		{ url: "#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
+	]
 }])
