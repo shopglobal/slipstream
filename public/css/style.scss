@@ -288,9 +288,9 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 
 	.navbar-container-search { padding-top: 10px; 
 		& > input#button-search { visibility: hidden; position: absolute; }
-		#button-search + label + input.navbar-search { width: 0px; visibility: hidden; display: none; @include transition ( width 100ms ease-in-out ); }
+		#button-search + label + input.navbar-search { width: 0px; display: none; @include transition ( width 100ms ease-in-out ); }
 		#button-search + label > .mag-glass { opacity: 0.5; @include transition ( width 100ms ease-in-out ); }
-		#button-search:checked + label + input.navbar-search { visibility: visible; width: 244px; @include transition ( width 100ms ease-in-out ); }
+		#button-search:checked + label + input.navbar-search { display: initial; width: 244px; @include transition ( width 100ms ease-in-out ); }
 		#button-search:checked + label > .mag-glass { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } }
 
 	/* Mode dropdown */
@@ -315,7 +315,7 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 		.footer { position: absolute; bottom: 15px; opacity: 0.5; font-size: 20px; display: inline-block;
 			a { display: block; text-decoration: none; color: white; } 
 			.glyphicon { padding: 2.5px; } }
-		&.sidebar-hidden { width: 0px; @include transition ( all 200ms ease-in-out ); opacity: 0; visibility: hidden; }
+		&.sidebar-hidden { top: 0; bottom: 0; left: -225px; z-index: 1000; @include transition ( all 200ms ease-in-out ); opacity: 0; visibility: hidden; }
 		.btn-x img { @include filter( brightness(3) ); }
 		.sidebar-nav { position: absolute; top: 0; width: 100%; margin: 0; padding: 0; list-style: none; }
 		.sidebar-nav li { font-size: 20px; vertical-align: middle;
