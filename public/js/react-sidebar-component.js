@@ -41,7 +41,7 @@ var Sidebar = React.createClass({displayName: "Sidebar",
 						 menuOptions 
 					), 
 					React.createElement("div", {className: "footer"}, 
-						React.createElement("a", {href:  this.props.menuOptionBottom.url}, 
+						React.createElement("a", {onClick:  this.props.handleSignOut}, 
 							React.createElement("div", {className: "col-xs-1 text-center icon-lg"}, 
 								React.createElement("div", {className:  this.props.menuOptionBottom.icon})
 							), 
@@ -60,6 +60,13 @@ var SidebarComponent = React.createClass({displayName: "SidebarComponent",
 			showSidebar: !this.state.showSidebar
 		})
 	},
+	handleSignOut: function () {
+		localStorage.removeItem( 'token' )
+		localStorage.removeItem( 'username' )
+		localStorage.removeItem( 'role' )
+		this.handleClick()
+		return window.location.assign( '#/home/splash' )
+	},
 	getInitialState: function () {
 	    return {
 	    	showSidebar: false    
@@ -68,7 +75,7 @@ var SidebarComponent = React.createClass({displayName: "SidebarComponent",
 	render: function () {
 		return 	React.createElement("div", null, 
 					React.createElement(LogoButton, {buttonImage:  this.props.buttonImage, buttonImageMini:  this.props.buttonImageMini, handleClick:  this.handleClick}), 
-					React.createElement(Sidebar, {show:  this.state.showSidebar ? '' : 'sidebar-hidden', buttonImage:  this.props.buttonImageMini, buttonImageMini:  this.props.buttonImageMini, handleButtonClick:  this.handleClick, menuOptions:  this.props.menuOptions, menuOptionBottom:  this.props.menuOptionBottom})
+					React.createElement(Sidebar, {show:  this.state.showSidebar ? '' : 'sidebar-hidden', buttonImage:  this.props.buttonImageMini, buttonImageMini:  this.props.buttonImageMini, handleButtonClick:  this.handleClick, menuOptions:  this.props.menuOptions, menuOptionBottom:  this.props.menuOptionBottom, handleSignOut:  this.handleSignOut})
 				)
 	}
 })
