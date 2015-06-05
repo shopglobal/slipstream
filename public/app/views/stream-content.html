@@ -10,46 +10,51 @@
 				<a ng-click="openReaderModal( item )" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' ">
 					<h2 data-ng-bind="item.title" class="title-stream-item"></h2>
 				</a>
+
+				<div class="pull-left col-md-12 no-padding visible-xs meta-text">
+					<div ng-include="'meta-text.html'"></div>
+				</div>
 				
-				<div class="add-container pull-right button-stream-item-top" ng-hide="  mode == 'mystream' ">
-					<a href="" ng-click="addContent( item.url )"><div class="add-button">+</div></a>
+				<div class="add-container pull-right button-stream-item-top hidden-xs" ng-hide="  mode == 'mystream' ">
+					<a href="" ng-click="addContent( item.url )">
+						<div class="add-button add-button-sm">
+							<span>+</span>
+						</div>
+					</a>
 				</div>
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
+				
+				<div class="item-preview">
+					<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' ">
 
-				<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer" ng-show=" item.stream == 'read' ">
+					<div class="item-description col-xs-12 col-md-8 no-padding">
 
-				<div class="item-description">
-					<span ng-hide=" item.stream == 'listen' "><span ng-bind="item.description | stripTags | limitTo: 260"></span> ...</span>
+						<span ng-hide=" item.stream == 'listen' "><span ng-bind="item.description | stripTags | limitTo: 260"></span> ...</span>
 
-					<div class="clearfix"></div>
+						<div class="clearfix"></div>
 
-					<div class="content-tags" ng-if=" mode == 'mystream' ">
-						<tags-input 
-							ng-model="item.tags" 
-							on-tag-added="tagAdded( $tag, item._id )"
-							on-tag-removed="tagRemoved( $tag, item._id )"
-							class="no-padding">
-						</tags-input>
 					</div>
+					<div class="clearfix"></div>
+				</div>
 
+				<div class="content-tags col-xs-12 no-padding" ng-if=" mode == 'mystream' ">
+					<tags-input 
+						ng-model="item.tags" 
+						on-tag-added="tagAdded( $tag, item._id )"
+						on-tag-removed="tagRemoved( $tag, item._id )"
+						class="no-padding"
+						remove-tag-symbol="X">
+					</tags-input>
 				</div>
 
 				<div class="clearfix"></div>
 
-				<div class="date-added-ago pull-left meta-text">
-					<span ng-if=" mode == 'discover' || mode == 'following' ">
-						Saved by 
-						<a ui-sref="app.stream({ username: item.user.username, stream: currentStream, mode: 'stream' } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer a-underlined"></a>
-						<span ng-show=" item.saveCount >= 2 && mode == 'discover' "> and
-							<span ng-bind="item.saveCount - 1"></span> other<span ng-show="item.saveCount > 2">s</span>
-						</span>
-					</span>
-					<span ng-bind="item.added | timeAgo"></span>
-					<span ng-show="item.private" class="glyphicon glyphicon-lock"></span>
+				<div class="date-added-ago pull-left meta-text col-md-12 no-padding hidden-xs">
+					<div ng-include="'meta-text.html'"></div>
 				</div>
 
-				<div class="share-links">
+				<div class="share-links col-xs-offset-6">
 					<ng-include src="'app/views/menu-share.html'"></ng-include>
 
 					<span class="dropdown user-menu">
@@ -82,6 +87,14 @@
 					    </li>
 					  </ul>
 					</span>
+
+					<div class="add-container visible-xs mobile" ng-hide="  mode == 'mystream' ">
+						<a href="" ng-click="addContent( item.url )" alt="Add to your own stream">
+							<div class="add-button add-button-sm">
+								<span>+</span>
+							</div>
+						</a>
+					</div>
 				</div>
 				
 				<div class="clearfix"></div>
@@ -105,3 +118,23 @@
 	</div>
 
 </div>
+
+<!-- Templates -->
+
+<script type="text/ng-template" id="meta-text.html">
+	<div class="col-meta-item">
+		<span ng-bind="item.added | timeAgo"></span>
+	</div>
+
+	<div class="col-meta-item">
+		<span ng-if=" mode == 'discover' || mode == 'following' ">
+		Saved by <a ui-sref="app.stream({ username: item.user.username, stream: currentStream, mode: 'stream' } )" ui-sref-opts="{ reload: true }" ng-bind="item.user.username" class="cursor-pointer a-underlined"></a>
+	</div>
+
+	<div class="col-meta-item" ng-show=" item.saveCount >= 2 && mode == 'discover' ">
+		and <span ng-bind="item.saveCount - 1"></span> other<span ng-show="item.saveCount > 2">s</span>
+	</span>
+	</div>
+	
+	<span ng-show="item.private" class="glyphicon glyphicon-lock"></span>
+</script>
