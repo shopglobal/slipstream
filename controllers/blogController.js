@@ -37,7 +37,7 @@ exports.add = function ( req, res ) {
 			*/			
 			urlExpand( req.body.url, function( error, url ) {
 	
-			Content.findOne( { url: url } ).exec()
+			Content.findOne( { url: url } )
 			.then( function ( result ) {
 				if ( result ) return resolve( result )	
 				else {
@@ -55,58 +55,59 @@ exports.add = function ( req, res ) {
 						private: true
 					})
 
-					imageResolver.resolve( req.body.url, function ( result ) {
-						if ( result ) {
-							saveImage( req.body.type, result.image )
-							.spread( function ( hash, orig, thumb ) {
-								newArticle.images.push({
-									orig: orig,
-									hash: hash,
-									thumb: thumb
-								})
-							})
-						}
+					needle.get( req.body.url, {
+						compressed: true,
+						follow_max: 3
+					}, function( error, response ) {
+						if ( error ) return reject( error )
 
-						needle.get( req.body.url, {
-							compressed: true,
-							follow_max: 3
-						}, function( error, response ) {
-							if ( error ) return reject( error )
-
-							readability( response.body, function ( error, article, meta ) {
-								if ( error ) {
-									article.close()
-
-									return reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
-								}
-
-								var description = htmlStripper.html_strip( article.content, {
-									include_script : false,
-									include_style : false,
-									compact_whitespace : true } ).substring( 0, 400 )
-
-								var a = _.extend( newArticle, {
-									title: article.title,
-									description: description,
-									content: article.content,
-									slug: slug( article.title, { lower: true } )
-								} )
-
-								var b = new Content( newArticle )
-
+						readability( response.body, function ( error, article, meta ) {
+							if ( error ) {
 								article.close()
 
-								resolve( newArticle )
+								return reject( new Error( { error: error, message: "We couldn't get that page right now." } ) )
+							}
+
+							var description = htmlStripper.html_strip( article.content, {
+								include_script : false,
+								include_style : false,
+								compact_whitespace : true } ).substring( 0, 400 )
+
+							var a = _.extend( newArticle, {
+								title: article.title,
+								description: description,
+								content: article.content,
+								slug: slug( article.title, { lower: true } )
+							} )
+
+							var b = new Content( newArticle )
+
+							imageResolver.resolve( req.body.url, function ( result ) {
+								saveImage( req.body.type, result.image )
+								.spread( function ( hash, orig, thumb ) {
+									newArticle.images.push({
+										orig: orig,
+										hash: hash,
+										thumb: thumb
+									})
+									
+									article.close()
+
+									resolve( newArticle )
+								}, function ( error ) {
+									console.log( error )
+									reject( error )
+								})
 							})
 						})
-						
-					})	
-				}	
-			})
-			
+					})
+				}		
+			}, function ( error ) {
+				console.log( error )
+				reject( error )
 			})
 		})
-	}
+	})}
 	
 	/*
 	Replaces external images in the body of the readbale HTML with locally-hosted images. 
@@ -152,7 +153,8 @@ exports.add = function ( req, res ) {
 						resolve()
 					})
 					.catch( function ( error ) {
-						reject( error )
+						console.log( error )
+						resolve()
 					})
 				
 				})
