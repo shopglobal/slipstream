@@ -154,6 +154,17 @@ exports.add = function ( req, res ) {
 					})
 					.catch( function ( error ) {
 						console.log( error )
+						
+						var placeholderImage = "images/ss_placeholder.jpg"
+						
+						article.images.push({
+							orig: placeholderImage,
+							hash: "placeholder",
+							thumb: placeholderImage
+						})
+						
+						each.src = placeholderImage
+							
 						resolve()
 					})
 				
