@@ -38,23 +38,23 @@ gulp.task( 'minifyViews', function() {
 })
 
 gulp.task( 'copyFonts', function() {
-	gulp.src( 'public/fonts/*' )
-		.pipe( gulp.dest('build/fonts') )
+	gulp.src( './public/fonts/*' )
+		.pipe( gulp.dest('./build/fonts') )
 })
 
 gulp.task( 'copyVendor', function() {
-	gulp.src( 'public/vendor/**/*' )
-		.pipe( gulp.dest('build/vendor') )
+	gulp.src( './public/vendor/**/*' )
+		.pipe( gulp.dest('./build/vendor') )
 })
 
 gulp.task( 'copyImages', function() {
-	gulp.src( 'public/images/**/*' )
-		.pipe( gulp.dest('build/images') )
+	gulp.src( './public/images/**/*' )
+		.pipe( gulp.dest('./build/images') )
 })
 
 gulp.task( 'copyJs', function() {
-	gulp.src( 'public/js/**/*' )
-		.pipe( gulp.dest('build/js') )
+	gulp.src( './public/js/**/*' )
+		.pipe( gulp.dest('./build/js') )
 })
 
 gulp.task( 'sass', function() {
@@ -86,18 +86,6 @@ gulp.task( 'watch-react', function () {
 
 	build()
 	bundler.on( 'update', build )
-})
-
-gulp.task( 'build-react', function () {
-	function build( file ) {
-		if ( file ) gutil.log( 'Recompiling... ' + file )
-
-		return bundler
-			.bundle()
-			.on( 'error', gutil.log.bind( gutil, 'Browserify Error' ) )
-			.pipe( source( 'main.js') )
-			.pipe( gulp.dest( './public/js/' ) )
-	}	
 })
 
 gulp.task( 'default', [
