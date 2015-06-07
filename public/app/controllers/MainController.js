@@ -1,5 +1,12 @@
 app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
+	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
+		console.log( "hello " + $state.current.name )
+		mixpanel.track( "Visit", {
+			state: $state.current.name ? $state.current.name : ''
+		})
+	}
+
 	$scope.appName = "SlipStream"
 
 	$rootScope.role = $window.localStorage.role
