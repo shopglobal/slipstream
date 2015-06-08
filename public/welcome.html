@@ -1,5 +1,3 @@
-<link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
 <script>
 	mixpanel.track( "User", {
 		action: "Read welcome post"
@@ -15,11 +13,11 @@
 	font-weight: 300;
 }
 
-.post-welcome * { font-family: Oxygen; font-weight: 300; }
+.post-welcome { font-family: Oxygen !important; font-weight: 300 !important; }
 
 </style>
 
-<div class="container post-welcome">
+<div class="post-welcome">
 
 Welcome! Here are a few quick notes to get you started.<br /><br />
 
@@ -33,24 +31,32 @@ When you close this view you will see a few really important features:<br /><br 
 
 2) The Add Button<br /><br />
 
-<div class="col-xs-2">
+<div class="col-xs-3">
 	<img src="images/welcome/add.jpeg" alt="Add button">	
 </div>
 
-<div class="col-xs-10">
+<div class="col-xs-9">
 	Paste a URL, give Slipstream a few moments to build a beautiful post, and click done (you can add tags now or later). 
 </div>
 
 <div class="clearfix"></div><br /><br />
 
-3) Discovery Mode<br /><br />
-
-<div class="col-xs-2">
-	<img src="images/welcome/discover_button.jpeg" alt="Discover button">
+<div class="col-xs-3">
+	<img src="images/welcome/ss_add_selector.png" alt="Add button" style=" height: 22px; width: auto; ">	
 </div>
 
-<div class="col-xs-10">
-	Discover what the community is adding to Slipstream. The best new articles, videos and music are here! 
+<div class="col-xs-9">
+	Indicate to which stream your post belongs by selecting from this mini content toggle found in the Add Modal.
+</div>
+
+<div class="clearfix"></div><br /><br />
+
+3) Stream Dropdown<br /><br />
+
+<img src="images/welcome/ss_dropdown.png" alt="Discover button" class="center-block" style="height: 103px; width: auto;"><br /><br />
+
+<div class="col-xs-12">
+	Select Discover from the main dropdown to see what the community is adding to Slipstream. The best new articles, videos and music are here! Start following your favorite curators and see them all in one place by selecting the Following stream.
 </div>
 
 <div class="clearfix"></div><br /><br />
