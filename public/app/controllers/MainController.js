@@ -7,7 +7,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 		})
 	}
 
-	$scope.appName = "SlipStream"
+	$scope.appName = "Slipstream"
 
 	$rootScope.role = $window.localStorage.role
 
