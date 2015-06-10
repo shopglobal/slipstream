@@ -277,13 +277,13 @@ exports.sendPasswordReset = function ( req, res ) {
 	
 	function emailTemporaryPassword ( user ) {
 		Q.Promise( function ( resolve, reject, notify ) {	
-			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) )
+			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toSting()
 			
 			var email = {
 				from: 'SlipStream <noahgray@me.com>',
 				to: user.email,
 				subject: 'Your temporary SlipStream password',
-				html: passwordHtml.toString() + user.temporaryPassword + "</code></div><br /><a href='http://beta.slipstreamapp.com/#/home/login'><div class='button-visit'>Take me to Slipstream</div></a></div></html>"
+				html: passwordHtml.split( '</code>')[0] + user.temporaryPassword + passwordHtml.split( '</code>')[1]
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
@@ -510,7 +510,10 @@ exports.sendBetakey = function ( req, res ) {
 	.then( function ( user ) {
 		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
 		
-		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) )
+		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString()
+		
+		console.log( betakeyHtml.split( "</code>" )[0]) 
+		console.log( betakeyHtml.split( "</code>" )[1] )
 		
 		makeKey( user )
 		.then( function ( betakey ) {
@@ -518,7 +521,7 @@ exports.sendBetakey = function ( req, res ) {
 				from: 'SlipStream <welcome@slipstreamapp.com>',
 				to: req.body.email,
 				subject: 'Your SlipStream beta key',
-				html: betakeyHtml + betakey.key + "</code></div><br> <br><h3>Just a few things:</h3>We’re not quite mobile-friendly yet - look out for that update in a week or two! <br> <br>Running smoothly on Chrome and Safari so stick to those browsers for now (latest versions of other browsers might work too).Feedback: <br> <br>We’re really excited to have you and more than anything want to hear what you think, so look out for the feedback feature at the bottom right once you’re logged in. Use it for anything you feel is worth a mention - we really appreciate it! <br> <br><h2>Thanks for joining!</h2><br><br><a href='http://beta.slipstreamapp.com/#/home/login'><div class='button-visit'>Take me to Slipstream</div></a></div></html>"
+				html: betakeyHtml.split( "</code>" )[0] + betakey.key + betakeyHtml.split( "</code>" )[1]
 			}
 			
 			mailgun.messages().send( email, function ( err, body ) {
