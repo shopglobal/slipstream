@@ -64,7 +64,8 @@ $dark-text: #5B5A5A;
 .wide { width:100%; background-image: url('../images/splash-background.jpeg'); background-size:cover; }
 
 body.app { background-color: #F2F1F1; font-family: $body-font; 
-	#logo { height: 30px; opacity: 0.5; @include filter( brightness(3) ); } }
+	#logo { height: 30px; opacity: 0.5; 
+		&:hover { opacity: 1; @include transition ( opacity 1s ease-in-out ); } } }
 
 body.landing { background-color: white; font-family: $body-font; 
 	#logo { opacity: 1 !important; } 
@@ -286,7 +287,7 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 #header { white-space: nowrap;
 	.first-initial { color: white; background: #D4D4D5; border-radius: 50%; width: 30px; height: 30px; display: inline-block; line-height: 25px; vertical-align: middle; }
 	.navbar-brand { padding-top: 10px;
-		#logo { height: 30px; opacity: 0.5; } }
+		#logo { height: 30px; } }
 
 	/* Search stuff */
 
