@@ -63,20 +63,64 @@ exports.signUp = function ( req, res ) {
 	function betakeyCheck () {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			Betakey.findOne( { key: req.body.betakey }, function ( err, betakey ) {
-				if ( err || !betakey ) return reject( new Error( "Could not find that key" ) )
+			Betakey.findOne( { key: req.body.betakey } )
+			.then( function ( betakey ) {
+				if ( !betakey ) return reject( new Error( "Could not find that key" ) )
 				
 				if ( betakey.used ) return reject( new Error( "Sorry, beta key aleady used." ) )
 				
 				betakey.update(
 					{ used: ( new Date() / 1 ).toFixed(), user: req.body.email } )
-				.exec()
 				.then( function ( result ) {
-					resolve( result )
+					console.log( "1. Beta key used: " + result )
+					return resolve( result )
 				}, function ( error ) {
-					reject( new Error( "Error using beta key. Try again." ) )
+					return reject( new Error( "Error using beta key. Try again." ) )
 				})
 			})
+		})
+	}
+	
+	function postSignup ( object ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			var user = object.user
+			
+			/*
+			Adds the welcome post to the user's read stream.
+			*/
+			var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
+			
+			Content.findOne( { _id: welcomePostId } ).exec()
+			.then( function ( result ) {
+				var newUser = result.users.create({
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: 'read',
+					private: true
+				})
+
+				result.users.push( newUser )
+
+				result.save()
+			})
+
+			user.token = jwt.sign( user, secret.secretToken )
+			user.save( function ( err, user ) {
+				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
+
+				var email = {
+					from: 'SlipStream <welcome@slipstreamapp.com>',
+					to: user.email,
+					subject: 'Welcome to Slipstream, ' + user.username,
+					html: welcomeHtml.toString()
+				}
+
+				mailgun.messages().send( email, function ( err, body ) {
+					if ( err ) console.log( err )
+				})
+
+				return resolve( user )
+			} )
 		})
 	}
 	
@@ -85,57 +129,47 @@ exports.signUp = function ( req, res ) {
 	*/
 	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
 	.then( function ( result ) {
-		if ( !result || typeof result.username == undefined ) {
+		if ( !result ) {
 			betakeyCheck()
 			.then( function ( betakey ) {
-				user.save()
-				.then( function( user ) {
-
-					/*
-					Adds the welcome post to the user's read stream.
-					*/
-					var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
-					Content.findOne( { _id: welcomePostId } ).exec()
-					.then( function ( result ) {
-						var newUser = result.users.create({
-							user: user._id,
-							added: ( new Date() / 1).toFixed(),
-							stream: 'read',
-							private: true
-						})
-
-						result.users.push( newUser )
-
-						result.save()
-					})
-
-					user.token = jwt.sign(user , secret.secretToken )
-					user.save( function ( err, user ) {
-						var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
-
-						var email = {
-							from: 'SlipStream <welcome@slipstreamapp.com>',
-							to: user.email,
-							subject: 'Welcome to Slipstream, ' + user.username,
-							html: welcomeHtml.toString()
-						}
-
-						mailgun.messages().send( email, function ( err, body ) {
-							if ( err ) console.log( err )
-						})
-
-						return res.status( 200 ).json( user )
-					} )
-				})
+				return user.save()
 			})
-		} else if ( result ) {
+			.then( function () {
+				postSignup( { user: user } )
+				.then( function ( user ) {
+					return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+				})
+			} )
+			.catch ( function ( error ) {
+				console.log( error )
+				return res.status( 500 ).json( error.message )
+			})
+		} else if ( ( !result.username || result.username == null || typeof result.username == undefined) && result ) {
+			betakeyCheck()
+			.then( function ( betakey ) {
+				result.username = user.username,
+				result.email = user.email,
+				result.joined = ( new Date() / 1000 ).toFixed()
+				
+				return result.save()
+			} )
+			.then( function ( result ) {
+				postSignup( { user: result } )
+				.then( function ( user ) {
+					return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+				})
+			} )
+			.catch ( function ( error ) {
+				console.log( error )
+				return res.status( 500 ).json( error.message )
+			})
+		} else {
 			console.log( "User signed up with that info:" + user.username + " or " + user.email )
 			
 			if ( result.username === user.username ) return res.status( 500 ).json( "That username is already taken." )
 			else return res.status( 500 ).json( "That email has already been used." )
 		}
-	})	
-	.catch( function ( error ) {
+	}, function ( error ) {
 		console.error( error )
 		
 		return res.status( 500 ).json( error.message )
