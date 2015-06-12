@@ -6,6 +6,9 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 	$scope.currentUser = $stateParams.username
 	$scope.currentStream = $stateParams.stream
 	$scope.username = $window.localStorage.username
+	$scope.search = {
+		query: ''
+	}
 
 	if ( $scope.mode == 'stream' ) {
 		if ( $scope.currentUser == $scope.username ) {
