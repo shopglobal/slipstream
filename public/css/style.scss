@@ -65,7 +65,7 @@ $dark-text: #5B5A5A;
 
 body.app { background-color: #F2F1F1; font-family: $body-font; 
 	#logo { height: 30px; opacity: 0.5; 
-		&:hover { opacity: 1; @include transition ( opacity 1s ease-in-out ); } } }
+		&:hover { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } } }
 
 body.landing { background-color: white; font-family: $body-font; 
 	#logo { opacity: 1 !important; } 
