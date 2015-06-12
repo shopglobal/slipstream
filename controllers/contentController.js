@@ -139,8 +139,8 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
 			var content = new Content( _.extend({
-				url: contentInfo.url,
-				slug: slug( article.title, { lower: true } )
+				url: contentInfo.meta.canonical,
+				slug: slug( contentInfo.meta.title, { lower: true } )
 			}, contentInfo.meta ))
 			
 			getUser( req.token )
