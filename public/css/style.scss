@@ -174,7 +174,7 @@ a { color: $green;
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
-.input-font-lg { font-size: 19px; padding: 30px 15px; }
+.input-font-lg { font-size: 19px; padding: 0px 15px; height: 64px; }
 
 .form-control:focus { box-shadow: none; border-color: $green; outline : none; }
 
