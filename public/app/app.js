@@ -386,6 +386,5 @@ app.directive( 'userName', [ function ( userId ) {
 }])*/
 
 app.directive( 'sidebarButton', [ 'reactDirective', function ( reactDirective ) {
-	return reactDirective( 'SidebarComponent', [ 'buttonImage', 
-		'buttonImageMini', 'menuOptionBottom', 'menuOptions' ] )
+	return reactDirective( 'sidebarComponent' )
 }])
