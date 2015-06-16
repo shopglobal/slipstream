@@ -4,12 +4,9 @@
 	
 	<nav class="navbar navbar-default navbar-green navbar-fixed-top" id="nav-row-1">
 		<div class="container">
-			<sidebar-button
-				menu-options="menuOptions" 
-				button-image="buttonImage" 
-                button-image-mini="buttonImageMini" 
-                menu-option-bottom="menuOptionBottom">
-			</sidebar-button>
+
+			<react-component name="SidebarComponent" props="sidebarProps" watch-depth="reference"></react-component>
+
 			<div class="collpase navbar-collapse">
 				<ul class="nav navbar-nav navbar-left pull-left">
 					<li ng-show=" mode == 'visiting' " class="containter-navbar-btn-left visible-lg">
@@ -109,7 +106,7 @@
 	<div class="content-toggle center-block btn-back navbar-fixed-top no-border" id="nav-row-2" ng-show=" $state.includes('app.profile') ">
 		<div class="container container-padded no-padding">
 			<div class="col-md-12">
-				<a ui-sref="app.read"><span class="glyphicon glyphicon-chevron-left"></span>  Back to streams</a>
+				<a ui-sref="app.stream( { username: username, stream: 'read', mode: 'stream' })"><span class="glyphicon glyphicon-chevron-left"></span>  Back to streams</a>
 			</div>
 		</div>
 	</div>

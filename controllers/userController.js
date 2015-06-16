@@ -63,20 +63,64 @@ exports.signUp = function ( req, res ) {
 	function betakeyCheck () {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
-			Betakey.findOne( { key: req.body.betakey }, function ( err, betakey ) {
-				if ( err || !betakey ) return reject( new Error( "Could not find that key" ) )
+			Betakey.findOne( { key: req.body.betakey } )
+			.then( function ( betakey ) {
+				if ( !betakey ) return reject( new Error( "Could not find that key" ) )
 				
 				if ( betakey.used ) return reject( new Error( "Sorry, beta key aleady used." ) )
 				
 				betakey.update(
 					{ used: ( new Date() / 1 ).toFixed(), user: req.body.email } )
-				.exec()
 				.then( function ( result ) {
-					resolve( result )
+					console.log( "1. Beta key used: " + result )
+					return resolve( result )
 				}, function ( error ) {
-					reject( new Error( "Error using beta key. Try again." ) )
+					return reject( new Error( "Error using beta key. Try again." ) )
 				})
 			})
+		})
+	}
+	
+	function postSignup ( object ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+			var user = object.user
+			
+			/*
+			Adds the welcome post to the user's read stream.
+			*/
+			var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
+			
+			Content.findOne( { _id: welcomePostId } ).exec()
+			.then( function ( result ) {
+				var newUser = result.users.create({
+					user: user._id,
+					added: ( new Date() / 1).toFixed(),
+					stream: 'read',
+					private: true
+				})
+
+				result.users.push( newUser )
+
+				result.save()
+			})
+
+			user.token = jwt.sign( user, secret.secretToken )
+			user.save( function ( err, user ) {
+				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
+
+				var email = {
+					from: 'SlipStream <welcome@slipstreamapp.com>',
+					to: user.email,
+					subject: 'Welcome to Slipstream, ' + user.username,
+					html: welcomeHtml.toString()
+				}
+
+				mailgun.messages().send( email, function ( err, body ) {
+					if ( err ) console.log( err )
+				})
+
+				return resolve( user )
+			} )
 		})
 	}
 	
@@ -85,57 +129,47 @@ exports.signUp = function ( req, res ) {
 	*/
 	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
 	.then( function ( result ) {
-		if ( !result || typeof result.username == undefined ) {
+		if ( !result ) {
 			betakeyCheck()
 			.then( function ( betakey ) {
-				user.save()
-				.then( function( user ) {
-
-					/*
-					Adds the welcome post to the user's read stream.
-					*/
-					var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
-					Content.findOne( { _id: welcomePostId } ).exec()
-					.then( function ( result ) {
-						var newUser = result.users.create({
-							user: user._id,
-							added: ( new Date() / 1).toFixed(),
-							stream: 'read',
-							private: true
-						})
-
-						result.users.push( newUser )
-
-						result.save()
-					})
-
-					user.token = jwt.sign(user , secret.secretToken )
-					user.save( function ( err, user ) {
-						var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
-
-						var email = {
-							from: 'SlipStream <welcome@slipstreamapp.com>',
-							to: user.email,
-							subject: 'Welcome to Slipstream, ' + user.username,
-							html: welcomeHtml.toString()
-						}
-
-						mailgun.messages().send( email, function ( err, body ) {
-							if ( err ) console.log( err )
-						})
-
-						return res.status( 200 ).json( user )
-					} )
-				})
+				return user.save()
 			})
-		} else if ( result ) {
+			.then( function () {
+				postSignup( { user: user } )
+				.then( function ( user ) {
+					return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+				})
+			} )
+			.catch ( function ( error ) {
+				console.log( error )
+				return res.status( 500 ).json( error.message )
+			})
+		} else if ( ( !result.username || result.username == null || typeof result.username == undefined) && result ) {
+			betakeyCheck()
+			.then( function ( betakey ) {
+				result.username = user.username,
+				result.email = user.email,
+				result.joined = ( new Date() / 1000 ).toFixed()
+				
+				return result.save()
+			} )
+			.then( function ( result ) {
+				postSignup( { user: result } )
+				.then( function ( user ) {
+					return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+				})
+			} )
+			.catch ( function ( error ) {
+				console.log( error )
+				return res.status( 500 ).json( error.message )
+			})
+		} else {
 			console.log( "User signed up with that info:" + user.username + " or " + user.email )
 			
 			if ( result.username === user.username ) return res.status( 500 ).json( "That username is already taken." )
 			else return res.status( 500 ).json( "That email has already been used." )
 		}
-	})	
-	.catch( function ( error ) {
+	}, function ( error ) {
 		console.error( error )
 		
 		return res.status( 500 ).json( error.message )
@@ -277,13 +311,13 @@ exports.sendPasswordReset = function ( req, res ) {
 	
 	function emailTemporaryPassword ( user ) {
 		Q.Promise( function ( resolve, reject, notify ) {	
-			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) )
+			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toSting()
 			
 			var email = {
 				from: 'SlipStream <noahgray@me.com>',
 				to: user.email,
 				subject: 'Your temporary SlipStream password',
-				html: passwordHtml.toString() + user.temporaryPassword + "</code></div><br /><a href='http://beta.slipstreamapp.com/#/home/login'><div class='button-visit'>Take me to Slipstream</div></a></div></html>"
+				html: passwordHtml.split( '</code>')[0] + user.temporaryPassword + passwordHtml.split( '</code>')[1]
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
@@ -510,7 +544,10 @@ exports.sendBetakey = function ( req, res ) {
 	.then( function ( user ) {
 		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
 		
-		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) )
+		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString()
+		
+		console.log( betakeyHtml.split( "</code>" )[0]) 
+		console.log( betakeyHtml.split( "</code>" )[1] )
 		
 		makeKey( user )
 		.then( function ( betakey ) {
@@ -518,7 +555,7 @@ exports.sendBetakey = function ( req, res ) {
 				from: 'SlipStream <welcome@slipstreamapp.com>',
 				to: req.body.email,
 				subject: 'Your SlipStream beta key',
-				html: betakeyHtml + betakey.key + "</code></div><br> <br><h3>Just a few things:</h3>We’re not quite mobile-friendly yet - look out for that update in a week or two! <br> <br>Running smoothly on Chrome and Safari so stick to those browsers for now (latest versions of other browsers might work too).Feedback: <br> <br>We’re really excited to have you and more than anything want to hear what you think, so look out for the feedback feature at the bottom right once you’re logged in. Use it for anything you feel is worth a mention - we really appreciate it! <br> <br><h2>Thanks for joining!</h2><br><br><a href='http://beta.slipstreamapp.com/#/home/login'><div class='button-visit'>Take me to Slipstream</div></a></div></html>"
+				html: betakeyHtml.split( "</code>" )[0] + betakey.key + betakeyHtml.split( "</code>" )[1]
 			}
 			
 			mailgun.messages().send( email, function ( err, body ) {

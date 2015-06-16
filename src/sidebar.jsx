@@ -16,10 +16,10 @@ module.exports = React.createClass({
 					</li>
 		})
 
-		return 	<div id="sidebar-wrapper" className={ 'container ' + this.props.show } >
+		return 	<div id="sidebar-wrapper" className={ 'col-xs-12 container ' + this.props.show } >
 					<ul className="sidebar-nav">
 						<li className="sidebar-brand">
-							<LogoButton buttonImage={ this.props.buttonImage } handleClick={ this.props.handleButtonClick } />
+							<LogoButton buttonImage={ this.props.buttonImage } handleClick={ this.props.handleButtonClick } buttonImageMini={ this.props.buttonImageMini } />
 							<div className="pull-right">
 								<button className="btn btn-white btn-x no-border" onClick={ this.props.handleButtonClick } >
 									<img src="images/x@2x.png" alt="Close sidebar"/>
@@ -29,7 +29,7 @@ module.exports = React.createClass({
 						{ menuOptions }
 					</ul>
 					<div className="footer">
-						<a href={ this.props.menuOptionBottom.url } >
+						<a onClick={ this.props.handleSignOut } >
 							<div className="col-xs-1 text-center icon-lg">
 								<div className={ this.props.menuOptionBottom.icon }></div>
 							</div>

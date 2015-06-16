@@ -6,6 +6,9 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 	$scope.currentUser = $stateParams.username
 	$scope.currentStream = $stateParams.stream
 	$scope.username = $window.localStorage.username
+	$scope.search = {
+		query: ''
+	}
 
 	if ( $scope.mode == 'stream' ) {
 		if ( $scope.currentUser == $scope.username ) {
@@ -239,13 +242,16 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	$scope.buttonImage = "images/ss_logo.png"
+	/*React component props*/
 
-	$scope.buttonImageMini = "images/ss_green.png"
+	$scope.sidebarProps = {
+		buttonImage: "images/ss_logo.png",
+		buttonImageMini: "images/ss_green.png",		
+		menuOptionBottom: { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" },
+		menuOptions: [ 
+			{ url: "#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
+		]
+	}
+
 	
-	$scope.menuOptionBottom = { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" }
-
-	$scope.menuOptions = [ 
-		{ url: "#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
-	]
 }])
