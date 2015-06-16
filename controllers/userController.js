@@ -109,7 +109,7 @@ exports.signUp = function ( req, res ) {
 				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
 
 				var email = {
-					from: 'SlipStream <welcome@slipstreamapp.com>',
+					from: 'Slipstream <welcome@slipstreamapp.com>',
 					to: user.email,
 					subject: 'Welcome to Slipstream, ' + user.username,
 					html: welcomeHtml.toString()
@@ -314,9 +314,9 @@ exports.sendPasswordReset = function ( req, res ) {
 			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toSting()
 			
 			var email = {
-				from: 'SlipStream <noahgray@me.com>',
+				from: 'Slipstream <hello@slipstreamapp.com>',
 				to: user.email,
-				subject: 'Your temporary SlipStream password',
+				subject: 'Your temporary Slipstream password',
 				html: passwordHtml.split( '</code>')[0] + user.temporaryPassword + passwordHtml.split( '</code>')[1]
 			}
 
@@ -544,18 +544,19 @@ exports.sendBetakey = function ( req, res ) {
 	.then( function ( user ) {
 		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
 		
-		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString()
+		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString().split( "<!-- Breakpoint -->" )
 		
-		console.log( betakeyHtml.split( "</code>" )[0]) 
-		console.log( betakeyHtml.split( "</code>" )[1] )
-		
-		makeKey( user )
+		makeKey( user )		
 		.then( function ( betakey ) {
+			var html = betakeyHtml[0] + betakey.key + betakeyHtml[1]
+			
+			console.log( html )
+			
 			var email = {
-				from: 'SlipStream <welcome@slipstreamapp.com>',
+				from: 'Slipstream <welcome@slipstreamapp.com>',
 				to: req.body.email,
-				subject: 'Your SlipStream beta key',
-				html: betakeyHtml.split( "</code>" )[0] + betakey.key + betakeyHtml.split( "</code>" )[1]
+				subject: 'Your Slipstream Beta Key',
+				html: html.toString()
 			}
 			
 			mailgun.messages().send( email, function ( err, body ) {
