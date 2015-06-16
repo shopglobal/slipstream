@@ -61,9 +61,23 @@ To do administration, log in with a user with the `role: 'admin'` field and got 
 
 ## Overview
 
-There are two parts of the application, front-end and back-end. The back-end is in Node.js and the front-end is in Angular JS. There are several packages at use in both the front and back and you can see a list in the package.json and bower.json files. As mentioned, Bower and NPM are used for package managment. The front-end files are in the `/public` folder and the Bower-installed packages are in `public/vendor`.
+There are two parts of the application, front-end and back-end. The back-end is in Node.js and the front-end is in Angular JS and some ReactJS. There are several packages at use in both the front and back and you can see a list in the package.json and bower.json files. As mentioned, Bower and NPM are used for package managment. The front-end files are in the `/public` folder and the Bower-installed packages are in `public/vendor`.
 
 Node.js serves both the JSON API and the static web files. The app to launch both is `server.js`. The endpoint for the API is `/api` and the endpoint for the static web app is just `/`. Here are the other API details. They are subjec to change so please contact me if there's any inconsistencies.
+
+### ReactJS
+
+With "Version 2" we included some React components. The `JSX` parts of these are in `src/`, and they are set by the gulp file to compile to `public/js`. The reasons for including React are:
+
+* Future-compatabilty with React-Native, a way of writing iOS apps in Javascript (we probably can't re-use the same code exactly, but we're learning it).
+
+* Better performance for some things.
+
+* It's hip and fun?
+
+Although it makes the application more complicated and larger for the time being, we hope to migrate features over one-by-one and eventually have a full migration. There is also a `README.MD` in `src/` which may have useful information. 
+
+## Routes
 
 For a list of all API endpoints, see the file `routes/userRoute.js`.
 
@@ -94,47 +108,3 @@ A `GET` request to this endpoint will get a single post, if it is not private. Y
 # TODOs
 
 See our Pivotal Tracker.
-
-# Version names
-
-[Update about version names: We are doing basically continuous deployment and haven't really been following this.]
-
-Here are the planned version names. They are the names of muted colours going couter-clockwise around the colour circle, starting near our mock-up colour, green, with moss. List:
-
-Moss -- 0.1.0
-
-Lime -- 0.2.0
-
-Mint -- 0.3.0
-
-Seaglass
-
-Robin’s Egg
-
-Peacock
-
-Sky Grey
-
-Sky Blue
-
-Lavender
-
-Velvet
-
-Heliotrope
-
-Old Rose
-
-Pink
-
-Coral
-
-Dusty Plum
-
-Dune
-
-Marigold
-
-Parchment
-
-Canary

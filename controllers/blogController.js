@@ -83,6 +83,18 @@ exports.add = function ( req, res ) {
 							var b = new Content( newArticle )
 
 							imageResolver.resolve( req.body.url, function ( result ) {
+								if ( !result ) {
+									var placeholderImage = "images/ss_placeholder.jpg"
+						
+									newArticle.images.push({
+										orig: placeholderImage,
+										hash: "placeholder",
+										thumb: placeholderImage
+									})
+									
+									return resolve( newArticle )
+								}
+								
 								saveImage( req.body.type, result.image )
 								.spread( function ( hash, orig, thumb ) {
 									newArticle.images.push({
@@ -94,7 +106,8 @@ exports.add = function ( req, res ) {
 									article.close()
 
 									resolve( newArticle )
-								}, function ( error ) {
+								})
+								.catch( function ( error ) {
 									console.log( error )
 									reject( error )
 								})
