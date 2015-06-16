@@ -8,6 +8,13 @@ module.exports = React.createClass({
 			showSidebar: !this.state.showSidebar
 		})
 	},
+	handleSignOut: function () {
+		localStorage.removeItem( 'token' )
+		localStorage.removeItem( 'username' )
+		localStorage.removeItem( 'role' )
+		this.handleClick()
+		return window.location.assign( '#/home/splash' )
+	},
 	getInitialState: function () {
 	    return {
 	    	showSidebar: false    
@@ -15,8 +22,8 @@ module.exports = React.createClass({
 	},
 	render: function () {
 		return 	<div>
-					<LogoButton buttonImage={ this.props.buttonImage } handleClick={ this.handleClick } />
-					<Sidebar show={ this.state.showSidebar ? '' : 'hidden' } buttonImage={ this.props.buttonImageMini } handleButtonClick={ this.handleClick } menuOptions={ this.props.menuOptions } menuOptionBottom={ this.props.menuOptionBottom } />
+					<LogoButton buttonImage={ this.props.buttonImage } buttonImageMini={ this.props.buttonImageMini } handleClick={ this.handleClick } />
+					<Sidebar show={ this.state.showSidebar ? '' : 'sidebar-hidden' } buttonImage={ this.props.buttonImageMini } buttonImageMini={ this.props.buttonImageMini } handleButtonClick={ this.handleClick } menuOptions={ this.props.menuOptions } menuOptionBottom={ this.props.menuOptionBottom } handleSignOut={ this.handleSignOut } />
 				</div>
 	}
 })
