@@ -22,7 +22,10 @@ var UserSchema = new mongoose.Schema({
 		required: true,
 		unique: true
 	},
-	joined: Number,
+	joined: {
+		type: Number,
+		default: ( new Date() / 1000 ).toFixed()
+	},
 	token: String,
 	role: String,
 	permissions: Array,
