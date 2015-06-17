@@ -11,8 +11,7 @@ var Content = require( '../models/contentModel' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex( 'Contents' ),
-	urlExpand = require( 'url-expand' ),
-	slug = require( 'slug' )
+	urlExpand = require( 'url-expand' )
 
 function findUserid ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
@@ -139,8 +138,7 @@ exports.add = function ( req, res ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			
 			var content = new Content( _.extend({
-				url: contentInfo.meta.canonical,
-				slug: slug( contentInfo.meta.title, { lower: true } )
+				url: contentInfo.meta.canonical
 			}, contentInfo.meta ))
 			
 			getUser( req.token )
