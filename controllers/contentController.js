@@ -351,9 +351,11 @@ Gets a single post. Used to dynamically get content a user just added to their s
 */
 exports.single = function ( req, res ) {
 	
+	var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'
+	
 	findUserid( req.params.username )
 	.then( function ( userid ) {
-		User.findOne( { token: req.token } )
+		User.findOne( { token: userToken } )
 		.then( function ( result ) {
 			/*Tries to determine if ID is slug or objectID*/
 			if ( req.query.id ) {
@@ -364,7 +366,7 @@ exports.single = function ( req, res ) {
 				console.log( options )
 			}
 			
-			if ( result._id != userid || !result ) {
+			if ( !result || result._id != userid ) {
 				projectContent( options )
 				.then( function ( result ) {
 					if ( result.private == true ) return res.status( 500 ).json( "Can't find that content." )
