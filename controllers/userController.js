@@ -56,8 +56,7 @@ exports.signUp = function ( req, res ) {
 	var user = new User({
 		username: req.body.username,
 		password: req.body.password,
-		email: req.body.email,
-		joined: ( new Date() / 1000 ).toFixed()
+		email: req.body.email
 	})
 	
 	function betakeyCheck () {
@@ -498,21 +497,69 @@ exports.waitlist = function ( req, res ) {
 	})
 }
 
-exports.getwaitlist = function ( req, res ) {
-	
-	User.findOne( { token: req.token, role: 'admin' } )
-	.then( function ( user ) {
-		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
-		
-		User.find( { waiting: true, username: { $exists: false } } )
-		.then( function ( results ) {
-			return res.status( 200 ).json( results )
+function checkAdmin ( object ) {
+	return Q.Promise( function ( resolve, reject, notify ) {
+		User.findOne( { token: object.token, role: 'admin' } )
+		.then( function ( user ) {
+			if ( !user ) return reject( new Error ( { message: "Permissions don't appear to allow that." } ) )
+			
+			resolve( user )
 		})
 		.catch( function ( error ) {
+			return reject( error )
+		})
+	})
+}
+
+exports.getwaitlist = function ( req, res ) {
+	
+	checkAdmin( { token: req.token } )
+	.then( function ( user ) {
+		User.find()
+		.select( 'joined waiting email username' )
+		.sort( { waiting: -1 } )
+		.sort( { joined: -1 } )
+		.exec()
+		.then( function ( results ) {
+			return res.status( 200 ).json( results )
+		}, function ( error ) {
 			console.log( error )
 			
 			return res.status( 500 ).json( error.message )
 		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+exports.exportEmails = function ( req, res ) {
+	
+	checkAdmin( { token: req.token } )
+	.then( function ( admin ) {
+		User.find( { username: { $exists: true } } )
+		.select( 'email' )
+		.exec()
+		.then( function ( results ) {
+			var emails = ""
+			
+			var map = results.map( function ( user ) {
+				return emails += user.email + ", " 
+			})
+			
+			return 	res.status( 200)
+					.set({"Content-Disposition":'attachment; filename="user-emails-' + new Date() + '.txt"'})
+					.send( emails )
+			
+		}, function ( error ) {
+			console.log( error )
+			return res.status( 500 ).json( error.message )
+		})
+	})
+	.catch( function( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
 	})
 }
 
