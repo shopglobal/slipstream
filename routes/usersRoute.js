@@ -102,7 +102,7 @@ router.route('/stream/:username/:stream')
 	})
 
 router.route( '/single/:username')
-	.get( userController.checkAuthorization, contentController.single )
+	.get( contentController.single )
 
 router.route( '/following/:stream' )
 	.get( userController.checkAuthorization, contentController.following )
