@@ -49,6 +49,9 @@ router.route( '/user/waitlist' )
 router.route( '/user/sendbetakey' )
 	.post( userController.checkAuthorization, userController.sendBetakey )
 
+router.route( '/admin/user-emails' )
+	.get( userController.checkAuthorization, userController.exportEmails )
+
 router.route('/add')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {
@@ -99,7 +102,7 @@ router.route('/stream/:username/:stream')
 	})
 
 router.route( '/single/:username')
-	.get( userController.checkAuthorization, contentController.single )
+	.get( contentController.single )
 
 router.route( '/following/:stream' )
 	.get( userController.checkAuthorization, contentController.following )
