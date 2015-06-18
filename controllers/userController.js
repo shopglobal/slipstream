@@ -309,14 +309,15 @@ exports.sendPasswordReset = function ( req, res ) {
 	}
 	
 	function emailTemporaryPassword ( user ) {
-		Q.Promise( function ( resolve, reject, notify ) {	
-			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toSting()
+		return Q.Promise( function ( resolve, reject, notify ) {	
+			
+			var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toString().split( '<!-- Breakpoint -->' )
 			
 			var email = {
 				from: 'Slipstream <hello@slipstreamapp.com>',
 				to: user.email,
 				subject: 'Your temporary Slipstream password',
-				html: passwordHtml.split( '</code>')[0] + user.temporaryPassword + passwordHtml.split( '</code>')[1]
+				html: passwordHtml[0] + user.temporaryPassword + passwordHtml[1]
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
