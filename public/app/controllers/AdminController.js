@@ -48,6 +48,15 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 		})
 	}
 
+	$scope.getEmails = function () {
+		$http.get( '/api/admin/user-emails' )
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$window.location = "data:text/plain;charset=utf-8," + encodeURIComponent( response.data )
+		})
+	}
+
 	$http
 		.get( '/api/user/waitlist' )
 		.success( function ( data ) {

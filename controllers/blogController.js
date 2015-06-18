@@ -21,8 +21,7 @@ var fs = require('fs'),
 	urlExpand = require( 'url-expand' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex( 'Contents' ),
-	slug = require( 'slug' )
+	index = algolia.initIndex( 'Contents' )
 //	readability = require( 'readable-proxy' ).scrape
 
 // adds and item to the articles database with the user's id.
@@ -76,13 +75,24 @@ exports.add = function ( req, res ) {
 							var a = _.extend( newArticle, {
 								title: article.title,
 								description: description,
-								content: article.content,
-								slug: slug( article.title, { lower: true } )
+								content: article.content
 							} )
 
 							var b = new Content( newArticle )
 
 							imageResolver.resolve( req.body.url, function ( result ) {
+								if ( !result ) {
+									var placeholderImage = "images/ss_placeholder.jpg"
+						
+									newArticle.images.push({
+										orig: placeholderImage,
+										hash: "placeholder",
+										thumb: placeholderImage
+									})
+									
+									return resolve( newArticle )
+								}
+								
 								saveImage( req.body.type, result.image )
 								.spread( function ( hash, orig, thumb ) {
 									newArticle.images.push({
@@ -94,7 +104,8 @@ exports.add = function ( req, res ) {
 									article.close()
 
 									resolve( newArticle )
-								}, function ( error ) {
+								})
+								.catch( function ( error ) {
 									console.log( error )
 									reject( error )
 								})
