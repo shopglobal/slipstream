@@ -17,20 +17,22 @@
 				</a>
 			</div>
 			<div class="collpase navbar-collapse">
-				<ul class="nav navbar-nav navbar-center">
+				<!-- <ul class="nav navbar-nav navbar-center">
 					<li>
 						<button class="btn btn-green no-border" ui-sref="app.stream( { username: currentUser, stream: currentStream, mode: 'stream' })">
 							<span class="glyphicon glyphicon-chevron-left"></span> Back to {{ currentUser }}'s {{ currentStream }} stream
 						</button>
 					</li>
-				</ul>
+				</ul> -->
 				<ul class="nav navbar-nav navbar-right" ng-hide="username">
 					<li ng-hide=" $state.includes( 'landing.login' )  ">
-						<a ui-sref="landing.login">	
+						<ng-include src="'splash-cta-signup.html'"></ng-include>
+
+						<!-- <a ui-sref="landing.login">	
 							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }">
 								Login
 							</button>
-						</a>
+						</a> -->
 					</li>
 					<!--<li>
 						<a ui-sref="landing.register">Register</a>
@@ -112,3 +114,22 @@
 	</span>
 	
 </div>
+
+<script type="text/ng-template" id="splash-cta-signup.html">
+	<span ng-hide="showSignup">
+		<button class="btn btn-green btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
+	</span>
+	<form class="form-inline form-waitlist" ng-show="showSignup">
+		<span class="form-group">
+			<input type="email" class="input-green form-control" ng-model="user.email" placeholder="Email">
+			
+			<!-- Desktop  -->
+
+			<button class="btn btn-green hidden-xs form-control" ng-click="waitlist()">Sign Up</button>
+
+			<!-- Mobile -->
+			
+			<br class="visible-xs"><button class="btn btn-white btn-block visible-xs" ng-click="waitlist()">Sign Up</button>
+		</span>
+	</form>
+</script>

@@ -4,7 +4,8 @@ var mongoose = require( 'mongoose' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex('Contents'),
-	Q = require( 'q' )
+	Q = require( 'q' ),
+	URLSlugs = require( 'mongoose-url-slugs' )
 
 /*
 This first model is for the subdocuments. These record the instances that a user saves the article. It lacks the article text and is inserted in the main article object within an array.article
@@ -29,7 +30,6 @@ UsersSchema.methods.togglePrivate = function () {
 
 var ContentSchema = new mongoose.Schema( {
 	title: String,		// title of the item
-	slug: String,
 	url: String,		// direc link the non-embed browser version of
 	service: String,	// such as youtube
 	author: String,		// who made it on the parent site (eg youtube)
@@ -83,5 +83,7 @@ ContentSchema.post( 'remove', function( item ) {
 })
 
 ContentSchema.index( { 'users.tags': 'text' } )
+
+ContentSchema.plugin( URLSlugs( 'title', { field: 'slug' } ) )
 
 module.exports = mongoose.model( 'Content', ContentSchema )
