@@ -32,7 +32,7 @@ gulp.task( 'minify', function() {
 })
 
 gulp.task( 'minifyViews', function() {
-	return gulp.src( './public/app/views/*.html' )
+	return gulp.src( './public/app/views/**/*' )
 		// .pipe( minifyHtml({ empty: true }) )
 		.pipe( gulp.dest( './build/app/views/' ) )
 })
