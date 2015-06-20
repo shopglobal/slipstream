@@ -215,9 +215,9 @@ INPUT: Edited text and valid user token.
 */
 exports.edit = function ( req, res ) {
 	
-	User.findOne( { token: req.token } )
+	User.findOne( { token: req.token, role: 'admin' } )
 	.then( function ( user ) {
-		if( user.role != 'admin' ) return res.status( 403 ).json( "Can't do that." )
+		if ( !user ) throw new Error( "Permissions don't appear to allow that." )
 		
 		var contentid = mongoose.Types.ObjectId( req.body.id )
 		
@@ -225,7 +225,7 @@ exports.edit = function ( req, res ) {
 		.then( function ( parent ) {
 			if ( !parent ) return res.status( 500 ).json( "Couldn't find that article to edit." )
 			
-			parent.text = req.body.text
+			var parent = _.extend( parent, req.body.changes )
 			
 			parent.save()
 			.then( function ( result ) {
@@ -239,6 +239,10 @@ exports.edit = function ( req, res ) {
 			console.log( error )
 			return res.status( 500 ).json( error.message )
 		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
 	})
 }
 

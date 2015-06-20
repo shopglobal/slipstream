@@ -70,7 +70,16 @@
 		
 	</div>
 
-	<h2>{{ article.title }}</h2>
+	<h2 ng-hide=" role == 'admin' ">{{ article.title }}</h2>
+
+	<h2 ng-show=" role == 'admin' "
+		inline-edit="article.title" 
+		inline-edit-on-click
+		inline-edit-btn-edit="" 
+		inline-edit-callback="adminEditTitle( newValue )"
+	></h2>
+
+	<!-- <react-component name="EditTitle" props="adminEditTitle" watch-depth="reference" ng-show=" role == 'admin' " ng-model="newTitle" ng-change="showNewTitle()"></react-component> -->
 
 	<div class="reader-processing" ng-show=" article.processing ">
 		<h3 class="text-center dark-text btn-font-light font-sans-serif">
