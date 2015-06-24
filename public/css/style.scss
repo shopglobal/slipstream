@@ -492,7 +492,10 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 		iframe { height: 150px !important; } }
 	.content-tags {  margin: 5px 0 10px -3px; }
 	.video-info {  }
-	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } 
+	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; }
+	.item-preview-image { position: relative; 
+		.admin-dropdown { position: absolute; opacity: 0; bottom: -30px; left: 10px; z-index: 100; }
+		&:hover .admin-dropdown { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } }
 	
 	/* Desktop add/re-stream button. */
 
