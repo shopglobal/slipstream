@@ -53,7 +53,8 @@ function projectContent ( options ) {
 				text: '$text',
 				processing: '$processing',
 				tags: '$users.tags',
-				private: '$users.private'
+				private: '$users.private',
+				thumbnail: '$thumbnail'
 			} }
 		] ).exec()
 		.then( function ( result ) {
@@ -229,6 +230,7 @@ exports.edit = function ( req, res ) {
 			
 			parent.save()
 			.then( function ( result ) {
+				console.log( "Admin edit: Post: " + parent._id )
 				return res.status( 200 ).json( "The post was saved." )
 			}, function ( error ) {
 				console.log( error )
@@ -284,7 +286,8 @@ exports.stream = function ( req, res ) {
 					text: '$text',
 					processing: '$processing',
 					tags: '$users.tags',
-					private: '$users.private'
+					private: '$users.private',
+					thumbnail: '$thumbnail'
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },
