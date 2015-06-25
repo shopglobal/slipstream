@@ -189,7 +189,7 @@ a { color: $green;
 
 .feedback-btn-gray { font-family: $body-font; background: white; }
 
-.feedback-btn { box-shadow: none !important; }
+.feedback-btn { box-shadow: none !important; color: #852C20; }
 
 .dropdown-menu { 
 	li { border-bottom: 1px solid $list-border ;
@@ -509,10 +509,12 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 
 // feedback
 
-feedback-widget { position: fixed; right: 25px; bottom: 0; 
-	.form-group { width: 500px; background: rgba( 0, 0, 0, 0.87 ); padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
+feedback-widget { position: fixed; right: 25px; bottom: 0;
+	.btn-feedback-toggle { color: white; background: #852C20; border-radius: 5px 5px 0 0; font-weight: 500; font-size: 16px; 
+		&:hover { color: white; } }
+	.form-group { width: 500px; background: white; padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
 
-.lbl-feedback-comment { color: white; }
+.lbl-feedback-comment { color: $dark-text; }
 
 .txt-feedback-comment { margin-bottom: 15px; }
 
