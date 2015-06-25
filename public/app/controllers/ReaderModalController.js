@@ -65,4 +65,18 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 		postId: $scope.article._id
 	}*/
 
+	$scope.adminEditTitle = function ( newValue ) {
+		$http.post( 'api/content/edit', {
+			id: $scope.article._id,
+			changes: {
+				title: newValue
+			}
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
+	}
+
 }])

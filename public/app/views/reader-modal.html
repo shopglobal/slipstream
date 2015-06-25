@@ -90,7 +90,9 @@
 		</h4>
 	</div>
 
-	<div ng-bind-html="article.text" ng-hide="adminEdit"></div>
+	<div ng-bind-html="article.text" ng-show=" article.stream == 'read' && !adminEdit"></div>
+
+	<div ng-class="{ 'watch-iframe' : article.stream == 'watch', 'listen-iframe' : article.stream == 'listen' }" iframely url="{{ article.url }}" ng-if=" article.stream != 'read' "></div>
 
 	<div ng-show="adminEdit == true">
 		<textarea ng-wig="article.text"></textarea><br />
