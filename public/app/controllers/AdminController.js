@@ -48,12 +48,18 @@ app.controller('AdminController', ['$scope', '$state', '$urlRouter', '$http', '$
 		})
 	}
 
-	$scope.getEmails = function () {
-		$http.get( '/api/admin/user-emails' )
+	$scope.getEmails = function ( object ) {
+		if ( !object ) {
+			var query = null
+		} else {
+			var query = { params: object }
+		}
+
+		$http.get( '/api/admin/user-emails', query )
 		.then( function ( response, error ) {
 			if ( error ) return $flash.error = error
 
-			$window.location = "data:text/plain;charset=utf-8," + encodeURIComponent( response.data )
+			$window.open("data:text/plain;charset=utf-8," + encodeURIComponent( response.data ), '_blank' )
 		})
 	}
 
