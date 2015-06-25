@@ -42,9 +42,10 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	}
 
 	$scope.saveAdminEdit = function () {
-		$http.post( '/api/content/edit',
-			{ id: article._id, text: article.text }
-		)
+		$http.post( '/api/content/edit', { 
+			id: $scope.article._id, 
+			changes: { text: $scope.article.text }
+		})
 		.then( function ( response, error ) {
 			if ( error ) return $flash.error = error
 

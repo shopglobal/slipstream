@@ -222,9 +222,12 @@ exports.edit = function ( req, res ) {
 		
 		var contentid = mongoose.Types.ObjectId( req.body.id )
 		
-		Content.findOne( { 'users._id': req.body.id } )
+		Content.findOne( { $or: [ 
+			{ 'users._id': req.body.id }, 
+			{ _id: req.body.id }
+		] } )
 		.then( function ( parent ) {
-			if ( !parent ) return res.status( 500 ).json( "Couldn't find that article to edit." )
+			if ( !parent ) throw new Error( "Couldn't find that article to edit." )
 			
 			var parent = _.extend( parent, req.body.changes )
 			
