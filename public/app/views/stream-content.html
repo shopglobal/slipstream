@@ -5,11 +5,15 @@
 		<div infinite-scroll="content.loadMore(3)" infinite-scroll-immediate-check="true">
 
 			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
-				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title" class="title-stream-item"></h2>
-
-				<a ng-click="openReaderModal( item )" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' ">
-					<h2 data-ng-bind="item.title" class="title-stream-item"></h2>
-				</a>
+				<h2	ng-show=" role == 'admin' "
+					inline-edit="item.title" 
+					inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer text-grey icon-admin'></span>"
+					inline-edit-callback="adminEditTitle( newValue, { id: item._id } )"
+					inline-edit-on-click
+				></h2>
+				<h2 class="title-stream-item" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' && role != 'admin' " ng-click="openReaderModal( item )">
+					<span class="cursor-pointer" data-ng-bind="item.title"></span>
+				</h2>
 
 				<div class="pull-left col-md-12 no-padding visible-xs meta-text">
 					<div ng-include="'meta-text.html'"></div>
@@ -25,8 +29,23 @@
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 				
-				<div class="item-preview">
-					<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' ">
+				<div class="item-preview" ng-if=" item.stream == 'read' ">
+					<span class="item-preview-image">
+						<div class="dropdown admin-dropdown" ng-if=" role == 'admin' ">
+							<button class="btn btn-green-solid btn-xs dropdown-toggle" type="button" id="admin-edit-thumbnail-dropdown" data-toggle="dropdown">
+								Edit thumbnail
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="admin-edit-thumbnail-dropdown">
+								<li ng-repeat=" image in item.images track by $index">
+									<img ng-src="{{ image.thumb }}" alt="" style="width: 200px; height: auto; " class="cursor-pointer" ng-click="adminEditThumb( { item: item, thumbnail: $index } )">
+								</li>
+							</ul>
+						</div>
+
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-hide=" item.thumbnail ">
+
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-show=" item.thumbnail ">
+					</span>					
 
 					<div class="item-description col-xs-12 col-md-8 no-padding">
 
@@ -55,6 +74,8 @@
 				</div>
 
 				<div class="share-links col-xs-offset-6">
+					<button ng-show="role == 'admin'" class="btn btn-grey no-border" ng-click="openReaderModal( item )"><span class="glyphicon glyphicon-book cursor-pointer"></span></button>
+
 					<ng-include src="'app/views/menu-share.html'"></ng-include>
 
 					<span class="dropdown user-menu">

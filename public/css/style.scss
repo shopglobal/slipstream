@@ -57,7 +57,7 @@ $list-border: #E9E9E9;
 
 $dark-text: #5B5A5A;
 
-.cursor-pointer { cursor: pointer; }
+.cursor-pointer { cursor: pointer !important; }
 
 // containers and wrappers
 
@@ -189,7 +189,7 @@ a { color: $green;
 
 .feedback-btn-gray { font-family: $body-font; background: white; }
 
-.feedback-btn { box-shadow: none !important; }
+.feedback-btn { box-shadow: none !important; color: #852C20; }
 
 .dropdown-menu { 
 	li { border-bottom: 1px solid $list-border ;
@@ -200,6 +200,8 @@ a { color: $green;
 // new classes
 
 .text-white { color: white !important; }
+
+.text-grey { color: $grey !important; }
 
 .img-white { @include filter( brightness( 2 ) ); }
 
@@ -246,6 +248,8 @@ a { color: $green;
 .navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
 
 a.navbar-height-fix { padding: 11 15 0 15 !important; }
+
+.icon-admin { font-size: 16px; vertical-align: top; margin-left: 5px; }
 
 
 
@@ -417,6 +421,7 @@ footer { bottom: 0; position: absolute; height: 25px; }
 	.modal-logo { position: fixed; top: -25px; left: -275px; width: 200px; }
 	.modal-dialog { float: none; width: 50%; max-width: 700px; }
 	.reader-container { padding-top: 37px; }
+	.watch-iframe { max-height: 428px; padding: 0; margin: 15px 0; }
 	#item-options { margin: 10px 0; padding: 0; }
 	p { font-size: 16px; margin: 17px 0; }
 	img { clear: both; max-width: 100%; height: auto; margin: 0 auto; display: block; }
@@ -484,7 +489,7 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 
 .panel-item { position: relative; border: solid #ddd; border-width: 0px 0px 1px 0px; border-radius: 0px; padding-bottom: 10px; margin-bottom: 0px;
 	.title-stream-item { margin-right: 51px; }
-	&:last-child { border-bottom: 0px; }
+	&:last-child { border-bottom: 0px; }.icon-admin { font-size: 16px; }
 	.col-meta-item { display: inline-block; padding-right: 10px; }
 	.meta-text { color: $grey; font-size: 11px; }
 	.item-description { margin-bottom: 15px; }
@@ -492,7 +497,10 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 		iframe { height: 150px !important; } }
 	.content-tags {  margin: 5px 0 10px -3px; }
 	.video-info {  }
-	.watch-iframe { height: 428px; padding: 0; margin: 15px 0; } 
+	.watch-iframe { max-height: 428px; padding: 0; margin: 15px 0; }
+	.item-preview-image { position: relative; 
+		.admin-dropdown { position: absolute; opacity: 0; bottom: -30px; left: 10px; z-index: 100; }
+		&:hover .admin-dropdown { opacity: 1; @include transition ( opacity 100ms ease-in-out ); } }
 	
 	/* Desktop add/re-stream button. */
 
@@ -501,10 +509,12 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 
 // feedback
 
-feedback-widget { position: fixed; right: 25px; bottom: 0; 
-	.form-group { width: 500px; background: rgba( 0, 0, 0, 0.87 ); padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
+feedback-widget { position: fixed; right: 25px; bottom: 0;
+	.btn-feedback-toggle { color: white; background: #852C20; border-radius: 5px 5px 0 0; font-weight: 500; font-size: 16px; 
+		&:hover { color: white; } }
+	.form-group { width: 500px; background: white; padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
 
-.lbl-feedback-comment { color: white; }
+.lbl-feedback-comment { color: $dark-text; }
 
 .txt-feedback-comment { margin-bottom: 15px; }
 

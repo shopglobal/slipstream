@@ -71,6 +71,7 @@
     "q": "^1.1.2",
     "random-key": "^0.3.2",
     "react": "^0.13.3",
+    "react-inline-edit": "^1.1.0",
     "reactify": "^1.1.1",
     "read-chunk": "^1.0.1",
     "readable-proxy": "OKNoah/readable-proxy-jsdom#7242f7eb369815ed9de895dc74c8446a7ca36194",
