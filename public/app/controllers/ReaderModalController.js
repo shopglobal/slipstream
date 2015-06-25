@@ -12,6 +12,8 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 	$scope.article = article
 
+	$scope.newTitle = ''
+
 	/*
 	check if the article is currently processing. If it is, check again. This will make the app check each time an add modal is openened instead of only after refreshign the whole app.
 	*/
@@ -40,9 +42,10 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	}
 
 	$scope.saveAdminEdit = function () {
-		$http.post( '/api/content/edit',
-			{ id: article._id, text: article.text }
-		)
+		$http.post( '/api/content/edit', { 
+			id: $scope.article._id, 
+			changes: { text: $scope.article.text }
+		})
 		.then( function ( response, error ) {
 			if ( error ) return $flash.error = error
 
@@ -52,5 +55,29 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	}
 
 	console.log( $scope.adminEdit )
+
+	/*Props for React directive to edit post title inline*/
+	/*$scope.adminEditTitle = {
+		title: $scope.article.title,
+		tagName: "div",
+		className: "name-field",
+		autoFocus: true,
+		maxLength: 300,
+		postId: $scope.article._id
+	}*/
+
+	$scope.adminEditTitle = function ( newValue ) {
+		$http.post( 'api/content/edit', {
+			id: $scope.article._id,
+			changes: {
+				title: newValue
+			}
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
+	}
 
 }])

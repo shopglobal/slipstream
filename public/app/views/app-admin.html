@@ -34,8 +34,11 @@
 
 		<div class="col-md-3">
 
-			<button class="btn btn-green" ng-click="getEmails()">Export emails</button>
-			Exports all emails of non-waitlisted users.
+			<button class="btn btn-green" ng-click="getEmails()">Export registered</button>
+			Exports all emails of registered users.<br /><br />
+
+			<button class="btn btn-green" ng-click="getEmails( { type: 'unregistered' })">Export unregistered</button>
+			Exports all emails of unregistered users who <i>have</i> received a betakey.
 
 			<div class="clearfix"></div>
 		</div>

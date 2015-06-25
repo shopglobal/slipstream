@@ -53,7 +53,8 @@ function projectContent ( options ) {
 				text: '$text',
 				processing: '$processing',
 				tags: '$users.tags',
-				private: '$users.private'
+				private: '$users.private',
+				thumbnail: '$thumbnail'
 			} }
 		] ).exec()
 		.then( function ( result ) {
@@ -215,20 +216,24 @@ INPUT: Edited text and valid user token.
 */
 exports.edit = function ( req, res ) {
 	
-	User.findOne( { token: req.token } )
+	User.findOne( { token: req.token, role: 'admin' } )
 	.then( function ( user ) {
-		if( user.role != 'admin' ) return res.status( 403 ).json( "Can't do that." )
+		if ( !user ) throw new Error( "Permissions don't appear to allow that." )
 		
 		var contentid = mongoose.Types.ObjectId( req.body.id )
 		
-		Content.findOne( { 'users._id': req.body.id } )
+		Content.findOne( { $or: [ 
+			{ 'users._id': req.body.id }, 
+			{ _id: req.body.id }
+		] } )
 		.then( function ( parent ) {
-			if ( !parent ) return res.status( 500 ).json( "Couldn't find that article to edit." )
+			if ( !parent ) throw new Error( "Couldn't find that article to edit." )
 			
-			parent.text = req.body.text
+			var parent = _.extend( parent, req.body.changes )
 			
 			parent.save()
 			.then( function ( result ) {
+				console.log( "Admin edit: Post: " + parent._id )
 				return res.status( 200 ).json( "The post was saved." )
 			}, function ( error ) {
 				console.log( error )
@@ -239,6 +244,10 @@ exports.edit = function ( req, res ) {
 			console.log( error )
 			return res.status( 500 ).json( error.message )
 		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
 	})
 }
 
@@ -280,7 +289,8 @@ exports.stream = function ( req, res ) {
 					text: '$text',
 					processing: '$processing',
 					tags: '$users.tags',
-					private: '$users.private'
+					private: '$users.private',
+					thumbnail: '$thumbnail'
 				} },
 				{ $sort: { added: -1 } },
 				{ $skip: skip },

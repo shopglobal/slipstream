@@ -70,7 +70,16 @@
 		
 	</div>
 
-	<h2>{{ article.title }}</h2>
+	<h2 ng-hide=" role == 'admin' ">{{ article.title }}</h2>
+
+	<h2 ng-show=" role == 'admin' "
+		inline-edit="article.title"
+		inline-edit-on-click
+		inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer dark-text icon-admin'></span>" 
+		inline-edit-callback="adminEditTitle( newValue )"
+	></h2>
+
+	<!-- <react-component name="EditTitle" props="adminEditTitle" watch-depth="reference" ng-show=" role == 'admin' " ng-model="newTitle" ng-change="showNewTitle()"></react-component> -->
 
 	<div class="reader-processing" ng-show=" article.processing ">
 		<h3 class="text-center dark-text btn-font-light font-sans-serif">
@@ -81,7 +90,9 @@
 		</h4>
 	</div>
 
-	<div ng-bind-html="article.text" ng-hide="adminEdit"></div>
+	<div ng-bind-html="article.text" ng-show=" article.stream == 'read' && !adminEdit"></div>
+
+	<div ng-class="{ 'watch-iframe' : article.stream == 'watch', 'listen-iframe' : article.stream == 'listen' }" iframely url="{{ article.url }}" ng-if=" article.stream != 'read' "></div>
 
 	<div ng-show="adminEdit == true">
 		<textarea ng-wig="article.text"></textarea><br />

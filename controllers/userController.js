@@ -539,7 +539,18 @@ exports.exportEmails = function ( req, res ) {
 	
 	checkAdmin( { token: req.token } )
 	.then( function ( admin ) {
-		User.find( { username: { $exists: true } } )
+		
+		/*Find the type of email list to get based on the optional query parameter 'type'.*/
+		
+		if ( !req.query.type ) {
+			var query = { username: { $exists: true } }
+		} else if ( req.query.type == 'unregistered' ) {
+			var query = { username: { $exists: false }, waiting: false }
+		} else {
+			throw new Error( "That is not a valid type of list to send." )
+		}		
+		
+		User.find( query )
 		.select( 'email' )
 		.exec()
 		.then( function ( results ) {
