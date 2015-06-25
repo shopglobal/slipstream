@@ -29,7 +29,7 @@
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 				
-				<div class="item-preview">
+				<div class="item-preview" ng-if=" item.stream == 'read' ">
 					<span class="item-preview-image">
 						<div class="dropdown admin-dropdown" ng-if=" role == 'admin' ">
 							<button class="btn btn-green-solid btn-xs dropdown-toggle" type="button" id="admin-edit-thumbnail-dropdown" data-toggle="dropdown">
