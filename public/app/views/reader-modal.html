@@ -73,9 +73,9 @@
 	<h2 ng-hide=" role == 'admin' ">{{ article.title }}</h2>
 
 	<h2 ng-show=" role == 'admin' "
-		inline-edit="article.title" 
+		inline-edit="article.title"
 		inline-edit-on-click
-		inline-edit-btn-edit="" 
+		inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer dark-text icon-admin'></span>" 
 		inline-edit-callback="adminEditTitle( newValue )"
 	></h2>
 

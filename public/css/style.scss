@@ -57,7 +57,7 @@ $list-border: #E9E9E9;
 
 $dark-text: #5B5A5A;
 
-.cursor-pointer { cursor: pointer; }
+.cursor-pointer { cursor: pointer !important; }
 
 // containers and wrappers
 
@@ -201,6 +201,8 @@ a { color: $green;
 
 .text-white { color: white !important; }
 
+.text-grey { color: $grey !important; }
+
 .img-white { @include filter( brightness( 2 ) ); }
 
 .button-follow { border: solid 2px $green; box-shadow: none; text-decoration: none;
@@ -246,6 +248,8 @@ a { color: $green;
 .navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
 
 a.navbar-height-fix { padding: 11 15 0 15 !important; }
+
+.icon-admin { font-size: 16px; vertical-align: top; margin-left: 5px; }
 
 
 
@@ -484,7 +488,7 @@ body.splash { font-family: $body-font; background-size: cover; background-attach
 
 .panel-item { position: relative; border: solid #ddd; border-width: 0px 0px 1px 0px; border-radius: 0px; padding-bottom: 10px; margin-bottom: 0px;
 	.title-stream-item { margin-right: 51px; }
-	&:last-child { border-bottom: 0px; }
+	&:last-child { border-bottom: 0px; }.icon-admin { font-size: 16px; }
 	.col-meta-item { display: inline-block; padding-right: 10px; }
 	.meta-text { color: $grey; font-size: 11px; }
 	.item-description { margin-bottom: 15px; }

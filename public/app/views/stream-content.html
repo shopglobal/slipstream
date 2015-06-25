@@ -5,11 +5,15 @@
 		<div infinite-scroll="content.loadMore(3)" infinite-scroll-immediate-check="true">
 
 			<div class="panel panel-item" ng-repeat="item in content.items" ng-hide="hideItem">
-				<h2 ng-hide=" item.stream == 'read' " data-ng-bind="item.title" class="title-stream-item"></h2>
-
-				<a ng-click="openReaderModal( item )" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' ">
-					<h2 data-ng-bind="item.title" class="title-stream-item"></h2>
-				</a>
+				<h2	ng-show=" role == 'admin' "
+					inline-edit="item.title" 
+					inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer text-grey icon-admin'></span>"
+					inline-edit-callback="adminEditTitle( newValue, { id: item._id } )"
+					inline-edit-on-click
+				></h2>
+				<h2 class="title-stream-item" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' && role != 'admin' " ng-click="openReaderModal( item )">
+					<span class="cursor-pointer" data-ng-bind="item.title"></span>
+				</h2>
 
 				<div class="pull-left col-md-12 no-padding visible-xs meta-text">
 					<div ng-include="'meta-text.html'"></div>
@@ -70,6 +74,8 @@
 				</div>
 
 				<div class="share-links col-xs-offset-6">
+					<button ng-show="role == 'admin'" class="btn btn-grey no-border" ng-click="openReaderModal( item )"><span class="glyphicon glyphicon-book cursor-pointer"></span></button>
+
 					<ng-include src="'app/views/menu-share.html'"></ng-include>
 
 					<span class="dropdown user-menu">
