@@ -267,5 +267,19 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
+	$scope.adminEditTitle = function ( newValue, object ) {
+		$http.post( 'api/content/edit', {
+			id: object.id,
+			changes: {
+				title: newValue
+			}
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
+	}
+
 	
 }])
