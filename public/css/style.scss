@@ -361,7 +361,7 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 	.btn-active { background: white; color: $green;
 		span { color: $green;}
 		&:active { color: white; }
-		&:hover { background: white; border: red 1px dashed;
+		&:hover { background: white; border: red 1px solid;
 			& > span {  color: red; } } }
 	.add-container { 
 		&:hover > a, &:hover > a:visited, a:visited { color: white; } 
