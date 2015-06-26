@@ -11,7 +11,7 @@
 					inline-edit-callback="adminEditTitle( newValue, { id: item._id } )"
 					inline-edit-on-click
 				></h2>
-				<h2 class="title-stream-item" class="cursor-pointer title-stream-item" ng-show=" item.stream == 'read' && role != 'admin' " ng-click="openReaderModal( item )">
+				<h2 class="title-stream-item" class="cursor-pointer title-stream-item" ng-show=" role != 'admin' " ng-click="openReaderModal( item )">
 					<span class="cursor-pointer" data-ng-bind="item.title"></span>
 				</h2>
 
@@ -29,8 +29,8 @@
 
 				<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 				
-				<div class="item-preview" ng-if=" item.stream == 'read' ">
-					<span class="item-preview-image">
+				<div class="item-preview">
+					<span class="item-preview-image" ng-if=" item.stream == 'read' ">
 						<div class="dropdown admin-dropdown" ng-if=" role == 'admin' ">
 							<button class="btn btn-green-solid btn-xs dropdown-toggle" type="button" id="admin-edit-thumbnail-dropdown" data-toggle="dropdown">
 								Edit thumbnail
@@ -47,7 +47,7 @@
 						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-show=" item.thumbnail ">
 					</span>					
 
-					<div class="item-description col-xs-12 col-md-8 no-padding">
+					<div class="item-description col-xs-12 no-padding" ng-class="{ 'col-md-8' : item.stream == 'read', 'col-md-12' : item.stream != 'read' }">
 
 						<span ng-hide=" item.stream == 'listen' "><span ng-bind="item.description | stripTags | limitTo: 260"></span> ...</span>
 
