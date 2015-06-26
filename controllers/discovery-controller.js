@@ -31,6 +31,7 @@ exports.popular = function( req, res) {
 				text: { $first: '$text' },
 				added: { $first: '$users.added' },
 				url: { $first: '$url' },
+				slug: { $first: '$slug' },
 				saveCount: { $sum: 1 },
 			 	thumbnail: { $first: '$thumbnail' }
 			} },
