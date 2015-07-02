@@ -282,7 +282,11 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 	}
 
 	function getSinglePostUrl ( item ) {
-		var username = item.user.username ? item.user.username : item.user
+		if ( $scope.mode == 'mystream' ) {
+			var username = $stateParams.username
+		} else {
+			var username = item.user.username ? item.user.username : item.user
+		}
 
 		var slug = item.slug ? item.slug : item._id
 
