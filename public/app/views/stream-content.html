@@ -37,7 +37,7 @@
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="admin-edit-thumbnail-dropdown">
 								<li ng-repeat=" image in item.images track by $index">
-									<img ng-src="{{ image.thumb }}" alt="" style="width: 200px; height: auto; " class="cursor-pointer" ng-click="adminEditThumb( { item: item, thumbnail: $index } )">
+									<img ng-src="{{ image.thumb }}" alt="" style="width: 200px; height: auto; " class="cursor-pointer" ng-click="adminEditThumb( { id: item._id, thumbnail: $index } )">
 								</li>
 							</ul>
 						</div>
