@@ -593,6 +593,7 @@ exports.following = function ( req, res ) {
 				url: '$url',
 				slug: '$slug',
 				images: '$images',
+				thumbnail: '$thumbnail', 
 				description: '$description',
 				added: '$users.added',
 				user: '$users.user',
