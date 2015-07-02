@@ -101,6 +101,9 @@
 					    </li>
 					    <!-- Admin options -->
 					    <li role="presentation" ng-show=" role == 'admin' ">
+					    	<a ng-click="goToSinglePost( item )" class="cursor-pointer"><span class="glyphicon glyphicon-flag"></span> Go to single post</a>
+					    </li>
+					    <li role="presentation" ng-show=" role == 'admin' ">
 					    	<a ng-click="flag( { item: item, flag: 'hidden' } )" class="cursor-pointer"><span class="glyphicon glyphicon-ban-circle"></span> Flag hidden</a>
 					    </li>
 					    <li role="presentation" ng-show=" role == 'admin' ">
