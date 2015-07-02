@@ -23,7 +23,9 @@ Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
 
 function findUserid ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
-		User.findOne( { username: username } )
+		var query = mongoose.Types.ObjectId.isValid( username ) ? { _id: username } : { username: username }
+		
+		User.findOne( query )
 		.then( function( result ) {
 			if ( !result ) return reject( new Error( { message: "No user found" } ) )
 			
