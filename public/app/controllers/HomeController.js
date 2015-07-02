@@ -281,14 +281,22 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	$scope.shareTwitter = function ( item ) {
+	function getSinglePostUrl ( item ) {
 		var username = item.user.username ? item.user.username : item.user
 
 		var slug = item.slug ? item.slug : item._id
 
 		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/#/" + username + "/" + item.stream + "/" + slug
 
-		console.log( singlePostUrl )
+		return singlePostUrl
+	}
+
+	$scope.goToSinglePost = function ( item ) {
+		$window.open( getSinglePostUrl( item ) )
+	}
+
+	$scope.shareTwitter = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
 
 		$http.get( 'api/shorten-url', { params: {
 			url: singlePostUrl
@@ -299,6 +307,16 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 
 			window.open( 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetMessage) + '&via=getslipstream', '_blank')
 		})
+	}
+
+	$scope.shareToFacebook = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
+
+		var facebookUrl = 'https://www.facebook.com/dialog/share?app_id=1416653888663542&display=popup&href=' + encodeURIComponent( singlePostUrl ) + '&redirect_uri=' + encodeURIComponent( $window.location )
+
+		console.log( facebookUrl )
+
+		$window.open( facebookUrl, '_blank' )
 	}
 
 }])
