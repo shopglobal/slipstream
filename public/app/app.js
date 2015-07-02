@@ -1,7 +1,9 @@
 var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypress', 'infinite-scroll', 'yaru22.angular-timeago', 'iframely', 'ngSanitize', 'angular-flash.service', 'angular-flash.flash-alert-directive', 'ngTagsInput', 'angular.filter', '$feedback.directives', 'ngWig', 'react', 'angularInlineEdit' ])
 
-.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider) {
+.config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', '$locationProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider, $locationProvider ) {
 
+
+	$locationProvider.html5Mode( true )
 	
 	// sets default state
 

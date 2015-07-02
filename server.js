@@ -24,6 +24,9 @@ app
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
 	   console.log( error.stack )
 	})
+	.use( function( req, res ) {
+  		return res.redirect(req.protocol + '://' + req.get('Host') + '/#' + req.url)
+	} )
 
 http
 	.createServer( app ).listen( process.env.PORT )
