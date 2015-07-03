@@ -25,6 +25,7 @@
 				</button>
 				<a ui-sref="landing.splash" class="navbar-brand">
 					<img src="images/ss_logo_green.png" alt="" id="logo" ng-hide=" $state.includes( 'landing.splash' ) ">
+					<span class="dark-text pull-right hidden-xs">Curate and discover the web like never before.</span>
 				</a>
 			</div>
 			<div class="collpase navbar-collapse">
@@ -36,14 +37,18 @@
 					</li>
 				</ul> -->
 				<ul class="nav navbar-nav navbar-right" ng-hide="username">
-					<li ng-hide=" $state.includes( 'landing.login' )  ">
-						<ng-include src="'splash-cta-signup.html'"></ng-include>
+					<li>
+						<a href="">
+							<ng-include src="'splash-cta-signup.html'"></ng-include>
+						</a>
+					</li>
 
-						<!-- <a ui-sref="landing.login">	
-							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }">
+					<li ng-hide=" $state.includes( 'landing.login' )  ">
+						<a href="">
+							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ng-click="$state.go( 'landing.login' )">
 								Login
 							</button>
-						</a> -->
+						</a>
 					</li>
 					<!--<li>
 						<a ui-sref="landing.register">Register</a>
@@ -108,7 +113,9 @@
 	<div ng-show="adminEdit == true">
 		<textarea ng-wig="article.text"></textarea><br />
 		<button class="btn btn-green" ng-click="saveAdminEdit()">Submit changes</button>
-	</div>
+	</div><br /> 
+	
+	<div ng-bind="article.description" ng-show=" article.stream != 'read' "></div>
 
 </div>
 
