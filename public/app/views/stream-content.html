@@ -42,9 +42,9 @@
 							</ul>
 						</div>
 
-						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-hide=" item.thumbnail ">
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" !item.thumbnail && item.stream == 'read' ">
 
-						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-show=" item.thumbnail ">
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.thumbnail && item.stream == 'read' ">
 					</span>					
 
 					<div class="item-description col-xs-12 no-padding" ng-class="{ 'col-md-8' : item.stream == 'read', 'col-md-12' : item.stream != 'read' }">
