@@ -1,14 +1,14 @@
 <img src="images/ss_logo_green.png" alt="" class="modal-logo" ng-hide=" $state.includes( 'single' )"><br />
 	
 	<head>
-		<title>{{ article.title }}</title>
+		<title>{{ item.title }}</title>
 		<!-- Open Graph + Twitter for image when embedded. -->
 		<meta name="twitter:site" content="@getslipstream" />
 		<meta property="og:site_name" content="Slipstream" />
-		<meta property="og:title" content="{{ article.title }}" />
+		<meta property="og:title" content="{{ item.title }}" />
 		<meta property="og:type" content="article" />
-		<meta property="og:image" content="{{ article.images[ article.thumbnail ].thumb }}" />
-		<meta property="og:description" content="{{ article.description }}" />
+		<meta property="og:image" content="{{ item.images[ item.thumbnail ].thumb }}" />
+		<meta property="og:description" content="{{ item.description }}" />
 	</head>
 
 <div id="header" ng-show=" $state.includes( 'single' ) ">
@@ -86,10 +86,10 @@
 		
 	</div>
 
-	<h2 ng-hide=" role == 'admin' ">{{ article.title }}</h2>
+	<h2 ng-hide=" role == 'admin' ">{{ item.title }}</h2>
 
 	<h2 ng-show=" role == 'admin' "
-		inline-edit="article.title"
+		inline-edit="item.title"
 		inline-edit-on-click
 		inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer dark-text icon-admin'></span>" 
 		inline-edit-callback="adminEditTitle( newValue )"
@@ -97,21 +97,21 @@
 
 	<!-- <react-component name="EditTitle" props="adminEditTitle" watch-depth="reference" ng-show=" role == 'admin' " ng-model="newTitle" ng-change="showNewTitle()"></react-component> -->
 
-	<div class="reader-processing" ng-show=" article.processing ">
+	<div class="reader-processing" ng-show=" item.processing ">
 		<h3 class="text-center dark-text btn-font-light font-sans-serif">
-			We're still processing this article.
+			We're still processing this item.
 		</h3>
 		<h4 class="text-center dark-text btn-font-light font-sans-serif">
 			Check back later when we've imported all it's content.
 		</h4>
 	</div>
 
-	<div ng-bind-html="article.text" ng-show=" article.stream == 'read' && !adminEdit"></div>
+	<div ng-bind-html="item.text" ng-show=" item.stream == 'read' && !adminEdit"></div>
 
-	<div ng-class="{ 'watch-iframe' : article.stream == 'watch', 'listen-iframe' : article.stream == 'listen' }" iframely url="{{ article.url }}" ng-if=" article.stream != 'read' "></div>
+	<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
 
 	<div ng-show="adminEdit == true">
-		<textarea ng-wig="article.text"></textarea><br />
+		<textarea ng-wig="item.text"></textarea><br />
 		<button class="btn btn-green" ng-click="saveAdminEdit()">Submit changes</button>
 	</div><br /> 
 	
@@ -125,7 +125,7 @@
 		<img src="images/x@2x.png" alt="">
 	</button>
 
-	<ng-include src="'app/views/menu-share.html'" scope="" onload=""></ng-include>
+	<ng-include src="'menu-share.html'"></ng-include>
 
 	<span class="dropdown admin-reader-menu" ng-if=" role == 'admin' ">
 	  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">

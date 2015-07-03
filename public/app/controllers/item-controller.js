@@ -10,12 +10,12 @@ app.controller( 'ItemController', [ '$scope', '$http', '$stateParams', '$state',
 		slug: $stateParams.slug 
 	}})
 	.then( function ( response, error ) {
-		$scope.article = response.data[0]
+		$scope.item = response.data[0]
 
 		$rootScope.OG = {
-			title: $scope.article.title,
-			description: $scope.article.description,
-			image: $scope.article.images[ $scope.article.thumbnail ]
+			title: $scope.item.title,
+			description: $scope.item.description,
+			image: $scope.item.images[ $scope.item.thumbnail ]
 		}
 	})
 

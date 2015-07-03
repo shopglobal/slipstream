@@ -1,4 +1,4 @@
-app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', function( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams ){
+app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', '$window', '$filter', function( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams, $window, $filter ){
 	
 	var modalDialog = document.getElementsByClassName( 'modal-dialog' )
 
@@ -10,7 +10,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 	// }, 500)
 
-	$scope.article = article
+	$scope.item = article
 
 	$scope.newTitle = ''
 
@@ -24,7 +24,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 		.then( function ( response, error ) {
 			if ( error ) return
 
-			if ( !response.data.processing ) $scope.article = response.data[0]
+			if ( !response.data.processing ) $scope.item = response.data[0]
 		})
 	}
 
@@ -43,8 +43,8 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 	$scope.saveAdminEdit = function () {
 		$http.post( '/api/content/edit', { 
-			id: $scope.article._id, 
-			changes: { text: $scope.article.text }
+			id: $scope.item._id, 
+			changes: { text: $scope.item.text }
 		})
 		.then( function ( response, error ) {
 			if ( error ) return $flash.error = error
@@ -58,17 +58,17 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 	/*Props for React directive to edit post title inline*/
 	/*$scope.adminEditTitle = {
-		title: $scope.article.title,
+		title: $scope.item.title,
 		tagName: "div",
 		className: "name-field",
 		autoFocus: true,
 		maxLength: 300,
-		postId: $scope.article._id
+		postId: $scope.item._id
 	}*/
 
 	$scope.adminEditTitle = function ( newValue ) {
 		$http.post( 'api/content/edit', {
-			id: $scope.article._id,
+			id: $scope.item._id,
 			changes: {
 				title: newValue
 			}
@@ -78,6 +78,44 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 			$flash.success = response.data
 		})
+	}
+	
+	function getSinglePostUrl ( item ) {
+		if ( $scope.mode == 'mystream' ) {
+			var username = $stateParams.username
+		} else {
+			var username = item.user.username ? item.user.username : item.user
+		}
+
+		var slug = item.slug ? item.slug : item._id
+
+		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/#/" + username + "/" + item.stream + "/" + slug
+
+		return singlePostUrl
+	}
+
+	$scope.shareTwitter = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
+
+		$http.get( 'api/shorten-url', { params: {
+			url: singlePostUrl
+		}})
+		.then( function ( response, error ){
+			if ( error ) return $flash.error = "Problem sharing link :("
+			var tweetMessage = $filter( 'limitTo' )( item.title, 99, 0) + "... " + response.data
+
+			window.open( 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetMessage) + '&via=getslipstream', '_blank')
+		})
+	}
+
+	$scope.shareToFacebook = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
+
+		var facebookUrl = 'https://www.facebook.com/dialog/share?app_id=1416653888663542&display=popup&href=' + encodeURIComponent( singlePostUrl ) + '&redirect_uri=' + encodeURIComponent( $window.location )
+
+		console.log( facebookUrl )
+
+		$window.open( facebookUrl, '_blank' )
 	}
 
 }])
