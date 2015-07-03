@@ -288,10 +288,11 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 
 .navbar-header { display: inline !important; } 
 
-#header { white-space: nowrap;
+#header { white-space: no-wrap;
 	.first-initial { color: white; background: #D4D4D5; border-radius: 50%; width: 30px; height: 30px; display: inline-block; line-height: 25px; vertical-align: middle; }
 	.navbar-brand { padding-top: 10px;
-		#logo { height: 30px; } }
+		span { float: right; vertical-align: middle; line-height: 32px; font-style: italic; font-weight: 300; padding-left: 5px; }
+		#logo { height: 30px; float: left; } }
 
 	/* Search stuff */
 
@@ -433,7 +434,9 @@ footer { bottom: 0; position: absolute; height: 25px; }
 
 /* landing */
 
-.btn-landing-register { }
+body.single { 
+	#header { margin-top: -20px; margin-bottom: 30px; }
+	.reader-container { margin-bottom: 30px; } }
 
 body.splash { font-family: $body-font; background-size: cover; background-attachment: fixed;
 	.splash-section { padding-bottom: 45px; padding-top: 45px; }
@@ -581,7 +584,7 @@ tags-input.ng-invalid .tags {
 
 @media only screen and (max-width : 768px) {
 
-	#header {
+	#header { 
 		.add-container { margin-right: 10px; } }
 
 	.container { padding: 0 5px !important; }

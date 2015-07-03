@@ -222,7 +222,10 @@ exports.add = function ( req, res ) {
 /*
 Allows admins to edit posts. 
 
-INPUT: Edited text and valid user token.
+INPUT: An object containing:
+
+	{ id: ( _id or users._id of the content to edit. ),
+	  changes: { an object with any fields and values that should be changed } }
 */
 exports.edit = function ( req, res ) {
 	

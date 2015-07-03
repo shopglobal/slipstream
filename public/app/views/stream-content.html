@@ -37,14 +37,14 @@
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="admin-edit-thumbnail-dropdown">
 								<li ng-repeat=" image in item.images track by $index">
-									<img ng-src="{{ image.thumb }}" alt="" style="width: 200px; height: auto; " class="cursor-pointer" ng-click="adminEditThumb( { item: item, thumbnail: $index } )">
+									<img ng-src="{{ image.thumb }}" alt="" style="width: 200px; height: auto; " class="cursor-pointer" ng-click="adminEditThumb( { id: item._id, thumbnail: $index } )">
 								</li>
 							</ul>
 						</div>
 
-						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-hide=" item.thumbnail ">
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[0].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" !item.thumbnail && item.stream == 'read' ">
 
-						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.stream == 'read' " ng-show=" item.thumbnail ">
+						<img ng-click="openReaderModal( item )" ng-src="{{ item.images[ item.thumbnail ].thumb }}" class="stream-article-image cursor-pointer col-md-3 col-xs-12 no-padding" ng-show=" item.thumbnail && item.stream == 'read' ">
 					</span>					
 
 					<div class="item-description col-xs-12 no-padding" ng-class="{ 'col-md-8' : item.stream == 'read', 'col-md-12' : item.stream != 'read' }">
@@ -76,7 +76,7 @@
 				<div class="share-links col-xs-offset-6">
 					<button ng-show="role == 'admin'" class="btn btn-grey no-border" ng-click="openReaderModal( item )"><span class="glyphicon glyphicon-book cursor-pointer"></span></button>
 
-					<ng-include src="'app/views/menu-share.html'"></ng-include>
+					<ng-include src="'menu-share.html'"></ng-include>
 
 					<span class="dropdown user-menu">
 					  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
@@ -161,4 +161,20 @@
 	</div>
 	
 	<span ng-show="item.private" class="glyphicon glyphicon-lock"></span>
+</script>
+
+<script type="text/ng-template" id="menu-share.html">
+	<span class="dropdown menu-share">
+		<button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-share" data-toggle="dropdown" aria-expanded="true">
+			<span class="glyphicon glyphicon-send glyphicon-grey"></span>
+			<span class="sr-only">
+			Toggle Item Share Menu
+		</span>
+		</button>
+		
+		<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="item-options">
+			<li role="presentation"><a ng-click="shareTwitter( item )" class="cursor-pointer"><span class="icon-logo icon-twitter"></span> Share to Twitter</a></li>
+			<li role="presentation"><a  ng-click="shareToFacebook( item )" class="cursor-pointer"><span class="icon-logo icon-facebook"></span> Share to Facebook</a></li>
+		</ul>
+	</span>
 </script>
