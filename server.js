@@ -6,7 +6,8 @@ var http = require('http'),
 	bodyParser = require('body-parser'),
 	secret = require('./config/secretConfig'),
 	jwt = require('jsonwebtoken'),
-	morgan = require('morgan')
+	morgan = require('morgan'),
+	contentController = require( './controllers/contentController' )
 
 var indexPath = path.join( __dirname, process.env.PUBLIC_FOLDER )
 
@@ -19,6 +20,7 @@ app
 	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
 	.use( bodyParser.json( { limit: '50mb' } ) )
 	.use( '/api', require('./routes/usersRoute.js') )
+	.use( '/', require( './routes/home' ) )
 	.use( express.static( indexPath ) )
 	.on( 'error', function( error ){
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
