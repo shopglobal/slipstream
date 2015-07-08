@@ -21,7 +21,7 @@ var Content = require( '../models/contentModel' ),
 
 Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
 
-function findUserid ( username ) {
+var findUserId = function ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
 		var query = mongoose.Types.ObjectId.isValid( username ) ? { _id: username } : { username: username }
 		
@@ -37,7 +37,9 @@ function findUserid ( username ) {
 	})		
 }
 
-function projectContent ( slug ) {
+exports.findUserId = findUserId
+
+var projectContent = function ( slug ) {
 	return Q.Promise( function ( resolve, reject, notify ) {
 		
 		if ( mongoose.Types.ObjectId.isValid( slug ) ) {
@@ -68,12 +70,16 @@ function projectContent ( slug ) {
 			} }
 		] ).exec()
 		.then( function ( result ) {
+			if ( !result ) throw new Error( "No result. " )
+			
 			resolve( result )
 		}, function ( error ) {
 			reject( error )
 		})
 	})
 }
+
+exports.projectContent = projectContent
 
 // adds content to users stream.
 
@@ -319,7 +325,7 @@ exports.stream = function ( req, res ) {
 		})
 	}
 	
-	findUserid( req.params.username )
+	findUserId( req.params.username )
 	.then( function ( user ) {
 		User.findOne( { token: req.token } )
 		.then( function ( result ) {
@@ -375,7 +381,7 @@ exports.single = function ( req, res ) {
 	
 	var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'
 	
-	findUserid( req.params.username )
+	findUserId( req.params.username )
 	.then( function ( userid ) {
 		User.findOne( { token: userToken } )
 		.then( function ( result ) {
