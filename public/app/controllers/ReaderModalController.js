@@ -1,4 +1,4 @@
-app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', '$window', '$filter', function( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams, $window, $filter ){
+app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', '$window', '$filter', '$state', function( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams, $window, $filter, $state ){
 	
 	var modalDialog = document.getElementsByClassName( 'modal-dialog' )
 
