@@ -30,7 +30,7 @@ function createOpenGraph ( result ) {
 
 router.get( '/:user/:stream/:slug', function( req, res, next ) {
 	
-	if ( req.headers['user-agent'] === 'facebookexternalhit/1.1' ) {
+	if ( req.headers['user-agent'].indexOf( 'facebook' ) != -1 ) {
 		/*var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'*/
 		
 		if ( !req.params.user && !req.params.stream && !req.params.slug ) return next()
