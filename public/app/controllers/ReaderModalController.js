@@ -14,6 +14,8 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 	$scope.newTitle = ''
 
+	$scope.$state = $state
+
 	/*
 	check if the article is currently processing. If it is, check again. This will make the app check each time an add modal is openened instead of only after refreshign the whole app.
 	*/

@@ -1,11 +1,14 @@
 app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
-	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
-		console.log( "hello " + $state.current.name )
-		mixpanel.track( "Visit", {
-			state: $state.current.name ? $state.current.name : ''
-		})
-	}
+	/*Attemps to try track any visit in mixpanel as an event called Visit with property state to show the current state.*/
+
+/*	$scope.$watch( '$state.current.name', function ( newValue, oldValue ) {
+		if ( newValue != oldValue ) {
+			$window.mixpanel.track( "Visit", {
+				state: $window.location.pathname
+			})
+		}
+	})*/
 
 	$scope.appName = "Slipstream"
 

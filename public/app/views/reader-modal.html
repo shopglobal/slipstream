@@ -45,7 +45,7 @@
 
 					<li ng-hide=" $state.includes( 'landing.login' )  ">
 						<a href="">
-							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ng-click="$state.go( 'landing.login' )">
+							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ui-sref='landing.login' ui-sref-opts="{reload: true}">
 								Login
 							</button>
 						</a>
