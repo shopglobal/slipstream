@@ -26,13 +26,14 @@ exports.popular = function( req, res) {
 				title: { $first: '$title' },
 				description: { $first: '$description' },
 				images: { $first: '$images' },
+				thumbnail: { $first: '$thumbnail' },
 				user: { $first: '$users.user' },
 				stream: { $first: '$users.stream' },
 				text: { $first: '$text' },
 				added: { $first: '$users.added' },
 				url: { $first: '$url' },
-				saveCount: { $sum: 1 },
-			 	thumbnail: { $first: '$thumbnail' }
+				slug: { $first: '$slug' },
+				saveCount: { $sum: 1 }
 			} },
 			{ $sort: { saveCount: -1, added: -1 } },
 			{ $skip: skip },

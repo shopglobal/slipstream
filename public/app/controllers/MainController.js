@@ -1,11 +1,14 @@
 app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
 
-	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
-		console.log( "hello " + $state.current.name )
-		mixpanel.track( "Visit", {
-			state: $state.current.name ? $state.current.name : ''
-		})
-	}
+	/*Attemps to try track any visit in mixpanel as an event called Visit with property state to show the current state.*/
+
+/*	$scope.$watch( '$state.current.name', function ( newValue, oldValue ) {
+		if ( newValue != oldValue ) {
+			$window.mixpanel.track( "Visit", {
+				state: $window.location.pathname
+			})
+		}
+	})*/
 
 	$scope.appName = "Slipstream"
 
@@ -30,6 +33,14 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 		ajaxURL: '/api/feedback',
 		postBrowserInfo: true,
 		postURL: true
+	}
+
+	/*FaceBook Open Graph default data*/
+
+	$rootScope.OG = {
+		image: "http://slipstream-dev.s3.amazonaws.com/meta_image.png",
+		title: "Slipstream",
+		content: "Slipstream is the most delightful way to save all your favourite content, enjoy it again later, and discover more. Three distinct feeds separate content by media type so that you don't have to go looking. When you're in the mood to watch something, videos are all conveniently in one place, same goes for reading and listening. Slipstream isn't about gaining followers, so there's no incentive to post more frequently - making Discovery on Slipstream it's best feature. See what other users have been collecting that actually matters to them. We're building a platform for all the best content on the web to call home."
 	}
 
 	// logs in. signs in and returns the user's token into her

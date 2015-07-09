@@ -1,4 +1,4 @@
-app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', 'Following', function( $rootScope, $stateParams, $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover, Following ) {
+app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$state', '$urlRouter', '$http', '$window', '$location', '$modal', 'flash', 'Content', 'Search', 'Discover', 'Following', '$filter', function( $rootScope, $stateParams, $scope, $state, $urlRouter, $http, $window, $location, $modal, $flash, Content, Search, Discover, Following, $filter ) {
 
 	$window.scrollTo( 0, 0 )
 
@@ -281,5 +281,46 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	
+	function getSinglePostUrl ( item ) {
+		if ( $scope.mode == 'mystream' ) {
+			var username = $stateParams.username
+		} else {
+			var username = item.user.username ? item.user.username : item.user
+		}
+
+		var slug = item.slug ? item.slug : item._id
+
+		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/" + username + "/" + item.stream + "/" + slug
+
+		return singlePostUrl
+	}
+
+	$scope.goToSinglePost = function ( item ) {
+		$window.open( getSinglePostUrl( item ) )
+	}
+
+	$scope.shareTwitter = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
+
+		$http.get( 'api/shorten-url', { params: {
+			url: singlePostUrl
+		}})
+		.then( function ( response, error ){
+			if ( error ) return $flash.error = "Problem sharing link :("
+			var tweetMessage = $filter( 'limitTo' )( item.title, 99, 0) + "... " + response.data
+
+			window.open( 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetMessage) + '&via=getslipstream', '_blank')
+		})
+	}
+
+	$scope.shareToFacebook = function ( item ) {
+		var singlePostUrl = getSinglePostUrl( item )
+
+		var facebookUrl = 'https://www.facebook.com/dialog/share?app_id=1416653888663542&display=popup&href=' + encodeURIComponent( singlePostUrl ) + '&redirect_uri=' + encodeURIComponent( $window.location )
+
+		console.log( facebookUrl )
+
+		$window.open( facebookUrl, '_blank' )
+	}
+
 }])
