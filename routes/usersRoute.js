@@ -60,6 +60,9 @@ router.route('/add')
 		else { contentController.add( req, res ) }
 	})
 
+router.route( '/shorten-url' )
+	.get( contentController.shortenUrl )
+
 router.route( '/search' )
 	.get( userController.checkAuthorization, contentController.search )
 

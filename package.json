@@ -66,6 +66,7 @@
     "needle": "^0.9.1",
     "newrelic": "^1.18.1",
     "node": "0.0.0",
+    "node-bitlyapi": "^0.4.0",
     "node-readability": "^1.0.1",
     "pause-stream": "0.0.11",
     "q": "^1.1.2",
@@ -82,6 +83,7 @@
     "uglify-js": "^2.4.17",
     "underscore": "^1.7.0",
     "url-expand": "^0.1.5",
+    "validator": "^3.40.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1",
     "xmlbuilder": "^2.6.2"

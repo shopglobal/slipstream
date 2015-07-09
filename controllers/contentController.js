@@ -8,14 +8,24 @@ var Content = require( '../models/contentModel' ),
 	log = require( '../helpers/logger.js' ),
 	bodyParser = require( 'body-parser' ),
 	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+	validator = require( 'validator' ),
 	Algolia = require( 'algoliasearch' ),
 	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
 	index = algolia.initIndex( 'Contents' ),
-	urlExpand = require( 'url-expand' )
+	urlExpand = require( 'url-expand' ),
+	BitlyApi = require( 'node-bitlyapi' ),
+	Bitly = new BitlyApi( {
+		client_id: process.env.BITLY_CLIENT_ID,
+		client_secret: process.env.BITLY_CLIENT_SECRET
+	})
 
-function findUserid ( username ) {
+Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
+
+var findUserId = function ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
-		User.findOne( { username: username } )
+		var query = mongoose.Types.ObjectId.isValid( username ) ? { _id: username } : { username: username }
+		
+		User.findOne( query )
 		.then( function( result ) {
 			if ( !result ) return reject( new Error( { message: "No user found" } ) )
 			
@@ -27,14 +37,16 @@ function findUserid ( username ) {
 	})		
 }
 
-function projectContent ( options ) {
+exports.findUserId = findUserId
+
+var projectContent = function ( slug ) {
 	return Q.Promise( function ( resolve, reject, notify ) {
 		
-		if ( options.id ) {
-			var objectid = mongoose.Types.ObjectId( options.id )
-			var match = { $match: { 'users._id': objectid } }
-		} else if ( options.slug ) {
-			var match = { $match: { slug: options.slug } }
+		if ( mongoose.Types.ObjectId.isValid( slug ) ) {
+			var objectid = mongoose.Types.ObjectId( slug )
+			var match = { $match: { $or: [ { 'users._id': objectid }, { _id: objectid } ] } }
+		} else  {
+			var match = { $match: { slug: slug } }
 		}
 		
 		Content.aggregate( [
@@ -58,12 +70,16 @@ function projectContent ( options ) {
 			} }
 		] ).exec()
 		.then( function ( result ) {
+			if ( !result ) throw new Error( "No result. " )
+			
 			resolve( result )
 		}, function ( error ) {
 			reject( error )
 		})
 	})
 }
+
+exports.projectContent = projectContent
 
 // adds content to users stream.
 
@@ -212,7 +228,10 @@ exports.add = function ( req, res ) {
 /*
 Allows admins to edit posts. 
 
-INPUT: Edited text and valid user token.
+INPUT: An object containing:
+
+	{ id: ( _id or users._id of the content to edit. ),
+	  changes: { an object with any fields and values that should be changed } }
 */
 exports.edit = function ( req, res ) {
 	
@@ -306,7 +325,7 @@ exports.stream = function ( req, res ) {
 		})
 	}
 	
-	findUserid( req.params.username )
+	findUserId( req.params.username )
 	.then( function ( user ) {
 		User.findOne( { token: req.token } )
 		.then( function ( result ) {
@@ -336,7 +355,8 @@ exports.stream = function ( req, res ) {
 						text: '$text',
 						processing: '$processing',
 						tags: '$users.tags',
-						private: '$users.private'
+						private: '$users.private',
+						slug: '$slug'
 					} },
 					{ $sort: { added: -1 } },
 					{ $skip: skip },
@@ -361,28 +381,21 @@ exports.single = function ( req, res ) {
 	
 	var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'
 	
-	findUserid( req.params.username )
+	findUserId( req.params.username )
 	.then( function ( userid ) {
 		User.findOne( { token: userToken } )
 		.then( function ( result ) {
-			/*Tries to determine if ID is slug or objectID*/
-			if ( req.query.id ) {
-				var options = { id: req.query.id }
-				console.log( options )
-			} else if ( req.query.slug ) {
-				var options = { slug: req.query.slug }
-				console.log( options )
-			}
+			var option = req.query.id ? req.query.id : req.query.slug
 			
 			if ( !result || result._id != userid ) {
-				projectContent( options )
+				projectContent( option )
 				.then( function ( result ) {
 					if ( result.private == true ) return res.status( 500 ).json( "Can't find that content." )
 										
 					return res.status( 200 ).json( result )
 				})
 			} else {
-				projectContent( options )
+				projectContent( option )
 				.then( function ( result ) {
 					return res.status( 200 ).json( result )
 				})
@@ -586,8 +599,10 @@ exports.following = function ( req, res ) {
 			{ $project: { 
 				_id: '$users._id',
 				title: '$title', 
-				url: '$url', 
+				url: '$url',
+				slug: '$slug',
 				images: '$images',
+				thumbnail: '$thumbnail', 
 				description: '$description',
 				added: '$users.added',
 				user: '$users.user',
@@ -670,6 +685,30 @@ exports.flag = function ( req, res ) {
 			return res.status( 500 ).json( error.message )
 		})
 	}, function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+exports.shortenUrl = function ( req, res ) {
+	
+	Q.try( function () {
+		if ( validator.isURL( req.query.url ) ) {
+			return req.query.url
+		} else {
+			throw new Error( "That doesn't look like a valid URL." )
+		}
+	})
+	.then( function ( url ) {
+		Bitly.shorten( { longUrl: url }, function( err, result ) {
+			if ( err ) throw new Error( err )
+			
+			jsonResult = JSON.parse( result )
+			
+			return res.status( 200 ).json( jsonResult.data.url )
+		})
+	})
+	.catch( function ( error ) {
 		console.log( error )
 		return res.status( 500 ).json( error.message )
 	})
