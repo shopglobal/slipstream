@@ -16,12 +16,12 @@ var indexPath = path.join( __dirname, '..public/index.html')
 function createOpenGraph ( result ) {
 	return Q.Promise( function ( resolve, reject, modify ) {
 		
-		var openGraphHtml = "<html><head><title>" + encodeURIComponent( result.title ) + "</title>" +
+		var openGraphHtml = "<html><head><title>" + result.title + "</title>" +
 							"<meta property='og:site_name' content='Slipstream' />" +
 							"<meta property='og:image' content='" + result.images[ result.thumbnail ? result.thumbnail : 0 ].thumb + "' />" +
-							"<meta property='og:title' content='" + encodeURIComponent( result.title ) + "' />" +
-							"<meta property='og:description' content='" + encodeURIComponent( result.description ) + "' />" +
-							"<meta property='og:type' content='article' />"
+							"<meta property='og:title' content='" + result.title.replace(/\"/g,'&quot;') + "' />" +
+							"<meta property='og:description' content='" + result.description.replace(/\"/g,'&quot;') + "' />" +
+							"<meta property='og:type' content='article' /></head></html>"
 	
 		return resolve( openGraphHtml )
 		
@@ -37,9 +37,12 @@ router.get( '/:user/:stream/:slug', function( req, res, next ) {
 
 		contentController.findUserId( req.params.user )
 		.then( function ( userId ) {
+			if ( !userId ) return next()
 			
 			contentController.projectContent( req.params.slug )
 			.then( function ( item ) {
+				if ( !item ) return next()
+				
 				createOpenGraph( item[0] )
 				.then( function ( OG ) {
 					return res.status( 200 ).send( OG )
