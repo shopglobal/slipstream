@@ -91,7 +91,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 		var slug = item.slug ? item.slug : item._id
 
-		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/" + username + "/" + item.stream + "/" + slug
+		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/#/" + username + "/" + item.stream + "/" + slug
 
 		return singlePostUrl
 	}
