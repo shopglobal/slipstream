@@ -20,15 +20,14 @@ app
 	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
 	.use( bodyParser.json( { limit: '50mb' } ) )
 	.use( '/api', require('./routes/usersRoute.js') )
-	.use( '/', require( './routes/home' ) )
 	.use( express.static( indexPath ) )
 	.on( 'error', function( error ){
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
 	   console.log( error.stack )
 	})
-	.use( function( req, res ) {
+	/*.use( function( req, res ) {
   		return res.redirect(req.protocol + '://' + req.get('Host') + '/#' + req.url)
-	} )
+	} )*/
 
 http
 	.createServer( app ).listen( process.env.PORT )
