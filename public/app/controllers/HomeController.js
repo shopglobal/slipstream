@@ -249,7 +249,7 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		buttonImageMini: "images/ss_green.png",		
 		menuOptionBottom: { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" },
 		menuOptions: [ 
-			{ url: "#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
+			{ url: "/#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
 		]
 	}
 
