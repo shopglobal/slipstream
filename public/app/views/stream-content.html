@@ -8,7 +8,7 @@
 				<h2	ng-show=" role == 'admin' "
 					inline-edit="item.title" 
 					inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer text-grey icon-admin'></span>"
-					inline-edit-callback="adminEditTitle( newValue, { id: item._id } )"
+					inline-edit-callback="adminEditTitle( newValue, item )"
 					inline-edit-on-click
 				></h2>
 				<h2 class="title-stream-item" class="cursor-pointer title-stream-item" ng-show=" role != 'admin' " ng-click="openReaderModal( item )">

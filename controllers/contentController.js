@@ -418,6 +418,21 @@ exports.single = function ( req, res ) {
 		return res.status( 500 ).json( error.message )
 	})
 }
+
+exports.singleManifesto = function ( req, res ) {
+	
+	Content.findOne( { _id: process.env.MANIFESTO_ID } )
+	.then( function ( result ) {
+		if ( !result ) throw new Error( "Can't find that content." )
+		
+		return res.status( 200 ).json( result )
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		
+		return res.status( 500 ).json( error.message )
+	})	
+}
 	
 exports.delete = function ( req, res ) {
 	
