@@ -104,6 +104,9 @@ router.route('/stream/:username/:stream')
 		contentController.delete( req, res )
 	})
 
+router.route( '/single/manifesto' )
+	.get( contentController.singleManifesto )
+
 router.route( '/single/:username')
 	.get( contentController.single )
 

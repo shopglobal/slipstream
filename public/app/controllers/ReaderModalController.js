@@ -68,7 +68,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 		postId: $scope.item._id
 	}*/
 
-	$scope.adminEditTitle = function ( newValue ) {
+/*	$scope.adminEditTitle = function ( newValue ) {
 		$http.post( 'api/content/edit', {
 			id: $scope.item._id,
 			changes: {
@@ -80,7 +80,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 
 			$flash.success = response.data
 		})
-	}
+	}*/
 	
 	function getSinglePostUrl ( item ) {
 		if ( $scope.mode == 'mystream' ) {
