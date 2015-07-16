@@ -163,6 +163,10 @@ a { color: $green;
 
 .btn-back { position: absolute; top: -125px; }
 
+.add-button { font-size: 20; position: relative; display: block; height: 20px; width: 20px; border: 3px solid $green; border-radius: 5px; background: transparent; font-weight: 700;
+		& span { position: absolute; top: 7px; padding: 0; left: 2.5px; line-height: 0; font-size: 20; color: $green; } 
+		&.add-button-sm { font-size: 13px; border-width: 2px; padding: 0px 6.5px; } }
+
 .font-sans-serif { font-family: $body-font; }
 
 .input-white { background: transparent; border-color: white; color: white;
@@ -170,7 +174,8 @@ a { color: $green;
 
 .input-green { background: transparent; border: 2px solid $green; color: $dark-text;
 	&::-webkit-input-placeholder { color: $dark-text; }
-	&:focus { box-shadow: none; border-color: $green; outline: none; } }
+	&:focus { box-shadow: none; border-color: $green; outline: none; }
+	&.ng-invalid { border: 2px solid $red; } }
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
@@ -243,7 +248,8 @@ a { color: $green;
 
 .no-padding { padding-left: 0; padding-right: 0; }
 
-.input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; }
+.input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; 
+	&.ng-invalid { border-width: 0 0 2px 0; } }
 
 .navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
 
@@ -369,7 +375,7 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 	.add-container { 
 		&:hover > a, &:hover > a:visited, a:visited { color: white; } 
 		a { padding: 7px; }
-		.add-button { font-size: 24px; padding: 5px 8px; border: 3px solid white; } }
+		.add-button { font-size: 24px; padding: 5px 8px; border: 3px solid white; height: auto; width: auto; } }
 	.navbar-brand { color: white;
 		&:hover { color: white; } }
 	.user-menu-button { padding: 12px 15px;
@@ -388,6 +394,13 @@ footer { bottom: 0; position: absolute; height: 25px; }
 // modals
 
 .modal-cover { position: absolute; top: -15px; left: 0px; height: 100%; width: 100%; z-index: 5000; }
+
+.modal-email { 
+	h1 { padding-bottom: 30px; }
+	.btn-add-more { float: left; margin-right: 8px;
+		&> span { font-weight: 700; } } 
+	.btn-share { margin-top: -36px; }
+	.modal-content { box-shadow: none; background: rgba( 255, 255, 255, .98); } }
 
 .add-modal { background-color: rgba( 41, 41, 59, 0.70);
 	.done-button { margin: 0; padding: 0; position: absolute; right: 0; bottom: 0; }

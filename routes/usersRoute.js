@@ -83,6 +83,9 @@ router.route('/tags')
 router.route( '/content/private' )
 	.post( userController.checkAuthorization, contentController.private )
 
+router.route( '/content/share' )
+	.post( userController.checkAuthorization, contentController.shareByEmail )
+
 router.route( '/content/edit' )
 	.post( userController.checkAuthorization, contentController.edit )
 
