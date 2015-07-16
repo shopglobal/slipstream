@@ -196,6 +196,19 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
+	$scope.openShareModal = function ( item ) {
+		var modalInstance = $modal.open( {
+			templateUrl: "app/views/email-modal.html",
+			windowClass: "modal-email",
+			controller: "EmailModalController",
+			resolve: {
+				item: function() {
+					return item
+				}
+			}
+		})
+	}
+
 	$scope.addContent = function ( url ) {
 		$http
 			.post( '/api/add', {
@@ -265,6 +278,10 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/#/" + username + "/" + item.stream + "/" + slug
 
 		return singlePostUrl
+	}
+
+	$rootScope.getSinglePostUrl = function ( item ) {
+		return getSinglePostUrl( item )
 	}
 
 	$scope.goToSinglePost = function ( item ) {
