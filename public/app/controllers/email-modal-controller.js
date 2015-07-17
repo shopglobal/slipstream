@@ -6,8 +6,18 @@ app.controller('EmailModalController', ['$scope', '$modalInstance', 'item', 'fla
 		$scope.choices.push( { email: "" } )
 	}
 
+	$scope.cancel = function () {
+		$modalInstance.close()
+	}
+
 	$scope.sendEmails = function ( emailObj ) {
-		var validEmails = angular.copy( emailObj )
+		var filledEmails = emailObj.filter( function ( each ) {
+			if ( each.email != "" ) {
+				return each
+			}
+		})
+
+		var validEmails = angular.copy( filledEmails )
 
 		console.log( item )
 
@@ -31,7 +41,7 @@ app.controller('EmailModalController', ['$scope', '$modalInstance', 'item', 'fla
 
 					$flash.success = response.data
 
-					$scope.choices = [ { email: "" } ]
+					$modalInstance.close()
 				})
 			}
 		})
