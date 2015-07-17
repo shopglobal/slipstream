@@ -396,7 +396,8 @@ footer { bottom: 0; position: absolute; height: 25px; }
 .modal-cover { position: absolute; top: -15px; left: 0px; height: 100%; width: 100%; z-index: 5000; }
 
 .modal-email { 
-	h1 { padding-bottom: 30px; }
+	h1 { padding-bottom: 30px; font-size: 30px; }
+	.btn-x { position: absolute; top: 10; right: -13px; }
 	.btn-add-more { float: left; margin-right: 8px;
 		&> span { font-weight: 700; } } 
 	.btn-share { margin-top: -36px; }
