@@ -748,8 +748,8 @@ exports.shareByEmail = function ( req, res ) {
 			var email = {
 				from: 'Slipstream <welcome@slipstreamapp.com>',
 				to: each,
-				subject: user.username + " shared " + req.body.title + " with you on Slipstream.",
-				html: shareHtml[0] + req.body.title + shareHtml[1] + req.body.url + shareHtml[2]
+				subject: "Someone you know shared this with you on Slipstream!",
+				html: shareHtml[0] + user.username + shareHtml[1] + req.body.title + shareHtml[2] + req.body.url + shareHtml[3]
 			}
 
 			mailgun.messages().send( email, function ( err, body ) {
