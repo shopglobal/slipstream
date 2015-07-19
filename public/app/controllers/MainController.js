@@ -163,16 +163,37 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 			templateUrl: "app/views/reader-modal.html",
 			windowClass: 'reader-modal',
 			controller: function ( $scope ) {
+				/*	Used when an admin wants to make a manual edit to a post. A user must be authorized as an admin on the back-end for this to do antything*/
+				$scope.adminEdit = false
+
+				$scope.adminMode = function() {
+					$scope.adminEdit = !$scope.adminEdit
+				}
+
+				$scope.saveAdminEdit = function () {
+					$http.post( '/api/content/edit', { 
+						id: $scope.item._id, 
+						changes: { text: $scope.item.text }
+					})
+					.then( function ( response, error ) {
+						if ( error ) return $flash.error = error
+
+						$flash.success = response.data
+						$modalInstance.close()
+					})
+				}
+
 				$scope.closeModal = function() {
 					modalInstance.close()
 				}
 
-				$http.get( '/app/views/manifesto.json' )
+				$http.get( '/api/single/manifesto' )
 				.success( function ( data ) {
-					$scope.article = data
+					$scope.item = data
 				})
 				.error( function ( error ) {
 					console.log( error )
+					$flash.error = error
 				})
 			}
 		})
@@ -194,6 +215,34 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 			.error( function ( error ) {
 				$flash.error = error
 			})
+	}
+
+	$rootScope.adminEditThumb = function ( object ) {
+		$http.post( 'api/content/edit', {
+			id: object.id,
+			changes: {
+				thumbnail: object.thumbnail
+			}
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
+	}
+
+	$rootScope.adminEditTitle = function ( newValue, object ) {
+		$http.post( 'api/content/edit', {
+			id: object._id,
+			changes: {
+				title: newValue
+			}
+		})
+		.then( function ( response, error ) {
+			if ( error ) return $flash.error = error
+
+			$flash.success = response.data
+		})
 	}
 
 }])
