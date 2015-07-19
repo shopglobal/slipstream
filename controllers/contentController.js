@@ -2,6 +2,8 @@ var Content = require( '../models/contentModel' ),
 	User = require( '../models/userModel' ),
 	getUser = require( '../helpers/get-user' ),
 	saveImage = require( '../helpers/save-image' ),
+	fs = require( 'fs' ),
+	path = require( 'path' ),
 	request = require( 'request' ),
 	Q = require( 'q' ),
 	_ = require( 'underscore' ),
@@ -18,6 +20,10 @@ var Content = require( '../models/contentModel' ),
 		client_id: process.env.BITLY_CLIENT_ID,
 		client_secret: process.env.BITLY_CLIENT_SECRET
 	})
+
+var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
+	mailgunDomain = "slipstreamapp.com",
+	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
 
 Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
 
@@ -418,6 +424,21 @@ exports.single = function ( req, res ) {
 		return res.status( 500 ).json( error.message )
 	})
 }
+
+exports.singleManifesto = function ( req, res ) {
+	
+	Content.findOne( { _id: process.env.MANIFESTO_ID } )
+	.then( function ( result ) {
+		if ( !result ) throw new Error( "Can't find that content." )
+		
+		return res.status( 200 ).json( result )
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		
+		return res.status( 500 ).json( error.message )
+	})	
+}
 	
 exports.delete = function ( req, res ) {
 	
@@ -706,6 +727,39 @@ exports.shortenUrl = function ( req, res ) {
 			jsonResult = JSON.parse( result )
 			
 			return res.status( 200 ).json( jsonResult.data.url )
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+/*INPUTS: req.body.url, req.body.title, req.body.recipeints (array) and authorization token in header*/
+
+exports.shareByEmail = function ( req, res ) {
+	var shareHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/share-by-email.html' ) ).toString().split( '<!-- Breakpoint -->' )
+	
+	User.findOne( { token: req.token } )
+	.then( function ( user ) {
+		
+		req.body.recipients.forEach( function ( each, index ) {
+			
+			var email = {
+				from: 'Slipstream <welcome@slipstreamapp.com>',
+				to: each,
+				subject: "Someone you know shared this with you on Slipstream!",
+				html: shareHtml[0] + user.username + shareHtml[1] + req.body.title + shareHtml[2] + req.body.url + shareHtml[3]
+			}
+
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) throw new Error( err )
+			})
+			
+			if ( index === req.body.recipients.length - 1 ) {
+				return res.status( 200 ).json( "Sending all emails." )
+			}
+			
 		})
 	})
 	.catch( function ( error ) {

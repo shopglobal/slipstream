@@ -16,8 +16,8 @@ var User = require( '../models/userModel' ),
 	randomKey = require( 'random-key' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
-	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
-	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomiain })
+	mailgunDomain = "slipstreamapp.com",
+	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
 
 //
 // check the username and password and returns token if verified

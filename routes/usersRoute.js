@@ -83,6 +83,9 @@ router.route('/tags')
 router.route( '/content/private' )
 	.post( userController.checkAuthorization, contentController.private )
 
+router.route( '/content/share' )
+	.post( userController.checkAuthorization, contentController.shareByEmail )
+
 router.route( '/content/edit' )
 	.post( userController.checkAuthorization, contentController.edit )
 
@@ -103,6 +106,9 @@ router.route('/stream/:username/:stream')
 	.delete( userController.checkAuthorization, function ( req, res ) {
 		contentController.delete( req, res )
 	})
+
+router.route( '/single/manifesto' )
+	.get( contentController.singleManifesto )
 
 router.route( '/single/:username')
 	.get( contentController.single )
