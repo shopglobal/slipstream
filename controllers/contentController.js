@@ -29,7 +29,9 @@ Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
 
 var findUserId = function ( username ) {
 	return Q.promise( function ( resolve, reject, notify ) {
-		var query = mongoose.Types.ObjectId.isValid( username ) ? { _id: username } : { username: username }
+		var query = username.match( /^[a-fA-F0-9]{24}$/ ) ? { _id: username } : { username: username }
+		
+		console.log( query )
 		
 		User.findOne( query )
 		.then( function( result ) {
