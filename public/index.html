@@ -96,4 +96,23 @@
 	
 </body>
 
+<script type="text/ng-template" id="splash-cta-signup.html">
+	<span ng-hide="showSignup">
+		<button class="btn btn-white btn-xlg btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
+	</span>
+	<form class="form-inline form-waitlist" ng-show="showSignup">
+		<span class="form-group">
+			<input type="email" class="input-white form-control input-font-lg" ng-model="user.email" placeholder="Email" />
+			
+			<!-- Desktop  -->
+
+			<button class="btn btn-white btn-lg hidden-xs" ui-sref="landing.register( { email: user.email } )">Sign Up</button>
+
+			<!-- Mobile -->
+			
+			<br class="visible-xs"><button class="btn btn-white btn-lg btn-block visible-xs" ui-sref="landing.register( { email: user.email } )">Sign Up</button>
+		</span>
+	</form>
+</script>
+
 </html>
