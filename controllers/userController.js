@@ -8,7 +8,6 @@ var User = require( '../models/userModel' ),
 	bcrypt = require( 'bcrypt-nodejs' ),
 	log = require( '../helpers/logger.js' ),
 	Q = require( 'q' ),
-	Betakey = require( '../models/betakey-model' ),
 	getUser = require( '../helpers/get-user' ),
 	fs = require( 'fs' ),
 	path = require( 'path' ),
@@ -59,27 +58,6 @@ exports.signUp = function ( req, res ) {
 		email: req.body.email
 	})
 	
-	function betakeyCheck () {
-		return Q.Promise( function ( resolve, reject, notify ) {
-			
-			Betakey.findOne( { key: req.body.betakey } )
-			.then( function ( betakey ) {
-				if ( !betakey ) return reject( new Error( "Could not find that key" ) )
-				
-				if ( betakey.used ) return reject( new Error( "Sorry, beta key aleady used." ) )
-				
-				betakey.update(
-					{ used: ( new Date() / 1 ).toFixed(), user: req.body.email } )
-				.then( function ( result ) {
-					console.log( "1. Beta key used: " + result )
-					return resolve( result )
-				}, function ( error ) {
-					return reject( new Error( "Error using beta key. Try again." ) )
-				})
-			})
-		})
-	}
-	
 	function postSignup ( object ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
 			var user = object.user
@@ -129,10 +107,7 @@ exports.signUp = function ( req, res ) {
 	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
 	.then( function ( result ) {
 		if ( !result ) {
-			betakeyCheck()
-			.then( function ( betakey ) {
-				return user.save()
-			})
+			user.save()
 			.then( function () {
 				postSignup( { user: user } )
 				.then( function ( user ) {
@@ -144,14 +119,11 @@ exports.signUp = function ( req, res ) {
 				return res.status( 500 ).json( error.message )
 			})
 		} else if ( ( !result.username || result.username == null || typeof result.username == undefined) && result ) {
-			betakeyCheck()
-			.then( function ( betakey ) {
-				result.username = user.username,
-				result.email = user.email,
-				result.joined = ( new Date() / 1000 ).toFixed()
-				
-				return result.save()
-			} )
+			result.username = user.username,
+			result.email = user.email,
+			result.joined = ( new Date() / 1000 ).toFixed()
+
+			result.save()
 			.then( function ( result ) {
 				postSignup( { user: result } )
 				.then( function ( user ) {
@@ -571,71 +543,6 @@ exports.exportEmails = function ( req, res ) {
 	})
 	.catch( function( error ) {
 		console.log( error )
-		return res.status( 500 ).json( error.message )
-	})
-}
-
-/*
-Inputs: An email address.
-
-Outputs: Generates and sends a betakey to user, and updates their status on the waitlist if they were on the beta waitlist.
-*/
-exports.sendBetakey = function ( req, res ) {
-	
-	function makeKey ( user ) {
-		return Q.Promise( function ( resolve, reject, notify ) {
-
-				var betakey = new Betakey( {
-					key: randomKey.generateBase30( 12 ),
-					added: ( new Date() / 1 ).toFixed(),
-					creator: user.email
-				} )
-
-				betakey.save( function ( err, result ) {				
-					if ( err ) reject( err )
-					
-					resolve( result )
-				})
-		})
-	}
-	
-	User.findOne( { token: req.token, role: 'admin' } )
-	.then( function ( user ) {
-		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
-		
-		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString().split( "<!-- Breakpoint -->" )
-		
-		makeKey( user )		
-		.then( function ( betakey ) {
-			var html = betakeyHtml[0] + betakey.key + betakeyHtml[1]
-			
-			console.log( html )
-			
-			var email = {
-				from: 'Slipstream <welcome@slipstreamapp.com>',
-				to: req.body.email,
-				subject: 'Your Slipstream Beta Key',
-				html: html.toString()
-			}
-			
-			mailgun.messages().send( email, function ( err, body ) {
-				if ( err ) { 
-					console.log( err )
-					return res.status( 500 ).json( "Could not mail betakey to user." )
-				}
-				
-				User.findOneAndUpdate( { email: req.body.email }, { waiting: false } )
-				.then( function ( result ) {
-					if ( !result ) return res.status( 200 ).json( "Invite sent to new email address." )
-					
-					return res.status( 200 ).json( "Invite sent to user on waitlist." )
-				})
-			})
-		})
-	})
-	.catch( function ( error ) {
-		console.log( error )
-		
 		return res.status( 500 ).json( error.message )
 	})
 }
