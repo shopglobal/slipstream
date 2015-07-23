@@ -20,22 +20,20 @@
 				</span>
 				<form class="form-inline form-waitlist" ng-show="showSignup">
 					<span class="form-group">
-						<input type="email" class="input-white form-control input-font-lg" ng-model="user.email" placeholder="Email">
+						<input type="email" class="input-white form-control input-font-lg" ng-model="user.email" placeholder="Email" />
 						
 						<!-- Desktop  -->
 
-						<button class="btn btn-white btn-lg hidden-xs" ng-click="waitlist()">Sign Up</button>
+						<button class="btn btn-white btn-lg hidden-xs" ui-sref="landing.register( { email: user.email } )">Sign Up</button>
 
 						<!-- Mobile -->
 						
-						<br class="visible-xs"><button class="btn btn-white btn-lg btn-block visible-xs" ng-click="waitlist()">Sign Up</button>
+						<br class="visible-xs"><button class="btn btn-white btn-lg btn-block visible-xs" ui-sref="landing.register( { email: 'bazinga' } )">Sign Up</button>
 					</span>
 				</form>
 			</script>
 
 			<ng-include src="'splash-cta-signup.html'"></ng-include>
-			<div class="clearfix"></div>
-			<a ui-sref="landing.register" ng-hide="showSignup">Have a beta key?</a>
 			<div class="clearfix"></div>
 		</div>
 	</div>

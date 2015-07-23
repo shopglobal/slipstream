@@ -39,6 +39,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/login.html'
 			})
 			.state( 'landing.register', {
+				params: { email: { value: '' } },
 				url: '/register',
 				templateUrl: 'app/views/register.html'
 			})
