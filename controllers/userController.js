@@ -639,3 +639,36 @@ exports.sendBetakey = function ( req, res ) {
 		return res.status( 500 ).json( error.message )
 	})
 }
+
+/* INPUTS: req.body.recipeints (array) and authorization token in header */
+
+exports.inviteByEmail = function ( req, res ) {
+	var inviteHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/invite-by-email.html' ) ).toString()
+	
+	User.findOne( { token: req.token } )
+	.then( function ( user ) {
+		
+		req.body.recipients.forEach( function ( each, index ) {
+			
+			var email = {
+				from: 'Slipstream <welcome@slipstreamapp.com>',
+				to: each,
+				subject: "You've been invited by " + user.username,
+				html: inviteHtml
+			}
+
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) throw new Error( err )
+			})
+			
+			if ( index === req.body.recipients.length - 1 ) {
+				return res.status( 200 ).json( "Sending all emails." )
+			}
+			
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}

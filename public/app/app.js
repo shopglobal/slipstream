@@ -60,6 +60,12 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/profile.html',
 				controller: 'ProfileController'
 			})
+			.state( 'app.invite', {
+				url: '/invite',
+				onEnter: function ( $rootScope ) {
+					$rootScope.openInviteModal()
+				}
+			})
 			.state( 'app.admin', {
 				url: '/admin',
 				templateUrl: 'app/views/app-admin.html',
