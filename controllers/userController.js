@@ -8,6 +8,7 @@ var User = require( '../models/userModel' ),
 	bcrypt = require( 'bcrypt-nodejs' ),
 	log = require( '../helpers/logger.js' ),
 	Q = require( 'q' ),
+	Betakey = require( '../models/betakey-model' ),
 	getUser = require( '../helpers/get-user' ),
 	fs = require( 'fs' ),
 	path = require( 'path' ),
@@ -542,6 +543,104 @@ exports.exportEmails = function ( req, res ) {
 		})
 	})
 	.catch( function( error ) {
+		console.log( error )
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+/*
+Inputs: An email address.
+
+Outputs: Generates and sends a betakey to user, and updates their status on the waitlist if they were on the beta waitlist.
+*/
+exports.sendBetakey = function ( req, res ) {
+	
+	function makeKey ( user ) {
+		return Q.Promise( function ( resolve, reject, notify ) {
+
+				var betakey = new Betakey( {
+					key: randomKey.generateBase30( 12 ),
+					added: ( new Date() / 1 ).toFixed(),
+					creator: user.email
+				} )
+
+				betakey.save( function ( err, result ) {				
+					if ( err ) reject( err )
+					
+					resolve( result )
+				})
+		})
+	}
+	
+	User.findOne( { token: req.token, role: 'admin' } )
+	.then( function ( user ) {
+		if ( !user ) return res.status( 500 ).json( "Permissions don't appear to allow that." )
+		
+		var betakeyHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/beta-key.html' ) ).toString().split( "<!-- Breakpoint -->" )
+		
+		makeKey( user )		
+		.then( function ( betakey ) {
+			var html = betakeyHtml[0] + betakey.key + betakeyHtml[1]
+			
+			console.log( html )
+			
+			var email = {
+				from: 'Slipstream <welcome@slipstreamapp.com>',
+				to: req.body.email,
+				subject: 'Your Slipstream Beta Key',
+				html: html.toString()
+			}
+			
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) { 
+					console.log( err )
+					return res.status( 500 ).json( "Could not mail betakey to user." )
+				}
+				
+				User.findOneAndUpdate( { email: req.body.email }, { waiting: false } )
+				.then( function ( result ) {
+					if ( !result ) return res.status( 200 ).json( "Invite sent to new email address." )
+					
+					return res.status( 200 ).json( "Invite sent to user on waitlist." )
+				})
+			})
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
+		
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+/* INPUTS: req.body.recipeints (array) and authorization token in header */
+
+exports.inviteByEmail = function ( req, res ) {
+	var inviteHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/invite-by-email.html' ) ).toString()
+	
+	User.findOne( { token: req.token } )
+	.then( function ( user ) {
+		
+		req.body.recipients.forEach( function ( each, index ) {
+			
+			var email = {
+				from: 'Slipstream <welcome@slipstreamapp.com>',
+				to: each,
+				subject: "You've been invited by " + user.username,
+				html: inviteHtml
+			}
+
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) throw new Error( err )
+			})
+			
+			if ( index === req.body.recipients.length - 1 ) {
+				return res.status( 200 ).json( "Sending all emails." )
+			}
+			
+		})
+	})
+	.catch( function ( error ) {
 		console.log( error )
 		return res.status( 500 ).json( error.message )
 	})
