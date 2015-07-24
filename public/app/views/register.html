@@ -2,22 +2,17 @@
 	<h2 class="text-center dark-text">Register</h2><br/>
 	<div class="form-group">
 		<label for="regUsername" class="dark-text">Username</label>
-		<input type="text" class="username form-control input-green input-font-lg" id="regUsername" ng-model="reg.username">
+		<input type="text" class="username form-control input-green input-font-lg" id="regUsername" ng-model="user.username">
 	</div>
 
 	<div class="form-group">
 		<label for="regPassword" class="dark-text">Password</label>
-		<input type="password" class="username form-control input-green input-font-lg" id="regPassword" ng-model="reg.password">
+		<input type="password" class="username form-control input-green input-font-lg" id="regPassword" ng-model="user.password">
 	</div>
 
 	<div class="form-group">
 		<label for="regEmail" class="dark-text">Email</label>
-		<input type="email" class="email form-control input-green input-font-lg" id="regEmail" ng-model="reg.email">
-	</div>
-
-	<div class="form-group">
-		<label for="regBetakey" class="dark-text">Beta key</label>
-		<input type="text" class="betakey form-control input-green input-font-lg" id="regBetakey" ng-model="reg.betakey">
+		<input type="email" class="email form-control input-green input-font-lg" id="regEmail" ng-model="user.email">
 	</div>
 	
 	<button class="btn btn-green-solid btn-block btn-lg btn-font-light" ng-click="register()">Register</button>

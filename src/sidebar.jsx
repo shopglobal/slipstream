@@ -2,10 +2,14 @@ var React = require( 'react' ),
 	LogoButton = require( './logo-button' )
 
 module.exports = React.createClass({
+	handleClick: function ( event ) {
+		var option = event.currentTarget.item
+		return console.log( "djklsajlkfdjaklfjdf" )
+	},
 	render: function () {
 		var menuOptions = this.props.menuOptions.map( function ( option ) {
 			return 	<li>
-						<a href={ option.url } >
+						<a onClick={ option.callback }>
 							<div className="col-xs-1 text-center icon-lg">
 								<div className={ option.icon }></div>
 							</div>

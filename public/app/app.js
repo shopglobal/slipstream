@@ -39,6 +39,7 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/login.html'
 			})
 			.state( 'landing.register', {
+				params: { email: { value: '' } },
 				url: '/register',
 				templateUrl: 'app/views/register.html'
 			})
@@ -59,6 +60,12 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				url: '/profile',
 				templateUrl: 'app/views/profile.html',
 				controller: 'ProfileController'
+			})
+			.state( 'app.invite', {
+				url: '/invite',
+				onEnter: function ( $rootScope ) {
+					$rootScope.openInviteModal()
+				}
 			})
 			.state( 'app.admin', {
 				url: '/admin',
