@@ -49,6 +49,9 @@ router.route( '/user/waitlist' )
 router.route( '/user/sendbetakey' )
 	.post( userController.checkAuthorization, userController.sendBetakey )
 
+router.route( '/users/invite' )
+	.post( userController.checkAuthorization, userController.inviteByEmail )
+
 router.route( '/admin/user-emails' )
 	.get( userController.checkAuthorization, userController.exportEmails )
 

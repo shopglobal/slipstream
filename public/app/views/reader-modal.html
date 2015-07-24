@@ -146,19 +146,6 @@
 
 <script type="text/ng-template" id="splash-cta-signup.html">
 	<span ng-hide="showSignup">
-		<button class="btn btn-green btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
+		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
 	</span>
-	<form class="form-inline form-waitlist" ng-show="showSignup">
-		<span class="form-group">
-			<input type="email" class="input-green form-control" ng-model="user.email" placeholder="Email">
-			
-			<!-- Desktop  -->
-
-			<button class="btn btn-green hidden-xs form-control" ng-click="waitlist()">Sign Up</button>
-
-			<!-- Mobile -->
-			
-			<br class="visible-xs"><button class="btn btn-white btn-block visible-xs" ng-click="waitlist()">Sign Up</button>
-		</span>
-	</form>
 </script>

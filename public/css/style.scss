@@ -336,11 +336,11 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 		&.sidebar-hidden { top: 0; bottom: 0; left: -225px; z-index: 1000; @include transition ( all 200ms ease-in-out ); opacity: 0; visibility: hidden; }
 		.btn-x img { @include filter( brightness(3) ); }
 		.sidebar-nav { position: absolute; top: 0; width: 100%; margin: 0; padding: 0; list-style: none; }
-		.sidebar-nav li { font-size: 20px; vertical-align: middle;
+		.sidebar-nav li { font-size: 20px; vertical-align: middle; margin-bottom: 15px;
 			&:hover { background: transparent; }
 			div { display: inline-block; } 
 			.glyphicon { padding: 2.5px; } }
-		.sidebar-nav li a { display: block; text-decoration: none; color: white; }
+		.sidebar-nav li a { display: block; text-decoration: none; color: white; cursor: pointer; }
 		.sidebar-nav li a:hover { text-decoration: none; color: white; }
 		.sidebar-nav li a:active, .sidebar-nav li a:focus { text-decoration: none; }
 		.sidebar-nav > .sidebar-brand { height: 65px; font-size: 18px; }

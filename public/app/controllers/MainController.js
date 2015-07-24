@@ -1,33 +1,16 @@
-app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '$urlRouter', '$http', 'Content', 'flash', '$modal', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, $flash, $modal ) {
+app.controller('MainController', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
 
-	/*Attemps to try track any visit in mixpanel as an event called Visit with property state to show the current state.*/
-
-/*	$scope.$watch( '$state.current.name', function ( newValue, oldValue ) {
-		if ( newValue != oldValue ) {
-			$window.mixpanel.track( "Visit", {
-				state: $window.location.pathname
-			})
-		}
-	})*/
+	$scope.user = {
+		username: '',
+		password: '',
+		email: $stateParams.email ? $stateParams.email : ''
+	}
 
 	$scope.appName = "Slipstream"
 
 	$rootScope.role = $window.localStorage.role
 
 	$scope.$state = $state
-
-	$scope.user = {
-		username: '',
-		password: '',
-		email: ''
-	}
-
-	$scope.reg = {
-		username: '',
-		password: '',
-		email: '',
-		betakey: ''
-	}
 
 	$scope.feedbackOptions = {
 		ajaxURL: '/api/feedback',
@@ -68,7 +51,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 			.error( function ( error ) {
 				console.log( error )
 				delete $window.localStorage.token
-				$flash.error = "Error signing in." 
+				flash.error = "Error signing in." 
 			} )
 	}
 
@@ -76,7 +59,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 
 	$scope.register = function () {
 		$http
-			.post( 'api/signup', $scope.reg )
+			.post( 'api/signup', $scope.user )
 			.success( function ( data ) {
 				$window.localStorage.token = data.token
 				$window.localStorage.username = data.username
@@ -94,7 +77,7 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 				$state.go( 'app.stream', { username: data.username, stream: 'read', mode: 'stream' } )
 			})
 			.error( function ( error ) {
-				$flash.error = error
+				flash.error = error
 				delete $window.localStorage.token
 			})
 	}
@@ -109,13 +92,13 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 				$state.go( 'landing.splash' )
 			})
 			.error( function ( error ) {
-				$flash.error = error
+				flash.error = error
 			})
 	}
 
 	$scope.resetPassword = function () {
 		if ( $scope.user.email.length == 0 ) {
-			$flash.error = "Email address required!"
+			flash.error = "Email address required!"
 			mixpanel.track( "User", {
 				action: "Password reset failed",
 				error: "Email address required!"
@@ -129,14 +112,14 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 					mixpanel.track( "User", {
 						action: "Password reset"
 					} )
-					$flash.success = data
+					flash.success = data
 				})
 				.error( function ( error ) {
 					mixpanel.track( "User", {
 						action: "Password reset failed",
 						error: error
 					} )
-					$flash.error = error
+					flash.error = error
 				})
 		}
 	}
@@ -176,9 +159,9 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 						changes: { text: $scope.item.text }
 					})
 					.then( function ( response, error ) {
-						if ( error ) return $flash.error = error
+						if ( error ) return flash.error = error
 
-						$flash.success = response.data
+						flash.success = response.data
 						$modalInstance.close()
 					})
 				}
@@ -193,28 +176,10 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 				})
 				.error( function ( error ) {
 					console.log( error )
-					$flash.error = error
+					flash.error = error
 				})
 			}
 		})
-	}
-
-	$scope.waitlist = function () {
-		$http
-			.post( '/api/user/waitlist', {
-				email: $scope.user.email
-			})
-			.success( function ( data ) {
-				mixpanel.identify( data.id )
-				mixpanel.track( "Landing", {
-					action: "Waitlisted" 
-				})
-
-				$flash.success = data
-			})
-			.error( function ( error ) {
-				$flash.error = error
-			})
 	}
 
 	$rootScope.adminEditThumb = function ( object ) {
@@ -225,9 +190,9 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 			}
 		})
 		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
+			if ( error ) return flash.error = error
 
-			$flash.success = response.data
+			flash.success = response.data
 		})
 	}
 
@@ -239,10 +204,10 @@ app.controller('MainController', ['$scope', '$rootScope', '$window', '$state', '
 			}
 		})
 		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
+			if ( error ) return flash.error = error
 
-			$flash.success = response.data
+			flash.success = response.data
 		})
 	}
 
-}])
+} )
