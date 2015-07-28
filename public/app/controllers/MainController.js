@@ -58,6 +58,8 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 	// registartion 
 
 	$scope.register = function () {
+		if ( $scope.user.username.match( /^[a-fA-F0-9]{24}$|^[a-fA-F0-9]{12}$/ ) ) return flash.error = "Please choose another username."
+
 		$http
 			.post( 'api/signup', $scope.user )
 			.success( function ( data ) {
