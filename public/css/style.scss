@@ -601,9 +601,18 @@ tags-input.ng-invalid .tags {
 @media only screen and (max-width : 768px) {
 
 	#header { 
+		#nav-row-1 { box-shadow: 0px 0px 0px #D3D2D2; }
+		#nav-row-2 { margin-top: 65px; }
 		.add-container { margin-right: 10px; } }
 
 	.container { padding: 0 5px !important; }
+
+	.content-toggle { max-width: 100%; background: white; border-radius: 10px; box-shadow: 0px 5px 5px 2px rgba( 255, 255, 255, 0.3); opacity: 0.98;
+		.btn-green { 
+			&:hover { color: white; } }
+		.btn { height: 58px; position: relative; border-radius: 10px;
+			.text-toggle { vertical-align: bottom;  }
+			.glyphicon { margin-right: 10px; font-size: 22px; vertical-align: middle; } } }
 
 	.panel-item { padding: 10px !important; 
 		.title-stream-item { margin-right: 0px; }
