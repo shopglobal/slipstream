@@ -451,6 +451,8 @@ footer { bottom: 0; position: absolute; height: 25px; }
 /* landing */
 
 body.single { 
+	.sign-up-mobile { 
+		.sign-up-span { float: left; padding-right: 10px; } }
 	#header { margin-top: -20px; margin-bottom: 30px; }
 	.reader-container { margin-bottom: 30px; } }
 
