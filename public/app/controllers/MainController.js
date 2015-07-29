@@ -135,7 +135,7 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 			mixpanel.track( "User", {
 				action: "Sign out"
 			} )
-			$state.go( 'landing.login' )
+			return $state.go( 'landing.login' )
 	}
 
 	$scope.openManifesto = function () {
