@@ -32,52 +32,53 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 	$scope.login = function() {
 		$http
 			.post( '/api/authenticate', $scope.user )
-			.success( function ( data, status ) {
-				$window.localStorage.token = data.token
-				$window.localStorage.username = data.username
-				if ( data.role == 'admin' ) {
+			.then( function ( response, error ) {
+				if ( error ) throw new Error( error )
+
+				$window.localStorage.token = response.data.token
+				$window.localStorage.username = response.data.username
+				if ( response.data.role == 'admin' ) {
 					$window.localStorage.role = 'admin'
 				}
-				mixpanel.identify( data.id )
+				mixpanel.identify( response.data.id )
 				mixpanel.track( "User", {
 					action: "Logged in" 
 				})
-				$state.go( 'app.stream', { 
-					username: data.username, 
-					stream: 'read',
-					mode: 'stream'
-				} )
+				$state.go( 'app.stream', { mode: 'stream', username: response.data.username } )
 			} )
-			.error( function ( error ) {
-				console.log( error )
+			.catch( function ( error ) {
 				delete $window.localStorage.token
-				flash.error = "Error signing in." 
-			} )
+				flash.error = error.data
+			})
 	}
 
 	// registartion 
 
 	$scope.register = function () {
+		if ( $scope.user.username.match( /^[a-fA-F0-9]{24}$|^[a-fA-F0-9]{12}$/ ) ) return flash.error = "Please choose another username."
+
 		$http
 			.post( 'api/signup', $scope.user )
-			.success( function ( data ) {
-				$window.localStorage.token = data.token
-				$window.localStorage.username = data.username
-				mixpanel.identify( data.id )
+			.then( function ( response, error ) {
+				if ( error ) throw new Error( error )
+
+				$window.localStorage.token = response.data.token
+				$window.localStorage.username = response.data.username
+				mixpanel.identify( response.data.id )
 				mixpanel.people.set({
-				    "id": data._id,
-				    "$email": data.email,
+				    "id": response.data._id,
+				    "$email": response.data.email,
 				    "$created": new Date(),
 				    "$last_login": new Date(),
-				    "$name": data.username
+				    "$name": response.data.username
 				})
 				mixpanel.track( "User", {
 					action: "Registered"
 				} )
-				$state.go( 'app.stream', { username: data.username, stream: 'read', mode: 'stream' } )
+				$state.go( 'app.discover', { mode: 'discover' } )
 			})
-			.error( function ( error ) {
-				flash.error = error
+			.catch( function ( error ) {
+				flash.error = error.data
 				delete $window.localStorage.token
 			})
 	}
