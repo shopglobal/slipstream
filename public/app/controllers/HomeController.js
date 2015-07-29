@@ -268,19 +268,33 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	/*React component props*/
+	/*React sidebar component props*/
 
 	$scope.sidebarProps = {
-		buttonImage: "images/ss_logo.png",
-		buttonImageMini: "images/ss_green.png",		
-		menuOptionBottom: { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" },
-		menuOptions: [ 
-			{ title: "Profile", icon: "glyphicon glyphicon-user", callback: function () {
-				return $state.go( 'app.profile' )
-			} },
-			{ title: "Invite Friends", icon: "glyphicon glyphicon-bullhorn", callback: function () {
-				return $rootScope.openInviteModal() 
-			} }
+		buttonImage: "images/ss_logo.png",	// the main button (site logo)
+		buttonImageMini: "images/ss_green.png",	// the mini button in the sidebar
+		menuOptionBottom: { 	// this is the single menu option of the bottom
+			title: 'Logout', 
+			icon: "glyphicon glyphicon-log-out", 
+			callback: function () {
+				return $scope.logout()
+			} 
+		},
+		menuOptions: [ 		// the resst of the regular menu options in the sidebar
+			{ 
+				title: "Profile",	// title
+				icon: "glyphicon glyphicon-user",	// class of the icon span
+				callback: function () {		// what happens when button is pressed
+					return $state.go( 'app.profile' ) 
+				} 
+			},
+			{ 
+				title: "Invite Friends", 
+				icon: "glyphicon glyphicon-bullhorn", 
+				callback: function () {
+					return $rootScope.openInviteModal() 
+				} 
+			}
 		]
 	}
 
