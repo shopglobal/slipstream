@@ -1,4 +1,4 @@
-app.controller('MainController', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
+app.controller('MainController', function ( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
 
 	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
 		mixpanel.track( "Visit", {
@@ -217,6 +217,12 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 
 			flash.success = response.data
 		})
+	}
+
+	$rootScope.makeLocation = function ( url ) {
+		var tempElem = document.createElement( "tempElem" )
+		tempElem.href = url
+		return tempElem
 	}
 
 } )

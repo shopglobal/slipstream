@@ -118,6 +118,10 @@
 		</h4>
 	</div>
 
+	<span ng-show="publisher" class="publisher">
+		Via <a ng-href="{{ item.url }}">{{ publisher }}</a>
+	</span>
+
 	<div ng-bind-html="item.text" ng-show=" item.stream == 'read' && !adminEdit"></div>
 
 	<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
