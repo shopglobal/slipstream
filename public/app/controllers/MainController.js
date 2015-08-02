@@ -6,6 +6,8 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 		email: $stateParams.email ? $stateParams.email : ''
 	}
 
+	$scope.submitted = false
+
 	$scope.appName = "Slipstream"
 
 	$rootScope.role = $window.localStorage.role

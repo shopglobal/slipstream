@@ -397,6 +397,30 @@ app.directive( 'userName', [ function ( userId ) {
 	}
 }])
 
+// A form-validation directive.
+// From : http://blog.projectnibble.org/2014/01/10/advanced-form-control-with-angularjs-and-bootstrap3/
+
+app.directive( 'validSubmit', function ( $parse ) {
+	return {
+		require: 'form',
+		link: function ( scope, element, iAttrs, form ) {
+			form.$submitted = false 
+
+			var submitFunc = $parse( iAttrs.validSubmit )
+
+			element.on( 'submit', function ( event ) {
+				scope.$apply( function () {
+					form.$submitted = true
+					if ( form.$valid ) {
+						submitFunc( scope, { $event: event } )
+						form.$submitted = false 
+					}
+				})
+			})
+		}
+	}
+} )
+
 /*app.directive( 'sidebarButton', [ 'reactDirective', function ( reactDirective ) {
 	return reactDirective( 'sidebarComponent' )
 }])
