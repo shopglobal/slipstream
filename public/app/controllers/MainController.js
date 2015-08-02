@@ -1,5 +1,11 @@
 app.controller('MainController', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
 
+	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
+		mixpanel.track( "Visit", {
+			state: $state.current.name ? $state.current.name : ''
+		})
+	}
+
 	$scope.user = {
 		username: '',
 		password: '',
