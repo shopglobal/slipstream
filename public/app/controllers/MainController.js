@@ -1,4 +1,4 @@
-app.controller('MainController', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
+app.controller('MainController', function ( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
 
 	$scope.user = {
 		username: '',
@@ -209,6 +209,12 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 
 			flash.success = response.data
 		})
+	}
+
+	$rootScope.makeLocation = function ( url ) {
+		var tempElem = document.createElement( "tempElem" )
+		tempElem.href = url
+		return tempElem
 	}
 
 } )
