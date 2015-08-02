@@ -174,8 +174,7 @@ a { color: $green;
 
 .input-green { background: transparent; border: 2px solid $green; color: $dark-text;
 	&::-webkit-input-placeholder { color: $dark-text; }
-	&:focus { box-shadow: none; border-color: $green; outline: none; }
-	&.ng-invalid { border: 2px solid $red; } }
+	&:focus { box-shadow: none; border-color: $green; outline: none; } }
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
@@ -249,7 +248,7 @@ a { color: $green;
 .no-padding { padding-left: 0; padding-right: 0; }
 
 .input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; 
-	&.ng-invalid { border-width: 0 0 2px 0; } }
+	&.ng-invalid.ng-touched { border-width: 0 0 2px 0; border-color: $red; } }
 
 .navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
 
