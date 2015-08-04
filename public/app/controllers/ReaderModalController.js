@@ -1,4 +1,4 @@
-app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article', '$sce', '$http', 'flash', '$stateParams', '$window', '$filter', '$state', function ( $scope, $modalInstance, article, $sce, $http, $flash, $stateParams, $window, $filter, $state ){
+app.controller('ReaderModalController', function ( $scope, $rootScope, $modalInstance, article, $sce, $http, flash, $stateParams, $window, $filter, $state ){
 	
 	var modalDialog = document.getElementsByClassName( 'modal-dialog' )
 
@@ -15,6 +15,15 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 	$scope.newTitle = ''
 
 	$scope.$state = $state
+
+	getPublisher = function () {
+		var tempElem = document.createElement( "a" )
+		tempElem.href = article.url
+		console.log( tempElem.hostname )
+		$scope.publisher = tempElem.hostname
+	}
+
+	getPublisher()
 
 	/*
 	check if the article is currently processing. If it is, check again. This will make the app check each time an add modal is openened instead of only after refreshign the whole app.
@@ -49,9 +58,9 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 			changes: { text: $scope.item.text }
 		})
 		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
+			if ( error ) return flash.error = error
 
-			$flash.success = response.data
+			flash.success = response.data
 			$modalInstance.close()
 		})
 	}
@@ -76,9 +85,9 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 			}
 		})
 		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
+			if ( error ) return flash.error = error
 
-			$flash.success = response.data
+			flash.success = response.data
 		})
 	}*/
 	
@@ -103,7 +112,7 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 			url: singlePostUrl
 		}})
 		.then( function ( response, error ){
-			if ( error ) return $flash.error = "Problem sharing link :("
+			if ( error ) return flash.error = "Problem sharing link :("
 			var tweetMessage = $filter( 'limitTo' )( item.title, 99, 0) + "... " + response.data
 
 			window.open( 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetMessage) + '&via=getslipstream', '_blank')
@@ -120,4 +129,4 @@ app.controller('ReaderModalController', [ '$scope', '$modalInstance', 'article',
 		$window.open( facebookUrl, '_blank' )
 	}
 
-}])
+})

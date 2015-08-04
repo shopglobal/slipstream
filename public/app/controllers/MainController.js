@@ -1,10 +1,18 @@
-app.controller('MainController', function( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
+app.controller('MainController', function ( $scope, $rootScope, $window, $state, $urlRouter, $http, Content, flash, $modal, $stateParams ) {
+
+	if ( $state.current.name && typeof $state.current.name != undefined && $state.current.name != null && $state ) {
+		mixpanel.track( "Visit", {
+			state: $state.current.name ? $state.current.name : ''
+		})
+	}
 
 	$scope.user = {
 		username: '',
 		password: '',
 		email: $stateParams.email ? $stateParams.email : ''
 	}
+
+	$scope.submitted = false
 
 	$scope.appName = "Slipstream"
 
@@ -135,7 +143,7 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 			mixpanel.track( "User", {
 				action: "Sign out"
 			} )
-			$state.go( 'landing.login' )
+			return $state.go( 'landing.login' )
 	}
 
 	$scope.openManifesto = function () {
@@ -209,6 +217,12 @@ app.controller('MainController', function( $scope, $rootScope, $window, $state, 
 
 			flash.success = response.data
 		})
+	}
+
+	$rootScope.makeLocation = function ( url ) {
+		var tempElem = document.createElement( "tempElem" )
+		tempElem.href = url
+		return tempElem
 	}
 
 } )
