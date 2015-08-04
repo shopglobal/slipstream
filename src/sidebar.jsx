@@ -32,16 +32,18 @@ module.exports = React.createClass({
 						</li>
 						{ menuOptions }
 					</ul>
-					<div className="footer">
-						<a onClick={ this.props.handleSignOut } >
-							<div className="col-xs-1 text-center icon-lg">
-								<div className={ this.props.menuOptionBottom.icon }></div>
-							</div>
-							<span className="col-xs-offset-2">
-								{ this.props.menuOptionBottom.title }
-							</span>	
-						</a>
-					</div>
+					<ul className="sidebar-nav sidebar-bottom">
+						<li>
+							<a onClick={ this.props.handleSignOut } >
+								<div className="col-xs-1 text-center icon-lg cursor-pointer">
+									<div className={ this.props.menuOptionBottom.icon }></div>
+								</div>
+								<span className="col-xs-offset-2">
+									{ this.props.menuOptionBottom.title }
+								</span>	
+							</a>
+						</li>
+					</ul>
 				</div>
 	}
 })
