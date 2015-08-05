@@ -59,7 +59,7 @@
 	</nav>
 </div>
 
-<div class="visible-xs container-fluid sign-up-mobile" ng-hide="username">
+<div class="visible-xs container-fluid sign-up-mobile" ng-show=" $state.includes( 'single' ) ">
 	
 	<span ng-hide="showSignup" class="sign-up-span">
 		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
@@ -76,7 +76,7 @@
 	<div class="share-links visible-xs" ng-hide=" $state.includes( 'single' ) ">
 	
 		<button class="btn btn-green btn-xs no-border btn-x" ng-click="closeModal()">
-			<img src="images/x@2x.png" alt="">
+			<img src="images/x@2x.png" alt="Close reader view">
 		</button>
 
 		<!-- <ng-include src="'app/views/menu-share.html'" scope="" onload=""></ng-include>
@@ -135,15 +135,17 @@
 
 </div>
 
-<div class="share-links share-links-stacked hidden-xs" ng-hide=" $state.includes( 'single' ) ">
+<div class="share-links share-links-stacked" ng-hide=" $state.includes( 'single' ) ">
 	
 	<button class="btn btn-green btn-xs no-border btn-x" ng-click="closeModal()">
 		<img src="images/x@2x.png" alt="">
 	</button>
 
-	<ng-include src="'menu-share.html'"></ng-include>
+	<span class="hidden-xs">
+		<ng-include src="'menu-share.html'"></ng-include>
+	</span>
 
-	<span class="dropdown admin-reader-menu" ng-if=" role == 'admin' ">
+	<span class="dropdown admin-reader-menu hidden-xs" ng-if=" role == 'admin' ">
 	  <button class="btn dropdown-toggle no-border btn-grey" type="button" id="item-options" data-toggle="dropdown" aria-expanded="true">
 	    <span class="glyphicon glyphicon-option-horizontal glyphicon-green"></span>
 	    <span class="sr-only">
