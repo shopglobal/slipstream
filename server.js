@@ -19,13 +19,9 @@ app
 	.use( morgan( 'dev' ) )
 	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
 	.use( bodyParser.json( { limit: '50mb' } ) )
+	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
-	.use( '/api/*', require('./routes/usersRoute.js') )
-	.all( '/*', function ( req, res ) {
-		res.status( 200 )
-		.set( { 'content-type': 'text/html; charset=utf-8' } )
-		.sendfile( 'public/index.html' )
-	} )
+	.all( '/*', require( './routes/home.js' ) )
 	.on( 'error', function( error ){
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
 	   console.log( error.stack )

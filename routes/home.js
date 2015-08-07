@@ -56,8 +56,10 @@ router.get( '/#/:user/:stream/:slug', function( req, res, next ) {
 	} else return next()
 })
 
-router.get( '/:anyreq', function( req, res ) {
-	express.static( indexPath )
+router.get( '/*', function( req, res ) {
+	res.status( 200 )
+		.set( { 'content-type': 'text/html; charset=utf-8' } )
+		.sendfile( 'public/index.html' )
 })
 
 module.exports = router
