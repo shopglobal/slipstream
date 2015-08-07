@@ -2,10 +2,14 @@ var React = require( 'react' ),
 	LogoButton = require( './logo-button' )
 
 module.exports = React.createClass({
+	handleClick: function ( event ) {
+		var option = event.currentTarget.item
+		return console.log( "djklsajlkfdjaklfjdf" )
+	},
 	render: function () {
 		var menuOptions = this.props.menuOptions.map( function ( option ) {
 			return 	<li>
-						<a href={ option.url } >
+						<a onClick={ option.callback }>
 							<div className="col-xs-1 text-center icon-lg">
 								<div className={ option.icon }></div>
 							</div>
@@ -28,16 +32,18 @@ module.exports = React.createClass({
 						</li>
 						{ menuOptions }
 					</ul>
-					<div className="footer">
-						<a onClick={ this.props.handleSignOut } >
-							<div className="col-xs-1 text-center icon-lg">
-								<div className={ this.props.menuOptionBottom.icon }></div>
-							</div>
-							<span className="col-xs-offset-2">
-								{ this.props.menuOptionBottom.title }
-							</span>	
-						</a>
-					</div>
+					<ul className="sidebar-nav sidebar-bottom">
+						<li>
+							<a onClick={ this.props.handleSignOut } >
+								<div className="col-xs-1 text-center icon-lg cursor-pointer">
+									<div className={ this.props.menuOptionBottom.icon }></div>
+								</div>
+								<span className="col-xs-offset-2">
+									{ this.props.menuOptionBottom.title }
+								</span>	
+							</a>
+						</li>
+					</ul>
 				</div>
 	}
 })

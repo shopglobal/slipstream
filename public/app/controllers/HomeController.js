@@ -209,6 +209,19 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
+	$rootScope.openInviteModal = function () {
+		var modalInstance = $modal.open( {
+			templateUrl: 'app/views/email-modal.html',
+			windowClass: 'modal-email',
+			controller: "EmailModalController",
+			resolve: {
+				item: function() {
+					return { valid: false, invite: true }
+				}
+			}
+		} )
+	}
+
 	$scope.addContent = function ( url ) {
 		$http
 			.post( '/api/add', {
@@ -255,14 +268,33 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	/*React component props*/
+	/*React sidebar component props*/
 
 	$scope.sidebarProps = {
-		buttonImage: "images/ss_logo.png",
-		buttonImageMini: "images/ss_green.png",		
-		menuOptionBottom: { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" },
-		menuOptions: [ 
-			{ url: "/#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
+		buttonImage: "images/ss_logo.png",	// the main button (site logo)
+		buttonImageMini: "images/ss_green.png",	// the mini button in the sidebar
+		menuOptionBottom: { 	// this is the single menu option of the bottom
+			title: 'Logout', 
+			icon: "glyphicon glyphicon-log-out", 
+			callback: function () {
+				return $scope.logout()
+			} 
+		},
+		menuOptions: [ 		// the resst of the regular menu options in the sidebar
+			{ 
+				title: "Profile",	// title
+				icon: "glyphicon glyphicon-user",	// class of the icon span
+				callback: function () {		// what happens when button is pressed
+					return $state.go( 'app.profile' ) 
+				} 
+			},
+			{ 
+				title: "Invite Friends", 
+				icon: "glyphicon glyphicon-bullhorn", 
+				callback: function () {
+					return $rootScope.openInviteModal() 
+				} 
+			}
 		]
 	}
 
