@@ -3,7 +3,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', '$locationProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider, $locationProvider ) {
 
 
-	/*$locationProvider.html5Mode( true )*/
+	$locationProvider.html5Mode( {
+		enabled: true,
+		requireBase: false
+	} )
 	
 	// sets default state
 

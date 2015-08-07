@@ -9,7 +9,7 @@ var http = require('http'),
 	morgan = require('morgan'),
 	contentController = require( './controllers/contentController' )
 
-var indexPath = path.join( __dirname, process.env.PUBLIC_FOLDER )
+var indexPath = path.resolve( __dirname, process.env.PUBLIC_FOLDER )
 
 mongoose.connect( process.env.MONGOLAB_URI )
 
@@ -19,8 +19,13 @@ app
 	.use( morgan( 'dev' ) )
 	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
 	.use( bodyParser.json( { limit: '50mb' } ) )
-	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
+	.use( '/api/*', require('./routes/usersRoute.js') )
+	.all( '/*', function ( req, res ) {
+		res.status( 200 )
+		.set( { 'content-type': 'text/html; charset=utf-8' } )
+		.sendfile( 'public/index.html' )
+	} )
 	.on( 'error', function( error ){
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
 	   console.log( error.stack )

@@ -8,7 +8,7 @@ var express = require('express'),
 	User = require( '../models/userModel' ),
 	contentController = require( '../controllers/contentController' )
 
-var indexPath = path.join( __dirname, '..public/index.html')
+var indexPath = path.resolve( __dirname, '../public/index.html')
 
 // 
 // serves he index file when accessing root URL
@@ -28,7 +28,7 @@ function createOpenGraph ( result ) {
 	})
 }
 
-router.get( '/:user/:stream/:slug', function( req, res, next ) {
+router.get( '/#/:user/:stream/:slug', function( req, res, next ) {
 	
 	if ( req.headers['user-agent'].indexOf( 'facebook' ) != -1 ) {
 		/*var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'*/
@@ -54,6 +54,10 @@ router.get( '/:user/:stream/:slug', function( req, res, next ) {
 			})
 		})
 	} else return next()
+})
+
+router.get( '/:anyreq', function( req, res ) {
+	express.static( indexPath )
 })
 
 module.exports = router
