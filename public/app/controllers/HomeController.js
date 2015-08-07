@@ -196,6 +196,32 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
+	$scope.openShareModal = function ( item ) {
+		var modalInstance = $modal.open( {
+			templateUrl: "app/views/email-modal.html",
+			windowClass: "modal-email",
+			controller: "EmailModalController",
+			resolve: {
+				item: function() {
+					return item
+				}
+			}
+		})
+	}
+
+	$rootScope.openInviteModal = function () {
+		var modalInstance = $modal.open( {
+			templateUrl: 'app/views/email-modal.html',
+			windowClass: 'modal-email',
+			controller: "EmailModalController",
+			resolve: {
+				item: function() {
+					return { valid: false, invite: true }
+				}
+			}
+		} )
+	}
+
 	$scope.addContent = function ( url ) {
 		$http
 			.post( '/api/add', {
@@ -242,43 +268,34 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		})
 	}
 
-	/*React component props*/
+	/*React sidebar component props*/
 
 	$scope.sidebarProps = {
-		buttonImage: "images/ss_logo.png",
-		buttonImageMini: "images/ss_green.png",		
-		menuOptionBottom: { title: 'Logout', url: '#/home/splash', icon: "glyphicon glyphicon-log-out" },
-		menuOptions: [ 
-			{ url: "#/app/profile", title: "Profile", icon: "glyphicon glyphicon-user" }
+		buttonImage: "images/ss_logo.png",	// the main button (site logo)
+		buttonImageMini: "images/ss_green.png",	// the mini button in the sidebar
+		menuOptionBottom: { 	// this is the single menu option of the bottom
+			title: 'Logout', 
+			icon: "glyphicon glyphicon-log-out", 
+			callback: function () {
+				return $scope.logout()
+			} 
+		},
+		menuOptions: [ 		// the resst of the regular menu options in the sidebar
+			{ 
+				title: "Profile",	// title
+				icon: "glyphicon glyphicon-user",	// class of the icon span
+				callback: function () {		// what happens when button is pressed
+					return $state.go( 'app.profile' ) 
+				} 
+			},
+			{ 
+				title: "Invite Friends", 
+				icon: "glyphicon glyphicon-bullhorn", 
+				callback: function () {
+					return $rootScope.openInviteModal() 
+				} 
+			}
 		]
-	}
-
-	$scope.adminEditThumb = function ( object ) {
-		$http.post( 'api/content/edit', {
-			id: object.id,
-			changes: {
-				thumbnail: object.thumbnail
-			}
-		})
-		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
-
-			$flash.success = response.data
-		})
-	}
-
-	$scope.adminEditTitle = function ( newValue, object ) {
-		$http.post( 'api/content/edit', {
-			id: object.id,
-			changes: {
-				title: newValue
-			}
-		})
-		.then( function ( response, error ) {
-			if ( error ) return $flash.error = error
-
-			$flash.success = response.data
-		})
 	}
 
 	function getSinglePostUrl ( item ) {
@@ -293,6 +310,10 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 		var singlePostUrl = $window.location.protocol + "//" + $window.location.host + "/#/" + username + "/" + item.stream + "/" + slug
 
 		return singlePostUrl
+	}
+
+	$rootScope.getSinglePostUrl = function ( item ) {
+		return getSinglePostUrl( item )
 	}
 
 	$scope.goToSinglePost = function ( item ) {

@@ -1,15 +1,4 @@
 <img src="images/ss_logo_green.png" alt="" class="modal-logo" ng-hide=" $state.includes( 'single' )"><br />
-	
-	<head>
-		<title>{{ item.title }}</title>
-		<!-- Open Graph + Twitter for image when embedded. -->
-		<meta name="twitter:site" content="@getslipstream" />
-		<meta property="og:site_name" content="Slipstream" />
-		<meta property="og:title" content="{{ item.title }}" />
-		<meta property="og:type" content="article" />
-		<meta property="og:image" content="{{ item.images[ item.thumbnail ].thumb }}" />
-		<meta property="og:description" content="{{ item.description }}" />
-	</head>
 
 <div id="header" ng-show=" $state.includes( 'single' ) ">
 	<nav class="navbar navbar-white">
@@ -28,7 +17,7 @@
 					<span class="dark-text pull-right hidden-xs">Curate and discover the web like never before.</span>
 				</a>
 			</div>
-			<div class="collpase navbar-collapse">
+			<div class="hidden-xs">
 				<!-- <ul class="nav navbar-nav navbar-center">
 					<li>
 						<button class="btn btn-green no-border" ui-sref="app.stream( { username: currentUser, stream: currentStream, mode: 'stream' })">
@@ -45,7 +34,7 @@
 
 					<li ng-hide=" $state.includes( 'landing.login' )  ">
 						<a href="">
-							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ng-click="$state.go( 'landing.login' )">
+							<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ui-sref='landing.login' ui-sref-opts="{reload: true}">
 								Login
 							</button>
 						</a>
@@ -57,6 +46,18 @@
 			</div>
 		</div>
 	</nav>
+</div>
+
+<div class="visible-xs container-fluid sign-up-mobile" ng-hide="username">
+	
+	<span ng-hide="showSignup" class="sign-up-span">
+		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
+	</span>
+
+	<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ui-sref='landing.login' ui-sref-opts="{reload: true}">
+		Login
+	</button>
+
 </div>
 
 <div class="container-fluid reader-container" ng-class="{ 'reader-single col-md-6 col-md-offset-3': $state.includes( 'single' ) }">
@@ -92,7 +93,7 @@
 		inline-edit="item.title"
 		inline-edit-on-click
 		inline-edit-btn-edit=" <span class='glyphicon glyphicon-pencil cursor-pointer dark-text icon-admin'></span>" 
-		inline-edit-callback="adminEditTitle( newValue )"
+		inline-edit-callback="adminEditTitle( newValue, item )"
 	></h2>
 
 	<!-- <react-component name="EditTitle" props="adminEditTitle" watch-depth="reference" ng-show=" role == 'admin' " ng-model="newTitle" ng-change="showNewTitle()"></react-component> -->
@@ -105,6 +106,10 @@
 			Check back later when we've imported all it's content.
 		</h4>
 	</div>
+
+	<span ng-show="publisher" class="publisher">
+		Via <a ng-href="{{ item.url }}">{{ publisher }}</a>
+	</span>
 
 	<div ng-bind-html="item.text" ng-show=" item.stream == 'read' && !adminEdit"></div>
 
@@ -145,20 +150,7 @@
 </div>
 
 <script type="text/ng-template" id="splash-cta-signup.html">
-	<span ng-hide="showSignup">
-		<button class="btn btn-green btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
+	<span ng-hide="showSignup" class="sign-up-span">
+		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
 	</span>
-	<form class="form-inline form-waitlist" ng-show="showSignup">
-		<span class="form-group">
-			<input type="email" class="input-green form-control" ng-model="user.email" placeholder="Email">
-			
-			<!-- Desktop  -->
-
-			<button class="btn btn-green hidden-xs form-control" ng-click="waitlist()">Sign Up</button>
-
-			<!-- Mobile -->
-			
-			<br class="visible-xs"><button class="btn btn-white btn-block visible-xs" ng-click="waitlist()">Sign Up</button>
-		</span>
-	</form>
 </script>

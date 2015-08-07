@@ -103,7 +103,15 @@ This endpoint will accept a token in the header, and returns all a user's articl
 
 ### /api/single/USERNAME[&id=ID][&slug=slug]
 
-A `GET` request to this endpoint will get a single post, if it is not private. You can use the exact post slug (short, hyphonated name) or the post ID for that user. It's important to remember the post ID and the post ID _for that user_ are different. In the code, this would be the `content.users._id` field. 
+A `GET` request to this endpoint will get a single post, if it is not private. You can use the exact post slug (short, hyphonated name) or the post ID for that user. It's important to remember the post ID and the post ID _for that user_ are different. In the code, this would be the `content.users._id` field.
+
+### /api/content/share
+
+A `POST` request will send emails to a list of email addresses. It requires an authentication header and a body like this:
+
+	url: String,
+	title: String,
+	recipients: Array
 
 # TODOs
 

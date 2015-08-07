@@ -16,8 +16,8 @@ var User = require( '../models/userModel' ),
 	randomKey = require( 'random-key' )
 
 var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
-	mailgunDomiain = "sandboxe7a1a487792a445785ebe90604e4b5cb.mailgun.org",
-	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomiain })
+	mailgunDomain = "slipstreamapp.com",
+	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
 
 //
 // check the username and password and returns token if verified
@@ -58,27 +58,6 @@ exports.signUp = function ( req, res ) {
 		password: req.body.password,
 		email: req.body.email
 	})
-	
-	function betakeyCheck () {
-		return Q.Promise( function ( resolve, reject, notify ) {
-			
-			Betakey.findOne( { key: req.body.betakey } )
-			.then( function ( betakey ) {
-				if ( !betakey ) return reject( new Error( "Could not find that key" ) )
-				
-				if ( betakey.used ) return reject( new Error( "Sorry, beta key aleady used." ) )
-				
-				betakey.update(
-					{ used: ( new Date() / 1 ).toFixed(), user: req.body.email } )
-				.then( function ( result ) {
-					console.log( "1. Beta key used: " + result )
-					return resolve( result )
-				}, function ( error ) {
-					return reject( new Error( "Error using beta key. Try again." ) )
-				})
-			})
-		})
-	}
 	
 	function postSignup ( object ) {
 		return Q.Promise( function ( resolve, reject, notify ) {
@@ -129,10 +108,7 @@ exports.signUp = function ( req, res ) {
 	User.findOne( { $or: [ { username: user.username }, { email: user.email } ] } )
 	.then( function ( result ) {
 		if ( !result ) {
-			betakeyCheck()
-			.then( function ( betakey ) {
-				return user.save()
-			})
+			user.save()
 			.then( function () {
 				postSignup( { user: user } )
 				.then( function ( user ) {
@@ -144,14 +120,11 @@ exports.signUp = function ( req, res ) {
 				return res.status( 500 ).json( error.message )
 			})
 		} else if ( ( !result.username || result.username == null || typeof result.username == undefined) && result ) {
-			betakeyCheck()
-			.then( function ( betakey ) {
-				result.username = user.username,
-				result.email = user.email,
-				result.joined = ( new Date() / 1000 ).toFixed()
-				
-				return result.save()
-			} )
+			result.username = user.username,
+			result.email = user.email,
+			result.joined = ( new Date() / 1000 ).toFixed()
+
+			result.save()
 			.then( function ( result ) {
 				postSignup( { user: result } )
 				.then( function ( user ) {
@@ -636,6 +609,39 @@ exports.sendBetakey = function ( req, res ) {
 	.catch( function ( error ) {
 		console.log( error )
 		
+		return res.status( 500 ).json( error.message )
+	})
+}
+
+/* INPUTS: req.body.recipeints (array) and authorization token in header */
+
+exports.inviteByEmail = function ( req, res ) {
+	var inviteHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/invite-by-email.html' ) ).toString()
+	
+	User.findOne( { token: req.token } )
+	.then( function ( user ) {
+		
+		req.body.recipients.forEach( function ( each, index ) {
+			
+			var email = {
+				from: 'Slipstream <welcome@slipstreamapp.com>',
+				to: each,
+				subject: "You've been invited by " + user.username,
+				html: inviteHtml
+			}
+
+			mailgun.messages().send( email, function ( err, body ) {
+				if ( err ) throw new Error( err )
+			})
+			
+			if ( index === req.body.recipients.length - 1 ) {
+				return res.status( 200 ).json( "Sending all emails." )
+			}
+			
+		})
+	})
+	.catch( function ( error ) {
+		console.log( error )
 		return res.status( 500 ).json( error.message )
 	})
 }
