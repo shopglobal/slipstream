@@ -318,8 +318,7 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 		.btn-light-green { text-align: left; font-weight: 100; color: $light-green; }
 		.img-binoculars { height: 30px; width: auto; margin-left: -12.5px; }
 		.dropdown-menu { overflow: hidden; }
-		.dropdown-toggle { color: white; whitespace: no-wrap; position: relative;
-			.glyphicon-chevron-down { @include background-image(linear-gradient( left, rgba(92, 210, 152, 0) 0, $green 50% ) ); position: absolute; right: 0; top: 50%; @include transform( translateY( -50% ) ); }
+		.dropdown-toggle { color: white; 
 			.img-binoculars { @include filter( brightness( 3 ) ); } }
 		.dropdown-menu li, .dropdown-toggle span { border: none; cursor: pointer; font-size: 20px; }
 		.dropdown-menu li { padding: 10px; }
@@ -385,10 +384,9 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 		&:hover { background: $darkbase; }
 		&:hover > a:visited, &:hover > a { color: white; } } }
 
-.wrapper { min-height: 100%; position: relative; padding-bottom: 50px; }
+.wrapper { min-height: 100%; position: relative; }
 
-footer { bottom: 0; position: absolute; height: 25 px; width: 100%;
-	p { text-align: center; } }
+footer { bottom: 0; position: absolute; height: 25px; }
 
 // modals
 
@@ -598,6 +596,63 @@ tags-input.ng-invalid .tags {
 
 .alert-warn, .alert-warn h4 { color: #c09853; }
 
+/* Extra small, iPhone, mobile */
+
+@media only screen and (max-width : 768px) {
+
+	#header { 
+		#nav-row-1 { box-shadow: 0px 0px 0px #D3D2D2; }
+		#nav-row-2 { margin-top: 65px; }
+		.add-container { margin-right: 10px; } }
+
+	.container { padding: 0 5px !important; }
+
+	.content-toggle { max-width: 100%; background: white; border-radius: 10px; box-shadow: 0px 5px 5px 2px rgba( 255, 255, 255, 0.3); opacity: 0.98;
+		.btn-green { 
+			&:hover { color: white; } }
+		.btn { height: 58px; position: relative; border-radius: 10px;
+			.text-toggle { vertical-align: bottom;  }
+			.glyphicon { margin-right: 10px; font-size: 22px; vertical-align: middle; } } }
+
+	.panel-item { padding: 10px !important; 
+		.title-stream-item { margin-right: 0px; }
+		.item-preview { }
+		.stream-article-image { margin: 10px 0;}
+		.content-tags {  margin: 0px 0 20px -3px; }
+		.meta-text { font-size: 15px; }
+		.share-links { vertical-align: middle; text-align: middle;
+			span, div { vertical-align: middle; }
+			.add-container.mobile { display: inline-block !important;
+				&:hover { background: transparent; }
+				&:hover > a, &:hover > a:visited, a:visited { color: $green; } 
+				a { padding: 0px !important; }
+				.add-button { font-size: 20; position: relative; height: 25px; width: 25px; padding: 0;
+					& span { position: absolute; top: 9px; padding: 0; left: 4.5px; line-height: 0; font-size: 20; } } } } }
+	
+	.navbar-container-dropdown { width: 200px !important; display: inline-block; }
+
+	.panel-item { 
+		.col-meta-item {  } }
+
+	.navbar-brand { padding: 15 0 ; }
+
+	body.splash { 
+		.wide { height: initial !important; } }
+		.splash-section { 
+			h2 { font-size: 18px; } }
+		
+	div.splash-manifesto-container { 
+		.splash-section { 
+			.badge-mixpanel { margin: 0 auto; text-align: center; float: initial !important; } } }
+
+	.alert-flash { width: 70%; left: 50%; margin-left: -35%; }
+
+	.modal-dialog { width: 100% !important; } 
+		
+	// .share-links { position: asbolute; top: 0; right: 0; z-index: 100; }
+
+}
+
 /* Larger than XS */
 
 @media only screen and (min-width : 768px) {
@@ -643,85 +698,3 @@ tags-input.ng-invalid .tags {
         margin-right: 0;
     }
 } 
-
-/* Extra small, iPhone, mobile */
-
-@media screen and (max-width : 768px) {
-
-	body.app { 
-		#logo { @include filter( brightness( 3 ) ); } }
-
-	#header {
-		.navbar-center { margin-top: 10px; }
-		.navbar-brand { margin-top: 4px; z-index: 8000; padding: 15 0 ; }
-		#nav-row-1 { box-shadow: 0px 0px 0px #D3D2D2; }
-		#nav-row-2 { margin-top: 65px; }
-		.add-container { margin-right: 10px; } }
-
-	.container { padding-left: 5px; padding-right: 5px; }
-
-	.content-toggle { max-width: 100%; background: white; border-radius: 10px; box-shadow: 0px 5px 5px 2px rgba( 255, 255, 255, 0.3); opacity: 0.98;
-		.btn-green { 
-			&:hover { color: white; } }
-		.btn { height: 40px; position: relative; border-radius: 10px;
-			.text-toggle { vertical-align: bottom;  }
-			.glyphicon { margin-right: 10px; font-size: 22px; vertical-align: middle; } } }
-	
-	.container-stream { margin-top: 115px;
-		.panel-item { padding: 10px !important; 
-		.title-stream-item { margin-right: 0px; }
-		.item-preview { }
-		.stream-article-image { margin: 10px 0;}
-		.content-tags {  margin: 0px 0 20px -3px; }
-		.meta-text { font-size: 15px; }
-		.share-links { vertical-align: middle; text-align: middle;
-			span, div { vertical-align: middle; }
-			.add-container.mobile { display: inline-block !important;
-				&:hover { background: transparent; }
-				&:hover > a, &:hover > a:visited, a:visited { color: $green; } 
-				a { padding: 0px !important; }
-				.add-button { font-size: 20; position: relative; height: 25px; width: 25px; padding: 0;
-					& span { position: absolute; top: 9px; padding: 0; left: 4.5px; line-height: 0; font-size: 20; } } } } } }
-	
-	.navbar-container-dropdown { width: 200px !important; display: inline-block; }
-
-	.panel-item { 
-		.col-meta-item {  } }
-
-	.add-modal {
-		.article-preview { padding-top: 20px;
-			.preview-text { padding: 0; margin: 0; 
-				h4 { margin: 0; padding: 0; } }
-			.preview-thumbnail { width: 100% !important; float: none; clear: both; margin: 0; } } }
-
-	.reader-modal {
-		.share-links { position: asbolute; top: 0; right: 0; z-index: 8000; } 
-		.reader-container { padding-top: 0px; margin-top: 20px; overflow: scroll; height: 100%; }}
-
-	body.splash { 
-		.wide { height: initial !important; } }
-		.splash-section { 
-			h2 { font-size: 18px; } }
-		
-	div.splash-manifesto-container { 
-		.splash-section { 
-			.badge-mixpanel { margin: 0 auto; text-align: center; float: initial !important; } } }
-
-	.alert-flash { width: 70%; left: 50%; margin-left: -35%; }
-
-	.modal-dialog { width: auto !important; } 
-
-	// feedback
-
-	feedback-widget { position: fixed; bottom: 0; z-index: 9000;
-		div:first-child { top: 0; z-index: 9000; position: fixed; right: 0px; }
-		.div-feedback-toggle-off { position: fixed; bottom: 0; z-index: 9000; right: 0; }
-		.btn-feedback-toggle { color: white; background: #852C20; border-radius: 5px 5px 0 0; font-weight: 500; font-size: 16px; 
-			&:hover { color: white; } }
-		.form-group { width: 100%; background: white; padding: 15px; border-radius: 5px 5px 0 0; margin: 0; } }
-
-	.lbl-feedback-comment { color: $dark-text; }
-
-	.txt-feedback-comment { margin-bottom: 15px; }
-
-}
