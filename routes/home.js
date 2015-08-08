@@ -8,7 +8,7 @@ var express = require('express'),
 	User = require( '../models/userModel' ),
 	contentController = require( '../controllers/contentController' )
 
-var indexPath = path.resolve( __dirname, '../public/index.html')
+var indexPath = path.resolve( __dirname, '../', process.env.PUBLIC_FOLDER + '/index.html')
 
 // 
 // serves he index file when accessing root URL
@@ -59,7 +59,7 @@ router.get( '/#/:user/:stream/:slug', function( req, res, next ) {
 router.get( '/*', function( req, res ) {
 	res.status( 200 )
 		.set( { 'content-type': 'text/html; charset=utf-8' } )
-		.sendfile( 'public/index.html' )
+		.sendFile( indexPath )
 })
 
 module.exports = router
