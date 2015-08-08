@@ -22,7 +22,11 @@ var SidebarComponent = React.createClass({
 		})
 	},
 	handleSignOut: function () {
-		return this.props.menuOptionBottom.callback()
+		localStorage.removeItem( 'token' )
+		localStorage.removeItem( 'username' )
+		localStorage.removeItem( 'role' )
+		this.handleClick()
+		return window.location.assign( '#/home/splash' )
 	},
 	getInitialState: function () {
 	    return {

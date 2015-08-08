@@ -2,22 +2,22 @@
 	
 	<h2 class="text-center dark-text">Login</h2><br />
 	
-	<form novalidate valid-submit="login()" name="loginForm">
-		
+	<form ng-submit="login()">
 		<div class="form-group">
+
 			<label for="loginUsername" class="dark-text">Username</label>
-			<input type="text" class="username input-green form-control input-font-lg" id="loginUsername" ng-model="user.username" ng-required="true" name="username">
-			<span class="text-grey" ng-show="loginForm.$submitted && loginForm.username.$invalid">Username required</span>
+			<input type="text" class="username input-green form-control input-font-lg" id="loginUsername" ng-model="user.username">
+
 		</div>
 
 		<div class="form-group">
+
 			<label for="loginPassword" class="dark-text">Password</label>
-			<input type="password" class="username input-green form-control input-font-lg" id="loginPassword" ng-model="user.password" ng-required="true" name="password" />
-			<span class="text-grey" ng-show="loginForm.$submitted && loginForm.password.$invalid">Password required</span>
+			<input type="password" class="username input-green form-control input-font-lg" id="loginPassword" ng-model="user.password" />
+
 		</div>
 
-		<button class="btn btn-green-solid btn-block btn-lg btn-font-light" type="submit">Sign in</button> <br />
-
+		<button class="btn btn-green-solid btn-block btn-lg btn-font-light" ng-click="login()">Sign in</button> <br />
 	</form>
 
 	<div class="pull-right login-meta-links">

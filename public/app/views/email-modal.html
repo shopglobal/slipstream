@@ -1,15 +1,12 @@
 <div class="container-fluid container-padded">
-
-	<h1 ng-hide="inviteMode">Send this content to some friends</h1>
-	<h1 ng-show="inviteMode" class="col-md-10">{{ headlines[ headerNumber ] }}</h1>
+	<h1>Send this content to some friends</h1>
 
 	<button class="btn pull-right no-border btn-x" ng-click="cancel()">
 		<img src="images/x@2x.png" alt="">
 	</button>
 
-	<div class="form-group col-md-12" ng-repeat="choice in choices">
-		<input type="email" class="input-green input-line col-md-9" name="" placeholder="Friend's email" ng-model="choice.email"><br><br>
-		<div ng-show="$last" class="clearfix"></div>
+	<div class="form-group" ng-repeat="choice in choices">
+		<input type="email" class="input-green input-line col-md-8" name="" placeholder="Friend's email" ng-model="choice.email"><br><br>
 		<button ng-show="$last" ng-click="addMoreEmails()" class="add-button add-button-sm btn-add-more"><span>+</span></button>
 		<span ng-show="$last" ng-click="addMoreEmails()" class="text-green cursor-pointer">I have more!</span>
 	</div>

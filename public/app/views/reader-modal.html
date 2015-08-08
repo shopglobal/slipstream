@@ -28,7 +28,7 @@
 					<span class="dark-text pull-right hidden-xs">Curate and discover the web like never before.</span>
 				</a>
 			</div>
-			<div class="hidden-xs">
+			<div class="collpase navbar-collapse">
 				<!-- <ul class="nav navbar-nav navbar-center">
 					<li>
 						<button class="btn btn-green no-border" ui-sref="app.stream( { username: currentUser, stream: currentStream, mode: 'stream' })">
@@ -57,18 +57,6 @@
 			</div>
 		</div>
 	</nav>
-</div>
-
-<div class="visible-xs container-fluid sign-up-mobile" ng-hide="username">
-	
-	<span ng-hide="showSignup" class="sign-up-span">
-		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
-	</span>
-
-	<button class="btn" ng-class="{ 'btn-green' : !$state.includes( 'landing.splash' ), 'btn-white': $state.includes( 'landing.splash' ) }" ui-sref='landing.login' ui-sref-opts="{reload: true}">
-		Login
-	</button>
-
 </div>
 
 <div class="container-fluid reader-container" ng-class="{ 'reader-single col-md-6 col-md-offset-3': $state.includes( 'single' ) }">
@@ -118,10 +106,6 @@
 		</h4>
 	</div>
 
-	<span ng-show="publisher" class="publisher">
-		Via <a ng-href="{{ item.url }}">{{ publisher }}</a>
-	</span>
-
 	<div ng-bind-html="item.text" ng-show=" item.stream == 'read' && !adminEdit"></div>
 
 	<div ng-class="{ 'watch-iframe' : item.stream == 'watch', 'listen-iframe' : item.stream == 'listen' }" iframely url="{{ item.url }}" ng-if=" item.stream != 'read' "></div>
@@ -161,7 +145,20 @@
 </div>
 
 <script type="text/ng-template" id="splash-cta-signup.html">
-	<span ng-hide="showSignup" class="sign-up-span">
-		<button class="btn btn-green btn-landing-register" ui-sref="landing.register">Sign Up</button><br /><br />
+	<span ng-hide="showSignup">
+		<button class="btn btn-green btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
 	</span>
+	<form class="form-inline form-waitlist" ng-show="showSignup">
+		<span class="form-group">
+			<input type="email" class="input-green form-control" ng-model="user.email" placeholder="Email">
+			
+			<!-- Desktop  -->
+
+			<button class="btn btn-green hidden-xs form-control" ng-click="waitlist()">Sign Up</button>
+
+			<!-- Mobile -->
+			
+			<br class="visible-xs"><button class="btn btn-white btn-block visible-xs" ng-click="waitlist()">Sign Up</button>
+		</span>
+	</form>
 </script>
