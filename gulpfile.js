@@ -25,7 +25,6 @@ gulp.task( 'minify', function() {
 	return gulp.src( './public/index.html' )
 		.pipe( usemin({
 			js: [ uglify() ],
-			html: [ minifyHtml({ empty: true }) ],
 			appjs: [ 'concat' ]
 		}))
 		.pipe( gulp.dest( './build/' ) )
@@ -88,12 +87,23 @@ gulp.task( 'watch-react', function () {
 	bundler.on( 'update', build )
 })
 
+gulp.task( 'copyAll', function () {
+	gulp.src( './public/**/*' )
+		.pipe( gulp.dest( './build/') )
+})
+
 gulp.task( 'default', [
+	'copyAll',
 	'minify',
+	'minifyViews',
+	'sass'
+])
+
+/*gulp.task( 'default', [
 	'minifyViews',
 	'copyFonts',
 	'copyVendor',
 	'copyImages',
 	'copyJs',
 	'sass'
-])
+])*/
