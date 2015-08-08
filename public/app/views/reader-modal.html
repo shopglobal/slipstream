@@ -1,15 +1,4 @@
 <img src="images/ss_logo_green.png" alt="" class="modal-logo" ng-hide=" $state.includes( 'single' )"><br />
-	
-	<head>
-		<title>{{ item.title }}</title>
-		<!-- Open Graph + Twitter for image when embedded. -->
-		<meta name="twitter:site" content="@getslipstream" />
-		<meta property="og:site_name" content="Slipstream" />
-		<meta property="og:title" content="{{ item.title }}" />
-		<meta property="og:type" content="article" />
-		<meta property="og:image" content="{{ item.images[ item.thumbnail ].thumb }}" />
-		<meta property="og:description" content="{{ item.description }}" />
-	</head>
 
 <div id="header" ng-show=" $state.includes( 'single' ) ">
 	<nav class="navbar navbar-white">
