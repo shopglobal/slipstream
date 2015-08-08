@@ -174,7 +174,8 @@ a { color: $green;
 
 .input-green { background: transparent; border: 2px solid $green; color: $dark-text;
 	&::-webkit-input-placeholder { color: $dark-text; }
-	&:focus { box-shadow: none; border-color: $green; outline: none; } }
+	&:focus { box-shadow: none; border-color: $green; outline: none; }
+	&.ng-invalid { border: 2px solid $red; } }
 
  .select-green { background: url('../images/carrot-green.png') no-repeat right !important; border: solid 1px #00E0AA; -webkit-appearance: none; color:  $green; }
 
@@ -248,7 +249,7 @@ a { color: $green;
 .no-padding { padding-left: 0; padding-right: 0; }
 
 .input-line { border-width: 0 0 2px 0; border-radius: 0; box-shadow: none; 
-	&.ng-invalid.ng-touched { border-width: 0 0 2px 0; border-color: $red; } }
+	&.ng-invalid { border-width: 0 0 2px 0; } }
 
 .navbar-center { position: absolute; left: 50%; margin-left: -122px; margin-top: 3px; }
 
@@ -329,19 +330,21 @@ a.navbar-height-fix { padding: 11 15 0 15 !important; }
 
 	#sidebar-wrapper { position: fixed; top: 0; bottom: 0; left: 0; z-index: 1000; width: 225px; background-color: $sidebar-background; @include transition ( all 200ms ease-in-out ); opacity: 0.975; visibility: visible; white-space: nowrap;
 		#logo { @include filter( brightness(3) ); opacity: 1; display: inline-block; }
+		.footer { position: absolute; bottom: 15px; opacity: 0.5; font-size: 20px; display: inline-block;
+			a { display: block; text-decoration: none; color: white; } 
+			.glyphicon { padding: 2.5px; } }
 		&.sidebar-hidden { top: 0; bottom: 0; left: -225px; z-index: 1000; @include transition ( all 200ms ease-in-out ); opacity: 0; visibility: hidden; }
 		.btn-x img { @include filter( brightness(3) ); }
 		.sidebar-nav { position: absolute; top: 0; width: 100%; margin: 0; padding: 0; list-style: none; }
-		.sidebar-nav li { font-size: 20px; vertical-align: middle; margin-bottom: 15px;
+		.sidebar-nav li { font-size: 20px; vertical-align: middle;
 			&:hover { background: transparent; }
 			div { display: inline-block; } 
 			.glyphicon { padding: 2.5px; } }
-		.sidebar-nav li a { display: block; text-decoration: none; color: white; cursor: pointer; }
+		.sidebar-nav li a { display: block; text-decoration: none; color: white; }
 		.sidebar-nav li a:hover { text-decoration: none; color: white; }
 		.sidebar-nav li a:active, .sidebar-nav li a:focus { text-decoration: none; }
 		.sidebar-nav > .sidebar-brand { height: 65px; font-size: 18px; }
-		.sidebar-nav > .sidebar-brand a:hover { color: #fff; background: none; } 
-		.sidebar-bottom { position: absolute; top: initial; bottom: 15px; opacity: 0.5; font-size: 20px; display: block !important; } }
+		.sidebar-nav > .sidebar-brand a:hover { color: #fff; background: none; } }
 
 	#nav-row-1 { margin-bottom: 28px; background-color: $darkbase; box-shadow: 0px 5px 5px #D3D2D2; z-index: 1000; 
 		.dropdown-menu { z-index: 1000; } } 
@@ -448,11 +451,8 @@ footer { bottom: 0; position: absolute; height: 25px; }
 /* landing */
 
 body.single { 
-	.sign-up-mobile { 
-		.sign-up-span { float: left; padding-right: 10px; } }
 	#header { margin-top: -20px; margin-bottom: 30px; }
-	.reader-container { margin-bottom: 30px; } 
-	.publisher { padding-bottom: 10px; display: block; } }
+	.reader-container { margin-bottom: 30px; } }
 
 body.splash { font-family: $body-font; background-size: cover; background-attachment: fixed;
 	.splash-section { padding-bottom: 45px; padding-top: 45px; }
@@ -601,18 +601,9 @@ tags-input.ng-invalid .tags {
 @media only screen and (max-width : 768px) {
 
 	#header { 
-		#nav-row-1 { box-shadow: 0px 0px 0px #D3D2D2; }
-		#nav-row-2 { margin-top: 65px; }
 		.add-container { margin-right: 10px; } }
 
 	.container { padding: 0 5px !important; }
-
-	.content-toggle { max-width: 100%; background: white; border-radius: 10px; box-shadow: 0px 5px 5px 2px rgba( 255, 255, 255, 0.3); opacity: 0.98;
-		.btn-green { 
-			&:hover { color: white; } }
-		.btn { height: 58px; position: relative; border-radius: 10px;
-			.text-toggle { vertical-align: bottom;  }
-			.glyphicon { margin-right: 10px; font-size: 22px; vertical-align: middle; } } }
 
 	.panel-item { padding: 10px !important; 
 		.title-stream-item { margin-right: 0px; }
