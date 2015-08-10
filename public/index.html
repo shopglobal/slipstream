@@ -3,7 +3,7 @@
 	<title ng-bind="OG.title"> Slipstream </title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-	<!-- <base href="/"> -->
+	<base href="/">
 
 	<!-- Open Graph + Twitter for image when embedded. -->
 	<meta name="twitter:site" content="@getslipstream" />
@@ -34,7 +34,7 @@
 
 <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
-<link rel="stylesheet" href="vendor/ng-inline-edit/dist/ng-inline-edit.min.css">
+<link rel="stylesheet" href="bower_components/ng-inline-edit/dist/ng-inline-edit.min.css">
 <link href="vendor/ng-wig/dist/css/ng-wig.css" rel="stylesheet">
 
 <body ng-class="{ 'landing' : $state.includes( 'landing' ), 'splash' : $state.includes( 'landing.splash' ), 'app' : $state.includes( 'app' ), 'single' : $state.includes( 'single' ) }">
@@ -95,24 +95,5 @@
 	<script src="js/main.js"></script>
 	
 </body>
-
-<script type="text/ng-template" id="splash-cta-signup.html">
-	<span ng-hide="showSignup">
-		<button class="btn btn-white btn-xlg btn-landing-register" ng-click="showSignup = true">Sign Up</button><br /><br />
-	</span>
-	<form class="form-inline form-waitlist" ng-show="showSignup">
-		<span class="form-group">
-			<input type="email" class="input-white form-control input-font-lg" ng-model="user.email" placeholder="Email" />
-			
-			<!-- Desktop  -->
-
-			<button class="btn btn-white btn-lg hidden-xs" ui-sref="landing.register( { email: user.email } )">Sign Up</button>
-
-			<!-- Mobile -->
-			
-			<br class="visible-xs"><button class="btn btn-white btn-lg btn-block visible-xs" ui-sref="landing.register( { email: user.email } )">Sign Up</button>
-		</span>
-	</form>
-</script>
 
 </html>

@@ -63,18 +63,18 @@ UserSchema.pre( 'save', function(callback) {
 */
 UserSchema.methods.verifyPassword = function( password, callback ) {
 	
-	var origPassword = this.password ? this.password : ''
+	var tempPassword = this.tempPassword
 	
-	var tempPassword = this.tempPassword ? this.tempPassword : ''
-	
-	bcrypt.compare( password, origPassword, function( err, isMatch ) {
-		if ( err || !isMatch ) {
+	bcrypt.compare(password, this.password, function( err, isMatch ) {
+		if (err) return callback(err)
+			
+		if ( !isMatch ) {
 			bcrypt.compare( password, tempPassword, function ( err, isMatch ) {
 				if ( err ) return callback( err )
 				
 				return callback( null, isMatch )
 			})
-		} else if ( isMatch ) {
+		} else {
 			return callback( null, isMatch )
 		}
 	})

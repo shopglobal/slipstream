@@ -3,12 +3,14 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 .config( [ '$stateProvider', '$urlRouterProvider', '$httpProvider', '$sceDelegateProvider', '$locationProvider', function( $stateProvider, $urlRouterProvider, $httpProvider, $sceDelegateProvider, $locationProvider ) {
 
 
-	/*$locationProvider.html5Mode( true )*/
+	$locationProvider.html5Mode( {
+		enabled: true,
+		requireBase: false
+	} )
 	
-	// sets default states
+	// sets default state
 
-	$urlRouterProvider.when( '/app', '/app/discover/read' )
-	$urlRouterProvider.otherwise( '/home/splash' )
+	$urlRouterProvider.otherwise('/home/splash')
 	
 	// whitelists outside scripts for iframe use
 
@@ -40,7 +42,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				templateUrl: 'app/views/login.html'
 			})
 			.state( 'landing.register', {
-				params: { email: { value: '' } },
 				url: '/register',
 				templateUrl: 'app/views/register.html'
 			})
@@ -50,7 +51,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			})
 		.state( 'app', {
 			url: '/app',
-			abstract: true,
 			templateUrl: 'app/views/app.html',
 			controller: 'HomeController'
 		})
@@ -62,12 +62,6 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 				url: '/profile',
 				templateUrl: 'app/views/profile.html',
 				controller: 'ProfileController'
-			})
-			.state( 'app.invite', {
-				url: '/invite',
-				onEnter: function ( $rootScope ) {
-					$rootScope.openInviteModal()
-				}
 			})
 			.state( 'app.admin', {
 				url: '/admin',
@@ -81,20 +75,10 @@ var app = angular.module('SlipStream', ['ui.router', 'ui.bootstrap', 'ui.keypres
 			})
 			.state( 'app.discover', {
 				url: '/:mode/:stream',
-				params: { 
-					stream: {
-						value: 'read' // default stream if none specified
-					}
-				},
 				templateUrl: 'app/views/stream-content.html'
 			})
 			.state( 'app.stream', {
 				url: '/:mode/:username/:stream',
-				params: {
-					stream: {
-						value: 'read'
-					}
-				},
 				templateUrl: 'app/views/stream-content.html'
 			})
 		.state( 'single', {
@@ -396,30 +380,6 @@ app.directive( 'userName', [ function ( userId ) {
 		}
 	}
 }])
-
-// A form-validation directive.
-// From : http://blog.projectnibble.org/2014/01/10/advanced-form-control-with-angularjs-and-bootstrap3/
-
-app.directive( 'validSubmit', function ( $parse ) {
-	return {
-		require: 'form',
-		link: function ( scope, element, iAttrs, form ) {
-			form.$submitted = false 
-
-			var submitFunc = $parse( iAttrs.validSubmit )
-
-			element.on( 'submit', function ( event ) {
-				scope.$apply( function () {
-					form.$submitted = true
-					if ( form.$valid ) {
-						submitFunc( scope, { $event: event } )
-						form.$submitted = false 
-					}
-				})
-			})
-		}
-	}
-} )
 
 /*app.directive( 'sidebarButton', [ 'reactDirective', function ( reactDirective ) {
 	return reactDirective( 'sidebarComponent' )
