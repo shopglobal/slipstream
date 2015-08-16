@@ -53,13 +53,11 @@ router.get( '/:user/:stream/:slug', function( req, res, next ) {
 				})
 			})
 		})
-	} else return next()
-})
-
-router.get( '/*', function( req, res ) {
-	res.status( 200 )
-		.set( { 'content-type': 'text/html; charset=utf-8' } )
-		.sendFile( indexPath )
+	} else { 
+		return res.status( 200 )
+			.set( { 'content-type': 'text/html; charset=utf-8' } )
+			.sendFile( indexPath )
+	}
 })
 
 module.exports = router
