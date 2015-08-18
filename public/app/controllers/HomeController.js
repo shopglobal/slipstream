@@ -337,7 +337,15 @@ app.controller('HomeController', [ '$rootScope', '$stateParams', '$scope', '$sta
 	$scope.shareToFacebook = function ( item ) {
 		var singlePostUrl = getSinglePostUrl( item )
 
-		var facebookUrl = 'https://www.facebook.com/dialog/share?app_id=1416653888663542&display=popup&href=' + encodeURIComponent( singlePostUrl ) + '&redirect_uri=' + encodeURIComponent( $window.location )
+		console.log( item )
+
+		var fbAppid = $window.location.hostname.indexOf(".com") != -1 ? "1416653888663542" : "1449930512002546"
+
+		var fbObject = "{ 'image': '" + item.images[0].thumb + "' }"
+
+		var fbString = fbObject.toString()
+
+		var facebookUrl = 'https://www.facebook.com/dialog/share_open_graph?app_id=' + fbAppid + '&action_type=og.share&display=popup&href=' + encodeURIComponent( singlePostUrl ) + '&action_properties=' + encodeURIComponent( fbString ) + '&redirect_uri=' + encodeURIComponent( $window.location )
 
 		console.log( facebookUrl )
 

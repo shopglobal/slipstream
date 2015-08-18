@@ -19,9 +19,9 @@ app
 	.use( morgan( 'dev' ) )
 	.use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
 	.use( bodyParser.json( { limit: '50mb' } ) )
-	.use( '/api', require('./routes/usersRoute.js') )
 	.use( express.static( indexPath ) )
-	.all( '/*', require( './routes/home.js' ) )
+	.use( '/api', require('./routes/usersRoute.js') )
+	.all( '/*', express.static( indexPath + '/index.html' ) )
 	.on( 'error', function( error ){
 	   console.log( "Error: " + hostNames[i] + "\n" + error.message )
 	   console.log( error.stack )
@@ -38,10 +38,6 @@ http
 	})
 
 setInterval(function() {
-    http.get("http://slipstreamapp.com" )
-		.on( 'error', function ( error ) {
-			console.log( error.stack )
-		})
     http.get("http://glacial-sea-2323.herokuapp.com/")
 		.on( 'error', function ( error ) {
 			console.log( error.stack )
