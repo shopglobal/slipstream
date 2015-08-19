@@ -45,6 +45,6 @@
     "ng-inline-edit": "~0.5.3"
   },
   "resolutions": {
-    "angular": "1.3.17"
+    "angular": "1.3.18"
   }
 }
