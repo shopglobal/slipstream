@@ -35,7 +35,7 @@ exports.popular = function( req, res) {
 				slug: { $first: '$slug' },
 				saveCount: { $sum: 1 }
 			} },
-			{ $sort: { saveCount: -1, added: -1 } },
+			{ $sort: { added: -1 } },
 			{ $skip: skip },
 			{ $limit: show }
 		] )
