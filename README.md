@@ -1,5 +1,7 @@
 [ ![Codeship Status for OKNoah/slipstream](https://codeship.com/projects/e25e8050-988b-0132-afbc-261ab1ce0f66/status?branch=master)](https://codeship.com/projects/63416)
 
+NOTICE: This is the code of the moonlit app "Slipstream". After shutting down the commercial app, we are making the source code free and open to all. We plan to undertake a large refactoring to make the app a self-hosted bookmarking tool. The front-end will be rebuilt to use React. If you'd like to help out, see the `refactor` branch.
+
 # SlipStream
 
 SlipStream is a content-based social network.
@@ -9,7 +11,7 @@ SlipStream is a content-based social network.
 The app uses *Bower* and *NPM* for dependencies. To install, download and install *Node* from http://nodejs.org. Then do,
 
 	cd slipstream
-	npm install -g bower
+	npm install -g bower // if bower is not installed
 	npm install
 	bower install
 
@@ -21,6 +23,7 @@ It also uses *MongoDB* which requires *Homebrew* to install on Mac. See http://b
 
 Before running the app, environmental variables must be set. Read about them below first. To run the server, simple do,
 
+	gem install foreman // if foreman is not installed
 	foreman start web
 
 Now visit http://localhost:4000/ (port depends on `PORT` environmental variable) in your browser and you should see the main landing page.
