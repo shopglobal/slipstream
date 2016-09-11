@@ -1,6 +1,0 @@
-<div class='container-navbar'>
-	<button class='btn btn-white cursor-pointer button-follow'>
-	 	<span ng-if=" !followingUser ">Follow</span>
-	 	<span ng-if=" followingUser ">Following</span>
-	</button>
-</div>

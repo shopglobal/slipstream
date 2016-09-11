@@ -1,6 +1,6 @@
 [ ![Codeship Status for OKNoah/slipstream](https://codeship.com/projects/e25e8050-988b-0132-afbc-261ab1ce0f66/status?branch=master)](https://codeship.com/projects/63416)
 
-NOTICE: This is the code of the moonlit app "Slipstream". After shutting down the commercial app, we are making the source code free and open to all. We plan to undertake a large refactoring to make the app a self-hosted bookmarking tool. The front-end will be rebuilt to use React. If you'd like to help out, see the `refactor` branch.
+**NOTICE**: This branch is under heavy construction and the information below may be out of date.
 
 # SlipStream
 
@@ -8,23 +8,20 @@ SlipStream is a content-based social network.
 
 # Installtion
 
-The app uses *Bower* and *NPM* for dependencies. To install, download and install *Node* from http://nodejs.org. Then do,
+The app uses *NPM* for dependencies. To install, download and install *Node* from http://nodejs.org. Then do,
 
-	cd slipstream
-	npm install -g bower // if bower is not installed
-	npm install
-	bower install
+  cd slipstream
+  npm install
 
 It also uses *MongoDB* which requires *Homebrew* to install on Mac. See http://brew.sh. Then:
 
-	brew install mongodb
+  brew install mongodb
 
 # Run
 
 Before running the app, environmental variables must be set. Read about them below first. To run the server, simple do,
 
-	gem install foreman // if foreman is not installed
-	foreman start web
+  npm run dev
 
 Now visit http://localhost:4000/ (port depends on `PORT` environmental variable) in your browser and you should see the main landing page.
 
@@ -36,21 +33,17 @@ There is a post that needs to be in the database before you accept user registra
 
 There are many environment variables. They need to be set in a .env file locally, and then on the Heroku environments or CodeShip, etc. This includes `WELCOME_POST`, which is the ID of the welcome post created in the step above. Here is a partial list of variables.
 
-	WEB // the command to start the server, eg. `nodemon --exec node-theseus server.js`
-	MONGOLAB_URI // mongodb URL, including username, password and port
-	PORT
-	PLANTER_BUCKET_NAME // an S3 butcket for storing uploads
-	PLANTER_S3_ACCESS_KEY_ID
-	PLANTER_S3_SECRET_ACCESS_KEY
-	IFRAMELY_URL
-	IFRAMELY_PORT
-	ALGOLIASEARCH_API_KEY
-	ALGOLIASEARCH_API_KEY_SEARCH
-	ALGOLIASEARCH_APPLICATION_ID
-	PUBLIC_FOLDER // either build or public depending on environment
-	NEW_RELIC_LICENSE_KEY
-	TEST_ADMIN_TOKEN // the token of a user with admin role, used for tests
-	WELCOME_POST
+  MONGOLAB_URI // mongodb URL, including username, password and port
+  PLANTER_BUCKET_NAME // an S3 butcket for storing uploads
+  PLANTER_S3_ACCESS_KEY_ID
+  PLANTER_S3_SECRET_ACCESS_KEY
+  IFRAMELY_URL
+  IFRAMELY_PORT
+  ALGOLIASEARCH_API_KEY
+  ALGOLIASEARCH_API_KEY_SEARCH
+  ALGOLIASEARCH_APPLICATION_ID
+  TEST_ADMIN_TOKEN // the token of a user with admin role, used for tests
+  WELCOME_POST
 
 # Create account with admin role
 
@@ -64,21 +57,7 @@ To do administration, log in with a user with the `role: 'admin'` field and got 
 
 ## Overview
 
-There are two parts of the application, front-end and back-end. The back-end is in Node.js and the front-end is in Angular JS and some ReactJS. There are several packages at use in both the front and back and you can see a list in the package.json and bower.json files. As mentioned, Bower and NPM are used for package managment. The front-end files are in the `/public` folder and the Bower-installed packages are in `public/vendor`.
-
-Node.js serves both the JSON API and the static web files. The app to launch both is `server.js`. The endpoint for the API is `/api` and the endpoint for the static web app is just `/`. Here are the other API details. They are subjec to change so please contact me if there's any inconsistencies.
-
-### ReactJS
-
-With "Version 2" we included some React components. The `JSX` parts of these are in `src/`, and they are set by the gulp file to compile to `public/js`. The reasons for including React are:
-
-* Future-compatabilty with React-Native, a way of writing iOS apps in Javascript (we probably can't re-use the same code exactly, but we're learning it).
-
-* Better performance for some things.
-
-* It's hip and fun?
-
-Although it makes the application more complicated and larger for the time being, we hope to migrate features over one-by-one and eventually have a full migration. There is also a `README.MD` in `src/` which may have useful information. 
+There are two parts of the application, front-end and back-end. The back-end is in Node.js and the front-end is in ReactJS. There are several packages at use in both the front and back and you can see a list in the package.json. As mentioned, NPM is used for package managment.
 
 ## Routes
 
@@ -112,9 +91,9 @@ A `GET` request to this endpoint will get a single post, if it is not private. Y
 
 A `POST` request will send emails to a list of email addresses. It requires an authentication header and a body like this:
 
-	url: String,
-	title: String,
-	recipients: Array
+  url: String,
+  title: String,
+  recipients: Array
 
 # TODOs
 
