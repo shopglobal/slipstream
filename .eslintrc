@@ -21,7 +21,8 @@
     "id-length": 0,
     "no-else-return": 0,
     "space-in-parens": 0,
-    "semi": 0
+    "semi": 0,
+    "quotes": 0
   },
   "plugins": [
     "react", "import"

@@ -14,9 +14,6 @@ app
   .use(bodyParser.urlencoded( { limit: '50mb', extended: true } ) )
   .use( bodyParser.json( { limit: '50mb' } ) )
   .use('/v1', require('./routes/usersRoute.js'))
-  .on( 'error', ( error ) => {
-    console.log( error.stack )
-  })
 
 if (config.apiPort) {
   http.createServer(app).listen(config.apiPort, (err) => {

@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+var mongoose = require( 'mongoose' ),
 	bcrypt = require('bcrypt-nodejs'),
 	Q = require( 'q' )
 

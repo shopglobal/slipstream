@@ -1,4 +1,4 @@
-var mongoose = require( 'mongoose-q' )( require( 'mongoose' ) )
+var mongoose = require( 'mongoose' )
 
 var BetakeySchema = new mongoose.Schema( {
 	key: String,

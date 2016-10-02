@@ -1,9 +1,6 @@
 'use strict'
 
 var mongoose = require( 'mongoose' ),
-	Algolia = require( 'algoliasearch' ),
-	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex('Contents'),
 	Q = require( 'q' ),
 	URLSlugs = require( 'mongoose-url-slugs' )
 
@@ -78,10 +75,6 @@ ContentSchema.methods.flagHidden = function () {
 	
 	return this.save()
 }
-
-ContentSchema.post( 'remove', function( item ) {
-	index.deleteObject( item._id )
-})
 
 ContentSchema.index( { 'users.tags': 'text' } )
 

@@ -2,9 +2,8 @@ var fs = require('fs'),
 	path = require('path'),
 	User = require('../models/userModel.js'),
 	Content = require('../models/contentModel.js'),
-	tokenManager = require('../config/tokenManager'),
 	article = require('article'),
-	mongoose = require( 'mongoose-q' )( require( 'mongoose' ) ),
+	mongoose = require( 'mongoose' ),
 	async = require('async'),
 	request = require( 'request' ),
 	Q = require( 'q' ),
@@ -18,11 +17,7 @@ var fs = require('fs'),
 	htmlStripper = require( 'htmlstrip-native' ),
 	needle = require( 'needle' ),
 	readability = require( 'node-readability' ),
-	urlExpand = require( 'url-expand' ),
-	Algolia = require( 'algoliasearch' ),
-	algolia = new Algolia( process.env.ALGOLIASEARCH_APPLICATION_ID, process.env.ALGOLIASEARCH_API_KEY ),
-	index = algolia.initIndex( 'Contents' )
-//	readability = require( 'readable-proxy' ).scrape
+	urlExpand = require( 'url-expand' )
 
 // adds and item to the articles database with the user's id.
 

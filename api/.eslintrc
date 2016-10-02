@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "one-var": 0,
+    "no-var": 0
+  }
+}

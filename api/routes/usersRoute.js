@@ -1,15 +1,14 @@
-var express = require('express'),
-	http = require('http'),
-	router = express.Router(),
-	jwt = require('express-jwt'),
-	userController = require( '../controllers/userController' ),
-	blogController = require( '../controllers/blogController' ),
-	contentController = require( '../controllers/contentController' ),
-	secret = require( '../config/secretConfig' ),
-	bodyParser = require('body-parser'),
-	feedbackController = require( '../controllers/feedback-controller' ),
-	betakeyController = require( '../controllers/betakey-controller' ),
-	discoveryController = require( '../controllers/discovery-controller' )
+import express from 'express'
+import userController from '../controllers/userController'
+import blogController from '../controllers/blogController'
+import contentController from '../controllers/contentController'
+import feedbackController from '../controllers/feedback-controller'
+import betakeyController from '../controllers/betakey-controller'
+import discoveryController from '../controllers/discovery-controller'
+
+// const {SECRET_TOKEN} = process.env
+
+const router = new express.Router()
 
 router.route('/authenticate')
 	.post( userController.login )
@@ -21,41 +20,41 @@ router.route('/users')
 router.route('/signup')
 	.post( userController.signUp )
 
-router.route( '/user/password/reset' )
+router.route( '/password/reset' )
 	.get( userController.sendPasswordReset )
 
-router.route( '/user/password/change' )
+router.route( '/password/change' )
 	.post( userController.checkAuthorization, userController.changePassword )
 
-router.route( '/user/follow' )
+router.route( '/follow' )
 	.post( userController.checkAuthorization, userController.follow )
 
-router.route( '/user/unfollow' )
+router.route( '/unfollow' )
 	.post( userController.checkAuthorization, userController.unFollow )
 
-router.route( '/user/isfollowing' )
+router.route( '/isfollowing' )
 	.get( userController.checkAuthorization, userController.isfollowing )
 
 router.route( '/user/name' )
 	.get( userController.checkAuthorization, userController.getName )
 
-router.route( '/user/search' )
+router.route( '/search/user' )
 	.get( userController.checkAuthorization, userController.search )
 
-router.route( '/user/waitlist' )
+router.route( '/waitlist/user' )
 	.post( userController.waitlist )
 	.get( userController.checkAuthorization, userController.getwaitlist )
 
-router.route( '/user/sendbetakey' )
+router.route( '/betakey' )
 	.post( userController.checkAuthorization, userController.sendBetakey )
 
-router.route( '/users/invite' )
+router.route( '/invite' )
 	.post( userController.checkAuthorization, userController.inviteByEmail )
 
 router.route( '/admin/user-emails' )
 	.get( userController.checkAuthorization, userController.exportEmails )
 
-router.route('/add')
+router.route('/content')
 	.post( userController.checkAuthorization, function ( req, res ) {
 		if ( req.body.type == "read" ) {
 			blogController.add( req, res )
@@ -65,9 +64,6 @@ router.route('/add')
 
 router.route( '/shorten-url' )
 	.get( contentController.shortenUrl )
-
-router.route( '/search' )
-	.get( userController.checkAuthorization, contentController.search )
 
 router.route( '/feedback' )
 	.post( userController.checkAuthorization, feedbackController.add )
@@ -102,7 +98,7 @@ router.route( '/discover/:measure/:stream' )
 		}
 	})
 	
-router.route('/stream/:username/:stream')
+router.route('/user/:username/stream/:stream')
 	.get( userController.checkAuthorization, function ( req, res ) {
 		contentController.stream( req, res )
 	})
@@ -113,11 +109,10 @@ router.route('/stream/:username/:stream')
 router.route( '/single/manifesto' )
 	.get( contentController.singleManifesto )
 
-router.route( '/single/:username')
+router.route( '/single/user/:username')
 	.get( contentController.single )
 
-router.route( '/following/:stream' )
+router.route( '/following/stream/:stream' )
 	.get( userController.checkAuthorization, contentController.following )
-	
 
 module.exports = router

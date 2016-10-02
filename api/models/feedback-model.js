@@ -1,4 +1,4 @@
-var mongoose = require( 'mongoose-q' )( require( 'mongoose') )
+var mongoose = require( 'mongoose')
 
 var FeedbackSchema = new mongoose.Schema({
 	name: String,

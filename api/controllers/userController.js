@@ -1,23 +1,21 @@
-var User = require( '../models/userModel' ),
-	Content = require( '../models/contentModel' ),
-	secret = require('../config/secretConfig'),
-	jwt = require('jsonwebtoken'),
-	tokenManager = require('../config/tokenManager'),
-	bodyParser = require('body-parser'),
-	crypto = require( 'crypto' ),
-	bcrypt = require( 'bcrypt-nodejs' ),
-	log = require( '../helpers/logger.js' ),
-	Q = require( 'q' ),
-	Betakey = require( '../models/betakey-model' ),
-	getUser = require( '../helpers/get-user' ),
-	fs = require( 'fs' ),
-	path = require( 'path' ),
-	mongoose = require( 'mongoose' ),
-	randomKey = require( 'random-key' )
+const User = require( '../models/userModel' )
+const Content = require( '../models/contentModel' )
+const jwt = require('jsonwebtoken')
+const crypto = require( 'crypto' )
+const bcrypt = require( 'bcrypt-nodejs' )
+const Q = require( 'q' )
+const Betakey = require( '../models/betakey-model' )
+const getUser = require( '../helpers/get-user' )
+const fs = require( 'fs' )
+const path = require( 'path' )
+const mongoose = require( 'mongoose' )
+const randomKey = require( 'random-key' )
 
-var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
-	mailgunDomain = "slipstreamapp.com",
-	mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
+const mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0"
+const mailgunDomain = "slipstreamapp.com"
+const mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
+
+const {SECRET_TOKEN} = process.env
 
 //
 // check the username and password and returns token if verified
@@ -82,7 +80,7 @@ exports.signUp = function ( req, res ) {
 				result.save()
 			})
 
-			user.token = jwt.sign( user, secret.secretToken )
+			user.token = jwt.sign( user, SECRET_TOKEN )
 			user.save( function ( err, user ) {
 				var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
 
