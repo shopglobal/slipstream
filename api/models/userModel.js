@@ -1,13 +1,6 @@
-'use strict';
-
 var mongoose = require( 'mongoose' ),
 	bcrypt = require('bcrypt-nodejs'),
 	Q = require( 'q' )
-
-var Follows = new mongoose.Schema({
-	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	added: Number
-})
 
 var UserSchema = new mongoose.Schema({
 	username: {
@@ -29,8 +22,7 @@ var UserSchema = new mongoose.Schema({
 	token: String,
 	role: String,
 	permissions: Array,
-	waiting: Boolean,
-	following: [ Follows ]
+	waiting: Boolean
 })
 
 UserSchema.index( { username: 'text', sparse: true } )
@@ -82,27 +74,6 @@ UserSchema.methods.verifyPassword = function( password, callback ) {
 
 UserSchema.methods.validPassword = function( password ) {
 	return bcrypt.compare( password, this.password )
-}
-
-/*
-Follow a user.
-*/
-UserSchema.methods.follow = function( id ) {
-	var follow = this.following.push( { 
-		user: id,
-		added: ( new Date() / 1 ).toFixed()
-	})
-		
-	return this.save()
-}
-
-/*
-Unfollow a user.
-*/
-UserSchema.methods.unfollow = function( id ) {
-	this.following.pull( id )
-
-	return this.save()
 }
 
 module.exports = mongoose.model( 'User', UserSchema )

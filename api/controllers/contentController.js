@@ -1,66 +1,53 @@
-var Content = require( '../models/contentModel' ),
-  User = require( '../models/userModel' ),
-  getUser = require( '../helpers/get-user' ),
-  saveImage = require( '../helpers/save-image' ),
-  fs = require( 'fs' ),
-  path = require( 'path' ),
-  request = require( 'request' ),
-  Q = require( 'q' ),
-  _ = require( 'underscore' ),
-  log = require( '../helpers/logger.js' ),
-  mongoose = ( require( 'mongoose' ) ),
-  validator = require( 'validator' ),
-  urlExpand = require( 'url-expand' ),
-  BitlyApi = require( 'node-bitlyapi' ),
-  Bitly = new BitlyApi( {
-    client_id: process.env.BITLY_CLIENT_ID,
-    client_secret: process.env.BITLY_CLIENT_SECRET
-  })
+import Content from '../models/contentModel'
+import User from '../models/userModel'
+import getUser from '../helpers/get-user'
+import saveImage from '../helpers/save-image'
+import fs from 'fs'
+import path from 'path'
+import request from 'request'
+import Q from 'q'
+import _ from 'underscore'
+import mongoose from 'mongoose'
+import urlExpand from 'url-expand'
 
-var mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0",
-  mailgunDomain = "slipstreamapp.com",
-  mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
+const mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0"
+const mailgunDomain = "slipstreamapp.com"
+const mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
 
-Bitly.setAccessToken( process.env.BITLY_ACCESS_TOKEN )
-
-var findUserId = function ( username ) {
-  return Q.promise( function ( resolve, reject, notify ) {
+export const findUserId = ( username ) => {
+  return Q.promise((resolve, reject) => {
     var query = username.match( /^[a-fA-F0-9]{24}$/ ) ? { _id: username } : { username: username }
-    
-    console.log( query )
-    
+
     User.findOne( query )
     .then( function( result ) {
       if ( !result ) return reject( new Error( { message: "No user found" } ) )
-      
       resolve( result.id )
     })
     .catch( function ( error ) {
       reject( error )
     })
-  })    
+  })
 }
 
-exports.findUserId = findUserId
+export const projectContent = ( slug ) => {
+  return new Promise( function ( resolve, reject ) {
+    let match
 
-var projectContent = function ( slug ) {
-  return Q.Promise( function ( resolve, reject, notify ) {
-    
     if ( mongoose.Types.ObjectId.isValid( slug ) ) {
-      var objectid = mongoose.Types.ObjectId( slug )
-      var match = { $match: { $or: [ { 'users._id': objectid }, { _id: objectid } ] } }
-    } else  {
-      var match = { $match: { slug: slug } }
+      const objectid = new mongoose.Types.ObjectId( slug )
+      match = { $match: { $or: [ { 'users._id': objectid }, { _id: objectid } ] } }
+    } else {
+      match = { $match: { slug: slug } }
     }
-    
+
     Content.aggregate( [
       { $unwind: '$users' },
-      match, 
-      { $project: { 
+      match,
+      { $project: {
         _id: '$users._id',
         title: '$title',
         slug: '$slug',
-        url: '$url', 
+        url: '$url',
         images: '$images',
         description: '$description',
         added: '$users.added',
@@ -75,7 +62,7 @@ var projectContent = function ( slug ) {
     ] ).exec()
     .then( function ( result ) {
       if ( !result ) throw new Error( "No result. " )
-      
+
       resolve( result )
     }, function ( error ) {
       reject( error )
@@ -83,71 +70,62 @@ var projectContent = function ( slug ) {
   })
 }
 
-exports.projectContent = projectContent
-
 // adds content to users stream.
 
-exports.add = function ( req, res ) {
-  
+export function addContent ( req, res ) {
   function getContent ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-          
-    /*
-    If the article already exists, save the user to it and return the article, minus the `users` sub-document
-    */
-    urlExpand( req.body.url, function ( error, url ) {
-      
-      Content.findOne( { url: url } ).exec()
-      .then( function ( result ) {
-        if ( result ) {
-          var newUser = result.users.create({
-            user: user._id,
-            added: ( new Date() / 1).toFixed(),
-            stream: req.body.type,
-            private: true
-          })
-          
-          result.users.push( newUser )
-          
-          result.save()
-                    
-          return res.status( 200 ).json({
-            title: result.title,
-            description: result. description,
-            images: result.images,
-            _id: newUser._id
-          })
-        } else {
-          request( {
-            url: process.env.IFRAMELY_URL + "/iframely?url=" + url
+    return new Promise( function ( resolve, reject ) {
+      /*
+      If the article already exists, save the user to it and return the article, minus the `users` sub-document
+      */
+      urlExpand( req.body.url, function ( error, url ) {
+        Content.findOne( { url: url } ).exec()
+        .then( function ( result ) {
+          if ( result ) {
+            const newUser = result.users.create({
+              user: user._id,
+              added: ( new Date() / 1).toFixed(),
+              stream: req.body.type,
+              private: true
+            })
+
+            result.users.push( newUser )
+            result.save()
+
+            return res.status( 200 ).json({
+              title: result.title,
+              description: result. description,
+              images: result.images,
+              _id: newUser._id
+            })
+          } else {
+            request({
+              url: process.env.IFRAMELY_URL + "/iframely?url=" + url
             }, function ( err, response, body ) {
-            if ( err || response.statusCode !== 200 )
-              reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
+              if ( err || response.statusCode !== 200 ) {
+                reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
+              }
 
-            if ( !body )
-              reject( new Error( "Error from embed server. No body returned." ) )
-              
-            var parsedBody = JSON.parse( body )
-            
-            parsedBody.url = url
+              if ( !body ) {
+                reject( new Error( "Error from embed server. No body returned." ) )
+              }
 
-            resolve( parsedBody )
-          })
-        }
+              const parsedBody = JSON.parse( body )
+              parsedBody.url = url
+              resolve( parsedBody )
+            })
+          }
+        })
       })
-    
-    })
-        
     })
   }
-  
+
   function makeContent( contentInfo ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-      
+    return new Promise( function ( resolve ) {
       var content = new Content( _.extend({
         url: contentInfo.meta.canonical
       }, contentInfo.meta ))
-      
+
       getUser( req.token )
       .then( function ( user ) {
         var users = content.users.create({
@@ -156,88 +134,73 @@ exports.add = function ( req, res ) {
           stream: req.body.type,
           private: true
         })
-        
+
         content.users.push( users )
-        
-        var searchIndex = {
-          user: users.user,
-          added: users.added,
-          stream: users.stream,
-          text: content.text,
-          description: content.description,
-          title: content.title,
-          images: content.images
+
+        function saveContent () {
+          content.save( function () {
+            content._id = users._id
+            resolve( content )
+          })
         }
-        
+
         /*
         If there is a picture, save and record it. Then save.
         */
         if ( contentInfo.links[2].href ) {
-          saveImage( req.body.type, contentInfo.links[2].href )
+          saveImage(contentInfo.links[2].href)
           .spread( function( imageHash, imageOriginalPath, imageThumbPath) {
             content.images.push( {
               orig: imageOriginalPath,
               thumb: imageThumbPath,
-              hash: imageHash   
+              hash: imageHash
             })
-            saveContent( users )
+            saveContent()
           })
-        } else { saveContent( users ) }
+        } else { saveContent() }
       })
-      
-      function saveContent ( users ) {
-        content.save( function ( err, result ) {
-          content._id = users._id
-          
-          resolve( content )
-        })
-      }
-    
     })
   }
-  
+
   getUser( req.token )
   .then( getContent )
   .then( makeContent )
   .then( function ( content ) {
-    return res.json( content )  
+    return res.json( content )
   }).catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status(500).send( error.message )
   })
   .catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status(500).send( { error: error.message } )
   })
 }
 
 /*
-Allows admins to edit posts. 
+Allows admins to edit posts.
 
 INPUT: An object containing:
 
   { id: ( _id or users._id of the content to edit. ),
     changes: { an object with any fields and values that should be changed } }
 */
-exports.edit = function ( req, res ) {
-  
+export function editContent ( req, res ) {
   User.findOne( { token: req.token, role: 'admin' } )
   .then( function ( user ) {
     if ( !user ) throw new Error( "Permissions don't appear to allow that." )
-    
-    var contentid = mongoose.Types.ObjectId( req.body.id )
-    
-    Content.findOne( { $or: [ 
-      { 'users._id': req.body.id }, 
+
+    Content.findOne( { $or: [
+      { 'users._id': req.body.id },
       { _id: req.body.id }
     ] } )
-    .then( function ( parent ) {
-      if ( !parent ) throw new Error( "Couldn't find that article to edit." )
-      
-      var parent = _.extend( parent, req.body.changes )
-      
+    .then( function (parentId) {
+      if ( !parentId ) throw new Error( "Couldn't find that article to edit." )
+
+      const parent = _.extend( parentId, req.body.changes )
+
       parent.save()
-      .then( function ( result ) {
+      .then( function () {
         console.log( "Admin edit: Post: " + parent._id )
         return res.status( 200 ).json( "The post was saved." )
       }, function ( error ) {
@@ -263,29 +226,26 @@ OUTPUT: The stream of the user being viewed.
 
 Tries to determine if the stream is the logged-in user's stream, and includes or excluded private posts based on that.
 */
-exports.stream = function ( req, res ) {
-
-  var show = parseInt( req.query.show ),  // the number of items to show per page
+export function getStream ( req, res ) {
+  var show = parseInt( req.query.show, 10 ),  // the number of items to show per page
     page = req.query.page,  // the current page being asked for
     stream = req.params.stream, // the type of content to get
     skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
-  
 
-  function getStream ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-      
-      var userid = mongoose.Types.ObjectId( user )
-    
+  function findStream ( user ) {
+    return new Promise( function ( resolve ) {
+      var userid = new mongoose.Types.ObjectId( user )
+
       Content.aggregate( [
         { $unwind: '$users' },
-        { $match: { 
-          'users.user': userid, 
+        { $match: {
+          'users.user': userid,
           'users.stream': stream
         } },
-        { $project: { 
+        { $project: {
           _id: '$users._id',
-          title: '$title', 
-          url: '$url', 
+          title: '$title',
+          url: '$url',
           images: '$images',
           description: '$description',
           added: '$users.added',
@@ -302,37 +262,34 @@ exports.stream = function ( req, res ) {
         { $limit: show }
       ] )
       .exec()
-      .then( function( results ) { 
-        
+      .then( function( results ) {
         resolve( results )
-
       })
-      
     })
   }
-  
+
   findUserId( req.params.username )
   .then( function ( user ) {
     User.findOne( { token: req.token } )
     .then( function ( result ) {
-      if ( user == result._id ) {
-        getStream( user )
+      if ( user === result._id ) {
+        findStream( user )
         .then( function ( results ) {
           return res.status( 200 ).json( results )
         })
       } else {
-        var userid = mongoose.Types.ObjectId( user )
+        const userid = new mongoose.Types.ObjectId( user )
         Content.aggregate( [
           { $unwind: '$users' },
-          { $match: { 
-            'users.user': userid, 
+          { $match: {
+            'users.user': userid,
             'users.stream': stream,
             $or: [ { 'users.private': false }, { 'users.private': { $exists: false } } ]
           } },
-          { $project: { 
+          { $project: {
             _id: '$users._id',
-            title: '$title', 
-            url: '$url', 
+            title: '$title',
+            url: '$url',
             images: '$images',
             description: '$description',
             added: '$users.added',
@@ -355,7 +312,7 @@ exports.stream = function ( req, res ) {
     })
   })
   .catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status( 500 ).send( { error: error.message } )
   })
 }
@@ -363,234 +320,153 @@ exports.stream = function ( req, res ) {
 /*
 Gets a single post. Used to dynamically get content a user just added to their stream, or get an item's content after it's been updated.
 */
-exports.single = function ( req, res ) {
-  
-  var userToken = req.headers['authorization'] ? req.headers['authorization'].split( ' ' )[1] : 'null'
-  
+export function getContent ( req, res ) {
+  var userToken = req.headers.authorization ? req.headers.authorization.split( ' ' )[1] : 'null'
+
   findUserId( req.params.username )
   .then( function ( userid ) {
     User.findOne( { token: userToken } )
     .then( function ( result ) {
       var option = req.query.id ? req.query.id : req.query.slug
-      
-      if ( !result || result._id != userid ) {
+
+      if ( !result || result._id !== userid ) {
         projectContent( option )
-        .then( function ( result ) {
-          if ( result.private == true ) return res.status( 500 ).json( "Can't find that content." )
-                    
+        .then( function () {
+          if ( result.private === true ) return res.status( 500 ).json( "Can't find that content." )
+
           return res.status( 200 ).json( result )
         })
       } else {
         projectContent( option )
-        .then( function ( result ) {
+        .then( function () {
           return res.status( 200 ).json( result )
         })
         .catch( function ( error ) {
           console.log( error )
-          
           return res.status( 500 ).json( error.message )
         })
       }
     })
     .catch( function ( error ) {
       console.log( error )
-      
       return res.status( 200 ).json( error.message )
     })
   })
   .catch( function ( error ) {
-    console.log( error ) 
-    
+    console.log( error )
     return res.status( 500 ).json( error.message )
   })
 }
 
-exports.singleManifesto = function ( req, res ) {
-  
-  Content.findOne( { _id: process.env.MANIFESTO_ID } )
-  .then( function ( result ) {
-    if ( !result ) throw new Error( "Can't find that content." )
-    
-    return res.status( 200 ).json( result )
-  })
-  .catch( function ( error ) {
-    console.log( error )
-    
-    return res.status( 500 ).json( error.message )
-  })  
-}
-  
-exports.delete = function ( req, res ) {
-  
+export function deleteContent ( req, res ) {
   /*
-  Deletes an item from any "content" stream. 
-  
+  Deletes an item from any "content" stream.
+
   Accepts: User ID, but requires content id in scope at req.query.bind
-  
+
   Returns: Promise which resolves to the deleted item.
   */
-  function deleteItem ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-      if ( !req.query.id )
+  function deleteItem () {
+    return new Promise( function ( resolve, reject ) {
+      if ( !req.query.id ) {
         reject( new Error( "There doesn't seem to be an id given." ) )
-      
-      var contentId = mongoose.Types.ObjectId( req.query.id )
-      
+      }
+
+      const contentId = new mongoose.Types.ObjectId( req.query.id )
+
       Content.findOne( { 'users._id': req.query.id } ).exec()
       .then( function ( result ) {
         if ( !result ) return reject( new Error( "No item found when trying to dleete." ) )
-        
-        var remove = result.users.id( contentId ).remove()
-        
-        result.save( function ( error, output ) {          
+
+        result.users.id( contentId ).remove()
+
+        result.save( function () {
           resolve( result )
         })
       })
     })
   }
-  
+
   getUser( req.token )
   .then( deleteItem )
   .then( function ( content ) {
     return res.status( 200 ).json( "Item temoved: " + content.title )
   })
   .catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status( 500 ).json( error.message )
   })
-  
 }
 
-exports.addTags = function ( req, res ) {
+export function addTags ( req, res ) {
+  function addTag () {
+    return new Promise((resolve, reject) => {
+      const tags = req.body.tags
+      const contentId = new mongoose.Types.ObjectId( req.body.id )
 
-  function addTag ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-      
-      var tags = req.body.tags,
-        contentId = mongoose.Types.ObjectId( req.body.id )
-      
-      Content.update( 
+      Content.update(
         { 'users._id': contentId },
         { $pushAll: { 'users.$.tags': tags } }
       ).exec()
       .then( function ( result ) {
-      
         resolve( result )
       }, function ( error ) {
         if ( error ) return reject( error )
       })
-        
     })
   }
-  
+
   getUser( req.token )
   .then( addTag )
   .then( function ( result ) {
     return res.status( 200 ).send( "Added: " + result.tags )
   })
   .catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status( 500 ).send( error.message )
   })
-  
 }
 
-exports.deleteTag = function ( req, res ) {
-  
-  function deleteTag ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
-      
-      var contentId = mongoose.Types.ObjectId( req.query.id ),
+export function deleteTag ( req, res ) {
+  function removeTag () {
+    return new Promise( function ( resolve, reject ) {
+      var contentId = new mongoose.Types.ObjectId( req.query.id ),
         tag = JSON.parse( req.query.tag )
-      
-      Content.update( 
+
+      Content.update(
         { 'users._id': contentId },
         { $pull: { 'users.$.tags': tag } } )
       .exec()
-      .then( function ( result ) {        
+      .then( function ( result ) {
         resolve( result )
-      }, function ( error ) {
+      }, function () {
         reject( new Error( "Could not remove that tag." ) )
       })
-      
     })
   }
-  
+
   getUser( req.token )
-  .then( deleteTag )
+  .then( removeTag )
   .then( function ( result ) {
-    if ( result == 0 )
+    if ( result === 0 ) {
       return res.status( 500 ).send( "Could not remove tag, it wasn't found." )
-    
+    }
+
     return res.status( 200 ).send( "Tag removed." )
   })
   .catch( function ( error ) {
-    log.error( error )
+    console.log( error )
     return res.status( 500 ).send( error.message )
   })
 }
 
-exports.following = function ( req, res ) {
-  
-  getUser( req.token )
-  .then( function ( user ) {
-    
-    var following = []
-    var page = parseInt( req.query.page )
-    var show = parseInt( req.query.show )
-    var skip = ( page > 0 ? (( page - 1 ) * show ) : 0 )
-    
-    var array = user.following.forEach( function ( each ) {
-      following.push( each.user )
-    })
-    
-    Content.aggregate( [
-      { $unwind: '$users' },
-      { $match: { 
-        'users.user': { $in: following }, 
-        'users.stream': req.params.stream,
-        $or: [ { 'users.private': false }, { 'users.private': { '$exists': false } } ]
-      } },
-      { $project: { 
-        _id: '$users._id',
-        title: '$title', 
-        url: '$url',
-        slug: '$slug',
-        images: '$images',
-        thumbnail: '$thumbnail', 
-        description: '$description',
-        added: '$users.added',
-        user: '$users.user',
-        stream: '$users.stream',
-        text: '$text',
-        processing: '$processing',
-        tags: '$users.tags'
-      } },
-      { $sort: { added: -1 } },
-      { $skip: skip },
-      { $limit: show }
-    ] ).exec()
-    .then( function ( results ) {
-      User.populate( results, { path: 'user', select: 'username' } )
-      .then( function ( results ) {
-        return res.status( 200 ).json( results )  
-      })      
-    }, function ( error ) {
-      console.log( error )
-
-      return res.status( 500 ).json( error )
-    })
-  })
-}
-
-exports.private = function ( req, res ) {
-  
+export function makePrivate ( req, res ) {
   getUser( req.token )
   .then( function ( user ) {
     Content.findOne( { 'users.user': user._id, 'users._id': req.body.id } )
     .then( function ( parent ) {
       parent.users.id( req.body.id ).private = !parent.users.id( req.body.id ).private
-      
+
       parent.save()
       .then( function ( result ) {
         result.users.id( req.body.id )
@@ -608,33 +484,32 @@ exports.private = function ( req, res ) {
   })
 }
 
-exports.flag = function ( req, res ) {
+export function postFlag ( req, res ) {
   User.findOne( { token: req.token, role: 'admin' } )
-  .then( function ( user ) {
-    if ( !user ) return reject( new Error( { message: "Permissions don't appear to allow that." } ) )
-    
+  .then(( user ) => {
+    if ( !user ) return new Error( { message: "Permissions don't appear to allow that." } )
+
     Content.findOne( { $or: [ { 'users._id': req.body.id }, { _id: req.body.id } ] } )
-    .then( function ( parent ) {
+    .then(( parent ) => {
       if ( !parent ) return res.status( 500 ).json( "Couldn't find that item" )
-      
-      if ( req.body.flag == 'adult' ) {
+
+      if ( req.body.flag === 'adult' ) {
         parent.flagAdult()
-        .then( function( result ) {
+        .then(() => {
           return res.status( 200 ).json( "That post was flagged." )
-        }, function ( error ) {
+        }, ( error ) => {
           console.log( error )
           return res.status( 500 ).json( error.message )
-        })  
-      } else if ( req.body.flag == 'hidden' ) {
+        })
+      } else if ( req.body.flag === 'hidden' ) {
         parent.flagHidden()
-        .then( function( result ) {
+        .then(() => {
           return res.status( 200 ).json( "That post was flagged." )
         }, function ( error ) {
           console.log( error )
           return res.status( 500 ).json( error.message )
-        })  
+        })
       }
-      
     }, function ( error ) {
       console.log( error )
       return res.status( 500 ).json( error.message )
@@ -645,40 +520,13 @@ exports.flag = function ( req, res ) {
   })
 }
 
-exports.shortenUrl = function ( req, res ) {
-  
-  Q.try( function () {
-    if ( validator.isURL( req.query.url ) ) {
-      return req.query.url
-    } else {
-      throw new Error( "That doesn't look like a valid URL." )
-    }
-  })
-  .then( function ( url ) {
-    Bitly.shorten( { longUrl: url }, function( err, result ) {
-      if ( err ) throw new Error( err )
-      
-      jsonResult = JSON.parse( result )
-      
-      return res.status( 200 ).json( jsonResult.data.url )
-    })
-  })
-  .catch( function ( error ) {
-    console.log( error )
-    return res.status( 500 ).json( error.message )
-  })
-}
-
-/*INPUTS: req.body.url, req.body.title, req.body.recipeints (array) and authorization token in header*/
-
-exports.shareByEmail = function ( req, res ) {
+/* INPUTS: req.body.url, req.body.title, req.body.recipeints (array) and authorization token in header */
+export function shareByEmail ( req, res ) {
   var shareHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/share-by-email.html' ) ).toString().split( '<!-- Breakpoint -->' )
-  
+
   User.findOne( { token: req.token } )
-  .then( function ( user ) {
-    
-    req.body.recipients.forEach( function ( each, index ) {
-      
+  .then(( user ) => {
+    req.body.recipients.forEach(( each, index ) => {
       var email = {
         from: 'Slipstream <welcome@slipstreamapp.com>',
         to: each,
@@ -686,17 +534,16 @@ exports.shareByEmail = function ( req, res ) {
         html: shareHtml[0] + user.username + shareHtml[1] + req.body.title + shareHtml[2] + req.body.url + shareHtml[3]
       }
 
-      mailgun.messages().send( email, function ( err, body ) {
+      mailgun.messages().send( email, (err) => {
         if ( err ) throw new Error( err )
       })
-      
+
       if ( index === req.body.recipients.length - 1 ) {
         return res.status( 200 ).json( "Sending all emails." )
       }
-      
     })
   })
-  .catch( function ( error ) {
+  .catch(( error ) => {
     console.log( error )
     return res.status( 500 ).json( error.message )
   })
