@@ -61,7 +61,7 @@ function saveOrig ( imageUrl ) {
 
               resolve( image )
             } if ( result.statusCode !== 200 ) {
-              reject( new Error( result ) )
+              reject(result)
             }
           })
         })
@@ -127,11 +127,14 @@ export default function saveImage ( imageUrl ) {
     saveOrig( imageUrl )
     .then( saveThumb )
     .then(( image ) => {
-      var returnArray = [ image.hash, image.orig, image.thumb ]
-      resolve( returnArray )
+      resolve({
+        hash: image.hash,
+        orig: image.orig,
+        thumb: image.thumb
+      })
     })
     .catch(( error ) => {
-      reject( new Error( error ) )
+      reject(error)
     })
   })
 }

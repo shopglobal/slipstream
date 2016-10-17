@@ -1,6 +1,6 @@
 import express from 'express'
 import userController from '../controllers/userController'
-import blogController from '../controllers/blogController'
+import {postArticle} from '../controllers/blogController'
 import {
   addTags,
   makePrivate,
@@ -32,7 +32,7 @@ router.route( '/password/change' )
   .post( userController.checkAuthorization, userController.changePassword )
 router.route('/content')
   .post( userController.checkAuthorization, ( req, res ) => (
-    req.body.type === "read" ? blogController.add( req, res ) : addContent( req, res )
+    req.body.stream === "read" ? postArticle( req, res ) : addContent( req, res )
   ))
 
 /* Content */
@@ -47,15 +47,13 @@ router.route( '/content/edit' )
   .post( userController.checkAuthorization, editContent )
 router.route( '/content/flag' )
   .post( userController.checkAuthorization, postFlag )
-router.route('/user/:username/stream/:stream')
-  .get( userController.checkAuthorization, function ( req, res ) {
-    getStream( req, res )
-  })
+router.route('/stream/:stream')
+  .get(getStream)
   .delete( userController.checkAuthorization, function ( req, res ) {
     deleteContent( req, res )
   })
 
-router.route( '/user/:username/single')
+router.route( '/content/:slug')
   .get( getContent )
 
 module.exports = router

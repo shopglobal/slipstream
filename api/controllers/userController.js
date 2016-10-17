@@ -9,9 +9,11 @@ const fs = require( 'fs' )
 const path = require( 'path' )
 const mongoose = require( 'mongoose' )
 
-const mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0"
-const mailgunDomain = "slipstreamapp.com"
-const mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
+const {MAILGUN_KEY, MAILGUN_DOMAIN} = process.env
+const mailgun = require( 'mailgun-js' )({
+  apiKey: MAILGUN_KEY,
+  domain: MAILGUN_DOMAIN
+})
 
 const {SECRET_TOKEN} = process.env
 
@@ -179,19 +181,20 @@ exports.deleteUser = function( req, res ) {
 // the req as req.token
 //
 exports.checkAuthorization = function( req, res, callback ) {
-  let bearerToken
-  const bearerHeader = req.headers['authorization']
-
-  if (typeof bearerHeader !== 'undefined') {
-    User.findOne({ token: bearerHeader.split(' ')[1] })
-    .then(user => {
-      req.user = user
-      return callback()
-    })
-  } else {
-    console.log( { headers: req.headers }, "Token authorization failed." )
-    return res.status( 500 ).send( "Token authorization failed." )
+  if (req.headers.authorization && !req.headers.authorization.includes(' ')) {
+    return res.status( 500 ).send( "Token authorization failed. 1" )
   }
+
+  const authToken = req.headers.authorization.split(' ')[1]
+
+  User.findOne({ token: authToken })
+  .then(user => {
+    if (!user) {
+      return res.status( 500 ).send( "Token authorization failed. 2" )
+    }
+    req.user = user
+    return callback()
+  })
 }
 
 /*

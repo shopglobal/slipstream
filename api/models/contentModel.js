@@ -17,6 +17,7 @@ const ContentSchema = new mongoose.Schema({
   dislikes: Number,   // number of dislikes on parent site
   shares: Number,   // number of times share on social media/email
   processing: Boolean, // whether the item is still being loaded in the background
+  stream: String,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   flags: {
     adult: {

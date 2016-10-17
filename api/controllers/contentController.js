@@ -8,11 +8,12 @@ import request from 'request'
 import Q from 'q'
 import _ from 'underscore'
 import mongoose from 'mongoose'
-import urlExpand from 'url-expand'
 
-const mailgunApiKey = "key-fe1e0965d13a84409a40129ca218d5e0"
-const mailgunDomain = "slipstreamapp.com"
-const mailgun = require( 'mailgun-js' )( { apiKey: mailgunApiKey, domain: mailgunDomain })
+const {MAILGUN_KEY, MAILGUN_DOMAIN} = process.env
+const mailgun = require( 'mailgun-js' )({
+  apiKey: MAILGUN_KEY,
+  domain: MAILGUN_DOMAIN
+})
 
 export const findUserId = ( username ) => {
   return Q.promise((resolve, reject) => {
@@ -73,49 +74,24 @@ export const projectContent = ( slug ) => {
 // adds content to users stream.
 
 export function addContent ( req, res ) {
-  function getContent ( user ) {
+  const {url} = req.params
+
+  function getContent () {
     return new Promise( function ( resolve, reject ) {
-      /*
-      If the article already exists, save the user to it and return the article, minus the `users` sub-document
-      */
-      urlExpand( req.body.url, function ( error, url ) {
-        Content.findOne( { url: url } ).exec()
-        .then( function ( result ) {
-          if ( result ) {
-            const newUser = result.users.create({
-              user: user._id,
-              added: ( new Date() / 1).toFixed(),
-              stream: req.body.type,
-              private: true
-            })
+      request({
+        url: process.env.IFRAMELY_URL + "/iframely?url=" + url
+      }, function ( err, response, body ) {
+        if ( err || response.statusCode !== 200 ) {
+          reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
+        }
 
-            result.users.push( newUser )
-            result.save()
+        if ( !body ) {
+          reject( new Error( "Error from embed server. No body returned." ) )
+        }
 
-            return res.status( 200 ).json({
-              title: result.title,
-              description: result. description,
-              images: result.images,
-              _id: newUser._id
-            })
-          } else {
-            request({
-              url: process.env.IFRAMELY_URL + "/iframely?url=" + url
-            }, function ( err, response, body ) {
-              if ( err || response.statusCode !== 200 ) {
-                reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
-              }
-
-              if ( !body ) {
-                reject( new Error( "Error from embed server. No body returned." ) )
-              }
-
-              const parsedBody = JSON.parse( body )
-              parsedBody.url = url
-              resolve( parsedBody )
-            })
-          }
-        })
+        const parsedBody = JSON.parse( body )
+        parsedBody.url = url
+        resolve( parsedBody )
       })
     })
   }
@@ -162,8 +138,8 @@ export function addContent ( req, res ) {
     })
   }
 
-  getUser( req.token )
-  .then( getContent )
+
+  getContent()
   .then( makeContent )
   .then( function ( content ) {
     return res.json( content )
@@ -227,93 +203,21 @@ OUTPUT: The stream of the user being viewed.
 Tries to determine if the stream is the logged-in user's stream, and includes or excluded private posts based on that.
 */
 export function getStream ( req, res ) {
-  var show = parseInt( req.query.show, 10 ),  // the number of items to show per page
-    page = req.query.page,  // the current page being asked for
-    stream = req.params.stream, // the type of content to get
-    skip = ( page > 0 ? (( page - 1 ) * show ) : 0 ) // amount to skip
+  const { stream } = req.params
 
-  function findStream ( user ) {
-    return new Promise( function ( resolve ) {
-      var userid = new mongoose.Types.ObjectId( user )
+  const limit = req.query.limit || 10
+  const skip = ((req.query.page || 1) - 1) * limit
 
-      Content.aggregate( [
-        { $unwind: '$users' },
-        { $match: {
-          'users.user': userid,
-          'users.stream': stream
-        } },
-        { $project: {
-          _id: '$users._id',
-          title: '$title',
-          url: '$url',
-          images: '$images',
-          description: '$description',
-          added: '$users.added',
-          user: '$users.user',
-          stream: '$users.stream',
-          text: '$text',
-          processing: '$processing',
-          tags: '$users.tags',
-          private: '$users.private',
-          thumbnail: '$thumbnail'
-        } },
-        { $sort: { added: -1 } },
-        { $skip: skip },
-        { $limit: show }
-      ] )
-      .exec()
-      .then( function( results ) {
-        resolve( results )
-      })
-    })
-  }
-
-  findUserId( req.params.username )
-  .then( function ( user ) {
-    User.findOne( { token: req.token } )
-    .then( function ( result ) {
-      if ( user === result._id ) {
-        findStream( user )
-        .then( function ( results ) {
-          return res.status( 200 ).json( results )
-        })
-      } else {
-        const userid = new mongoose.Types.ObjectId( user )
-        Content.aggregate( [
-          { $unwind: '$users' },
-          { $match: {
-            'users.user': userid,
-            'users.stream': stream,
-            $or: [ { 'users.private': false }, { 'users.private': { $exists: false } } ]
-          } },
-          { $project: {
-            _id: '$users._id',
-            title: '$title',
-            url: '$url',
-            images: '$images',
-            description: '$description',
-            added: '$users.added',
-            user: '$users.user',
-            stream: '$users.stream',
-            text: '$text',
-            processing: '$processing',
-            tags: '$users.tags',
-            private: '$users.private',
-            slug: '$slug'
-          } },
-          { $sort: { added: -1 } },
-          { $skip: skip },
-          { $limit: show }
-        ] ).exec()
-        .then( function ( results ) {
-          return res.status( 200 ).json( results )
-        })
-      }
-    })
+  Content.find({
+    'flags.hidden': false,
+    processing: false,
+    stream
+  }, null, {
+    limit,
+    skip
   })
-  .catch( function ( error ) {
-    console.log( error )
-    return res.status( 500 ).send( { error: error.message } )
+  .then(data => {
+    res.status(200).json({ data })
   })
 }
 
@@ -321,40 +225,9 @@ export function getStream ( req, res ) {
 Gets a single post. Used to dynamically get content a user just added to their stream, or get an item's content after it's been updated.
 */
 export function getContent ( req, res ) {
-  var userToken = req.headers.authorization ? req.headers.authorization.split( ' ' )[1] : 'null'
-
-  findUserId( req.params.username )
-  .then( function ( userid ) {
-    User.findOne( { token: userToken } )
-    .then( function ( result ) {
-      var option = req.query.id ? req.query.id : req.query.slug
-
-      if ( !result || result._id !== userid ) {
-        projectContent( option )
-        .then( function () {
-          if ( result.private === true ) return res.status( 500 ).json( "Can't find that content." )
-
-          return res.status( 200 ).json( result )
-        })
-      } else {
-        projectContent( option )
-        .then( function () {
-          return res.status( 200 ).json( result )
-        })
-        .catch( function ( error ) {
-          console.log( error )
-          return res.status( 500 ).json( error.message )
-        })
-      }
-    })
-    .catch( function ( error ) {
-      console.log( error )
-      return res.status( 200 ).json( error.message )
-    })
-  })
-  .catch( function ( error ) {
-    console.log( error )
-    return res.status( 500 ).json( error.message )
+  Content.findOne({ slug: req.params.slug })
+  .then(content => {
+    res.status(200).json({content})
   })
 }
 

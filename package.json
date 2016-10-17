@@ -235,7 +235,6 @@
     "timekeeper": "0.0.5",
     "uglify-js": "^2.4.17",
     "underscore": "^1.7.0",
-    "url-expand": "^0.1.5",
     "url-loader": "^0.5.7",
     "validator": "^3.40.1",
     "vinyl-source-stream": "^1.1.0",

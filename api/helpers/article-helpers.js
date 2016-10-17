@@ -9,7 +9,7 @@ Accepts: article object
 
 Returns: article object with images array and replaced URLs in article.content
 */
-export function replaceImages ( article ) {
+export default function replaceImages ( article ) {
   return new Promise( function (resolve, reject) {
     /* Try detect if the article has no images, quit if it does not. */
     if ( article.content.indexOf( 'img' ) <= -1 ) {
