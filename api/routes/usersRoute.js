@@ -5,7 +5,7 @@ import {
   addTags,
   makePrivate,
   getStream,
-  addContent,
+  postContent,
   getContent,
   postFlag,
   editContent,
@@ -30,9 +30,9 @@ router.route( '/password/reset' )
   .get( userController.sendPasswordReset )
 router.route( '/password/change' )
   .post( userController.checkAuthorization, userController.changePassword )
-router.route('/content')
+router.route('/stream/:stream/content')
   .post( userController.checkAuthorization, ( req, res ) => (
-    req.body.stream === "read" ? postArticle( req, res ) : addContent( req, res )
+    req.body.type === "read" ? postArticle( req, res ) : postContent( req, res )
   ))
 
 /* Content */
@@ -47,13 +47,11 @@ router.route( '/content/edit' )
   .post( userController.checkAuthorization, editContent )
 router.route( '/content/flag' )
   .post( userController.checkAuthorization, postFlag )
-router.route('/stream/:stream')
+router.route('/stream/:stream/content')
   .get(getStream)
-  .delete( userController.checkAuthorization, function ( req, res ) {
-    deleteContent( req, res )
-  })
 
 router.route( '/content/:slug')
   .get( getContent )
+  .delete( userController.checkAuthorization, deleteContent)
 
 module.exports = router

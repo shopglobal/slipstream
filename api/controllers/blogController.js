@@ -17,6 +17,8 @@ imageResolver.register(new ImageResolver.Webpage())
 // adds and item to the articles database with the user's id.
 
 export function postArticle ( req, res ) {
+  const {stream} = req.params
+
   function getArticle () {
     return new Promise( function ( resolve, reject ) {
       var newArticle = new Content({
@@ -25,7 +27,7 @@ export function postArticle ( req, res ) {
         url: req.body.url,
         private: true,
         user: req.user._id,
-        stream: 'read'
+        stream
       })
 
       needle.get( req.body.url, {

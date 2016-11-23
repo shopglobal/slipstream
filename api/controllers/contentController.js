@@ -73,7 +73,7 @@ export const projectContent = ( slug ) => {
 
 // adds content to users stream.
 
-export function addContent ( req, res ) {
+export function postContent ( req, res ) {
   const {url} = req.params
 
   function getContent () {
@@ -227,31 +227,20 @@ Gets a single post. Used to dynamically get content a user just added to their s
 export function getContent ( req, res ) {
   Content.findOne({ slug: req.params.slug })
   .then(content => {
-    res.status(200).json({content})
+    res.status(200).json({data: content})
   })
 }
 
 export function deleteContent ( req, res ) {
-  /*
-  Deletes an item from any "content" stream.
+  const {slug} = req.params
 
-  Accepts: User ID, but requires content id in scope at req.query.bind
-
-  Returns: Promise which resolves to the deleted item.
-  */
   function deleteItem () {
     return new Promise( function ( resolve, reject ) {
-      if ( !req.query.id ) {
-        reject( new Error( "There doesn't seem to be an id given." ) )
-      }
-
-      const contentId = new mongoose.Types.ObjectId( req.query.id )
-
-      Content.findOne( { 'users._id': req.query.id } ).exec()
+      Content.findOne({ slug }).exec()
       .then( function ( result ) {
-        if ( !result ) return reject( new Error( "No item found when trying to dleete." ) )
+        if ( !result ) return reject( new Error( "No item found when trying to delete." ) )
 
-        result.users.id( contentId ).remove()
+        result.remove()
 
         result.save( function () {
           resolve( result )
@@ -260,8 +249,7 @@ export function deleteContent ( req, res ) {
     })
   }
 
-  getUser( req.token )
-  .then( deleteItem )
+  deleteItem()
   .then( function ( content ) {
     return res.status( 200 ).json( "Item temoved: " + content.title )
   })
