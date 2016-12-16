@@ -1,0 +1,25 @@
+.Item {
+  background: #FAFAFA;
+  width: 300px;
+  padding: 20px;
+}
+
+.title {
+
+}
+
+.latestContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.latest {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: #FF373E;
+}

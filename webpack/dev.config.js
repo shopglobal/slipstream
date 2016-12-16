@@ -82,8 +82,8 @@ module.exports = {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']},
       { test: /\.json$/, loader: 'json-loader' },
-      { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
       { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },
+      { test: /\.css$/, loader: 'style!css?importLoaders=1!autoprefixer?browsers=last 2 version!sass' },
       { test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/font-woff" },
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=application/octet-stream" },
@@ -108,7 +108,7 @@ module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
+      __DEVTOOLS__: false  // <-------- DISABLE redux-devtools HERE
     }),
     webpackIsomorphicToolsPlugin.development()
   ]

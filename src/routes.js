@@ -1,10 +1,9 @@
 import React from 'react';
-import {IndexRoute, Route} from 'react-router';
+import {Route} from 'react-router';
 // import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
-import {
-    App,
-    Home
-  } from 'containers';
+import { App } from 'containers';
+import Home from './components/Home';
+import Stream from './components/Stream';
 
 export default () => { // passing in 'store'
 //   const requireLogin = (nextState, replace, cb) => {
@@ -25,8 +24,10 @@ export default () => { // passing in 'store'
 //   };
 
   return (
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
+    <Route component={App}>
+      <Route path="/" component={Home}>
+        <Route path="/stream/:stream" component={Stream} />
+      </Route>
     </Route>
   );
 };

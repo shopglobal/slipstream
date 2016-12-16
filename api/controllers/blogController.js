@@ -25,7 +25,6 @@ export function postArticle ( req, res ) {
         images: [],
         processing: true,
         url: req.body.url,
-        private: true,
         user: req.user._id,
         stream
       })

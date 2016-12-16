@@ -1,0 +1,22 @@
+.Header {
+  position: fixed;
+  top: 0;
+  height: 42px;
+  width: 100%;
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.addButtonContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.addButton {
+  cursor: pointer;
+}

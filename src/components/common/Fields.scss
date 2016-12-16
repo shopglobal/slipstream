@@ -1,0 +1,24 @@
+.textFieldContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.textField {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #333;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.textFieldError {
+  @extend .textField;
+  border-color: #F06161;
+}
+
+.selectFieldContainer {
+  @extend .textFieldContainer;
+}
