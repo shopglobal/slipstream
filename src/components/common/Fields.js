@@ -14,14 +14,24 @@ const commonProps = {
   className: PropTypes.string
 }
 
-const TextField = ({ input, label, type, id, className, meta: { touched, error } }) => {
+const TextField = ({ input, label, type, id, className, disabled, onBlur, meta: { touched, error } }) => {
   const hasError = (touched && error)
+
+  const blurHandler = (event) => {
+    input.onBlur(event)
+    if (onBlur && !error) {
+      console.log('onBlur')
+      onBlur(event)
+    }
+  }
 
   return (
     <div className={className || classes.textFieldContainer}>
       <label htmlFor={id}>{label}</label>
       <input
         {...input}
+        onBlur={blurHandler}
+        disabled={disabled}
         type={type}
         id={id}
         className={!hasError ? classes.textField : classes.textFieldError}
@@ -33,7 +43,7 @@ const TextField = ({ input, label, type, id, className, meta: { touched, error }
   )
 }
 
-const SelectField = ({ input, label, className, options, id, meta: { touched, error } }) => {
+const SelectField = ({ input, disabled, label, className, options, id, meta: { touched, error } }) => {
   const onChange = (event) => {
     input.onChange(event.value)
   }
@@ -45,6 +55,7 @@ const SelectField = ({ input, label, className, options, id, meta: { touched, er
       <Select
         id={id}
         options={options}
+        disabled={disabled}
         {...input}
         onChange={onChange}
         onBlurResetsInput={false}
@@ -58,7 +69,37 @@ const SelectField = ({ input, label, className, options, id, meta: { touched, er
   )
 }
 
+const TextAreaField = ({ input, label, type, id, className, disabled, onBlur, meta: { touched, error } }) => {
+  const hasError = (touched && error)
+
+  const blurHandler = (event) => {
+    input.onBlur(event)
+    if (onBlur && !error) {
+      console.log('onBlur')
+      onBlur(event)
+    }
+  }
+
+  return (
+    <div className={className || classes.textFieldContainer}>
+      <label htmlFor={id}>{label}</label>
+      <textarea
+        {...input}
+        onBlur={blurHandler}
+        disabled={disabled}
+        type={type}
+        id={id}
+        className={!hasError ? classes.textField : classes.textFieldError}
+      />
+      { hasError &&
+        <p className="invalidFieldText">{error}</p>
+      }
+    </div>
+  )
+}
+
 TextField.propTypes = commonProps
+TextAreaField.propTypes = commonProps
 SelectField.propTypes = { ...commonProps, options: PropTypes.array }
 
-export { TextField, SelectField }
+export { TextField, SelectField, TextAreaField }

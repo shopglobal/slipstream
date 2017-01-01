@@ -74,7 +74,8 @@ export const projectContent = ( slug ) => {
 // adds content to users stream.
 
 export function postContent ( req, res ) {
-  const {url} = req.params
+  const {stream} = req.params
+  const {format, url} = req.body
 
   function getContent () {
     return new Promise( function ( resolve, reject ) {
@@ -99,7 +100,8 @@ export function postContent ( req, res ) {
   function makeContent( contentInfo ) {
     return new Promise( function ( resolve ) {
       var content = new Content( _.extend({
-        url: contentInfo.meta.canonical
+        url: contentInfo.meta.canonical,
+        format
       }, contentInfo.meta ))
 
       getUser( req.token )
@@ -107,8 +109,8 @@ export function postContent ( req, res ) {
         var users = content.users.create({
           user: user._id,
           added: ( new Date() / 1).toFixed(),
-          stream: req.body.type,
-          private: true
+          private: true,
+          stream,
         })
 
         content.users.push( users )
@@ -125,11 +127,11 @@ export function postContent ( req, res ) {
         */
         if ( contentInfo.links[2].href ) {
           saveImage(contentInfo.links[2].href)
-          .spread( function( imageHash, imageOriginalPath, imageThumbPath) {
-            content.images.push( {
-              orig: imageOriginalPath,
-              thumb: imageThumbPath,
-              hash: imageHash
+          .then(({ hash, orig, thumb }) => {
+            content.images.push({
+              orig,
+              thumb,
+              hash
             })
             saveContent()
           })
@@ -137,7 +139,6 @@ export function postContent ( req, res ) {
       })
     })
   }
-
 
   getContent()
   .then( makeContent )
@@ -153,38 +154,36 @@ export function postContent ( req, res ) {
   })
 }
 
-/*
-Allows admins to edit posts.
-
-INPUT: An object containing:
-
-  { id: ( _id or users._id of the content to edit. ),
-    changes: { an object with any fields and values that should be changed } }
-*/
 export function editContent ( req, res ) {
-  User.findOne( { token: req.token, role: 'admin' } )
-  .then( function ( user ) {
-    if ( !user ) throw new Error( "Permissions don't appear to allow that." )
+  const {content} = req.params
 
-    Content.findOne( { $or: [
-      { 'users._id': req.body.id },
-      { _id: req.body.id }
-    ] } )
-    .then( function (parentId) {
-      if ( !parentId ) throw new Error( "Couldn't find that article to edit." )
+  Content.findOne({ slug: content })
+  .then( function (parent) {
+    if ( !parent ) throw new Error( "Couldn't find that article to edit." )
 
-      const parent = _.extend( parentId, req.body.changes )
+    for (const key in req.body) {
+      switch (key) {
+        case 'description':
+        case 'title':
+        case 'format':
+        case 'stream':
+          parent[key] = req.body[key]
+          break
+        case 'flags':
+          for (const flag in req.body.flags) {
+            parent.flags[flag] = req.body.flags[flag]
+          }
+          break
+        default:
+          console.log('UPDATE_KEY_IGNORED', key)
+      }
+    }
 
-      parent.save()
-      .then( function () {
-        console.log( "Admin edit: Post: " + parent._id )
-        return res.status( 200 ).json( "The post was saved." )
-      }, function ( error ) {
-        console.log( error )
-        return res.status( 500 ).json( error.message )
-      })
-    })
-    .catch( function ( error ) {
+    parent.save()
+    .then(data => {
+      console.log('CONTENT_UPDATED', data.slug)
+      return res.status( 200 ).json({ data })
+    }, function ( error ) {
       console.log( error )
       return res.status( 500 ).json( error.message )
     })

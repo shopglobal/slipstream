@@ -58,7 +58,7 @@
     "v8_use_snapshot": "true",
     "want_separate_host_toolset": 0,
     "xcode_version": "7.0",
-    "nodedir": "/Users/noah/.node-gyp/6.7.0",
+    "nodedir": "/Users/noah/.node-gyp/6.9.2",
     "copy_dev_lib": "true",
     "standalone_static_library": 1
   }

@@ -181,11 +181,13 @@ exports.deleteUser = function( req, res ) {
 // the req as req.token
 //
 exports.checkAuthorization = function( req, res, callback ) {
-  if (req.headers.authorization && !req.headers.authorization.includes(' ')) {
+  const {authorization} = req.headers
+
+  if (authorization && !authorization.includes(' ')) {
     return res.status( 500 ).send( "Token authorization failed. 1" )
   }
 
-  const authToken = req.headers.authorization.split(' ')[1]
+  const authToken = authorization.split(' ')[1]
 
   User.findOne({ token: authToken })
   .then(user => {

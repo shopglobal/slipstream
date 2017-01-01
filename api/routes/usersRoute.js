@@ -32,7 +32,7 @@ router.route( '/password/change' )
   .post( userController.checkAuthorization, userController.changePassword )
 router.route('/stream/:stream/content')
   .post( userController.checkAuthorization, ( req, res ) => (
-    req.body.type === "read" ? postArticle( req, res ) : postContent( req, res )
+    req.body.format === "read" ? postArticle( req, res ) : postContent( req, res )
   ))
 
 /* Content */
@@ -43,7 +43,7 @@ router.route( '/content/private' )
   .post( userController.checkAuthorization, makePrivate )
 router.route( '/content/share' )
   .post( userController.checkAuthorization, shareByEmail )
-router.route( '/content/edit' )
+router.route( '/content/:content' )
   .post( userController.checkAuthorization, editContent )
 router.route( '/content/flag' )
   .post( userController.checkAuthorization, postFlag )

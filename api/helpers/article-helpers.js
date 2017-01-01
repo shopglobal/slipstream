@@ -27,14 +27,14 @@ export default function replaceImages ( article ) {
       const imageMapFunction = Array.prototype.map.call(images, (each) => {
         return new Promise( function (resolve, reject) {
           saveImage(each.src)
-          .spread(( imageHash, imageOriginalPath, imageThumbPath ) => {
+          .then(({ hash, orig, thumb }) => {
             article.images.push({
-              orig: imageOriginalPath,
-              hash: imageHash,
-              thumb: imageThumbPath
+              orig,
+              hash,
+              thumb
             })
 
-            each.src = imageOriginalPath
+            each.src = orig
 
             resolve()
           })

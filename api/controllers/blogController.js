@@ -23,6 +23,7 @@ export function postArticle ( req, res ) {
     return new Promise( function ( resolve, reject ) {
       var newArticle = new Content({
         images: [],
+        format: 'read',
         processing: true,
         url: req.body.url,
         user: req.user._id,
@@ -106,11 +107,11 @@ export function postArticle ( req, res ) {
   .then(( article ) => {
     article.user = req.user._id
     article.save( function ( err, data ) {
-      res.status( 200 ).json(data)
+      res.status( 200 ).json({ data })
       replaceImages( data )
       .then( saveArticle )
-      .then( function ( art ) {
-        console.info( { title: art.title, url: art.url }, "Article saved" )
+      .then(() => {
+        console.info('READ_CONTENT_SAVED', data.slug)
         return
       })
       .catch( function ( error ) {

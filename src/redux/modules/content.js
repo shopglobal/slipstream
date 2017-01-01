@@ -14,7 +14,6 @@ export default function reducer(state = initialState, action = {}) {
         loading: true
       };
     case GET_CONTENT_SUCCESS:
-      console.log('...action.result', action.result)
       return {
         ...state,
         ...action.result,
@@ -34,8 +33,6 @@ export default function reducer(state = initialState, action = {}) {
 }
 
 export function getContent(stream) {
-  console.log('stream', stream);
-
   return {
     types: [GET_CONTENT, GET_CONTENT_SUCCESS, GET_CONTENT_FAIL],
     promise: (client) => client.get(`/stream/${stream}/content`)

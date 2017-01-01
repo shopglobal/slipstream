@@ -7,14 +7,14 @@ function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
   if (__SERVER__) {
     // Prepend host and port of the API server to the path.
-    return 'http://' + config.apiHost + ':' + config.apiPort + adjustedPath;
+    return 'http://' + config.apiHost + ':' + config.apiPort + '/v1' + adjustedPath;
   }
   // Prepend `/api` to relative URL, to proxy to API server.
   return '/api' + adjustedPath;
 }
 
 export default class ApiClient {
-  constructor(req) {
+  constructor() {
     methods.forEach((method) =>
       this[method] = (path, { params, data } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](formatUrl(path));
@@ -23,12 +23,16 @@ export default class ApiClient {
           request.query(params);
         }
 
-        if (__SERVER__ && req.get('cookie')) {
-          request.set('cookie', req.get('cookie'));
-        }
+        // if (__SERVER__ && req.get('cookie')) {
+        //   request.set('cookie', req.get('cookie'));
+        // }
 
         if (data) {
           request.send(data);
+        }
+
+        if (__CLIENT__ && window.localStorage.authToken) {
+          request.set('Authorization', window.localStorage.authToken)
         }
 
         request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));
