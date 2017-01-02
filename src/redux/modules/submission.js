@@ -16,7 +16,7 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case GET_SUBMISSION:
       return {
-        ...state,
+        ...initialState,
         loading: true
       };
     case GET_SUBMISSION_SUCCESS:

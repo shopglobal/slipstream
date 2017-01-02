@@ -212,6 +212,9 @@ export function getStream ( req, res ) {
     processing: false,
     stream
   }, null, {
+    sort: {
+      dateAdded: -1
+    },
     limit,
     skip
   })

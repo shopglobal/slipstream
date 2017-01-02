@@ -1,11 +1,17 @@
+@import '../theme/variables.scss';
+
 .Item {
   background: #FAFAFA;
   width: 300px;
   padding: 20px;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
-
+  flex-grow: 1;
 }
 
 .latestContainer {
@@ -22,4 +28,18 @@
   align-items: center;
   color: white;
   background: #FF373E;
+  position: absolute;
+  margin-top: -15px;
+  margin-left: -35px;
+}
+
+.timeAgo {
+  color: $darker-grey;
+}
+
+.meta {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

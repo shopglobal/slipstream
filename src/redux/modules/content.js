@@ -10,7 +10,7 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case GET_CONTENT:
       return {
-        ...state,
+        ...initialState,
         loading: true
       };
     case GET_CONTENT_SUCCESS:
