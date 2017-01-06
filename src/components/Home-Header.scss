@@ -1,3 +1,5 @@
+@import '../theme/variables.scss';
+
 .Header {
   position: fixed;
   top: 0;
@@ -23,5 +25,10 @@
 }
 
 .addButton {
+  cursor: pointer;
+}
+
+.authButton {
+  color: $darker-grey;
   cursor: pointer;
 }

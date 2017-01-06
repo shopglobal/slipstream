@@ -39,6 +39,8 @@ export default function reducer(state = initialState, action = {}) {
         loggingIn: true
       };
     case LOGIN_SUCCESS:
+      window.localStorage.authToken = `Bearer ${action.result.token}`
+
       return {
         ...state,
         loggingIn: false,
@@ -80,16 +82,17 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: (client) => client.get('/loadAuth')
+    promise: (client) => client.get('/user/me')
   };
 }
 
-export function login(name) {
+export function login({username, password}) {
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: (client) => client.post('/login', {
+    promise: (client) => client.post('/session', {
       data: {
-        name: name
+        username,
+        password
       }
     })
   };
@@ -98,6 +101,9 @@ export function login(name) {
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: (client) => client.get('/logout')
+    promise: () => {
+      delete window.localStorage.authToken
+      return Promise.resolve()
+    }
   };
 }

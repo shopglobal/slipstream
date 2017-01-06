@@ -1,21 +1,14 @@
-const User = require( '../models/userModel' )
-const Content = require( '../models/contentModel' )
-const jwt = require('jsonwebtoken')
-const crypto = require( 'crypto' )
-const bcrypt = require( 'bcrypt-nodejs' )
-const Q = require( 'q' )
-const getUser = require( '../helpers/get-user' )
-const fs = require( 'fs' )
-const path = require( 'path' )
-const mongoose = require( 'mongoose' )
+import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
+import bcrypt from 'bcrypt-nodejs'
+import Q from 'q'
+import fs from 'fs'
+import path from 'path'
 
-const {MAILGUN_KEY, MAILGUN_DOMAIN} = process.env
-const mailgun = require( 'mailgun-js' )({
-  apiKey: MAILGUN_KEY,
-  domain: MAILGUN_DOMAIN
-})
+import getUser from '../helpers/get-user'
+import User from '../models/userModel'
 
-const {SECRET_TOKEN} = process.env
+const { SECRET_TOKEN } = process.env
 
 //
 // check the username and password and returns token if verified
@@ -30,13 +23,17 @@ exports.login = function ( req, res ) {
     }
 
     user.verifyPassword( req.body.password, function( err, isMatch ) {
-      if ( err || !isMatch ) return res.status( 403 ).json( "Trouble signing in." )
+      if ( err || !isMatch ) {
+        return res.status( 403 ).json( "Trouble signing in." )
+      }
 
-      else 
-        return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
-
-    } )
-    
+      return res.status( 200 )
+      .json({
+        token: user.token(),
+        username: user.username,
+        role: user.role
+      })
+    })
   }, function ( error ) {
     console.log( error )
     return res.status( 500 ).send( error.message )
@@ -56,50 +53,17 @@ exports.signUp = function ( req, res ) {
     password: req.body.password,
     email: req.body.email
   })
-  
+
   function postSignup ( object ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
+    return Q.Promise( function ( resolve, reject ) {
       var user = object.user
-      
-      /*
-      Adds the welcome post to the user's read stream.
-      */
-      var welcomePostId = mongoose.Types.ObjectId( process.env.WELCOME_POST )
-      
-      Content.findOne( { _id: welcomePostId } ).exec()
-      .then( function ( result ) {
-        var newUser = result.users.create({
-          user: user._id,
-          added: ( new Date() / 1).toFixed(),
-          stream: 'read',
-          private: true
-        })
 
-        result.users.push( newUser )
-
-        result.save()
+      user.save( function ( err, newUser ) {
+        return resolve( newUser )
       })
-
-      user.token = jwt.sign( user, SECRET_TOKEN )
-      user.save( function ( err, user ) {
-        var welcomeHtml = fs.readFileSync( path.join( __dirname, '../lib/emails/welcome.html' ) )
-
-        var email = {
-          from: 'Slipstream <welcome@slipstreamapp.com>',
-          to: user.email,
-          subject: 'Welcome to Slipstream, ' + user.username,
-          html: welcomeHtml.toString()
-        }
-
-        mailgun.messages().send( email, function ( err, body ) {
-          if ( err ) console.log( err )
-        })
-
-        return resolve( user )
-      } )
     })
   }
-  
+
   /*
   Check if the username or email has already been used before. 
   */
@@ -110,7 +74,11 @@ exports.signUp = function ( req, res ) {
       .then( function () {
         postSignup( { user: user } )
         .then( function ( user ) {
-          return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+          return res.status( 200 ).json({
+            token: user.token(),
+            username: user.username,
+            role: user.role
+          })
         })
       } )
       .catch ( function ( error ) {
@@ -118,15 +86,19 @@ exports.signUp = function ( req, res ) {
         return res.status( 500 ).json( error.message )
       })
     } else if ( ( !result.username || result.username == null || typeof result.username == undefined) && result ) {
-      result.username = user.username,
-      result.email = user.email,
+      result.username = user.username
+      result.email = user.email
       result.joined = ( new Date() / 1000 ).toFixed()
 
       result.save()
       .then( function ( result ) {
         postSignup( { user: result } )
         .then( function ( user ) {
-          return res.status( 200 ).json( { token: user.token, username: user.username, role: user.role } )
+          return res.status( 200 ).json({
+            token: user.token(),
+            username: user.username,
+            role: user.role
+          })
         })
       } )
       .catch ( function ( error ) {
@@ -135,13 +107,13 @@ exports.signUp = function ( req, res ) {
       })
     } else {
       console.log( "User signed up with that info:" + user.username + " or " + user.email )
-      
+
       if ( result.username === user.username ) return res.status( 500 ).json( "That username is already taken." )
       else return res.status( 500 ).json( "That email has already been used." )
     }
   }, function ( error ) {
     console.error( error )
-    
+
     return res.status( 500 ).json( error.message )
   })
 }
@@ -150,16 +122,13 @@ exports.signUp = function ( req, res ) {
 // return all of a users information, except password, etc
 //
 exports.getUser = function( req, res ) {
-  User.findOne( { token: req.token }, function( err, user ) {
-    if ( err || !user )
-      return res.status( 500 ).json( "Error getting that user info." )
+  const { user } = req
 
-    return res.status( 200 ).json({
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      joined: user.joined
-    })
+  return res.status( 200 ).json({
+    id: user._id,
+    username: user.username,
+    email: user.email,
+    joined: user.joined
   })
 }
 
@@ -168,11 +137,11 @@ exports.getUser = function( req, res ) {
 //
 exports.deleteUser = function( req, res ) {
   User.findOneAndRemove( { token: req.token } ).exec()
-  .then( function ( data ) {
-    return res.status( 200 ).json( "User removed. Bye." )   
+  .then( function () {
+    return res.status( 200 ).json( "User removed. Bye." )
   }, function ( error ) {
-    console.log( error )    
-    return res.status( 500 ).json( error )    
+    console.log( error )
+    return res.status( 500 ).json( error )
   })
 }
 
@@ -183,13 +152,17 @@ exports.deleteUser = function( req, res ) {
 exports.checkAuthorization = function( req, res, callback ) {
   const {authorization} = req.headers
 
-  if (authorization && !authorization.includes(' ')) {
+  console.log("authorization", authorization)
+
+  if (!authorization || !authorization.includes(' ')) {
     return res.status( 500 ).send( "Token authorization failed. 1" )
   }
 
   const authToken = authorization.split(' ')[1]
 
-  User.findOne({ token: authToken })
+  const object = jwt.verify(authToken, SECRET_TOKEN)
+
+  User.findOne({ _id: object._id })
   .then(user => {
     if (!user) {
       return res.status( 500 ).send( "Token authorization failed. 2" )
@@ -230,10 +203,10 @@ exports.sendPasswordReset = function ( req, res ) {
   }
   
   function emailTemporaryPassword ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {  
+    return new Promise( function ( resolve ) {
       
       var passwordHtml = fs.readFileSync( path.join( __dirname, "../lib/emails/password-reset.html" ) ).toString().split( '<!-- Breakpoint -->' )
-      
+
       var email = {
         from: 'Slipstream <hello@slipstreamapp.com>',
         to: user.email,
@@ -241,12 +214,7 @@ exports.sendPasswordReset = function ( req, res ) {
         html: passwordHtml[0] + user.temporaryPassword + passwordHtml[1]
       }
 
-      mailgun.messages().send( email, function ( err, body ) {
-        if ( err )
-          reject( new Error( "There was a problem sending the password reset email: " + err ) )
-          
-        resolve( body )
-      })
+      resolve(user)
     })
   }
   

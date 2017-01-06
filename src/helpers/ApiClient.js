@@ -32,7 +32,7 @@ export default class ApiClient {
         }
 
         if (__CLIENT__ && window.localStorage.authToken) {
-          request.set('Authorization', window.localStorage.authToken)
+          request.set('authorization', window.localStorage.authToken)
         }
 
         request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));

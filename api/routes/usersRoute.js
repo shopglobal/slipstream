@@ -19,13 +19,13 @@ import {
 const router = new express.Router()
 
 /* User */
-router.route('/authenticate')
+router.route('/session')
   .post( userController.login )
-router.route('/users')
-  .get( userController.checkAuthorization, userController.getUser )
-  .delete( userController.checkAuthorization, userController.deleteUser )
 router.route('/user')
   .post( userController.signUp )
+  .delete( userController.checkAuthorization, userController.deleteUser )
+router.route('/user/me')
+  .get( userController.checkAuthorization, userController.getUser )
 router.route( '/password/reset' )
   .get( userController.sendPasswordReset )
 router.route( '/password/change' )
