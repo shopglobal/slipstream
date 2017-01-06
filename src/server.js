@@ -19,31 +19,19 @@ import createHistory from 'react-router/lib/createMemoryHistory';
 import {Provider} from 'react-redux';
 import getRoutes from './routes';
 
-const targetUrl = 'http://' + config.apiHost + ':' + config.apiPort + '/v1/';
+const targetUrl = `${config.apiHost}/v1`;
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
+
 const proxy = httpProxy.createProxyServer({
   target: targetUrl,
   // ws: true
 });
 
-app.use(compression());
-app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
-
-app.use(Express.static(path.join(__dirname, '..', 'static')));
-
 // Proxy to API server
 app.use('/api', (req, res) => {
   proxy.web(req, res, {target: targetUrl});
-});
-
-// app.use('/ws', (req, res) => {
-//   proxy.web(req, res, {target: targetUrl + '/ws'});
-// });
-
-server.on('upgrade', (req, socket, head) => {
-  proxy.ws(req, socket, head);
 });
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
@@ -59,6 +47,11 @@ proxy.on('error', (error, req, res) => {
   json = {error: 'proxy_error', reason: error.message};
   res.end(JSON.stringify(json));
 });
+
+app.use(compression());
+app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
+
+app.use(Express.static(path.join(__dirname, '..', 'static')));
 
 app.use((req, res) => {
   if (__DEVELOPMENT__) {
@@ -114,7 +107,7 @@ if (config.port) {
     if (err) {
       console.error(err);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
+    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, targetUrl);
     console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, config.port);
   });
 } else {

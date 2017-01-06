@@ -59,9 +59,9 @@ module.exports = {
     new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: '"production"'
+        NODE_ENV: '"production"',
+        'API_HOST': JSON.stringify(process.env.API_HOST)
       },
-
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: false,

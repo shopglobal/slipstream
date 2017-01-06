@@ -79,7 +79,7 @@ export function postArticle ( req, res ) {
               resolve( newArticle )
             })
             .catch( function ( error ) {
-              console.log( error )
+              console.log('Error saving image.', error)
               reject( error )
             })
           })
@@ -122,7 +122,7 @@ export function postArticle ( req, res ) {
     })
   })
   .catch( function ( error ) {
-    console.error( error )
+    console.error('Error getting article.')
     return res.status( 500 ).json( error.message )
   })
 }

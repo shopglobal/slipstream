@@ -1,15 +1,19 @@
 import crypto from 'crypto'
 import request from 'request'
 import Q from 'q'
-import knox from 'knox'
+import aws from 'aws-sdk'
 import mime from 'mime'
 import gm from 'gm'
 
-var s3Client = knox.createClient({
-  key: process.env.PLANTER_S3_ACCESS_KEY_ID,
-  secret: process.env.PLANTER_S3_SECRET_ACCESS_KEY,
-  bucket: process.env.PLANTER_BUCKET_NAME
+var s3Client = new aws.S3({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: process.env.S3_REGION
 })
+
+const makeFullUrl = (key) => (
+  `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET_NAME}/${key}`
+)
 
 function saveOrig ( imageUrl ) {
   return new Promise( function ( resolve, reject ) {
@@ -47,22 +51,24 @@ function saveOrig ( imageUrl ) {
 
           image.hash = crypto.createHash( 'md5' ).update( buf ).digest( 'hex' )
 
-          const uploader = s3Client.putBuffer( buf, image.hash + "-orig." + image.extension, {
-            'Content-Length': buf.length,
-            'Content-Type': mime.lookup( image.extension )
-          }, ( e, result ) => {
+          const key = image.hash + "-orig." + image.extension
+
+          const params = {
+            Bucket: process.env.S3_BUCKET_NAME,
+            Key: key,
+            Body: buf,
+            // ContentLength: buf.length,
+            ContentType: mime.lookup( image.extension )
+          }
+
+          s3Client.putObject(params, (e) => {
             if ( err ) return reject( new Error( e ) )
 
             buf = null
             bufs = []
+            image.orig = makeFullUrl(key)
 
-            if ( result.statusCode === 200 ) {
-              image.orig = uploader.url
-
-              resolve( image )
-            } if ( result.statusCode !== 200 ) {
-              reject(result)
-            }
+            return resolve( image )
           })
         })
       })
@@ -93,20 +99,20 @@ function saveThumb ( image ) {
 
         stdout.on( 'end', function () {
           var buf = Buffer.concat( bufs )
+          const key = image.hash + "-thumb.JPEG"
+          const params = {
+            Bucket: process.env.S3_BUCKET_NAME,
+            Key: key,
+            Body: buf,
+            // ContentLength: buf.length,
+            ContentType: 'image/jpeg'
+          }
 
-          var uploader = s3Client.putBuffer( buf, image.hash + "-thumb.JPEG", {
-            'Content-Length': buf.length,
-            'Content-Type': 'image/jpeg'
-          }, ( e, result ) => {
+          s3Client.putObject(params, ( e ) => {
             if ( e ) return reject( new Error( e ) )
 
-            if ( result.statusCode === 200 ) {
-              image.thumb = uploader.url
-
-              resolve( image )
-            } else if ( !result.statusCode === 200 ) {
-              reject( new Error( result ) )
-            }
+            image.thumb = makeFullUrl(key)
+            return resolve(image)
           })
         })
       })

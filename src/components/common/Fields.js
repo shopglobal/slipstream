@@ -20,7 +20,6 @@ const TextField = ({ input, label, type, id, className, disabled, onBlur, meta: 
   const blurHandler = (event) => {
     input.onBlur(event)
     if (onBlur && !error) {
-      console.log('onBlur')
       onBlur(event)
     }
   }
@@ -75,7 +74,6 @@ const TextAreaField = ({ input, label, type, id, className, disabled, onBlur, me
   const blurHandler = (event) => {
     input.onBlur(event)
     if (onBlur && !error) {
-      console.log('onBlur')
       onBlur(event)
     }
   }

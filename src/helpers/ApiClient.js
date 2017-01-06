@@ -1,15 +1,16 @@
 import superagent from 'superagent';
 import config from '../config';
 
+const { NODE_ENV } = process.env;
+
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 function formatUrl(path) {
   const adjustedPath = path[0] !== '/' ? '/' + path : path;
-  if (__SERVER__) {
-    // Prepend host and port of the API server to the path.
-    return 'http://' + config.apiHost + ':' + config.apiPort + '/v1' + adjustedPath;
+  if (__SERVER__ || NODE_ENV === 'production') {
+    return `${config.apiHost}/v1${adjustedPath}`
   }
-  // Prepend `/api` to relative URL, to proxy to API server.
+
   return '/api' + adjustedPath;
 }
 

@@ -99,10 +99,11 @@ export function postContent ( req, res ) {
 
   function makeContent( contentInfo ) {
     return new Promise( function ( resolve ) {
-      var content = new Content( _.extend({
+      var content = new Content({
         url: contentInfo.meta.canonical,
-        format
-      }, contentInfo.meta ))
+        format,
+        ...contentInfo.meta
+      })
 
       getUser( req.token )
       .then( function ( user ) {
