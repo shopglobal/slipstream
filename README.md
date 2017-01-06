@@ -1,4 +1,4 @@
-> **NOTICE**: This branch is under heavy construction and the information below may be out of date.
+> **NOTICE**: This project has been newly refactored and is still not production ready.
 
 # SlipStream
 
