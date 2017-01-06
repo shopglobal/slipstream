@@ -38,7 +38,9 @@ export function postArticle ( req, res ) {
 
         readability( response.body, function ( e, article ) {
           if ( e ) {
-            article.close()
+            if (article) {
+              article.close()
+            }
 
             return reject(new Error({ error: e, message: "We couldn't get that page right now." }))
           }

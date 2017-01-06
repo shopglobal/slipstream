@@ -149,10 +149,8 @@ exports.deleteUser = function( req, res ) {
 // check that the request has an authorization header and attach it to
 // the req as req.token
 //
-exports.checkAuthorization = function( req, res, callback ) {
+exports.checkAuthorization = function( req, res, next ) {
   const {authorization} = req.headers
-
-  console.log("authorization", authorization)
 
   if (!authorization || !authorization.includes(' ')) {
     return res.status( 500 ).send( "Token authorization failed. 1" )
@@ -167,8 +165,13 @@ exports.checkAuthorization = function( req, res, callback ) {
     if (!user) {
       return res.status( 500 ).send( "Token authorization failed. 2" )
     }
+
+    if (user.role !== 'ADMIN') {
+      return res.status(403).send("You don't have permission to do that.")
+    }
+
     req.user = user
-    return callback()
+    return next()
   })
 }
 
