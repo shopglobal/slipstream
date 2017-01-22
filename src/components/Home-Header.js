@@ -6,6 +6,7 @@ import { autobind } from 'core-decorators'
 import Skylight from 'react-skylight'
 import iosAdd from 'ionicons-svg/ios-add'
 import SVGInline from 'react-svg-inline'
+import config from '../config'
 
 import { logout } from 'redux/modules/auth'
 import AddContent from './AddContent'
@@ -41,6 +42,7 @@ export default class Header extends Component {
     return (
       <div>
         <div className={classes.Header}>
+          <div>{config.app.title}</div>
           <Link to="/">Home</Link>
           <Link to="/stream/news">News</Link>
           <Link to="/stream/share-this">Share this!</Link>

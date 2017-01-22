@@ -11,9 +11,12 @@
   align-items: center;
   padding: 0 20px;
 
+  a, div {
+    margin-right: 15px;
+  }
+
   a {
     color: #FF2F36;
-    margin-right: 15px;
   }
 }
 

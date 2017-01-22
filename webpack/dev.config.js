@@ -105,6 +105,10 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
+      'process.env': {
+        'SITE_NAME': JSON.stringify(process.env.SITE_NAME),
+        'SITE_DESCRIPTION': JSON.stringify(process.env.SITE_DESCRIPTION)
+      },
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
