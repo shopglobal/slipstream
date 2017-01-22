@@ -1,0 +1,18 @@
+.buttonBase {
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.buttonPrimary {
+  @extend .buttonBase;
+  background: #F06161;
+  border: none;
+  color: white;
+}
+
+.button {
+  @extend .buttonBase;
+  border: 1px solid #F06161;
+  color: #F06161;
+  background: white;
+}

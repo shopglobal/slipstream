@@ -1,0 +1,16 @@
+@import '../../theme/variables.scss';
+
+.sharesContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: $darker-grey;
+}
+
+.share {
+  width: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
