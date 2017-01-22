@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { asyncConnect } from 'redux-connect'
 import { bindActionCreators } from 'redux'
-import Helmet from 'react-helmet'
 import Header from './Home-Header'
+import Helmet from 'react-helmet'
 
 import { load } from 'redux/modules/auth'
 import styles from './Home.scss'
@@ -34,7 +34,7 @@ export default class Home extends Component {
 
     return (
       <div className={styles.home}>
-        <Helmet title="Slipstream - Content sharing platform" />
+        <Helmet title="Dashboard" />
         <Header params={params} />
         { this.props.children && React.cloneElement(this.props.children, {
           params

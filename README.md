@@ -27,13 +27,15 @@ Now visit http://localhost:3400/ (port depends on `PORT` environmental variable)
 
 There are a few environment variables. They need to be set in a .env file locally, and then on the Heroku environments or CodeShip, etc.
 
-  MONGOLAB_URI // mongodb URL, including username, password and port
-  S3_BUCKET_NAME // an S3 butcket for storing uploads
-  S3_ACCESS_KEY_ID
-  S3_SECRET_ACCESS_KEY
-  S3_REGION
-  IFRAMELY_URL // for getting embeds
-  IFRAMELY_PORT
+    MONGOLAB_URI // mongodb URL, including username, password and port
+    S3_BUCKET_NAME // an S3 butcket for storing uploads
+    S3_ACCESS_KEY_ID
+    S3_SECRET_ACCESS_KEY
+    S3_REGION
+    IFRAMELY_URL // for getting embeds
+    IFRAMELY_PORT
+    SITE_NAME  // title of the site as it will appear in header/embeds
+    SITE_DESCRIPTION  // description of site for SEO/embeds
 
 #API and Documentation
 
