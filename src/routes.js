@@ -1,8 +1,9 @@
 import React from 'react';
-import {Route} from 'react-router';
+import {Route, IndexRoute} from 'react-router';
 // import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 import { App } from 'containers';
-import Home from './components/Home';
+import Dashboard from './components/Dashboard';
+import Home from './components/Dashboard-Home';
 import Stream from './components/Stream';
 
 export default () => { // passing in 'store'
@@ -25,7 +26,8 @@ export default () => { // passing in 'store'
 
   return (
     <Route component={App}>
-      <Route path="/" component={Home}>
+      <Route path="/" component={Dashboard}>
+        <IndexRoute component={Home} />
         <Route path="/stream/:stream" component={Stream} />
       </Route>
     </Route>

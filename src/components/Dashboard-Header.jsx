@@ -12,7 +12,7 @@ import { logout } from 'redux/modules/auth'
 import AddContent from './AddContent'
 import Login from './Login'
 
-import classes from './Home-Header.scss'
+import classes from './Dashboard-Header.scss'
 
 @asyncConnect([],
   state => ({
@@ -42,8 +42,7 @@ export default class Header extends Component {
     return (
       <div>
         <div className={classes.Header}>
-          <div>{config.app.title}</div>
-          <Link to="/">Home</Link>
+          <Link to="/">{config.app.title}</Link>
           <Link to="/stream/news">News</Link>
           <Link to="/stream/share-this">Share this!</Link>
           {this.props.user &&

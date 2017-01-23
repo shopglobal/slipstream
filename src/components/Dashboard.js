@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { asyncConnect } from 'redux-connect'
 import { bindActionCreators } from 'redux'
-import Header from './Home-Header'
+import Header from './Dashboard-Header'
 import Helmet from 'react-helmet'
 
 import { load } from 'redux/modules/auth'
-import styles from './Home.scss'
+import styles from './Dashboard.scss'
 
 @asyncConnect([],
   state => ({
