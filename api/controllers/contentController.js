@@ -254,7 +254,7 @@ export function deleteContent ( req, res ) {
 
   deleteItem()
   .then( function ( content ) {
-    return res.status( 200 ).json( "Item temoved: " + content.title )
+    return res.status( 200 ).json({ data: content })
   })
   .catch( function ( error ) {
     console.log( error )

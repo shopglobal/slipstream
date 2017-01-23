@@ -45,6 +45,8 @@ export default class Stream extends Component {
           <Item
             key={index}
             title={content.title}
+            slug={content.slug}
+            format={content.format}
             isLatest={(index === 0)}
             images={content.images}
             dateAdded={content.dateAdded}

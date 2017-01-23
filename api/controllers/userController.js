@@ -128,7 +128,8 @@ exports.getUser = function( req, res ) {
     id: user._id,
     username: user.username,
     email: user.email,
-    joined: user.joined
+    joined: user.joined,
+    role: user.role
   })
 }
 

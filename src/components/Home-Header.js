@@ -56,8 +56,8 @@ export default class Header extends Component {
             {this.props.user ?
               <SVGInline
                 className={classes.addButton}
-                height={30}
-                width={30}
+                height="30"
+                width="30"
                 svg={iosAdd}
                 onClick={() => this.refs.addModal.show()}
               />
