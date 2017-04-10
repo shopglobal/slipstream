@@ -1,6 +1,5 @@
 import crypto from 'crypto'
 import request from 'request'
-import Q from 'q'
 import aws from 'aws-sdk'
 import mime from 'mime'
 import gm from 'gm'
@@ -80,7 +79,7 @@ function saveOrig ( imageUrl ) {
 TODO: Limit animated GIFS and request full image from external http again
 */
 function saveThumb ( image ) {
-  return Q.promise(( resolve, reject ) => {
+  return new Promise(( resolve, reject ) => {
     gm( request( image.orig ) )
       .setFormat("jpg")
       .rawSize( 400, 224 )

@@ -16,7 +16,7 @@ imageResolver.register(new ImageResolver.Webpage())
 
 // adds and item to the articles database with the user's id.
 
-export function postArticle ( req, res ) {
+export async function postArticle ( req, res ) {
   const {stream} = req.params
 
   function getArticle () {
@@ -105,20 +105,15 @@ export function postArticle ( req, res ) {
     })
   }
 
-  getArticle()
-  .then(( article ) => {
-    article.user = req.user._id
-    article.save( function ( err, data ) {
-      res.status( 200 ).json({ data })
-      replaceImages( data )
-      .then( saveArticle )
-      .then(() => {
-        console.info('READ_CONTENT_SAVED', data.slug)
-        return
-      })
-      .catch( function ( error ) {
-        console.log( error )
-      })
+  const article = await getArticle()
+
+  article.user = req.user._id
+  article.save( ( err, data ) => {
+    res.status( 200 ).json({ data })
+    replaceImages( data )
+    .then( saveArticle )
+    .then(() => {
+      console.info('READ_CONTENT_SAVED', data.slug)
     })
   })
   .catch( function ( error ) {

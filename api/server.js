@@ -4,12 +4,15 @@ import express from 'express'
 import config from '../src/config'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import morgan from 'morgan'
 
 mongoose.connect( process.env.MONGOLAB_URI )
+mongoose.Promise = Promise
 
 const app = express();
 
 app
+  .use(morgan('tiny'))
   .use(cors({
     origin: "*"
   }))

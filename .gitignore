@@ -18,3 +18,14 @@ _users/
 _replicator/
 log.txt
 config.json
+apns_cert.pem
+
+aps_development.cer
+
+APNsAuthKey_9Z7Z27762B.p8
+
+cert.pem
+
+key.p12
+
+key.pem
