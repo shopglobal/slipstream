@@ -208,6 +208,6 @@
     "webpack-isomorphic-tools": "^2.2.18"
   },
   "engines": {
-    "node": "7.8.0"
+    "node": "6.4.0"
   }
 }
