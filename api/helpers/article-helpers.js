@@ -1,6 +1,5 @@
 import jsdom from 'jsdom'
 import saveImage from '../helpers/save-image'
-import Q from 'q'
 
 /*
 Replaces external images in the body of the readbale HTML with locally-hosted images.
@@ -56,7 +55,7 @@ export default function replaceImages ( article ) {
         })
       })
 
-      Q.all(imageMapFunction)
+      Promise.all(imageMapFunction)
       .then(() => {
         article.content = window.document.body.innerHTML
 

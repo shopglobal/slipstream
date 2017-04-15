@@ -1,6 +1,7 @@
 import express from 'express'
 import userController from '../controllers/userController'
 import {postArticle} from '../controllers/blogController'
+import {postSubscription} from '../controllers/subscriptionController'
 import {
   addTags,
   makePrivate,
@@ -53,5 +54,8 @@ router.route('/stream/:stream/content')
 router.route( '/content/:slug')
   .get( getContent )
   .delete( userController.checkAuthorization, deleteContent)
+
+router.route('/subscription')
+  .post(postSubscription)
 
 module.exports = router

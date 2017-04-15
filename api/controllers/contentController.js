@@ -1,13 +1,13 @@
 import Content from '../models/contentModel'
 import User from '../models/userModel'
+import Subscription from '../models/subscriptionModel'
 import getUser from '../helpers/get-user'
 import saveImage from '../helpers/save-image'
 import fs from 'fs'
 import path from 'path'
 import request from 'request'
-import Q from 'q'
-import _ from 'underscore'
 import mongoose from 'mongoose'
+import apn from 'apn'
 
 const {MAILGUN_KEY, MAILGUN_DOMAIN} = process.env
 const mailgun = require( 'mailgun-js' )({
@@ -15,8 +15,17 @@ const mailgun = require( 'mailgun-js' )({
   domain: MAILGUN_DOMAIN
 })
 
+const isoPush = new apn.Provider({
+  token: {
+    teamId: process.env.APPLE_TEAM_ID,
+    keyId: process.env.APPLE_KEY_ID,
+    key: fs.readFileSync(path.resolve(process.env.APPLE_CERT_PATH))
+  },
+  production: false
+})
+
 export const findUserId = ( username ) => {
-  return Q.promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     var query = username.match( /^[a-fA-F0-9]{24}$/ ) ? { _id: username } : { username: username }
 
     User.findOne( query )
@@ -157,6 +166,7 @@ export function postContent ( req, res ) {
 
 export function editContent ( req, res ) {
   const {content} = req.params
+  const {stream, flags} = req.body
 
   Content.findOne({ slug: content })
   .then( function (parent) {
@@ -172,7 +182,34 @@ export function editContent ( req, res ) {
           break
         case 'flags':
           for (const flag in req.body.flags) {
-            parent.flags[flag] = req.body.flags[flag]
+            const isChanged = (parent.flags[flag] !== flags[flag])
+            parent.flags[flag] = flags[flag]
+
+            const isShare = (stream === 'share-this' || parent.stream === 'share-this')
+            const isPublic = (flag === 'hidden' && !flags[flag])
+
+            if (isShare && isPublic && isChanged) {
+              Subscription.find()
+              .then((subs) => {
+                const note = new apn.Notification({
+                  expiry: Math.floor(Date.now() / 1000) + 3600,
+                  badge: 3,
+                  sound: "ping.aiff",
+                  alert: `Share this! ${parent.title}`,
+                  payload: {'messageFrom': 'BCNDP Connect'},
+                  topic: "com.noahGray.NDPConnect"
+                })
+                const deviceIds = subs.map((sub) => sub.deviceId)
+
+                isoPush.send(note, deviceIds)
+                .then((result) => {
+                  console.log('isoResult', result)
+                  if (result.failed) {
+                    console.log('result.failed[0].response', result.failed[0].response)
+                  }
+                })
+              })
+            }
           }
           break
         default:

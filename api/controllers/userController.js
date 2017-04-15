@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import bcrypt from 'bcrypt-nodejs'
-import Q from 'q'
 import fs from 'fs'
 import path from 'path'
 
@@ -55,7 +54,7 @@ exports.signUp = function ( req, res ) {
   })
 
   function postSignup ( object ) {
-    return Q.Promise( function ( resolve, reject ) {
+    return new Promise( function ( resolve, reject ) {
       var user = object.user
 
       user.save( function ( err, newUser ) {
@@ -184,7 +183,7 @@ TODO: Makes this send a password update link with temporary password as it's own
 exports.sendPasswordReset = function ( req, res ) {
   
   function updateUser ( password ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
+    return new Promise( function ( resolve, reject ) {
       User.findOneAndUpdate( 
         { email: req.query.email },
         { tempPassword: password.encryptedPassword } 
@@ -223,7 +222,7 @@ exports.sendPasswordReset = function ( req, res ) {
   }
   
   function createPassword () {  
-    return Q.Promise( function ( resolve, reject, notify ) {
+    return new Promise( function ( resolve, reject ) {
       
       var password = {}
       
@@ -267,7 +266,7 @@ DESCRIPTION: Confirms a users old password and sets a new password.
 exports.changePassword = function ( req, res ) {
   
   function verifyOldPassword ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {
+    return new Promise( function ( resolve, reject ) {
       user.verifyPassword( req.body.oldPassword, function( err, isMatch ) {
         if ( err || !isMatch )
           return res.status( 403 ).send( { message: "Please verify your old password." } )
@@ -283,7 +282,7 @@ exports.changePassword = function ( req, res ) {
       id: user._id
     }
     
-    return Q.Promise( function ( resolve, reject, notify ) {  
+    return new Promise( function ( resolve, reject ) {  
       bcrypt.genSalt( 5, function( err, salt ) {
         if (err)
           reject( new Error( "Could not generate temporary password salt." ) )
@@ -301,7 +300,7 @@ exports.changePassword = function ( req, res ) {
   }
   
   function savePassword ( user ) {
-    return Q.Promise( function ( resolve, reject, notify ) {  
+    return new Promise( function ( resolve, reject ) {  
       User.findOneAndUpdate( 
         { _id: user.id },
         { password: user.password } 
@@ -330,7 +329,7 @@ exports.changePassword = function ( req, res ) {
 }
 
 function checkAdmin ( object ) {
-  return Q.Promise( function ( resolve, reject, notify ) {
+  return new Promise( function ( resolve, reject ) {
     User.findOne( { token: object.token, role: 'admin' } )
     .then( function ( user ) {
       if ( !user ) return reject( new Error ( { message: "Permissions don't appear to allow that." } ) )
