@@ -34,6 +34,11 @@ There are a few environment variables. They need to be set in a .env file locall
   S3_REGION
   IFRAMELY_URL // for getting embeds
   IFRAMELY_PORT
+  APPLE_TEAM_ID
+  APPLE_KEY_ID
+  APPLE_CERT="-----BEGIN PRIVATE KEY-----\nYOUR-APPLY-CERT-STRING\n-----END PRIVATE KEY-----"
+
+The `APPLE` prefixed variables are for push notifications to your app, and are required right now. For the `APPLE_CERT`, read your `.p8` file as given from https://developer.apple.com and replace the line breaks with `/n` so it's all one line as shown above, replacing `YOUR-APPLY-CERT-STRING` with everything on line 2.
 
 #API and Documentation
 
