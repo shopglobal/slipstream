@@ -4,6 +4,7 @@ import {Route} from 'react-router';
 import { App } from 'containers';
 import Home from './components/Home';
 import Stream from './components/Stream';
+import Privacy from './components/Privacy';
 
 export default () => { // passing in 'store'
 //   const requireLogin = (nextState, replace, cb) => {
@@ -27,6 +28,7 @@ export default () => { // passing in 'store'
     <Route component={App}>
       <Route path="/" component={Home}>
         <Route path="/stream/:stream" component={Stream} />
+        <Route path="/privacy" component={Privacy} />
       </Route>
     </Route>
   );
