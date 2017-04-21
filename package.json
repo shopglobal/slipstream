@@ -116,6 +116,7 @@
     "express": "^4.13.3",
     "express-session": "^1.12.1",
     "extract-text-webpack-plugin": "^0.9.1",
+    "fb": "^2.0.0",
     "file-loader": "^0.8.5",
     "font-awesome": "^4.4.0",
     "font-awesome-webpack": "0.0.4",

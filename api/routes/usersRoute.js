@@ -14,6 +14,7 @@ import {
   deleteTag,
   shareByEmail
 } from '../controllers/contentController'
+import {getEvents} from '../controllers/eventController'
 
 // const {SECRET_TOKEN} = process.env
 
@@ -50,6 +51,10 @@ router.route( '/content/flag' )
   .post( userController.checkAuthorization, postFlag )
 router.route('/stream/:stream/content')
   .get(getStream)
+
+/* Events */
+router.route('/event')
+  .get(getEvents)
 
 router.route( '/content/:slug')
   .get( getContent )
