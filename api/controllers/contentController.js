@@ -9,6 +9,9 @@ import request from 'request'
 import mongoose from 'mongoose'
 import apn from 'apn'
 
+const isProduction = (process.env.NODE_ENV === 'production')
+const appleCert = fs.readFileSync(path.resolve(process.env.APPLE_CERT_PATH))
+
 const {MAILGUN_KEY, MAILGUN_DOMAIN} = process.env
 const mailgun = require( 'mailgun-js' )({
   apiKey: MAILGUN_KEY,
@@ -19,9 +22,9 @@ const isoPush = new apn.Provider({
   token: {
     teamId: process.env.APPLE_TEAM_ID,
     keyId: process.env.APPLE_KEY_ID,
-    key: process.env.APPLE_CERT
+    key: appleCert
   },
-  production: false
+  production: isProduction
 })
 
 export const findUserId = ( username ) => {
