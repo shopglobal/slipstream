@@ -11,7 +11,8 @@ const fb = new Facebook({
 export function getEvents (req, res) {
   fb.api(`${FB_GROUP_ID}/events`, function (results) {
     if (!results || results.error) {
-      res.status(500).text('error')
+      console.log('error', results.error)
+      return res.status(500).send('error')
     }
 
     res.status(200).send(results)
