@@ -9,9 +9,9 @@ import replaceImages from '../helpers/article-helpers'
 
 var imageResolver = new ImageResolver()
 
+imageResolver.register(new ImageResolver.Opengraph())
 imageResolver.register(new ImageResolver.FileExtension())
 imageResolver.register(new ImageResolver.MimeType())
-imageResolver.register(new ImageResolver.Opengraph())
 imageResolver.register(new ImageResolver.Webpage())
 
 // adds and item to the articles database with the user's id.
