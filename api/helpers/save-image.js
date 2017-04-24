@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import request from 'request'
+import superagent from 'superagent'
 import aws from 'aws-sdk'
 import mime from 'mime'
 import gm from 'gm'
@@ -14,21 +14,38 @@ const makeFullUrl = (key) => (
   `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET_NAME}/${key}`
 )
 
-function saveOrig ( imageUrl ) {
-  return new Promise( function ( resolve, reject ) {
-    let url = imageUrl
-    var imgType = mime.lookup( imageUrl )
-
-    var image = {
-      type: imgType,
-      extension: mime.extension( imgType )
+const checkImageSize = (data) => new Promise((resolve) => {
+  gm(data).size((err, value) => {
+    if (value.height < 10 || value.width < 10 || err) {
+      return resolve(false)
     }
 
-    if ( imageUrl.indexOf( "/" ) === 0 ) {
-      url = "https:" + imageUrl
+    return resolve(true)
+  })
+})
+
+const saveOrig = (imageUrl ) => new Promise(async function (resolve, reject) {
+  let url = imageUrl
+  var imgType = mime.lookup( imageUrl )
+
+  var image = {
+    type: imgType,
+    extension: mime.extension( imgType )
+  }
+
+  if ( imageUrl.indexOf( "/" ) === 0 ) {
+    url = "https:" + imageUrl
+  }
+
+  try {
+    const imageData = await superagent.get(url)
+    const isRightSize = await checkImageSize(imageData.body)
+
+    if (!isRightSize) {
+      throw new Error("Image too small.")
     }
 
-    gm( request(url) )
+    gm(imageData.body)
       .resize( '1340>' )
       .format(( err, value ) => {
         if ( err ) return reject( new Error( "Could not determine format for image" ) )
@@ -71,16 +88,23 @@ function saveOrig ( imageUrl ) {
           })
         })
       })
-  })
-}
+  } catch (error) {
+    console.log('Error getting image', error.status || error)
+    return resolve({
+      ...image,
+      orig: makeFullUrl(process.env.PLACEHOLDER_FILENAME),
+    })
+  }
+})
 
 /* Saves a thumbnail
 
 TODO: Limit animated GIFS and request full image from external http again
 */
-function saveThumb ( image ) {
+async function saveThumb ( image ) {
+  const imageData = await superagent.get( image.orig )
   return new Promise(( resolve, reject ) => {
-    gm( request( image.orig ) )
+    gm(imageData.body)
       .setFormat("jpg")
       .rawSize( 400, 224 )
       .gravity( 'Center' )

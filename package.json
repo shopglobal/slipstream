@@ -153,7 +153,7 @@
     "morgan": "^1.8.1",
     "multireducer": "^2.0.0",
     "needle": "^0.9.1",
-    "node-readability": "^1.0.1",
+    "node-readability": "^2.2.0",
     "node-sass": "^3.4.2",
     "phantomjs": "^2.1.1",
     "phantomjs-polyfill": "0.0.1",
@@ -209,6 +209,6 @@
     "webpack-isomorphic-tools": "^2.2.18"
   },
   "engines": {
-    "node": "6.4.0"
+    "node": "7.9.0"
   }
 }
