@@ -60,7 +60,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"',
-        'API_HOST': JSON.stringify(process.env.API_HOST)
+        'API_HOST': JSON.stringify(process.env.API_HOST),
+        'IFRAMELY_API_KEY': JSON.stringify(process.env.IFRAMELY_API_KEY)
       },
       __CLIENT__: true,
       __SERVER__: false,

@@ -5,6 +5,7 @@ import {reducer as reduxAsyncConnect} from 'redux-async-connect';
 import auth from './auth';
 import content from './content';
 import submission from './submission';
+import single from './single'
 import {reducer as form} from 'redux-form';
 
 export default combineReducers({
@@ -13,5 +14,6 @@ export default combineReducers({
   submission,
   auth,
   content,
+  single,
   form
 });

@@ -267,11 +267,17 @@ export function getStream ( req, res ) {
 /*
 Gets a single post. Used to dynamically get content a user just added to their stream, or get an item's content after it's been updated.
 */
-export function getContent ( req, res ) {
-  Content.findOne({ slug: req.params.slug })
-  .then(content => {
-    res.status(200).json({data: content})
-  })
+export async function getContent ( req, res ) {
+  const { slug } = req.params
+
+  try {
+    const content = await Content.findOne({ slug })
+
+    return res.status(200).json({data: content})
+  } catch (error) {
+    console.log('getContent error', error)
+    res.status(500).json({ error })
+  }
 }
 
 export function deleteContent ( req, res ) {
