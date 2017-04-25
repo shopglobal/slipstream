@@ -105,6 +105,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({
+      'process.env': {
+        'IFRAMELY_API_KEY': JSON.stringify(process.env.IFRAMELY_API_KEY)
+      },
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,

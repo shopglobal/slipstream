@@ -1,5 +1,5 @@
 import Express from 'express';
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom/server';
 import config from './config';
 import favicon from 'serve-favicon';
