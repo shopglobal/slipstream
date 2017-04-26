@@ -6,6 +6,7 @@ import saveImage from '../helpers/save-image'
 import fs from 'fs'
 import path from 'path'
 import request from 'request'
+import superagent from 'superagent'
 import mongoose from 'mongoose'
 import apn from 'apn'
 
@@ -85,86 +86,62 @@ export const projectContent = ( slug ) => {
 
 // adds content to users stream.
 
-export function postContent ( req, res ) {
+export async function postContent ( req, res ) {
   const {stream} = req.params
   const {format, url} = req.body
 
-  function getContent () {
-    return new Promise( function ( resolve, reject ) {
-      request({
-        url: process.env.IFRAMELY_URL + "/iframely?url=" + url
-      }, function ( err, response, body ) {
-        if ( err || response.statusCode !== 200 ) {
-          reject( new Error( "Error from embed server: " + body + " --> " + req.body.url ) )
-        }
+  const iframelyPath = `${process.env.IFRAMELY_URL}&url=${url}`
+  const iframelyData = await superagent.get(iframelyPath)
 
-        if ( !body ) {
-          reject( new Error( "Error from embed server. No body returned." ) )
-        }
+  const { body } = iframelyData
 
-        const parsedBody = JSON.parse( body )
-        parsedBody.url = url
-        resolve( parsedBody )
-      })
-    })
-  }
-
-  function makeContent( contentInfo ) {
-    return new Promise( function ( resolve ) {
-      var content = new Content({
-        url: contentInfo.meta.canonical,
-        format,
-        ...contentInfo.meta
-      })
-
-      getUser( req.token )
-      .then( function ( user ) {
-        var users = content.users.create({
-          user: user._id,
-          added: ( new Date() / 1).toFixed(),
-          private: true,
-          stream,
-        })
-
-        content.users.push( users )
-
-        function saveContent () {
-          content.save( function () {
-            content._id = users._id
-            resolve( content )
-          })
-        }
-
-        /*
-        If there is a picture, save and record it. Then save.
-        */
-        if ( contentInfo.links[2].href ) {
-          saveImage(contentInfo.links[2].href)
-          .then(({ hash, orig, thumb }) => {
-            content.images.push({
-              orig,
-              thumb,
-              hash
-            })
-            saveContent()
-          })
-        } else { saveContent() }
-      })
-    })
-  }
-
-  getContent()
-  .then( makeContent )
-  .then( function ( content ) {
-    return res.json( content )
-  }).catch( function ( error ) {
-    console.log( error )
-    return res.status(500).send( error.message )
+  const content = new Content({
+    ...body,
+    ...body.meta,
+    stream,
+    format
   })
-  .catch( function ( error ) {
-    console.log( error )
-    return res.status(500).send( { error: error.message } )
-  })
+
+  const thumbs = iframelyData.body.links ? iframelyData.body.links.thumbnail : iframelyData.body.thumbnail_url
+
+  if (!Array.isArray(thumbs)) {
+    const image = await saveImage(thumbs)
+    content.images.push(image)
+    content.processing = false
+
+    try {
+      await content.save()
+      res.status(200).send({ data: content })
+    } catch (error) {
+      console.log('error', error)
+      return res.status(500).send({ error })
+    }
+  } else if (Array.isArray(thumbs)) {
+    thumbs.map((link, index) => {
+      const image = saveImage(link.href)
+      content.images.push(image)
+
+      if (index === 0) {
+        try {
+          content.save()
+          res.status(200).send({ data: content })
+        } catch (error) {
+          console.log('error')
+          res.status(500).send({ error })
+        }
+      }
+
+      if (index + 1 === thumbs.length) {
+        content.processing = false
+        content.save()
+      }
+    })
+  } else {
+    const image = await saveImage('')
+    content.images.push(image)
+    content.processing = false
+    content.save()
+  }
 }
 
 export function editContent ( req, res ) {
