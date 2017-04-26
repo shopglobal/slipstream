@@ -8,7 +8,7 @@ const ContentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  service: String,  // such as youtube
+  site: String,  // such as youtube
   author: String,   // who made it on the parent site (eg youtube)
   description: String,  // description of content
   text: String,     // full text of content
